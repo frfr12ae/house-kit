@@ -1,0 +1,70 @@
+<!--
+@title Title slide
+@description Opening slide with eyebrow, one display title, a subtitle and a presenter line. Scales with its container width.
+@tags slide, title, cover, opening
+@preview slide
+@added 2026-10-31
+@featured true
+-->
+<style>
+  .c-title-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-title-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 6cqi 7cqi;
+  }
+  .c-title-slide .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-title-slide .main { align-self: center; display: grid; gap: 2.2cqi; max-width: 70cqi; }
+  .c-title-slide h1 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 6.4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.02;
+    color: var(--ds-ink);
+  }
+  .c-title-slide .sub { font-size: 2cqi; line-height: 1.45; max-width: 52cqi; }
+  .c-title-slide .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding-top: 2cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 1.3cqi;
+    color: var(--ds-muted);
+  }
+  .c-title-slide .foot b { color: var(--ds-text); font-weight: 600; }
+  .c-title-slide .mark {
+    position: absolute;
+    right: 7cqi;
+    top: 6cqi;
+    width: 3.2cqi;
+    height: 3.2cqi;
+    border-radius: calc(0.6cqi * var(--ds-radius-scale, 1));
+    background: var(--ds-highlight-line);
+  }
+</style>
+
+<section class="c-title-slide">
+  <div class="mark" aria-hidden="true"></div>
+  <div class="inner">
+    <div class="eyebrow">Strategy review, Q4</div>
+    <div class="main">
+      <h1>Where the next twelve months of growth come from</h1>
+      <p class="sub">Three bets, what they cost, and the one decision we need from this room today.</p>
+    </div>
+    <div class="foot"><span><b>Presenter Name</b>, Company</span><span>31 October 2026</span></div>
+  </div>
+</section>

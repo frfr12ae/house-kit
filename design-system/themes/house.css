@@ -1,0 +1,45 @@
+/* house: the default theme. Warm off-white ground, warm neutrals,
+   colour only where it means a category, system sans, light only.
+   Copy this file to start a new brand; change values, never names. */
+:root {
+  /* ground and containers */
+  --ds-bg: #F1EEE7;
+  --ds-surface: #FAF9F5;
+  --ds-panel: #EFEEE8;
+  --ds-raised: #FFFFFF;
+
+  /* type */
+  --ds-ink: #000000;
+  --ds-text: #33322E;
+  --ds-muted: #82817B;
+  --ds-line: #D8D4CB;
+
+  /* primary action (buttons, active states) */
+  --ds-action: #1C1B18;
+  --ds-on-action: #FAF9F5;
+
+  /* semantic pairs: pale fill + mid-tone stroke */
+  --ds-info-fill: #ECF5FC;      --ds-info-line: #6FA3D6;      /* content, data, results */
+  --ds-neutral-fill: #EFEEE8;   --ds-neutral-line: #82817B;   /* system, given */
+  --ds-note-fill: #F2F9E8;      --ds-note-line: #8CC152;      /* annotation, positive */
+  --ds-highlight-fill: #FAF3E6; --ds-highlight-line: #E0A94A; /* the step that matters */
+  --ds-danger-fill: #FBEDE9;    --ds-danger-line: #C8553D;    /* errors, negative change */
+
+  /* data series, in order of use */
+  --ds-series-1: #6FA3D6;
+  --ds-series-2: #E0A94A;
+  --ds-series-3: #8CC152;
+  --ds-series-4: #82817B;
+  --ds-series-5: #C8553D;
+
+  /* type families and display personality */
+  --ds-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ds-font-display: var(--ds-font-sans);
+  --ds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ds-weight-display: 800;
+  --ds-tracking-display: -0.02em;
+
+  /* shape personality: 1 = house, 0 = square, 1.5 = soft */
+  --ds-radius-scale: 1;
+  color-scheme: light;
+}

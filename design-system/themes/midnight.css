@@ -1,0 +1,37 @@
+/* midnight: demo dark brand theme. A separate brand, not a dark mode of house.
+   Proves every component reads its colours from tokens only. */
+:root {
+  --ds-bg: #0F0F12;
+  --ds-surface: #17171C;
+  --ds-panel: #1E1E25;
+  --ds-raised: #24242C;
+
+  --ds-ink: #F5F4F0;
+  --ds-text: #D6D4CE;
+  --ds-muted: #8C8A94;
+  --ds-line: #2F2F38;
+
+  --ds-action: #C6F36B;
+  --ds-on-action: #0F0F12;
+
+  --ds-info-fill: #172231;      --ds-info-line: #6FA3F0;
+  --ds-neutral-fill: #1E1E25;   --ds-neutral-line: #8C8A94;
+  --ds-note-fill: #1A2A16;      --ds-note-line: #8FD45A;
+  --ds-highlight-fill: #2C2414; --ds-highlight-line: #F0B84E;
+  --ds-danger-fill: #2E1916;    --ds-danger-line: #F07A5F;
+
+  --ds-series-1: #C6F36B;
+  --ds-series-2: #6FA3F0;
+  --ds-series-3: #F0B84E;
+  --ds-series-4: #8C8A94;
+  --ds-series-5: #F07A5F;
+
+  --ds-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ds-font-display: var(--ds-font-sans);
+  --ds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ds-weight-display: 700;
+  --ds-tracking-display: -0.03em;
+
+  --ds-radius-scale: 1.4;
+  color-scheme: dark;
+}

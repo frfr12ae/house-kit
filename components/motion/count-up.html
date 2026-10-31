@@ -1,0 +1,84 @@
+<!--
+@title Count-up numbers
+@description Headline numbers that count up when they scroll into view. Set the target, prefix, suffix and decimals with data attributes.
+@tags number, stat, kpi, animate, counter
+@preview center
+@height 300
+@replay true
+@added 2026-10-31
+@featured true
+-->
+<style>
+  .c-count-up {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--ds-space-6);
+    width: min(860px, 100%);
+    font-family: var(--ds-font-sans);
+  }
+  .c-count-up .stat { display: grid; gap: var(--ds-space-2); }
+  .c-count-up .value {
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-3xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-count-up .label { color: var(--ds-muted); font-weight: 600; font-size: var(--ds-text-sm); }
+  .c-count-up .bar { height: 3px; border-radius: var(--ds-radius-pill); background: var(--ds-line); overflow: hidden; }
+  .c-count-up .bar i { display: block; height: 100%; width: 0; background: var(--ds-series-1); transition: width var(--ds-dur-story) var(--ds-ease); }
+  .c-count-up .stat:nth-child(2) .bar i { background: var(--ds-series-2); }
+  .c-count-up .stat:nth-child(3) .bar i { background: var(--ds-series-3); }
+</style>
+
+<div class="c-count-up">
+  <div class="stat">
+    <span class="value" data-to="128" data-suffix="h">0</span>
+    <div class="bar"><i style="--to: 72%"></i></div>
+    <span class="label">Hours saved per month</span>
+  </div>
+  <div class="stat">
+    <span class="value" data-to="4.6" data-decimals="1" data-suffix="x">0</span>
+    <div class="bar"><i style="--to: 46%"></i></div>
+    <span class="label">Faster first draft</span>
+  </div>
+  <div class="stat">
+    <span class="value" data-to="92" data-suffix="%">0</span>
+    <div class="bar"><i style="--to: 92%"></i></div>
+    <span class="label">Tasks closed on time</span>
+  </div>
+</div>
+
+<script>
+(() => {
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function run(root) {
+    const ms = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
+    root.querySelectorAll('.bar i').forEach((bar) => { bar.style.width = bar.style.getPropertyValue('--to'); });
+    root.querySelectorAll('.value').forEach((el) => {
+      const to = parseFloat(el.dataset.to);
+      const dec = parseInt(el.dataset.decimals || '0', 10);
+      const fmt = (n) => (el.dataset.prefix || '') + n.toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec }) + (el.dataset.suffix || '');
+      if (reduced) { el.textContent = fmt(to); return; }
+      const start = performance.now();
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / ms);
+        el.textContent = fmt(to * ease(t));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+
+  document.querySelectorAll('.c-count-up').forEach((root) => {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); run(root); }
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

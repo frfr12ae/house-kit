@@ -1,0 +1,67 @@
+<!--
+@title Button set
+@description Five emphasis levels for actions: filled, tonal, elevated, outlined and text, plus disabled and icon variants.
+@tags button, action, cta, variants
+@preview center
+@height 260
+@added 2026-10-31
+@featured true
+@source Material Design 3 common buttons | https://m3.material.io/components/buttons/overview | inspired-by
+-->
+<style>
+  .c-button-set {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ds-space-3);
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ds-font-sans);
+  }
+  .c-button-set .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    height: 40px;
+    padding: 0 var(--ds-space-5);
+    border: var(--ds-stroke) solid transparent;
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), box-shadow var(--ds-dur-fast) var(--ds-ease), transform var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-button-set .btn:active { transform: translateY(1px); }
+  .c-button-set .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-button-set .btn svg { width: 16px; height: 16px; }
+
+  .c-button-set .btn--filled { background: var(--ds-action); color: var(--ds-on-action); }
+  .c-button-set .btn--filled:hover { background: color-mix(in srgb, var(--ds-action) 86%, var(--ds-on-action)); }
+
+  .c-button-set .btn--tonal { background: var(--ds-info-fill); color: var(--ds-ink); border-color: color-mix(in srgb, var(--ds-info-line) 35%, transparent); }
+  .c-button-set .btn--tonal:hover { border-color: var(--ds-info-line); }
+
+  .c-button-set .btn--elevated { background: var(--ds-raised); color: var(--ds-ink); box-shadow: var(--ds-shadow-md); }
+  .c-button-set .btn--elevated:hover { box-shadow: var(--ds-shadow-lg); }
+
+  .c-button-set .btn--outlined { background: transparent; color: var(--ds-ink); border-color: var(--ds-line); }
+  .c-button-set .btn--outlined:hover { border-color: var(--ds-muted); background: var(--ds-surface); }
+
+  .c-button-set .btn--text { background: transparent; color: var(--ds-ink); padding: 0 var(--ds-space-3); }
+  .c-button-set .btn--text:hover { background: var(--ds-panel); }
+
+  .c-button-set .btn:disabled { background: var(--ds-panel); color: var(--ds-muted); border-color: transparent; box-shadow: none; cursor: not-allowed; opacity: 0.7; }
+</style>
+
+<div class="c-button-set">
+  <button class="btn btn--filled" type="button">Filled</button>
+  <button class="btn btn--tonal" type="button">Tonal</button>
+  <button class="btn btn--elevated" type="button">Elevated</button>
+  <button class="btn btn--outlined" type="button">Outlined</button>
+  <button class="btn btn--text" type="button">Text</button>
+  <button class="btn btn--filled" type="button">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>
+    With icon
+  </button>
+  <button class="btn btn--filled" type="button" disabled>Disabled</button>
+</div>

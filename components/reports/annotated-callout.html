@@ -1,0 +1,82 @@
+<!--
+@title Annotated callout
+@description A content frame with commentary kept outside it in a note box, pointing in with a thin arrow. Separates what the thing is from what to notice.
+@tags annotation, commentary, callout, explain
+@preview fill
+@height 420
+@added 2026-10-31
+@featured true
+-->
+<style>
+  .c-annotated-callout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: var(--ds-space-8);
+    align-items: center;
+    padding: var(--ds-space-7);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-annotated-callout .frame {
+    position: relative;
+    padding: var(--ds-space-6);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+  }
+  .c-annotated-callout .label { color: var(--ds-muted); font-weight: 600; font-size: var(--ds-text-sm); margin-bottom: var(--ds-space-4); }
+  .c-annotated-callout .steps { display: grid; gap: var(--ds-space-3); }
+  .c-annotated-callout .step {
+    padding: var(--ds-space-3) var(--ds-space-4);
+    border: var(--ds-stroke) solid var(--ds-info-line);
+    background: var(--ds-info-fill);
+    border-radius: var(--ds-radius-md);
+    font-family: var(--ds-font-mono);
+    font-size: var(--ds-text-sm);
+  }
+  .c-annotated-callout .step.is-key { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); }
+  .c-annotated-callout .note {
+    position: relative;
+    padding: var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-annotated-callout .arrow {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    width: var(--ds-space-8);
+    height: 16px;
+    margin-top: -8px;
+    color: var(--ds-note-line);
+    overflow: visible;
+  }
+  @media (max-width: 640px) {
+    .c-annotated-callout { grid-template-columns: 1fr; gap: var(--ds-space-5); padding: var(--ds-space-5); }
+    .c-annotated-callout .arrow { display: none; }
+  }
+</style>
+
+<div class="c-annotated-callout">
+  <div class="frame">
+    <div class="label">Intake pipeline</div>
+    <div class="steps">
+      <div class="step">01 receive_email()</div>
+      <div class="step is-key">02 classify_with_llm()</div>
+      <div class="step">03 route_to_owner()</div>
+    </div>
+  </div>
+  <div class="note">
+    <svg class="arrow" viewBox="0 0 56 16" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <line x1="56" y1="8" x2="2" y2="8"/><polyline points="9,2 2,8 9,14"/>
+    </svg>
+    Step 02 is the only one that costs money per call. Cache it before scaling.
+  </div>
+</div>

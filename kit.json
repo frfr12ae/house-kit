@@ -1,0 +1,28 @@
+{
+  "name": "Output Kit",
+  "tagline": "Copy-paste templates for decks, reports, pages, motion and AI interfaces, all on one design system.",
+  "author": "Frederik",
+  "repo": "",
+  "defaultLicense": "MIT",
+  "groups": [
+    {
+      "id": "outputs",
+      "label": "Outputs",
+      "categories": [
+        { "id": "decks", "label": "Decks", "icon": "deck", "blurb": "16:9 slides that scale with their container. Paste slides into the deck shell." },
+        { "id": "reports", "label": "Reports", "icon": "report", "blurb": "Blocks for memos, briefings and printable reports." },
+        { "id": "pages", "label": "Page sections", "icon": "page", "blurb": "Heroes, feature grids, pricing, FAQ and footers for HTML pages." },
+        { "id": "motion", "label": "Motion", "icon": "motion", "blurb": "Animated numbers, charts, text and overlays in CSS and vanilla JS." }
+      ]
+    },
+    {
+      "id": "blocks",
+      "label": "Building blocks",
+      "categories": [
+        { "id": "interactive", "label": "Interactive", "icon": "interactive", "blurb": "Buttons, tabs, toggles, dialogs, toasts and other controls." },
+        { "id": "dataviz", "label": "Data viz", "icon": "dataviz", "blurb": "Dependency-free SVG charts that read their colours from the series tokens." },
+        { "id": "ai", "label": "AI interfaces", "icon": "ai", "blurb": "Chat threads, prompt composers, streaming answers and tool calls." }
+      ]
+    }
+  ]
+}
