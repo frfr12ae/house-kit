@@ -13,7 +13,17 @@
           "id": "decks",
           "label": "Decks",
           "icon": "deck",
-          "blurb": "16:9 slides that scale with their container. Paste slides into the deck shell."
+          "blurb": "16:9 slides that scale with their container: consulting storylines and exhibits, pitch, keynote and workshop slides, and complete decks.",
+          "groups": [
+            "Openers and structure",
+            "Storyline",
+            "Exhibits",
+            "Pitch",
+            "Keynote",
+            "Workshop",
+            "Full decks",
+            "Deck tools"
+          ]
         },
         {
           "id": "reports",

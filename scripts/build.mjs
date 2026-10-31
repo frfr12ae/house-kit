@@ -99,6 +99,8 @@ for (const cat of readdirSync(join(ROOT, 'components')).sort()) {
     if (meta.added && !/^\d{4}-\d{2}-\d{2}$/.test(meta.added)) fail(file, '@added must be YYYY-MM-DD');
     const preview = meta.preview || 'fill';
     if (!PREVIEWS.includes(preview)) fail(file, `@preview must be one of ${PREVIEWS.join(', ')}`);
+    const catGroups = kit.groups.flatMap((g) => g.categories).find((c) => c.id === cat)?.groups;
+    if (meta.group && catGroups && !catGroups.includes(meta.group)) fail(file, `@group "${meta.group}" must be one of: ${catGroups.join(', ')}`);
     for (const s of meta.sources) {
       if (!RELATIONS.includes(s.relation)) fail(file, `@source relation "${s.relation}" must be one of ${RELATIONS.join(', ')}`);
       if (s.url && !/^https?:\/\//.test(s.url)) fail(file, `@source url "${s.url}" must start with http(s)://`);
@@ -119,6 +121,7 @@ for (const cat of readdirSync(join(ROOT, 'components')).sort()) {
       category: cat,
       title: meta.title,
       description: meta.description,
+      group: meta.group || '',
       tags: (meta.tags || '').split(',').map((t) => t.trim()).filter(Boolean),
       added: meta.added,
       preview,

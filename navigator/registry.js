@@ -15,7 +15,17 @@ window.OK_REGISTRY = {
       "id": "decks",
       "label": "Decks",
       "icon": "deck",
-      "blurb": "16:9 slides that scale with their container. Paste slides into the deck shell."
+      "blurb": "16:9 slides that scale with their container: consulting storylines and exhibits, pitch, keynote and workshop slides, and complete decks.",
+      "groups": [
+       "Openers and structure",
+       "Storyline",
+       "Exhibits",
+       "Pitch",
+       "Keynote",
+       "Workshop",
+       "Full decks",
+       "Deck tools"
+      ]
      },
      {
       "id": "reports",
@@ -109,6 +119,7 @@ window.OK_REGISTRY = {
    "category": "ai",
    "title": "Chat thread",
    "description": "A user and assistant conversation with a short list and inline code in the reply, timestamps, and a copy, retry and rating row under the assistant message.",
+   "group": "",
    "tags": [
     "chat",
     "conversation",
@@ -166,6 +177,7 @@ window.OK_REGISTRY = {
    "category": "ai",
    "title": "Prompt composer",
    "description": "An autosizing prompt box with attach button, model chip and a send button that enables with text. Enter sends, Shift+Enter adds a line, and sent prompts append to the list above.",
+   "group": "",
    "tags": [
     "prompt",
     "input",
@@ -226,6 +238,7 @@ window.OK_REGISTRY = {
    "category": "ai",
    "title": "Source citations",
    "description": "An answer with numbered inline citation markers. Hovering or focusing a marker highlights its source card below, with title, domain and a letter favicon.",
+   "group": "",
    "tags": [
     "citation",
     "sources",
@@ -284,6 +297,7 @@ window.OK_REGISTRY = {
    "category": "ai",
    "title": "Streaming answer",
    "description": "An answer that streams in word by word with a blinking caret, then settles into a \"Done in 2.4s\" meta line. Starts when scrolled into view.",
+   "group": "",
    "tags": [
     "streaming",
     "answer",
@@ -334,6 +348,7 @@ window.OK_REGISTRY = {
    "category": "ai",
    "title": "Suggestion chips",
    "description": "An empty-state greeting with four starter prompt chips. Clicking a chip fills the input below it so the user can edit and send.",
+   "group": "",
    "tags": [
     "empty state",
     "suggestions",
@@ -394,6 +409,7 @@ window.OK_REGISTRY = {
    "category": "ai",
    "title": "Thinking indicator",
    "description": "A shimmering \"Thinking\" label above a step list that ticks through its states, with spinners turning into checks. Starts when scrolled into view.",
+   "group": "",
    "tags": [
     "thinking",
     "loading",
@@ -443,6 +459,7 @@ window.OK_REGISTRY = {
    "category": "ai",
    "title": "Tool call cards",
    "description": "Collapsible cards for agent tool calls: tool name, a status pill for running, done or failed, then arguments and result in mono.",
+   "group": "",
    "tags": [
     "tool",
     "function call",
@@ -499,6 +516,7 @@ window.OK_REGISTRY = {
    "category": "backgrounds",
    "title": "Dot grid",
    "description": "A subtle dot or line grid that fades out toward the edges with a radial mask. Pure CSS: add the is-lines class for a line grid.",
+   "group": "",
    "tags": [
     "background",
     "grid",
@@ -550,6 +568,7 @@ window.OK_REGISTRY = {
    "category": "backgrounds",
    "title": "Flowing gradient",
    "description": "A WebGL background of slow, domain-warped colour bands drawn from your theme tokens, with a CSS gradient fallback and a still frame for reduced motion.",
+   "group": "",
    "tags": [
     "background",
     "gradient",
@@ -616,6 +635,7 @@ window.OK_REGISTRY = {
    "category": "backgrounds",
    "title": "Godrays",
    "description": "Soft shafts of light fan out from the top-left corner and drift slowly, tinted from your theme tokens. WebGL with a CSS fallback and a still frame for reduced motion.",
+   "group": "",
    "tags": [
     "background",
     "light",
@@ -681,6 +701,7 @@ window.OK_REGISTRY = {
    "category": "backgrounds",
    "title": "Grain overlay",
    "description": "Film grain that sits on top of any section: add one empty div as the last child of a positioned block. Pure CSS with an inline SVG noise tile, no images.",
+   "group": "",
    "tags": [
     "background",
     "grain",
@@ -733,6 +754,7 @@ window.OK_REGISTRY = {
    "category": "backgrounds",
    "title": "Liquid metal",
    "description": "A full-width sheet of slow, rippling chrome shaded from your theme ink and ground, rendered in WebGL with a CSS fallback and a still frame for reduced motion.",
+   "group": "",
    "tags": [
     "background",
     "metal",
@@ -799,6 +821,7 @@ window.OK_REGISTRY = {
    "category": "backgrounds",
    "title": "Marble",
    "description": "Slowly shifting marble veins in your theme ink on a pale ground, drawn in WebGL with a CSS fallback and a still frame for reduced motion.",
+   "group": "",
    "tags": [
     "background",
     "marble",
@@ -863,6 +886,7 @@ window.OK_REGISTRY = {
    "category": "backgrounds",
    "title": "Mesh gradient",
    "description": "Soft colour fields from your theme tokens drift and blend like a mesh gradient, rendered in WebGL with a CSS fallback and a still frame for reduced motion.",
+   "group": "",
    "tags": [
     "background",
     "gradient",
@@ -930,6 +954,7 @@ window.OK_REGISTRY = {
    "category": "backgrounds",
    "title": "Nebula",
    "description": "Drifting gas clouds and a faint twinkling starfield tinted from your theme tokens, rendered in WebGL with a CSS fallback and a still frame for reduced motion.",
+   "group": "",
    "tags": [
     "background",
     "space",
@@ -996,6 +1021,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Annotated price chart",
    "description": "A single-claim line chart in SVG: the claim as the title, a price pane with the last price tagged on the right edge, muted volume bars, one horizontal reference line, rings on the earlier touches of that level, a ring on today, a short caption and a source footer. Fictional data for a fictional ticker; edit KEYS, LEVEL and TOUCHES at the top of the script.",
+   "group": "",
    "tags": [
     "chart",
     "price",
@@ -1054,6 +1080,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Bar chart",
    "description": "Horizontal bars with labels and values, one highlighted bar, and bars that grow in when the chart scrolls into view. Edit the DATA array at the top of the script.",
+   "group": "",
    "tags": [
     "chart",
     "bar",
@@ -1099,6 +1126,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Dependency matrix",
    "description": "Initiatives down the side, shared enablers across the top, a filled dot where an initiative depends on an enabler, column totals underneath and the highest-leverage enabler highlighted. The table scrolls sideways on narrow screens with the initiative names pinned. Edit ENABLERS and INITIATIVES at the top of the script.",
+   "group": "",
    "tags": [
     "matrix",
     "dependencies",
@@ -1155,6 +1183,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Donut chart",
    "description": "A four-segment donut with the total in the centre and a legend showing value and percentage. Hover or focus a legend row or segment to read its value in the centre. Edit DATA at the top of the script.",
+   "group": "",
    "tags": [
     "chart",
     "donut",
@@ -1217,6 +1246,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Activity heatmap",
    "description": "A weeks-by-days activity grid in tints of the first series colour, with month and weekday labels, a legend and a hover title on every cell. Shows as many recent weeks as fit the width. The demo data is generated from a fixed seed, so it is identical on every load.",
+   "group": "",
    "tags": [
     "heatmap",
     "calendar",
@@ -1268,6 +1298,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Line chart",
    "description": "Two series over six months with y gridlines and labels, a legend, and a hover crosshair with a tooltip card. Works with a pointer or the arrow keys. Edit MONTHS and SERIES at the top of the script.",
+   "group": "",
    "tags": [
     "chart",
     "line",
@@ -1326,6 +1357,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Priority matrix",
    "description": "An impact by effort 2x2 with four labelled zones (quick wins, big bets, fill-ins, money pits), ten numbered dots with deterministic jitter so equal scores do not stack, tooltips on hover and focus, and a legend that highlights its dot. Edit ITEMS at the top of the script.",
+   "group": "",
    "tags": [
     "matrix",
     "prioritisation",
@@ -1392,6 +1424,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Progress bars",
    "description": "Four goals as progress bars with a target marker showing where each should be today. Fill colour and a status word say whether the goal is on track, at risk or off track. Edit GOALS at the top of the script.",
+   "group": "",
    "tags": [
     "progress",
     "goals",
@@ -1449,6 +1482,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Sparkline cards",
    "description": "Three KPI cards, each with a value, a delta chip and a small sparkline of the last twelve weeks. Put the points in data-points; the chip colour says whether the change is good or bad.",
+   "group": "",
    "tags": [
     "kpi",
     "sparkline",
@@ -1500,6 +1534,7 @@ window.OK_REGISTRY = {
    "category": "dataviz",
    "title": "Unit chart",
    "description": "One dot per person, grouped by status, above bars showing where the process spends its time. A four-meaning legend (content, neutral, constraint, notice) maps to the semantic colour pairs and each meaning also has its own dot shape. Edit GROUPS and STEPS at the top of the script.",
+   "group": "",
    "tags": [
     "unit chart",
     "dots",
@@ -1565,6 +1600,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Action title slide",
    "description": "A consultant-style content slide: a kicker, a full-sentence title that states the conclusion, three supporting points, a takeaway bar at the foot, a source line and a page number. Scales with its container width.",
+   "group": "Storyline",
    "tags": [
     "slide",
     "action title",
@@ -1605,6 +1641,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Agenda slide",
    "description": "Numbered agenda of five items with the current item marked in the highlight colours and a duration on each row.",
+   "group": "Openers and structure",
    "tags": [
     "slide",
     "agenda",
@@ -1646,6 +1683,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Big number slide",
    "description": "One huge number as the only display element, a sentence that gives it meaning and a source footnote. Use when a single figure carries the argument.",
+   "group": "Exhibits",
    "tags": [
     "slide",
     "number",
@@ -1683,6 +1721,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Chart slide",
    "description": "A headline that states the takeaway above an inline SVG bar chart with the key bar in the highlight colour, axis labels and a source line.",
+   "group": "Exhibits",
    "tags": [
     "slide",
     "chart",
@@ -1722,6 +1761,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Closing slide",
    "description": "Closing slide that states the decision needed, three numbered next steps with owner and date, and a contact line.",
+   "group": "Storyline",
    "tags": [
     "slide",
     "closing",
@@ -1766,6 +1806,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Comparison slide",
    "description": "Three options as columns against the same criteria, with the recommended column marked in the highlight colours. Use to land a choice.",
+   "group": "Exhibits",
    "tags": [
     "slide",
     "comparison",
@@ -1812,6 +1853,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Deck shell",
    "description": "A presentation host: shows one slide at a time with a crossfade, keyboard navigation, prev and next buttons, a slide counter, a progress bar and fullscreen. Paste any slide component into a slide wrapper.",
+   "group": "Deck tools",
    "tags": [
     "deck",
     "presentation",
@@ -1871,6 +1913,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Quote slide",
    "description": "One large pull quote with an attribution and no competing title. Use for a customer voice or a line the room should remember.",
+   "group": "Storyline",
    "tags": [
     "slide",
     "quote",
@@ -1908,6 +1951,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Section slide",
    "description": "Section divider with one large section number, the section name and a single line of framing, plus a progress rail showing where the talk is.",
+   "group": "Openers and structure",
    "tags": [
     "slide",
     "section",
@@ -1947,6 +1991,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Storyboard sheet",
    "description": "Contact sheet for a short video: numbered 16:9 frames drawn from simple token shapes, with the shot, the voiceover line and the duration under each, plus a runtime bar and total.",
+   "group": "Deck tools",
    "tags": [
     "storyboard",
     "video",
@@ -2013,6 +2058,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Title slide",
    "description": "Opening slide with eyebrow, one display title, a subtitle and a presenter line. Scales with its container width.",
+   "group": "Openers and structure",
    "tags": [
     "slide",
     "title",
@@ -2051,6 +2097,7 @@ window.OK_REGISTRY = {
    "category": "decks",
    "title": "Two column slide",
    "description": "The claim on the left and three supporting evidence points on the right. Use to make one argument and back it up.",
+   "group": "Storyline",
    "tags": [
     "slide",
     "claim",
@@ -2091,6 +2138,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Branch and merge flow",
    "description": "One input splits into four parallel steps that draw on one after another and merge into a single result. Plays when scrolled into view.",
+   "group": "",
    "tags": [
     "flow",
     "branch",
@@ -2166,6 +2214,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "ER diagram",
    "description": "Entities as field tables with keys and types, joined by one-to-many lines, with the aggregate root drawn in the highlight pair.",
+   "group": "",
    "tags": [
     "er",
     "entity",
@@ -2234,6 +2283,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Fan-out flow",
    "description": "One source fans out through a shared trunk to six outputs, drawing on from the middle outwards when scrolled into view.",
+   "group": "",
    "tags": [
     "flow",
     "fan out",
@@ -2309,6 +2359,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Flowchart",
    "description": "A decision flow with a start, steps, two diamond decisions and three outcomes, using shape for type and one highlighted result.",
+   "group": "",
    "tags": [
     "flowchart",
     "decision",
@@ -2376,6 +2427,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Journey map",
    "description": "Stages across the top, a feeling curve over a good to poor scale, then rows for what the person does, where, and what gets in the way.",
+   "group": "",
    "tags": [
     "journey",
     "customer",
@@ -2444,6 +2496,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Layer stack",
    "description": "Horizontal bands stacked by level of abstraction, each with a code, a name and what it contains, with one focal layer highlighted.",
+   "group": "",
    "tags": [
     "layers",
     "stack",
@@ -2511,6 +2564,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Layered architecture",
    "description": "Three bands, signals in, a system of record and surfaces out, with numbered flows and a toggle that morphs one central record into federated domain records.",
+   "group": "",
    "tags": [
     "architecture",
     "layers",
@@ -2584,6 +2638,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Pyramid",
    "description": "Stacked trapezoids whose width shows how often each layer happens, with the rare apex in the highlight pair and counts at the right.",
+   "group": "",
    "tags": [
     "pyramid",
     "hierarchy",
@@ -2651,6 +2706,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Sankey",
    "description": "Three columns of proportional nodes joined by flows whose thickness is the amount, with the wasteful path in the danger colour.",
+   "group": "",
    "tags": [
     "sankey",
     "flow",
@@ -2718,6 +2774,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Sequence diagram",
    "description": "Actors across the top, time flowing down, with lifelines, activation bars, a self-call, returns, an async message and a failure.",
+   "group": "",
    "tags": [
     "sequence",
     "messages",
@@ -2786,6 +2843,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "State machine",
    "description": "States as boxes and transitions as labelled arrows, with a start dot, an end ring, a pause loop and a backward move.",
+   "group": "",
    "tags": [
     "state",
     "lifecycle",
@@ -2853,6 +2911,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Swimlane",
    "description": "A process split into horizontal lanes by owner, so every handoff between people or systems is a visible line crossing a lane edge.",
+   "group": "",
    "tags": [
     "swimlane",
     "process",
@@ -2920,6 +2979,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Venn diagram",
    "description": "Three overlapping circles in semantic colours, with the place where all three overlap picked out in the highlight pair.",
+   "group": "",
    "tags": [
     "venn",
     "overlap",
@@ -2987,6 +3047,7 @@ window.OK_REGISTRY = {
    "category": "diagrams",
    "title": "Waterfall",
    "description": "A bridge from an opening total to a closing total, with each step floating at the running level in the positive or negative pair.",
+   "group": "",
    "tags": [
     "waterfall",
     "bridge",
@@ -3055,6 +3116,7 @@ window.OK_REGISTRY = {
    "category": "email",
    "title": "Newsletter",
    "description": "Newsletter email with masthead, lead story, a two-up story row, a short reading list and a footer with unsubscribe link.",
+   "group": "",
    "tags": [
     "email",
     "newsletter",
@@ -3103,6 +3165,7 @@ window.OK_REGISTRY = {
    "category": "email",
    "title": "Notification",
    "description": "Short system notification email asking for one action, with a single button and a plain-text fallback line for clients that block buttons.",
+   "group": "",
    "tags": [
     "email",
     "notification",
@@ -3149,6 +3212,7 @@ window.OK_REGISTRY = {
    "category": "email",
    "title": "Quote offer",
    "description": "Quote email with a price block, what is included, a validity date and one call to action, in a 600px table layout.",
+   "group": "",
    "tags": [
     "email",
     "quote",
@@ -3199,6 +3263,7 @@ window.OK_REGISTRY = {
    "category": "email",
    "title": "Receipt",
    "description": "Order or booking receipt email with a hero line, line items, totals, payment details and footer, in a 600px table layout.",
+   "group": "",
    "tags": [
     "email",
     "receipt",
@@ -3248,6 +3313,7 @@ window.OK_REGISTRY = {
    "category": "email",
    "title": "Email signature",
    "description": "Email signature with a drawn initials monogram, name, role, company, phone and links in a presentation table. No images, so nothing is blocked or tracked.",
+   "group": "",
    "tags": [
     "email",
     "signature",
@@ -3289,6 +3355,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Before and after slider",
    "description": "A comparison slider with a draggable handle that also works from the keyboard. Both panes are built from token shapes: a cluttered report on the left, a clean one on the right.",
+   "group": "",
    "tags": [
     "compare",
     "before after",
@@ -3369,6 +3436,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Button set",
    "description": "Five emphasis levels for actions: filled, tonal, elevated, outlined and text, plus disabled and icon variants.",
+   "group": "",
    "tags": [
     "button",
     "action",
@@ -3423,6 +3491,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Command palette",
    "description": "Search-first palette opened with Cmd or Ctrl plus K or a button. Grouped results filter as you type, arrow keys and Enter run a command, Escape closes. Combobox and listbox semantics.",
+   "group": "",
    "tags": [
     "command",
     "palette",
@@ -3486,6 +3555,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Copy field",
    "description": "Read-only input with a copy button that confirms with a Copied state. Uses navigator.clipboard and falls back to a selection and execCommand where it is unavailable.",
+   "group": "",
    "tags": [
     "copy",
     "clipboard",
@@ -3538,6 +3608,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Dialog",
    "description": "Modal dialog on the native dialog element: opened by a button, with title, body, cancel and confirm, a dimmed backdrop, Escape and backdrop click to close, and an entry animation.",
+   "group": "",
    "tags": [
     "dialog",
     "modal",
@@ -3593,6 +3664,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Dropdown menu",
    "description": "Button that opens a menu of actions with icons, shortcuts, a divider and a destructive item. Arrow, Home, End and type-ahead navigation, Escape and click outside to close.",
+   "group": "",
    "tags": [
     "dropdown",
     "menu",
@@ -3648,6 +3720,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "File chips",
    "description": "Attachment chips in three states: done, uploading with an animated progress bar, and failed with a retry action. Every chip has a remove button.",
+   "group": "",
    "tags": [
     "file",
     "attachment",
@@ -3703,6 +3776,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Segmented control",
    "description": "Pill segmented control with a sliding active indicator that animates between options. Radio group semantics with arrow key navigation.",
+   "group": "",
    "tags": [
     "segmented",
     "toggle",
@@ -3751,6 +3825,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Tabs",
    "description": "Accessible tabs with a tablist, roving tabindex, arrow, Home and End keys, and an underline indicator that slides to the active tab.",
+   "group": "",
    "tags": [
     "tabs",
     "tablist",
@@ -3802,6 +3877,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Toasts",
    "description": "Success, info and error toasts that stack in the bottom corner, dismiss themselves after a few seconds with a progress line, pause on hover, and announce through an aria-live region.",
+   "group": "",
    "tags": [
     "toast",
     "notification",
@@ -3860,6 +3936,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Toggle switches",
    "description": "Labelled switches using role=switch and aria-checked, with a helper line under each label and one disabled example. The label text toggles too.",
+   "group": "",
    "tags": [
     "switch",
     "toggle",
@@ -3911,6 +3988,7 @@ window.OK_REGISTRY = {
    "category": "interactive",
    "title": "Tooltips",
    "description": "Tooltips that appear above a control on hover and keyboard focus, with a small arrow, a short delay on hover and Escape to dismiss. Pure CSS positioning, wired with aria-describedby.",
+   "group": "",
    "tags": [
     "tooltip",
     "hint",
@@ -3959,6 +4037,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Bar grow",
    "description": "Vertical bar chart whose bars grow from the baseline with a stagger while their value labels count up. Starts when scrolled into view.",
+   "group": "",
    "tags": [
     "chart",
     "bar",
@@ -4009,6 +4088,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Caption highlight",
    "description": "A video caption overlay: words land in time with the speech and the key word gets a marker bar that sweeps in behind it. Shown on a placeholder frame built from tokens.",
+   "group": "",
    "tags": [
     "caption",
     "subtitle",
@@ -4062,6 +4142,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "CLI install",
    "description": "A terminal that types an install command, fills a progress bar and prints the success lines. Edit the command and lines in the markup.",
+   "group": "",
    "tags": [
     "terminal",
     "cli",
@@ -4120,6 +4201,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Count-up numbers",
    "description": "Headline numbers that count up when they scroll into view. Set the target, prefix, suffix and decimals with data attributes.",
+   "group": "",
    "tags": [
     "number",
     "stat",
@@ -4164,6 +4246,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Hard-cut text",
    "description": "A run of short phrases that cut in on the beat with no fades, swapping ground and colour each time. Made for video intros; edit the beats in the script.",
+   "group": "",
    "tags": [
     "text",
     "kinetic",
@@ -4207,6 +4290,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Ink fill loader",
    "description": "A wordmark drawn as SVG text with a ghost outline, while an ink fill rises inside the letters on a slow wave. Loops as a loader; swap the word for your own.",
+   "group": "",
    "tags": [
     "loader",
     "loading",
@@ -4246,6 +4330,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Line draw",
    "description": "SVG line chart whose path draws on, then the area fades in and the end point pulses with a value label. Set the series in data-points.",
+   "group": "",
    "tags": [
     "chart",
     "line",
@@ -4296,6 +4381,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Lower third",
    "description": "A name and role lower third that wipes in, holds, wipes out and loops, shown on a neutral video-frame placeholder.",
+   "group": "",
    "tags": [
     "lower third",
     "video",
@@ -4346,6 +4432,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Marquee ticker",
    "description": "An infinite horizontal ticker of keywords in two rows moving in opposite directions, with faded edges. Pauses on hover and when off screen.",
+   "group": "",
    "tags": [
     "marquee",
     "ticker",
@@ -4386,6 +4473,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Progress rings",
    "description": "Three SVG rings that fill to their percentage while the centre label counts up. Set each target with data-value.",
+   "group": "",
    "tags": [
     "ring",
     "progress",
@@ -4432,6 +4520,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Stagger cards",
    "description": "A grid of six cards that enter one after another with a fade, rise and slight scale. Starts when scrolled into view.",
+   "group": "",
    "tags": [
     "cards",
     "grid",
@@ -4478,6 +4567,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Table fill",
    "description": "A data table whose rows appear one by one while their numbers count up, ending on a highlighted total row. Edit the rows in the markup.",
+   "group": "",
    "tags": [
     "table",
     "rows",
@@ -4542,6 +4632,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Text reveal",
    "description": "A kinetic headline whose words rise out of a mask with a stagger, followed by a fading subline. Starts when scrolled into view.",
+   "group": "",
    "tags": [
     "text",
     "headline",
@@ -4585,6 +4676,7 @@ window.OK_REGISTRY = {
    "category": "motion",
    "title": "Typewriter terminal",
    "description": "A terminal window that types two commands, prints their output line by line and ends on a blinking cursor. Edit the lines in the markup.",
+   "group": "",
    "tags": [
     "terminal",
     "cli",
@@ -4632,6 +4724,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Browser mockup",
    "description": "A browser window with traffic lights, a tab and a URL bar around a mini dashboard built from token shapes. The chart bars grow in when it scrolls into view.",
+   "group": "",
    "tags": [
     "browser",
     "mockup",
@@ -4704,6 +4797,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "CTA band",
    "description": "Closing call to action on an inverted band: one headline, a supporting line, a primary button, a text link and a reassurance line.",
+   "group": "",
    "tags": [
     "cta",
     "band",
@@ -4757,6 +4851,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "FAQ accordion",
    "description": "Frequently asked questions in a two-column section. Built on details and summary, with a smooth height animation and a rotating chevron. Works without JavaScript.",
+   "group": "",
    "tags": [
     "faq",
     "accordion",
@@ -4813,6 +4908,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Feature grid",
    "description": "Six features in a three-column grid, each with a small stroke icon, a title and one line of copy, under a centred section heading.",
+   "group": "",
    "tags": [
     "features",
     "grid",
@@ -4874,6 +4970,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Footer",
    "description": "Multi-column site footer with a brand blurb, four link groups, a status indicator and a small-print row for legal links and copyright.",
+   "group": "",
    "tags": [
     "footer",
     "links",
@@ -4928,6 +5025,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Hero",
    "description": "Landing hero with one display headline, a subline, a filled and an outlined call to action, a proof line, and a product frame mock built from plain divs.",
+   "group": "",
    "tags": [
     "hero",
     "landing",
@@ -5005,6 +5103,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Navbar",
    "description": "Top navigation with a wordmark, links and a call to action. Below 760px it collapses to a menu button that opens an accessible disclosure panel.",
+   "group": "",
    "tags": [
     "navigation",
     "header",
@@ -5058,6 +5157,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Phone mockup",
    "description": "A phone frame whose app screen is built from token shapes and scrolls gently by itself, pausing on hover. Swap the feed markup for your own screen.",
+   "group": "",
    "tags": [
     "phone",
     "mockup",
@@ -5135,6 +5235,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Pricing",
    "description": "Three pricing tiers with a monthly and yearly toggle that updates every price, a recommended tier marked with the highlight colour pair, and a feature checklist per plan.",
+   "group": "",
    "tags": [
     "pricing",
     "plans",
@@ -5205,6 +5306,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Tablet mockup",
    "description": "A landscape tablet frame holding a reading app: chapter list, a page of text with a marker highlight that sweeps in, and a progress bar. Built from token shapes.",
+   "group": "",
    "tags": [
     "tablet",
     "mockup",
@@ -5271,6 +5373,7 @@ window.OK_REGISTRY = {
    "category": "pages",
    "title": "Testimonials",
    "description": "Three customer quotes in cards, each with the person's name, role, company and an initials avatar. No photos needed.",
+   "group": "",
    "tags": [
     "testimonials",
     "quotes",
@@ -5327,6 +5430,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Annotated callout",
    "description": "A content frame with commentary kept outside it in a note box, pointing in with a thin arrow. Separates what the thing is from what to notice.",
+   "group": "",
    "tags": [
     "annotation",
     "commentary",
@@ -5379,6 +5483,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Comparison cards",
    "description": "Three options side by side with cost, time, pros and cons. The recommended option is marked with the highlight pair so the eye lands there first.",
+   "group": "",
    "tags": [
     "compare",
     "options",
@@ -5437,6 +5542,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Data table",
    "description": "A spacious, sortable table: click a column heading to sort, numbers are right-aligned with tabular figures, the header stays put while the body scrolls, and a status column uses semantic pills.",
+   "group": "",
    "tags": [
     "table",
     "sort",
@@ -5498,6 +5604,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Decision list",
    "description": "Numbered recommendations for the reader to act on, each with a one-sentence rationale, an owner and a due date. Use at the end of a report or memo.",
+   "group": "",
    "tags": [
     "decisions",
     "recommendations",
@@ -5549,6 +5656,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Direction board",
    "description": "Board comparing four design directions as tiles, each with a name, a type specimen in its own system font stack, a four-swatch palette and a one-line rationale. One tile is marked recommended.",
+   "group": "",
    "tags": [
     "design",
     "directions",
@@ -5609,6 +5717,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Filterable timeline",
    "description": "A year of typed entries (shipped, decision, commercial, dropped, setback) as a newest-first timeline, with a colour legend, workstream filter chips and a plan versus actual track for the work that shipped.",
+   "group": "",
    "tags": [
     "timeline",
     "register",
@@ -5679,6 +5788,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Funnel strip",
    "description": "A horizontal strip of funnel stages with counts, a bar scaled to the first stage, and the conversion between each pair. The biggest drop-off is marked. Edit STAGES at the top of the script.",
+   "group": "",
    "tags": [
     "funnel",
     "conversion",
@@ -5737,6 +5847,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Gantt lanes",
    "description": "A 12 week plan in two lanes, our team and the client team, with stage bars, gates between stages, hatched refinement windows that overlap them and a today marker. Below it a workload histogram sets a flat load against a spiky one.",
+   "group": "",
    "tags": [
     "gantt",
     "plan",
@@ -5810,6 +5921,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "KPI tracker",
    "description": "KPI rows with the current value, a bar with a target tick, a small trend line, a status mark that reads in monochrome (filled, half or hollow dot plus a word) and a badge saying whether the number is live or a placeholder. Edit KPIS at the top of the script.",
+   "group": "",
    "tags": [
     "kpi",
     "scorecard",
@@ -5870,6 +5982,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Pillar cards",
    "description": "Three cards with a coloured bar on the left edge, each naming one pillar of a plan with a short paragraph and two fact rows. Use to frame a report around a few parallel ideas.",
+   "group": "",
    "tags": [
     "pillars",
     "cards",
@@ -5923,6 +6036,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Print page",
    "description": "An A4 portrait report page with a running header, two-column body and a footer with page number. On screen it scales to fit; printed or saved as PDF it is exactly one A4 sheet. The @page rule is global, so keep one print-page per document.",
+   "group": "",
    "tags": [
     "print",
     "a4",
@@ -5982,6 +6096,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Pull quote",
    "description": "A large quote with attribution and role, for lifting one voice out of a report. The quote is the only display element.",
+   "group": "",
    "tags": [
     "quote",
     "testimonial",
@@ -6024,6 +6139,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Ranked picks",
    "description": "A ranked list of recommendations, each with a rank, a title, one line on why, and a score bar. The top pick is the only row that is highlighted. Edit the list items to change the ranking.",
+   "group": "",
    "tags": [
     "ranking",
     "recommendations",
@@ -6083,6 +6199,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Report header",
    "description": "Opening block for a report or memo: eyebrow, one display title, a meta row with author, date and a status pill, and a summary paragraph.",
+   "group": "",
    "tags": [
     "header",
     "title",
@@ -6138,6 +6255,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Scroll report shell",
    "description": "A long-form report that scrolls inside its own frame: a reading-progress bar, a section dot nav on the right edge that follows the reader and shows labels on hover or focus, blocks that fade in as they arrive, four short sections and an accordion of anticipated questions at the end.",
+   "group": "",
    "tags": [
     "report",
     "long-form",
@@ -6213,6 +6331,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Stat strip",
    "description": "A row of four headline KPIs, each with a label and a delta chip. Green for a favourable change, red for an unfavourable one, with an arrow and screen-reader text so colour is never the only signal.",
+   "group": "",
    "tags": [
     "kpi",
     "numbers",
@@ -6266,6 +6385,7 @@ window.OK_REGISTRY = {
    "category": "reports",
    "title": "Timeline",
    "description": "A vertical list of milestones with a date, title and one-line note. Done, current and next states are told apart by marker, label and the highlight pair on the current step.",
+   "group": "",
    "tags": [
     "timeline",
     "milestones",
@@ -6318,6 +6438,7 @@ window.OK_REGISTRY = {
    "category": "social",
    "title": "Annotation kit",
    "description": "A sheet of reusable hand-drawn SVG marks: circle, underline, arrow, bracket, highlighter, stamp and scribble note. Each mark is a self-contained inline element that draws on when it scrolls into view.",
+   "group": "",
    "tags": [
     "social",
     "annotation",
@@ -6369,6 +6490,7 @@ window.OK_REGISTRY = {
    "category": "social",
    "title": "Carousel cover",
    "description": "4:5 carousel opening slide with a hook headline, a hand-drawn underline, a slide counter and a swipe cue. Exports at 1080x1350.",
+   "group": "",
    "tags": [
     "social",
     "carousel",
@@ -6413,6 +6535,7 @@ window.OK_REGISTRY = {
    "category": "social",
    "title": "Carousel end",
    "description": "4:5 closing carousel slide with a follow call to action, a handle placeholder and save and share cues.",
+   "group": "",
    "tags": [
     "social",
     "carousel",
@@ -6458,6 +6581,7 @@ window.OK_REGISTRY = {
    "category": "social",
    "title": "Quote post",
    "description": "4:5 pull-quote post set in the serif face, with a marker highlight on the key phrase and an attribution line.",
+   "group": "",
    "tags": [
     "social",
     "quote",
@@ -6498,6 +6622,7 @@ window.OK_REGISTRY = {
    "category": "social",
    "title": "Stat post",
    "description": "4:5 social post built around one huge number, a line of context, a hand-drawn underline and a source line.",
+   "group": "",
    "tags": [
     "social",
     "stat",
@@ -6537,6 +6662,7 @@ window.OK_REGISTRY = {
    "category": "social",
    "title": "Tool card slide",
    "description": "4:5 carousel slide recommending one tool or repo: name, one-line pitch, three bullets, a repo stats row, a rotated stamp and a hand-drawn circle with a scribbled note around one fact.",
+   "group": "",
    "tags": [
     "social",
     "carousel",
@@ -6589,6 +6715,7 @@ window.OK_REGISTRY = {
    "category": "tools",
    "title": "Decision board",
    "description": "Open decisions grouped by theme, each with context, options, Approve, Reject or Needs new options, and a note. A progress summary counts what is decided and one button copies the whole state as plain text.",
+   "group": "",
    "tags": [
     "decisions",
     "approval",
@@ -6662,6 +6789,7 @@ window.OK_REGISTRY = {
    "category": "tools",
    "title": "Form wizard",
    "description": "A multi-step quote request with a step rail, inline validation per step, a stepper and toggles, a date field, a live price summary and a review step. Autosaves to the browser and can be restarted.",
+   "group": "",
    "tags": [
     "form",
     "wizard",
@@ -6739,6 +6867,7 @@ window.OK_REGISTRY = {
    "category": "tools",
    "title": "Review comments",
    "description": "Pin feedback to any element of a page. Turn on comment mode, click what needs changing, write the note, then export every comment as markdown grouped by section. Scoped to one review area, or the whole document on request.",
+   "group": "",
    "tags": [
     "review",
     "feedback",
@@ -6809,6 +6938,7 @@ window.OK_REGISTRY = {
    "category": "tools",
    "title": "Scenario calculator",
    "description": "Compare plans side by side: scenario tabs you can add, duplicate, rename and delete, editable income and cost rows, a certainty filter, a sticky totals bar, a compare table and JSON backup.",
+   "group": "",
    "tags": [
     "calculator",
     "scenarios",

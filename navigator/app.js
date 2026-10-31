@@ -441,9 +441,20 @@ ${snippet(c, true)}
     const list = inCat(id);
     setActiveNav(`#/c/${id}`);
     setCrumbs([{ label: 'Home', href: '#/' }, { label: cat.label }]);
-    view().innerHTML = `
-      <div class="view-head"><h1>${esc(cat.label)}</h1><p>${esc(cat.blurb || '')}</p><span class="meta">${list.length} component${list.length === 1 ? '' : 's'}</span></div>
-      ${list.length ? `<div class="grid">${list.map((c) => card(c, { showCat: false })).join('')}</div>` : '<div class="empty">Nothing here yet. See CONTRIBUTING.md to add one.</div>'}`;
+    const head = `<div class="view-head"><h1>${esc(cat.label)}</h1><p>${esc(cat.blurb || '')}</p><span class="meta">${list.length} component${list.length === 1 ? '' : 's'}</span></div>`;
+    if (cat.groups && list.length) {
+      // Categories with sub-groups render one section per group, with jump chips on top.
+      const order = [...cat.groups, ''];
+      const sections = order.map((g) => [g, list.filter((c) => (cat.groups.includes(c.group) ? c.group : '') === g)]).filter(([, l]) => l.length);
+      view().innerHTML = `${head}
+        <div class="group-chips">${sections.map(([g, l], i) => `<button type="button" class="tag" data-jump="g${i}">${esc(g || 'Other')} <span>${l.length}</span></button>`).join('')}</div>
+        ${sections.map(([g, l], i) => `<section class="section" id="g${i}"><div class="section-head"><h2>${esc(g || 'Other')}</h2><span class="count">${l.length}</span></div>
+          <div class="grid">${l.map((c) => card(c, { showCat: false })).join('')}</div></section>`).join('')}`;
+      $$('[data-jump]', view()).forEach((b) => b.addEventListener('click', () => document.getElementById(b.dataset.jump).scrollIntoView({ behavior: 'smooth', block: 'start' })));
+    } else {
+      view().innerHTML = `${head}
+        ${list.length ? `<div class="grid">${list.map((c) => card(c, { showCat: false })).join('')}</div>` : '<div class="empty">Nothing here yet. See CONTRIBUTING.md to add one.</div>'}`;
+    }
     activateThumbs(view());
   }
 

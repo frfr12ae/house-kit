@@ -44,6 +44,7 @@ That regenerates `navigator/registry.js` and `CREDITS.md`, and lints every compo
 | `@title` | yes | Display name |
 | `@description` | yes | One sentence: what it is and when to use it |
 | `@added` | yes | `YYYY-MM-DD`, drives "Newest" |
+| `@group` | in categories that define groups | Sub-section inside the category, one of the `groups` listed for it in `kit.json` (Decks has: Openers and structure, Storyline, Exhibits, Pitch, Keynote, Workshop, Full decks, Deck tools) |
 | `@tags` | no | Comma-separated search terms |
 | `@preview` | no | `fill` (default, full-width block), `center` (centred on a padded ground) or `slide` (16:9) |
 | `@height` | no | Minimum preview height in px. The preview grows to fit content |
