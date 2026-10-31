@@ -138,7 +138,12 @@ const themes = {};
 for (const f of readdirSync(join(ROOT, 'design-system/themes')).filter((n) => n.endsWith('.css') && !n.startsWith('_')).sort()) {
   themes[basename(f, '.css')] = read(`design-system/themes/${f}`);
 }
-for (const [name, css] of Object.entries(themes)) lintText(css, `design-system/themes/${name}.css`);
+const houseKeys = [...themes.house.matchAll(/(--ds-[\w-]+)\s*:/g)].map((m) => m[1]);
+for (const [name, css] of Object.entries(themes)) {
+  lintText(css, `design-system/themes/${name}.css`);
+  const missing = houseKeys.filter((k) => !new RegExp(`${k}\\s*:`).test(css));
+  if (missing.length) fail(`design-system/themes/${name}.css`, `missing tokens: ${missing.join(', ')}`);
+}
 
 const registry = {
   kit,
@@ -167,6 +172,10 @@ function creditsMd() {
     '## Navigator',
     '',
     'The sidebar-and-grid browsing layout is inspired by the component browser at [21st.dev](https://21st.dev/community/components). No code was copied.',
+    '',
+    '## Upstream licenses',
+    '',
+    'Code adapted from other projects keeps its license. The full texts are in [LICENSES/](LICENSES/).',
     '',
     '## Components',
     '',

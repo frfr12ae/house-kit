@@ -9,19 +9,84 @@
       "id": "outputs",
       "label": "Outputs",
       "categories": [
-        { "id": "decks", "label": "Decks", "icon": "deck", "blurb": "16:9 slides that scale with their container. Paste slides into the deck shell." },
-        { "id": "reports", "label": "Reports", "icon": "report", "blurb": "Blocks for memos, briefings and printable reports." },
-        { "id": "pages", "label": "Page sections", "icon": "page", "blurb": "Heroes, feature grids, pricing, FAQ and footers for HTML pages." },
-        { "id": "motion", "label": "Motion", "icon": "motion", "blurb": "Animated numbers, charts, text and overlays in CSS and vanilla JS." }
+        {
+          "id": "decks",
+          "label": "Decks",
+          "icon": "deck",
+          "blurb": "16:9 slides that scale with their container. Paste slides into the deck shell."
+        },
+        {
+          "id": "reports",
+          "label": "Reports",
+          "icon": "report",
+          "blurb": "Blocks for memos, briefings, board packs and printable reports."
+        },
+        {
+          "id": "pages",
+          "label": "Page sections",
+          "icon": "page",
+          "blurb": "Heroes, feature grids, pricing, FAQ, footers and device mockups for HTML pages."
+        },
+        {
+          "id": "email",
+          "label": "Email",
+          "icon": "email",
+          "blurb": "Table-based email blocks and signatures. Copying resolves tokens to plain values, because email clients ignore CSS variables."
+        },
+        {
+          "id": "social",
+          "label": "Social",
+          "icon": "social",
+          "blurb": "4:5 carousel slides and post cards with a hand-annotation kit."
+        },
+        {
+          "id": "motion",
+          "label": "Motion",
+          "icon": "motion",
+          "blurb": "Animated numbers, charts, text and overlays in CSS and vanilla JS."
+        }
       ]
     },
     {
       "id": "blocks",
       "label": "Building blocks",
       "categories": [
-        { "id": "interactive", "label": "Interactive", "icon": "interactive", "blurb": "Buttons, tabs, toggles, dialogs, toasts and other controls." },
-        { "id": "dataviz", "label": "Data viz", "icon": "dataviz", "blurb": "Dependency-free SVG charts that read their colours from the series tokens." },
-        { "id": "ai", "label": "AI interfaces", "icon": "ai", "blurb": "Chat threads, prompt composers, streaming answers and tool calls." }
+        {
+          "id": "interactive",
+          "label": "Interactive",
+          "icon": "interactive",
+          "blurb": "Buttons, tabs, toggles, dialogs, toasts and other controls."
+        },
+        {
+          "id": "tools",
+          "label": "Forms and tools",
+          "icon": "tools",
+          "blurb": "Wizards, calculators, decision boards and feedback tools that keep their state in the browser."
+        },
+        {
+          "id": "dataviz",
+          "label": "Data viz",
+          "icon": "dataviz",
+          "blurb": "Dependency-free SVG charts that read their colours from the series tokens."
+        },
+        {
+          "id": "diagrams",
+          "label": "Diagrams",
+          "icon": "diagrams",
+          "blurb": "Flowcharts, sequences, architectures and maps drawn in SVG on the semantic colour pairs."
+        },
+        {
+          "id": "ai",
+          "label": "AI interfaces",
+          "icon": "ai",
+          "blurb": "Chat threads, prompt composers, streaming answers and tool calls."
+        },
+        {
+          "id": "backgrounds",
+          "label": "Backgrounds",
+          "icon": "backgrounds",
+          "blurb": "Animated and static backgrounds for heroes, slides and video frames."
+        }
       ]
     }
   ]

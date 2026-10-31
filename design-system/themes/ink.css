@@ -1,0 +1,39 @@
+/* ink: demo brand theme. Hard black and white with one signal colour, square corners.
+   For social cut-downs and bold statements. */
+:root {
+  --ds-bg: #000000;
+  --ds-surface: #0F0F0F;
+  --ds-panel: #1A1A1A;
+  --ds-raised: #141414;
+
+  --ds-ink: #FFFFFF;
+  --ds-text: #E6E6E6;
+  --ds-muted: #8A8A8A;
+  --ds-line: #2B2B2B;
+
+  --ds-action: #FF4D00;
+  --ds-on-action: #000000;
+
+  --ds-info-fill: #1A1A1A;      --ds-info-line: #FFFFFF;
+  --ds-neutral-fill: #141414;   --ds-neutral-line: #8A8A8A;
+  --ds-note-fill: #1C2400;      --ds-note-line: #C6FF00;
+  --ds-highlight-fill: #2A1200; --ds-highlight-line: #FF4D00;
+  --ds-danger-fill: #2A1200;    --ds-danger-line: #FF4D00;
+
+  --ds-series-1: #FFFFFF;
+  --ds-series-2: #FF4D00;
+  --ds-series-3: #C6FF00;
+  --ds-series-4: #8A8A8A;
+  --ds-series-5: #4D4D4D;
+
+  --ds-font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ds-font-display: var(--ds-font-sans);
+  --ds-font-serif: Georgia, serif;
+  --ds-font-hand: "Bradley Hand", "Segoe Print", cursive;
+  --ds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ds-weight-display: 800;
+  --ds-tracking-display: -0.05em;
+
+  --ds-radius-scale: 0.3;
+  color-scheme: dark;
+}

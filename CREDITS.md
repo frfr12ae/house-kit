@@ -8,6 +8,10 @@ Every component records where its idea or code came from. "Inspired by" means th
 
 The sidebar-and-grid browsing layout is inspired by the component browser at [21st.dev](https://21st.dev/community/components). No code was copied.
 
+## Upstream licenses
+
+Code adapted from other projects keeps its license. The full texts are in [LICENSES/](LICENSES/).
+
 ## Components
 
 | Component | Category | Source | Author | License |

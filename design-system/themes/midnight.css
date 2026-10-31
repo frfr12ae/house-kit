@@ -28,6 +28,8 @@
 
   --ds-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --ds-font-display: var(--ds-font-sans);
+  --ds-font-serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --ds-font-hand: "Bradley Hand", "Segoe Print", cursive;
   --ds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --ds-weight-display: 700;
   --ds-tracking-display: -0.03em;

@@ -62,6 +62,8 @@ That regenerates `navigator/registry.js` and `CREDITS.md`, and lints every compo
 
 Never copy code from a source whose license does not allow redistribution in a public repo. When in doubt, write it from scratch and use `inspired-by`.
 
+When code is adapted or ported, the upstream license text must be in `LICENSES/` (for example `LICENSES/diagram-design-MIT.txt`, `LICENSES/hyperframes-Apache-2.0.txt`), the `@source` must point at the upstream repo, and for Apache-2.0 code the file must say in a comment that it was changed.
+
 ## Rules the build enforces
 
 1. **Root class.** The outermost element carries `class="c-<slug>"`.
@@ -78,6 +80,9 @@ Never copy code from a source whose license does not allow redistribution in a p
 - **Air over density.** Generous padding; hierarchy by nesting containers, not heavier borders.
 - **Slides** (`@preview slide`): the root is `width: 100%; aspect-ratio: 16 / 9; container-type: inline-size;` and sizes everything in `cqi` units, so a slide scales to any width.
 - **Motion** reads `--ds-dur-*` and `--ds-ease*`, and respects `prefers-reduced-motion` (the tokens drop to 0ms; JS animations check `matchMedia('(prefers-reduced-motion: reduce)')`).
+- **Email** (`components/email/`): table-based layout, styles inline on elements (`style="color: var(--ds-ink)"`), widths in px, max 600px wide. Use `var(--ds-*)` freely: the navigator replaces every variable with the selected theme's value when copying, because email clients ignore CSS variables. No JavaScript in the email markup.
+- **Social** (`components/social/`): `@preview center`, root `width: min(540px, 100%); aspect-ratio: 4 / 5; container-type: inline-size;`, sizes in `cqi`, so it exports at 1080x1350 by scaling.
+- **Fonts**: `--ds-font-sans`, `--ds-font-display`, `--ds-font-serif` (editorial quotes), `--ds-font-hand` (hand annotations only), `--ds-font-mono`.
 - **Responsive.** Works from 360px wide upward. Test the mobile viewport in the navigator.
 - **Accessible.** Real buttons, labels on inputs, `aria-*` where a widget needs it, visible focus via `var(--ds-focus)`.
 - **Realistic placeholder copy**, never lorem ipsum.

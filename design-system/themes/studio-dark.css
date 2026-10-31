@@ -1,0 +1,38 @@
+/* studio-dark: demo dark brand theme. Near-black product-studio look with a cool accent. */
+:root {
+  --ds-bg: #0A0A0B;
+  --ds-surface: #151518;
+  --ds-panel: #1E1E22;
+  --ds-raised: #1A1A1E;
+
+  --ds-ink: #F4F4F5;
+  --ds-text: #D4D4D8;
+  --ds-muted: #A1A1AA;
+  --ds-line: #2A2A30;
+
+  --ds-action: #7C9CFF;
+  --ds-on-action: #0A0A0B;
+
+  --ds-info-fill: #161C2E;      --ds-info-line: #7C9CFF;
+  --ds-neutral-fill: #1E1E22;   --ds-neutral-line: #A1A1AA;
+  --ds-note-fill: #0F2A21;      --ds-note-line: #34D399;
+  --ds-highlight-fill: #2C2110; --ds-highlight-line: #F5A524;
+  --ds-danger-fill: #2E1618;    --ds-danger-line: #F87171;
+
+  --ds-series-1: #7C9CFF;
+  --ds-series-2: #F5A524;
+  --ds-series-3: #34D399;
+  --ds-series-4: #A1A1AA;
+  --ds-series-5: #F87171;
+
+  --ds-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --ds-font-display: var(--ds-font-sans);
+  --ds-font-serif: "Iowan Old Style", Georgia, serif;
+  --ds-font-hand: "Bradley Hand", "Segoe Print", cursive;
+  --ds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ds-weight-display: 600;
+  --ds-tracking-display: -0.04em;
+
+  --ds-radius-scale: 1;
+  color-scheme: dark;
+}
