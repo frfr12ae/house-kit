@@ -81,6 +81,8 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   document.querySelectorAll('.c-hard-cut-text').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const phrase = root.querySelector('.phrase');
     const ticks = [...root.querySelectorAll('.ticks i')];
     const show = (i) => {

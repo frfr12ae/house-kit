@@ -27,8 +27,8 @@
   .c-source-citations .cite {
     display: inline-grid;
     place-items: center;
-    min-width: 20px;
-    height: 20px;
+    min-width: 24px;
+    height: 24px;
     margin: 0 2px;
     padding: 0 5px;
     border: var(--ds-hairline) solid var(--ds-line);
@@ -106,6 +106,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-source-citations').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const cites = [...root.querySelectorAll('.cite')];
     const cards = [...root.querySelectorAll('.src')];
     const set = (id, on) => {

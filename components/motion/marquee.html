@@ -76,6 +76,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-marquee').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     root.querySelectorAll('.track').forEach((track) => {
       // repeat the set until one track is wider than the row, then add one copy for the seamless loop
       const row = track.parentElement;

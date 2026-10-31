@@ -159,6 +159,8 @@
   const pctW = (from, to) => ((to - from + 1) / WEEKS) * 100;
 
   document.querySelectorAll('.c-gantt-lanes').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const plot = root.querySelector('.plot');
     const detail = root.querySelector('.detail');
     const weeks = Array.from({ length: WEEKS }, (_, i) => i + 1);

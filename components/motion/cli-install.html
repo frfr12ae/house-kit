@@ -15,7 +15,9 @@
   .c-cli-install *::after { box-sizing: border-box; }
   .c-cli-install {
     width: min(680px, 100%);
+    max-width: 100%;
     margin: 0;
+    contain: inline-size;
     overflow: hidden;
     background: var(--ds-raised);
     border: var(--ds-hairline) solid var(--ds-line);
@@ -42,7 +44,7 @@
   .c-cli-install .ps { color: var(--ds-muted); }
   .c-cli-install .cmd { color: var(--ds-ink); font-weight: 600; }
   .c-cli-install .out { color: var(--ds-muted); }
-  .c-cli-install .ok b { color: var(--ds-note-line); font-weight: 400; }
+  .c-cli-install .ok b { color: var(--ds-ink); font-weight: 700; }
   .c-cli-install .ok span { color: var(--ds-text); }
   .c-cli-install .prog { display: flex; align-items: center; gap: var(--ds-space-3); white-space: nowrap; color: var(--ds-muted); }
   .c-cli-install .track { flex: 1; max-width: 300px; height: 8px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); border: var(--ds-hairline) solid var(--ds-line); overflow: hidden; }
@@ -81,6 +83,8 @@
   const ease = (t) => 1 - Math.pow(1 - t, 2);
 
   document.querySelectorAll('.c-cli-install').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     if (reduced) return; // the markup already holds the end state
     const cs = getComputedStyle(root);
     const base = parseFloat(cs.getPropertyValue('--ds-dur-base')) || 260;

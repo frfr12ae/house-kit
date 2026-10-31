@@ -44,10 +44,15 @@
     right: 0;
     bottom: 0;
     height: var(--h);
+  }
+  .c-bar-grow .bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0;
     background: var(--ds-series-1);
   }
-  .c-bar-grow .col.is-peak .bar { background: var(--ds-highlight-line); }
+  .c-bar-grow .col.is-peak .bar::before { background: var(--ds-highlight-line); }
   .c-bar-grow .val {
     position: absolute;
     left: 50%;
@@ -101,6 +106,8 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   document.querySelectorAll('.c-bar-grow').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     if (reduced) return;
     const ms = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
     const vals = [...root.querySelectorAll('.val')];

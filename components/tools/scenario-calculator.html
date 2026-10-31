@@ -85,7 +85,7 @@
   .c-scenario-calculator tbody tr:last-child > * { border-bottom: 0; }
   .c-scenario-calculator tbody th { font-weight: 600; color: var(--ds-ink); }
   .c-scenario-calculator tbody tr.is-active { background: var(--ds-highlight-fill); }
-  .c-scenario-calculator .pick { max-width: 220px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; text-decoration-color: var(--ds-line); text-underline-offset: 3px; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .c-scenario-calculator .pick { display: inline-block; vertical-align: middle; min-height: 24px; line-height: 24px; max-width: 220px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; text-decoration-color: var(--ds-line); text-underline-offset: 3px; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
   .c-scenario-calculator .pick:focus-visible { outline: none; box-shadow: var(--ds-focus); border-radius: var(--ds-radius-sm); }
   .c-scenario-calculator .neg { color: var(--ds-danger-line); }
   .c-scenario-calculator td.res { font-weight: 700; color: var(--ds-ink); }
@@ -219,6 +219,8 @@
   };
 
   document.querySelectorAll('.c-scenario-calculator').forEach((root, index) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const KEY = root.dataset.storageKey || 'ok:scenario-calculator:' + index;
     const $ = (s) => root.querySelector(s);
     const $$ = (s) => [...root.querySelectorAll(s)];

@@ -120,6 +120,8 @@
   }
 
   document.querySelectorAll('.c-sparkline-cards').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const hosts = [...root.querySelectorAll('.spark')];
     const run = () => hosts.forEach(draw);
     run();

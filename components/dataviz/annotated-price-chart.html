@@ -104,6 +104,8 @@
   const up = last >= price[N - 2];
 
   document.querySelectorAll('.c-annotated-price-chart').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const plot = root.querySelector('.plot');
     const NS = 'http://www.w3.org/2000/svg';
 

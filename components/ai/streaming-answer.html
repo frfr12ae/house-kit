@@ -89,6 +89,8 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   document.querySelectorAll('.c-streaming-answer').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     if (reduced) return;
     const answer = root.querySelector('.answer');
     const total = parseFloat(root.dataset.duration) || 2400;

@@ -152,6 +152,8 @@
   }
 
   document.querySelectorAll('.c-kpi-tracker').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const counts = { ahead: 0, watch: 0, behind: 0 };
     const rows = KPIS.map((k) => {
       const st = status(k);

@@ -98,7 +98,7 @@
   .c-keynote-availability .tier .price { display: flex; align-items: baseline; gap: 0.9cqi; white-space: nowrap; font-family: var(--ds-font-display); font-size: 4.6cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1.05; color: var(--k-fg); }
   .c-keynote-availability .tier .price small { font-family: var(--ds-font-sans); font-size: 1.25cqi; font-weight: 500; letter-spacing: 0; color: var(--k-dim); }
   .c-keynote-availability .tier p { margin: 0; font-size: 1.4cqi; color: var(--k-soft); }
-  .c-keynote-availability .tier .flag { position: absolute; right: 1.6cqi; top: 1.5cqi; padding: 0.35cqi 1cqi; border-radius: var(--ds-radius-pill); background: var(--k-amber); font-size: 1.05cqi; font-weight: 700; color: var(--k-bg); }
+  .c-keynote-availability .tier .flag { position: absolute; right: 1.6cqi; top: 1.5cqi; padding: 0.35cqi 1cqi; border-radius: var(--ds-radius-pill); background: var(--ds-highlight-fill); border: var(--ds-hairline) solid var(--k-amber); font-size: 1.05cqi; font-weight: 700; color: var(--ds-ink); }
   .c-keynote-availability .bottom { position: absolute; left: 7cqi; right: 7cqi; bottom: 5.4cqi; display: flex; align-items: center; justify-content: space-between; gap: 3cqi; }
   .c-keynote-availability .plats { display: flex; align-items: center; flex-wrap: wrap; gap: 0.8cqi; }
   .c-keynote-availability .plats span { padding: 0.7cqi 1.5cqi; border: var(--ds-hairline) solid var(--k-line); border-radius: var(--ds-radius-pill); font-size: 1.45cqi; font-weight: 600; color: var(--k-soft); }
@@ -138,6 +138,8 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('.c-keynote-availability').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     if (reduced) return;
     root.classList.add('is-armed');
     const io = new IntersectionObserver((entries) => {

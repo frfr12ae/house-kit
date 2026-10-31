@@ -166,6 +166,8 @@
 (() => {
   const mq = matchMedia('(max-width: 760px)');
   document.querySelectorAll('.c-navbar').forEach((root, i) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const toggle = root.querySelector('.toggle');
     const panel = root.querySelector('.panel');
     const id = 'c-navbar-panel-' + i;

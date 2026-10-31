@@ -87,6 +87,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-dialog').forEach((root, n) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const opener = root.querySelector('.open');
     const modal = root.querySelector('.modal');
     const result = root.querySelector('.result');

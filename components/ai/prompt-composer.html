@@ -192,6 +192,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-prompt-composer').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const form = root.querySelector('.box');
     const area = form.querySelector('textarea');
     const send = form.querySelector('.send');

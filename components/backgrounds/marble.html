@@ -186,6 +186,8 @@ void main() {
   }
 
   function init(root) {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const canvas = root.querySelector('.canvas');
     const probe = root.querySelector('.probe');
     const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });

@@ -115,6 +115,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-tooltip').forEach((root, n) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     root.querySelectorAll('.tip').forEach((tip, i) => {
       const trigger = tip.querySelector('.trigger');
       const bubble = tip.querySelector('.bubble');

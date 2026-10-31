@@ -128,6 +128,8 @@
     font-size: 1.5cqi;
     font-weight: 700;
     padding: 1cqi 2.6cqi;
+    min-width: 24px;
+    min-height: 24px;
     border-radius: var(--ds-radius-pill);
     background: var(--ds-action);
     color: var(--ds-on-action);
@@ -192,6 +194,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-exercise-timer').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const total = Math.max(0.05, parseFloat(root.dataset.minutes) || 10) * 60000;
     const fill = root.querySelector('.fill');
     const time = root.querySelector('.time');

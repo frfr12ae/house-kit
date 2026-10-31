@@ -116,7 +116,7 @@
   .c-keynote-steps .win .ct i:nth-child(3) { grid-column: 1 / span 2; background: color-mix(in srgb, var(--k-fg) 18%, transparent); }
   /* 3: link */
   .c-keynote-steps .link { display: flex; align-items: center; gap: 1cqi; padding: 0.6cqi 0.6cqi 0.6cqi 1.4cqi; border: var(--ds-hairline) solid var(--k-line); border-radius: var(--ds-radius-pill); background: var(--k-card); font-family: var(--ds-font-mono); font-size: 1.15cqi; color: var(--k-soft); }
-  .c-keynote-steps .link b { padding: 0.7cqi 1.2cqi; border-radius: var(--ds-radius-pill); background: var(--k-green); font-family: var(--ds-font-sans); font-size: 1.2cqi; font-weight: 700; color: var(--k-bg); box-shadow: 0 0 2cqi color-mix(in srgb, var(--k-green) 50%, transparent); }
+  .c-keynote-steps .link b { padding: 0.7cqi 1.2cqi; border-radius: var(--ds-radius-pill); background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--k-green); font-family: var(--ds-font-sans); font-size: 1.2cqi; font-weight: 700; color: var(--ds-ink); box-shadow: 0 0 2cqi color-mix(in srgb, var(--k-green) 50%, transparent); }
   .c-keynote-steps.is-armed .arrow { opacity: 0; }
   .c-keynote-steps.is-armed.is-in .arrow { opacity: 1; transition: opacity var(--ds-dur-slow) var(--ds-ease); transition-delay: calc(var(--d, 0) * 110ms); }
 </style>
@@ -152,6 +152,8 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('.c-keynote-steps').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     if (reduced) return;
     root.classList.add('is-armed');
     const io = new IntersectionObserver((entries) => {

@@ -92,6 +92,8 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   document.querySelectorAll('.c-progress-bars').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const list = root.querySelector('.list');
     list.innerHTML = GOALS.map((g, i) => {
       const s = status(g);

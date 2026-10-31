@@ -227,6 +227,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-storyboard-sheet').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const secs = [...root.querySelectorAll('[data-sec]')].map((el) => Number(el.dataset.sec));
     const sum = secs.reduce((a, b) => a + b, 0);
     const out = root.querySelector('[data-total]');

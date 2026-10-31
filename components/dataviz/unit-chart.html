@@ -103,6 +103,8 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   document.querySelectorAll('.c-unit-chart').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     root.querySelector('.groups').innerHTML = GROUPS.map((g) =>
       '<li class="group" aria-label="' + esc(g.name) + ': ' + g.count + ' people"><div class="top"><b>' + g.count + '</b><span>' + esc(g.name) + '</span></div>' +
       '<div class="units" aria-hidden="true">' + ('<i class="u m-' + g.kind + '"></i>').repeat(g.count) + '</div></li>'

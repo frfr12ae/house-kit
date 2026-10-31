@@ -154,6 +154,8 @@
   const posX = (s) => 2 + ((utc(s) - START) / (END - START)) * 96;
 
   document.querySelectorAll('.c-filterable-timeline').forEach((root, index) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const KEY = root.dataset.storageKey || 'ok:filterable-timeline:' + index;
     const $ = (s) => root.querySelector(s);
     const live = $('[data-live]');

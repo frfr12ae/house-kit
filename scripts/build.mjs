@@ -67,6 +67,11 @@ function lintCssScope(css, root, file) {
   for (const name of keyframeBlocks.map((k) => k.match(/@keyframes\s+([\w-]+)/)?.[1])) {
     if (name && !name.startsWith(root.slice(1))) fail(file, `@keyframes ${name} must be prefixed with ${root.slice(1)}`);
   }
+  // Document-wide at-rules reach outside the component: an unnamed @page reformats the host's print layout.
+  for (const m of noKeyframes.matchAll(/@page\s*([\w-]*)\s*[{:]/g)) {
+    if (!m[1].startsWith(root.slice(1))) fail(file, `@page must be a named page starting with ${root.slice(1)} (assign it with "page: ${root.slice(1)}" on the slides), or it reformats every page the host prints`);
+  }
+  if (/@import\b/.test(noKeyframes)) fail(file, '@import pulls in outside CSS; components carry their own styles');
   for (const m of noKeyframes.matchAll(/([^{};]+)\{/g)) {
     const sel = m[1].trim();
     if (!sel || sel.startsWith('@')) continue;
@@ -114,6 +119,7 @@ for (const cat of readdirSync(join(ROOT, 'components')).sort()) {
       if (!declared.includes(m[1])) fail(file, `${m[1]} is not a design-system token; name component-local variables without the --ds- prefix`);
     }
     if (parts.js && !/^\(\s*(\(\)\s*=>|function)/.test(parts.js)) warn(file, 'wrap the script in an IIFE so it leaves no globals');
+    if (parts.js && !/dataset\.ok\w+\)\s*return/.test(parts.js)) fail(file, "the script must skip roots it already set up (if (root.dataset.okInit) return; root.dataset.okInit = '1';), or pasting the component twice binds every handler twice");
     if (/#[0-9a-fA-F]{3,8}\b|rgba?\(/.test(parts.css.replace(/\/\*[\s\S]*?\*\//g, ''))) warn(file, 'hardcoded colour in CSS; use a --ds-* token');
     // A name ending in "-" is built at runtime ('--ds-series-' + i): expand it to every token with that prefix.
     const tokens = [...new Set(((parts.css + parts.html + parts.js).match(/--ds-[a-z0-9-]+/g) || [])
@@ -140,6 +146,16 @@ for (const cat of readdirSync(join(ROOT, 'components')).sort()) {
   }
 }
 
+function contrast(a, b) {
+  const lum = (rgb) => {
+    const [r, g, bl] = rgb.map((v) => v / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * bl;
+  };
+  const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
+  return (x + 0.05) / (y + 0.05);
+}
+
+const tokensCss = read('design-system/tokens.css');
 const themes = {};
 for (const f of readdirSync(join(ROOT, 'design-system/themes')).filter((n) => n.endsWith('.css') && !n.startsWith('_')).sort()) {
   themes[basename(f, '.css')] = read(`design-system/themes/${f}`);
@@ -149,6 +165,27 @@ for (const [name, css] of Object.entries(themes)) {
   lintText(css, `design-system/themes/${name}.css`);
   const missing = houseKeys.filter((k) => !new RegExp(`${k}\\s*:`).test(css));
   if (missing.length) fail(`design-system/themes/${name}.css`, `missing tokens: ${missing.join(', ')}`);
+  // Text tokens must stay readable (WCAG AA, 4.5:1) on every ground a component puts them on.
+  // Pairs come from token names, so a value the check cannot read fails instead of passing.
+  const decl = Object.fromEntries([...(tokensCss + '\n' + css).matchAll(/(--ds-[\w-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+  const colour = (k, depth = 0) => {
+    const v = decl[k];
+    if (!v || depth > 6) return null;
+    const ref = v.match(/^var\((--ds-[\w-]+)\)$/);
+    if (ref) return colour(ref[1], depth + 1);
+    let m = v.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    if (m) return m[1].length === 3 ? [...m[1]].map((c) => parseInt(c + c, 16)) : [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16));
+    m = v.match(/^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)\s*(?:[,/]\s*1(?:\.0*)?\s*)?\)$/i);
+    return m ? [m[1], m[2], m[3]].map(Number) : null;
+  };
+  const grounds = ['--ds-bg', '--ds-surface', '--ds-panel', '--ds-raised', ...houseKeys.filter((k) => k.endsWith('-fill'))];
+  const pairs = [['--ds-on-action', ['--ds-action']], ...['--ds-ink', '--ds-text', '--ds-muted'].map((k) => [k, grounds])];
+  for (const [fg, bgs] of pairs) for (const bg of bgs) {
+    const a = colour(fg), b = colour(bg);
+    if (!a || !b) { fail(`design-system/themes/${name}.css`, `cannot check ${fg} on ${bg}: use an opaque hex or rgb() colour, or var() of one`); continue; }
+    const r = contrast(a, b);
+    if (r < 4.5) fail(`design-system/themes/${name}.css`, `${fg} on ${bg} is ${r.toFixed(2)}:1; text needs 4.5:1`);
+  }
 }
 
 const registry = {

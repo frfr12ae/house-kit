@@ -96,6 +96,8 @@
   const NS = 'http://www.w3.org/2000/svg';
 
   document.querySelectorAll('.c-line-chart').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const plot = root.querySelector('.plot');
     const live = root.querySelector('[role="status"]');
     root.querySelector('.legend').innerHTML = SERIES.map((s, i) =>

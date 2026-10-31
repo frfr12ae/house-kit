@@ -259,12 +259,12 @@
   .c-full-workshop:fullscreen .bar:hover, .c-full-workshop:fullscreen .bar:focus-within { opacity: 1; }
 
   /* Print and PDF: one slide per landscape 16:9 page, chrome hidden.
-     The @page line sets the paper to 1280 x 720 px; delete it if the page
-     that hosts this deck also prints other content. */
-  @page { size: 1280px 720px; margin: 0; }
+     The slides use a named page, so only they print at 1280 x 720 px and
+     the rest of a host page keeps its own paper size. */
+  @page c-full-workshop { size: 1280px 720px !important; margin: 0 !important; }
   @media print {
     .c-full-workshop, .c-full-workshop * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .c-full-workshop { display: block; padding: 0; background: none; border-radius: 0; }
+    .c-full-workshop { display: block; page: c-full-workshop; padding: 0; background: none; border-radius: 0; }
     .c-full-workshop .bar, .c-full-workshop .notes-panel, .c-full-workshop .overview, .c-full-workshop .help,
     .c-full-workshop .toast, .c-full-workshop .progress { display: none !important; }
     .c-full-workshop .stage { aspect-ratio: auto; overflow: visible; background: none; border-radius: 0; box-shadow: none; }
@@ -355,7 +355,7 @@
   .c-full-workshop .cd-track { width: 100%; height: 0.9cqi; border-radius: var(--ds-radius-pill); background: color-mix(in srgb, var(--ds-ink) 10%, transparent); overflow: hidden; }
   .c-full-workshop .cd-fill { display: block; height: 100%; width: 100%; background: var(--ds-ink); transition: width 0.4s linear; }
   .c-full-workshop .cd-row { display: flex; gap: 1cqi; }
-  .c-full-workshop .cdb { padding: 0.9cqi 2.4cqi; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); font-size: 1.5cqi; font-weight: 700; color: var(--ds-ink); cursor: pointer; }
+  .c-full-workshop .cdb { min-width: 24px; min-height: 24px; padding: 0.9cqi 2.4cqi; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); font-size: 1.5cqi; font-weight: 700; color: var(--ds-ink); cursor: pointer; }
   .c-full-workshop .cdb.go { border-color: var(--ds-action); background: var(--ds-action); color: var(--ds-on-action); }
   .c-full-workshop .cdb:focus-visible { outline: none; box-shadow: var(--ds-focus); }
   .c-full-workshop .cdb:hover { border-color: var(--ds-muted); }
@@ -786,6 +786,8 @@
 
   const allRoots = Array.from(document.querySelectorAll('.' + ROOT_CLASS));
   allRoots.forEach((root, rootIndex) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const deeplink = root.hasAttribute('data-deeplink');
     const stage = root.querySelector('.stage');
     const slides = Array.from(stage.querySelectorAll(':scope > .slide'));
@@ -1054,12 +1056,14 @@
 
     if (deeplink) {
       window.addEventListener('hashchange', () => {
+        if (!root.isConnected) return;
         const n = hashIndex();
         if (n !== null && n !== index) go(n, true);
       });
     }
 
     document.addEventListener('keydown', (e) => {
+      if (!root.isConnected) return; // a removed deck must not take keys from its replacement
       if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
       if (isEditable(e.target)) return;
       const inside = root.contains(document.activeElement);
@@ -1111,6 +1115,8 @@
   const fmt = (s) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
   document.querySelectorAll('.c-full-workshop').forEach((root) => {
+    if (root.dataset.okTimer) return;
+    root.dataset.okTimer = '1';
     const cd = root.querySelector('.stage > .slide .cd');
     if (!cd) return;
     const time = cd.querySelector('.cd-time');

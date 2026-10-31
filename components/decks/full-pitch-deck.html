@@ -260,12 +260,12 @@
   .c-full-pitch-deck:fullscreen .bar:hover, .c-full-pitch-deck:fullscreen .bar:focus-within { opacity: 1; }
 
   /* Print and PDF: one slide per landscape 16:9 page, chrome hidden.
-     The @page line sets the paper to 1280 x 720 px; delete it if the page
-     that hosts this deck also prints other content. */
-  @page { size: 1280px 720px; margin: 0; }
+     The slides use a named page, so only they print at 1280 x 720 px and
+     the rest of a host page keeps its own paper size. */
+  @page c-full-pitch-deck { size: 1280px 720px !important; margin: 0 !important; }
   @media print {
     .c-full-pitch-deck, .c-full-pitch-deck * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .c-full-pitch-deck { display: block; padding: 0; background: none; border-radius: 0; }
+    .c-full-pitch-deck { display: block; page: c-full-pitch-deck; padding: 0; background: none; border-radius: 0; }
     .c-full-pitch-deck .bar, .c-full-pitch-deck .notes-panel, .c-full-pitch-deck .overview, .c-full-pitch-deck .help,
     .c-full-pitch-deck .toast, .c-full-pitch-deck .progress { display: none !important; }
     .c-full-pitch-deck .stage { aspect-ratio: auto; overflow: visible; background: none; border-radius: 0; box-shadow: none; }
@@ -876,6 +876,8 @@
 
   const allRoots = Array.from(document.querySelectorAll('.' + ROOT_CLASS));
   allRoots.forEach((root, rootIndex) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const deeplink = root.hasAttribute('data-deeplink');
     const stage = root.querySelector('.stage');
     const slides = Array.from(stage.querySelectorAll(':scope > .slide'));
@@ -1144,12 +1146,14 @@
 
     if (deeplink) {
       window.addEventListener('hashchange', () => {
+        if (!root.isConnected) return;
         const n = hashIndex();
         if (n !== null && n !== index) go(n, true);
       });
     }
 
     document.addEventListener('keydown', (e) => {
+      if (!root.isConnected) return; // a removed deck must not take keys from its replacement
       if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
       if (isEditable(e.target)) return;
       const inside = root.contains(document.activeElement);

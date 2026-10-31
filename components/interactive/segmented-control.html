@@ -55,7 +55,7 @@
     transition: color var(--ds-dur-base) var(--ds-ease);
   }
   .c-segmented-control .opt:hover { color: var(--ds-ink); }
-  .c-segmented-control .opt[aria-checked="true"] { color: var(--ds-on-action); }
+  .c-segmented-control .opt[aria-checked="true"] { background: var(--ds-action); color: var(--ds-on-action); transition: color var(--ds-dur-base) var(--ds-ease), background-color 0s linear var(--ds-dur-base); }
   .c-segmented-control .opt:focus-visible { outline: none; box-shadow: var(--ds-focus); }
   .c-segmented-control .caption { min-height: 1.5em; font-size: var(--ds-text-sm); color: var(--ds-muted); }
   .c-segmented-control .caption b { color: var(--ds-ink); font-weight: 600; }
@@ -78,6 +78,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-segmented-control').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const track = root.querySelector('.track');
     const thumb = root.querySelector('.thumb');
     const opts = [...root.querySelectorAll('[role="radio"]')];

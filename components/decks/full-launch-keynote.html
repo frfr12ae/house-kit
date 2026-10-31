@@ -260,12 +260,12 @@
   .c-full-launch-keynote:fullscreen .bar:hover, .c-full-launch-keynote:fullscreen .bar:focus-within { opacity: 1; }
 
   /* Print and PDF: one slide per landscape 16:9 page, chrome hidden.
-     The @page line sets the paper to 1280 x 720 px; delete it if the page
-     that hosts this deck also prints other content. */
-  @page { size: 1280px 720px; margin: 0; }
+     The slides use a named page, so only they print at 1280 x 720 px and
+     the rest of a host page keeps its own paper size. */
+  @page c-full-launch-keynote { size: 1280px 720px !important; margin: 0 !important; }
   @media print {
     .c-full-launch-keynote, .c-full-launch-keynote * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .c-full-launch-keynote { display: block; padding: 0; background: none; border-radius: 0; }
+    .c-full-launch-keynote { display: block; page: c-full-launch-keynote; padding: 0; background: none; border-radius: 0; }
     .c-full-launch-keynote .bar, .c-full-launch-keynote .notes-panel, .c-full-launch-keynote .overview, .c-full-launch-keynote .help,
     .c-full-launch-keynote .toast, .c-full-launch-keynote .progress { display: none !important; }
     .c-full-launch-keynote .stage { aspect-ratio: auto; overflow: visible; background: none; border-radius: 0; box-shadow: none; }
@@ -308,7 +308,7 @@
   .c-full-launch-keynote .cvk > * { position: relative; }
   .c-full-launch-keynote .cvk .meet { margin: 0; font-size: 2.2cqi; font-weight: 600; color: var(--k-dim); }
   .c-full-launch-keynote .cvk h1 { margin: 0; font-family: var(--ds-font-display); font-size: 13cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 0.98; }
-  .c-full-launch-keynote .cvk h1 span { color: var(--ds-highlight-line); }
+  .c-full-launch-keynote .cvk h1 span { color: var(--ds-bg); }
   .c-full-launch-keynote .cvk .when { margin: 1.6cqi 0 0; font-size: 2cqi; font-weight: 600; color: var(--k-dim); }
 
   /* statement */
@@ -741,6 +741,8 @@
 
   const allRoots = Array.from(document.querySelectorAll('.' + ROOT_CLASS));
   allRoots.forEach((root, rootIndex) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const deeplink = root.hasAttribute('data-deeplink');
     const stage = root.querySelector('.stage');
     const slides = Array.from(stage.querySelectorAll(':scope > .slide'));
@@ -1009,12 +1011,14 @@
 
     if (deeplink) {
       window.addEventListener('hashchange', () => {
+        if (!root.isConnected) return;
         const n = hashIndex();
         if (n !== null && n !== index) go(n, true);
       });
     }
 
     document.addEventListener('keydown', (e) => {
+      if (!root.isConnected) return; // a removed deck must not take keys from its replacement
       if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
       if (isEditable(e.target)) return;
       const inside = root.contains(document.activeElement);

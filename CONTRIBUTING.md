@@ -71,10 +71,14 @@ When code is adapted or ported, the upstream license text must be in `LICENSES/`
 2. **Scoped CSS.** Every selector includes `.c-<slug>`. `@keyframes` names start with `c-<slug>`. No `:root`, `body` or bare element selectors, so pasting never leaks.
 3. **No en or em dashes** anywhere in the file. Use a comma, colon or full stop.
 4. **IIFE scripts.** JavaScript is wrapped in `(() => { ... })();`, finds its roots with `document.querySelectorAll('.c-<slug>')` and initialises each one. No globals, no libraries, no network.
+5. **Initialise once.** Every script skips roots it already set up: `if (root.dataset.okInit) return; root.dataset.okInit = '1';`. Pasting a component twice runs its script twice, and without the guard every handler binds twice (a toggle flips back, a menu opens and closes).
+6. **No document-wide at-rules.** `@page` must be a named page starting with `c-<slug>`, assigned with `page: c-<slug>` on the root inside `@media print`, with `!important` sizes so a host's own `@page` cannot override it. No `@import`.
+7. **Readable themes.** In every theme, `--ds-ink`, `--ds-text` and `--ds-muted` reach 4.5:1 on `bg`, `surface`, `panel`, `raised` and every `*-fill`, and `--ds-on-action` on `--ds-action`.
 
 ## Rules for the design system
 
 - **Tokens only.** Colours, fonts, radii, shadows, spacing and durations come from `--ds-*` variables (see `design-system/tokens.css` and `design-system/themes/house.css`). The build warns on hardcoded hex or rgb colours in CSS. `color-mix(in srgb, var(--ds-x) 20%, transparent)` is the way to get a tint.
+- **Text on colour.** `*-line` and `--ds-series-*` are mid-tones: no text token is guaranteed to read on them in every theme. A small label that needs colour uses the pair: `*-fill` ground, `*-line` hairline border, `--ds-ink` text. Use `*-line` as a text colour only at 24px and up.
 - **Colour means a category.** `info` for data and results, `neutral` for system and given, `note` for annotation and positive, `highlight` for the one step that matters, `danger` for errors and negative change. Never colour something just to make it louder.
 - **Mono only for code, paths and literal data.** Headings and labels use the sans.
 - **One display element per component**: a title or one big number, not both.

@@ -42,7 +42,7 @@
   }
   .c-typewriter-terminal .ln { white-space: pre; }
   .c-typewriter-terminal .ln.out { color: var(--ds-muted); }
-  .c-typewriter-terminal .ln.out.ok b { color: var(--ds-note-line); font-weight: 400; }
+  .c-typewriter-terminal .ln.out.ok b { color: var(--ds-ink); font-weight: 700; }
   .c-typewriter-terminal .ps { color: var(--ds-muted); }
   .c-typewriter-terminal .cmd { color: var(--ds-ink); font-weight: 600; }
   .c-typewriter-terminal .gap { height: 0.9em; }
@@ -82,6 +82,8 @@
   const CHAR = 28, LINE = 140, PAUSE = 160;
 
   document.querySelectorAll('.c-typewriter-terminal').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const body = root.querySelector('.body');
     const cursor = document.createElement('span');
     cursor.className = 'cursor';

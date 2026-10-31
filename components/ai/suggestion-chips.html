@@ -128,6 +128,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-suggestion-chips').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const input = root.querySelector('input');
     const send = root.querySelector('.send');
     const chips = [...root.querySelectorAll('.chip')];

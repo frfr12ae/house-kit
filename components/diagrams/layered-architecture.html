@@ -169,6 +169,8 @@
   const clamp = (v) => Math.min(1, Math.max(0, v));
 
   document.querySelectorAll('.c-layered-architecture').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const HUB_X = 252, HUB_W = 626, FED_W = 190, FED_X = [252, 470, 688];
     const CHIP_X = [0, 1, 2, 3].map((i) => 252 + i * 162 + 70);
     const inPaths = [...root.querySelectorAll('.flow-in')];

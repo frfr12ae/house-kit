@@ -138,6 +138,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-data-table').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const body = root.querySelector('tbody');
     const heads = [...root.querySelectorAll('thead th')];
     const live = root.querySelector('[role="status"]');

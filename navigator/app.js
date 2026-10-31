@@ -135,9 +135,15 @@
     if (!need.size) return '';
     const lines = [...new Set(order)].filter((k) => need.has(k)).map((k) => `  ${k}: ${decl[k]};`);
     let out = `/* ${R.kit.name} tokens (${themeLabel(theme)} theme). Zero specificity: your own --ds-* values win. */\n:where(:root) {\n${lines.join('\n')}\n}`;
-    const durs = [...need].filter((k) => k.startsWith('--ds-dur-'));
-    if (durs.length) out += `\n@media (prefers-reduced-motion: reduce) {\n  :where(:root) { ${durs.map((k) => `${k}: 0ms;`).join(' ')} }\n}`;
     return out;
+  }
+
+  // Reduced motion is set on the component root, not :root, so it also beats duration
+  // tokens a host page already defines. Shipped with every snippet, bundled or not.
+  function motionBlock(c) {
+    const durs = c.tokens.filter((k) => k.startsWith('--ds-dur-'));
+    if (!durs.length) return '';
+    return `@media (prefers-reduced-motion: reduce) {\n  .c-${c.slug} { ${durs.map((k) => `${k}: 0ms;`).join(' ')} }\n}`;
   }
 
   // Email clients ignore CSS variables, so email components are exported with every
@@ -149,12 +155,22 @@
     return res(text).replace(/calc\(\s*([\d.]+)px\s*\*\s*([\d.]+)\s*\)/g, (_, a, b) => `${Math.round(a * b * 100) / 100}px`);
   }
   const isEmail = (c) => c.category === 'email';
+  // Attributes are resolved through the DOM, so any spacing or quoting in the source and
+  // any quotes in theme values (font stacks) serialise as valid, escaped HTML.
+  function resolveHtml(html, theme = S.theme) {
+    const tpl = document.createElement('template');
+    tpl.innerHTML = html;
+    tpl.content.querySelectorAll('*').forEach((el) => {
+      for (const a of [...el.attributes]) if (a.value.includes('var(')) el.setAttribute(a.name, resolveVars(a.value, theme));
+    });
+    return tpl.innerHTML;
+  }
 
   function snippet(c, bundle = S.bundle) {
     if (isEmail(c)) {
-      return [`<!-- ${creditLine(c)} Tokens resolved for the ${themeLabel(S.theme)} theme. -->`, c.css ? `<style>\n${resolveVars(c.css)}\n</style>\n` : '', resolveVars(c.html)].filter(Boolean).join('\n');
+      return [`<!-- ${creditLine(c)} Tokens resolved for the ${themeLabel(S.theme)} theme. -->`, c.css ? `<style>\n${resolveVars(c.css)}\n</style>\n` : '', resolveHtml(c.html)].filter(Boolean).join('\n');
     }
-    const css = [bundle ? tokenBlock(c) : '', c.css].filter(Boolean).join('\n\n');
+    const css = [bundle ? tokenBlock(c) : '', c.css, motionBlock(c)].filter(Boolean).join('\n\n');
     return [
       `<!-- ${creditLine(c)} -->`,
       css ? `<style>\n${css}\n</style>\n` : '',
@@ -450,7 +466,7 @@ ${snippet(c, true)}
         <div class="group-chips">${sections.map(([g, l], i) => `<button type="button" class="tag" data-jump="g${i}">${esc(g || 'Other')} <span>${l.length}</span></button>`).join('')}</div>
         ${sections.map(([g, l], i) => `<section class="section" id="g${i}"><div class="section-head"><h2>${esc(g || 'Other')}</h2><span class="count">${l.length}</span></div>
           <div class="grid">${l.map((c) => card(c, { showCat: false })).join('')}</div></section>`).join('')}`;
-      $$('[data-jump]', view()).forEach((b) => b.addEventListener('click', () => document.getElementById(b.dataset.jump).scrollIntoView({ behavior: 'smooth', block: 'start' })));
+      $$('[data-jump]', view()).forEach((b) => b.addEventListener('click', () => document.getElementById(b.dataset.jump).scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })));
     } else {
       view().innerHTML = `${head}
         ${list.length ? `<div class="grid">${list.map((c) => card(c, { showCat: false })).join('')}</div>` : '<div class="empty">Nothing here yet. See CONTRIBUTING.md to add one.</div>'}`;
@@ -557,7 +573,7 @@ ${snippet(c, true)}
       standalone: 'A complete HTML file with the full token set and the selected theme. Opens offline by double-clicking.',
       prompt: 'Paste into Claude, Cursor or any coding agent. It carries the integration rules and the code.',
     };
-    const getCode = (tab) => ({ snippet: () => snippet(c), html: () => c.html, css: () => c.css, js: () => c.js, standalone: () => standalone(c), prompt: () => prompt(c) }[tab]());
+    const getCode = (tab) => ({ snippet: () => snippet(c), html: () => c.html, css: () => [c.css, motionBlock(c)].filter(Boolean).join('\n\n'), js: () => c.js, standalone: () => standalone(c), prompt: () => prompt(c) }[tab]());
     const renderCode = () => {
       const code = getCode(S.tab);
       const el = $('#code');
@@ -865,6 +881,9 @@ ${snippet(c, true)}
     current.slideObserver?.disconnect();
     current = {};
     closeDrawer();
+    // Views attach delegated handlers to #view; a fresh node drops the previous view's.
+    const stale = $('#view');
+    stale.replaceWith(stale.cloneNode(false));
     const parts = location.hash.replace(/^#\/?/, '').split('/').map((p) => { try { return decodeURIComponent(p); } catch { return p; } });
     const [a, b, c] = parts;
     if (a !== 'search' && $('#q')) $('#q').value = '';
@@ -878,8 +897,14 @@ ${snippet(c, true)}
     else if (a === 'f' && b === 'space') viewSpace();
     else if (a === 'f' && b === 'theme') viewThemeBuilder();
     else viewHome();
-    if (a !== 'search') window.scrollTo(0, 0);
+    if (a !== 'search') {
+      window.scrollTo(0, 0);
+      // Move keyboard and screen-reader users to the new content, not on first load.
+      if (routed) $('#view').focus({ preventScroll: true });
+    }
+    routed = true;
   }
+  let routed = false;
 
   /* ---------- drawer and keys ---------- */
 

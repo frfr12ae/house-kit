@@ -95,6 +95,8 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   document.querySelectorAll('.c-dependency-matrix').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const totals = ENABLERS.map((_, e) => INITIATIVES.filter((it) => it.needs.includes(e)).length);
     const peak = Math.max(...totals);
     const top = (e) => totals[e] === peak;

@@ -1,13 +1,13 @@
 <!--
 @title Print page
-@description An A4 portrait report page with a running header, two-column body and a footer with page number. On screen it scales to fit; printed or saved as PDF it is exactly one A4 sheet. The @page rule is global, so keep one print-page per document.
+@description An A4 portrait report page with a running header, two-column body and a footer with page number. On screen it scales to fit; printed or saved as PDF it is exactly one A4 sheet. Its A4 size is a named page, so the rest of a host page keeps its own print format.
 @tags print, a4, pdf, page, report, layout
 @preview fill
 @height 1260
 @added 2026-10-31
 -->
 <style>
-  @page { size: A4 portrait; margin: 0; }
+  @page c-print-page { size: A4 portrait !important; margin: 0 !important; }
 
   .c-print-page {
     padding: var(--ds-space-6);
@@ -98,7 +98,7 @@
   .c-print-page .figures dd { margin: 2px 0 0; font-size: var(--ds-text-lg); font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
 
   @media print {
-    .c-print-page { padding: 0; background: none; border-radius: 0; }
+    .c-print-page { page: c-print-page; padding: 0; background: none; border-radius: 0; }
     .c-print-page .toolbar { display: none; }
     .c-print-page .stage { display: block; }
     .c-print-page .sheet {
@@ -160,6 +160,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-print-page').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const sheet = root.querySelector('.sheet');
     const fit = () => {
       sheet.style.zoom = 1;

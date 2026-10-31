@@ -157,6 +157,8 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('.c-annotation-kit').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     if (reduced) return;
     root.classList.add('is-armed');
     const io = new IntersectionObserver((entries) => {

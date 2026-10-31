@@ -145,6 +145,8 @@
   const STATUS = { open: 'Open', approved: 'Approved', rejected: 'Rejected', revisit: 'Needs new options' };
 
   document.querySelectorAll('.c-decision-board').forEach((root, index) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const KEY = root.dataset.storageKey || 'ok:decision-board:' + index;
     const $ = (s) => root.querySelector(s);
     const live = $('[data-live]');

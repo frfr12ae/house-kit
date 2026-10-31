@@ -69,6 +69,7 @@
     gap: var(--ds-space-2);
     flex: 1;
     min-width: 0;
+    contain: inline-size;
     padding: 5px var(--ds-space-4);
     border-radius: var(--ds-radius-pill);
     background: var(--ds-panel);
@@ -142,9 +143,9 @@
   }
 
   @media (max-width: 640px) {
-    .c-browser-mockup .app { grid-template-columns: 1fr; }
+    .c-browser-mockup .app { grid-template-columns: minmax(0, 1fr); }
     .c-browser-mockup .side { display: none; }
-    .c-browser-mockup .panes { grid-template-columns: 1fr; }
+    .c-browser-mockup .panes { grid-template-columns: minmax(0, 1fr); }
     .c-browser-mockup .newtab { display: none; }
     .c-browser-mockup .live { display: none; }
     .c-browser-mockup .main { padding: var(--ds-space-4); }
@@ -213,6 +214,8 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('.c-browser-mockup').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     if (reduced) return;
     root.classList.add('is-armed');
     const io = new IntersectionObserver((entries) => {

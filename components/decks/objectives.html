@@ -69,6 +69,8 @@
     position: relative;
     width: 2.8cqi;
     height: 2.8cqi;
+    min-width: 24px;
+    min-height: 24px;
     margin: 0;
     border: var(--ds-stroke) solid var(--ds-neutral-line);
     border-radius: calc(0.7cqi * var(--ds-radius-scale, 1));
@@ -80,13 +82,13 @@
   .c-objectives input:checked::after {
     content: "";
     position: absolute;
-    left: 0.85cqi;
-    top: 0.35cqi;
+    left: 50%;
+    top: 46%;
     width: 0.75cqi;
     height: 1.4cqi;
     border: solid var(--ds-ink);
     border-width: 0 0.28cqi 0.28cqi 0;
-    transform: rotate(40deg);
+    transform: translate(-50%, -50%) rotate(40deg);
   }
   .c-objectives h3 {
     margin: 0;
@@ -143,6 +145,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-objectives').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     root.querySelectorAll('.card').forEach((card) => {
       const box = card.querySelector('input');
       card.addEventListener('click', (e) => { if (e.target !== box) box.checked = !box.checked; });

@@ -123,6 +123,8 @@
   };
 
   document.querySelectorAll('.c-toast').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const stack = root.querySelector('.stack');
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 

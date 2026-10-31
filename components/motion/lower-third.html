@@ -137,6 +137,8 @@
   const HOLD = 2600, PAUSE = 700;
 
   document.querySelectorAll('.c-lower-third').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     if (reduced) { root.classList.add('is-in'); return; }
     const slow = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-slow')) || 600;
     let timers = [];

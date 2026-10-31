@@ -224,6 +224,8 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   document.querySelectorAll('.c-scroll-report-shell').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const scroller = root.querySelector('.scroller');
     const bar = root.querySelector('.progress i');
     const dotList = root.querySelector('.dots');

@@ -131,6 +131,8 @@
   }
 
   document.querySelectorAll('.c-line-draw').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const values = root.dataset.points.split(',').map(Number);
     const max = Math.ceil(Math.max(...values) / 25) * 25;
     const pts = values.map((v, i) => [(i / (values.length - 1)) * W, BOTTOM - (v / max) * (BOTTOM - TOP)]);

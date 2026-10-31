@@ -86,6 +86,8 @@
 <script>
 (() => {
   document.querySelectorAll('.c-toggle-switch').forEach((root, n) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     root.querySelectorAll('.row').forEach((row, i) => {
       const sw = row.querySelector('[role="switch"]');
       // per-instance ids, so two copies on one page never clash

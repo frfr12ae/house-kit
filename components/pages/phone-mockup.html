@@ -164,7 +164,7 @@
   .c-phone-mockup .item .t b { display: block; font-size: var(--ds-text-sm); color: var(--ds-ink); line-height: 1.3; }
   .c-phone-mockup .item .t span { font-size: var(--ds-text-xs); color: var(--ds-muted); }
   .c-phone-mockup .item .amt { font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
-  .c-phone-mockup .item .amt.neg { color: var(--ds-danger-line); }
+  .c-phone-mockup .item .amt.neg { color: var(--ds-text); }
   .c-phone-mockup .goal { display: grid; gap: var(--ds-space-2); padding: var(--ds-space-3) var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
   .c-phone-mockup .goal .top { display: flex; justify-content: space-between; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
   .c-phone-mockup .goal .top span { color: var(--ds-muted); font-weight: 600; }
@@ -242,6 +242,8 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('.c-phone-mockup').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
     const screen = root.querySelector('.screen');
     const feed = root.querySelector('.feed');
     const measure = () => root.style.setProperty('--dist', Math.max(0, feed.scrollHeight - screen.clientHeight) + 'px');
