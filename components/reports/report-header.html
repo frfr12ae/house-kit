@@ -1,0 +1,80 @@
+<!--
+@title Report header
+@description Opening block for a report or memo: eyebrow, one display title, a meta row with author, date and a status pill, and a summary paragraph.
+@tags header, title, memo, cover, status, byline
+@preview fill
+@height 420
+@added 2026-10-31
+-->
+<style>
+  .c-report-header {
+    padding: var(--ds-space-8) var(--ds-space-7);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-report-header .inner { display: grid; gap: var(--ds-space-5); max-width: 760px; }
+  .c-report-header .eyebrow { margin: 0; color: var(--ds-muted); font-size: var(--ds-text-sm); font-weight: 600; }
+  .c-report-header h1 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: clamp(34px, 5.4vw, 60px);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-report-header .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ds-space-3) var(--ds-space-5);
+    margin: 0;
+    padding: var(--ds-space-4) 0;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+    font-size: var(--ds-text-sm);
+  }
+  .c-report-header .meta div { display: flex; align-items: baseline; gap: var(--ds-space-2); }
+  .c-report-header .meta dt { color: var(--ds-muted); }
+  .c-report-header .meta dd { margin: 0; color: var(--ds-ink); font-weight: 600; }
+  .c-report-header .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 11px 3px 9px;
+    border: var(--ds-hairline) solid var(--ds-highlight-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-highlight-fill);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+  }
+  .c-report-header .pill::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ds-highlight-line);
+  }
+  .c-report-header .summary { margin: 0; font-size: var(--ds-text-lg); line-height: var(--ds-leading-body); color: var(--ds-text); max-width: 64ch; }
+  @media (max-width: 640px) {
+    .c-report-header { padding: var(--ds-space-6) var(--ds-space-5); }
+    .c-report-header .summary { font-size: var(--ds-text-md); }
+  }
+</style>
+
+<header class="c-report-header">
+  <div class="inner">
+    <p class="eyebrow">Quarterly business review</p>
+    <h1>Q3 2026 operating review: growth held, margin slipped</h1>
+    <dl class="meta">
+      <div><dt>Prepared by</dt><dd>Strategy and Operations</dd></div>
+      <div><dt>Date</dt><dd><time datetime="2026-10-31">31 October 2026</time></dd></div>
+      <div><dt>Status</dt><dd><span class="pill">Draft for review</span></dd></div>
+    </dl>
+    <p class="summary">Revenue grew 12% on the quarter and customer count passed 1,400, but gross margin fell by almost two points as onboarding costs rose. This review sets out why, what we recommend, and the three decisions needed before the November planning round.</p>
+  </div>
+</header>

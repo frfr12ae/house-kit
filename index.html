@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Output Kit</title>
+  <meta name="description" content="Copy-paste templates for decks, reports, pages, motion and AI interfaces, on one design system.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231C1B18'/%3E%3Crect x='8' y='8' width='7' height='7' rx='1.5' fill='%23FAF9F5'/%3E%3Crect x='17' y='8' width='7' height='7' rx='1.5' fill='%23FAF9F5'/%3E%3Crect x='8' y='17' width='7' height='7' rx='1.5' fill='%23FAF9F5'/%3E%3Crect x='17' y='17' width='7' height='7' rx='1.5' fill='%23E0A94A'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="navigator/app.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Library navigation"></aside>
+    <div class="scrim" id="scrim" hidden></div>
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false"></button>
+        <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+        <div class="theme-switch" id="theme-switch" role="group" aria-label="Preview theme"></div>
+      </header>
+      <div class="view" id="view" tabindex="-1"></div>
+    </main>
+  </div>
+  <div class="flash" id="flash" role="status" aria-live="polite"></div>
+  <script src="navigator/registry.js"></script>
+  <script src="navigator/app.js"></script>
+</body>
+</html>

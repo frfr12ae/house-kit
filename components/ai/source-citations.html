@@ -1,0 +1,129 @@
+<!--
+@title Source citations
+@description An answer with numbered inline citation markers. Hovering or focusing a marker highlights its source card below, with title, domain and a letter favicon.
+@tags citation, sources, references, footnote, answer, rag, llm
+@preview center
+@height 560
+@added 2026-10-31
+-->
+<style>
+  .c-source-citations,
+  .c-source-citations *,
+  .c-source-citations *::before,
+  .c-source-citations *::after { box-sizing: border-box; }
+  .c-source-citations {
+    display: grid;
+    gap: var(--ds-space-6);
+    width: min(680px, 100%);
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-source-citations .answer { margin: 0; font-size: var(--ds-text-md); line-height: 1.75; }
+  .c-source-citations .answer strong { color: var(--ds-ink); }
+  .c-source-citations .cite {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    margin: 0 2px;
+    padding: 0 5px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-panel);
+    color: var(--ds-text);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    vertical-align: 2px;
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-source-citations .cite:hover,
+  .c-source-citations .cite.is-on { background: var(--ds-info-fill); border-color: var(--ds-info-line); color: var(--ds-ink); }
+  .c-source-citations .cite:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-source-citations .sources-label { margin-bottom: var(--ds-space-3); font-size: var(--ds-text-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-source-citations .sources { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ds-space-3); }
+  .c-source-citations .src {
+    display: grid;
+    align-content: start;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-4);
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    transition: border-color var(--ds-dur-base) var(--ds-ease), background var(--ds-dur-base) var(--ds-ease), box-shadow var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-source-citations .src.is-on { border-color: var(--ds-info-line); background: var(--ds-info-fill); box-shadow: var(--ds-shadow-md); transform: translateY(-2px); }
+  .c-source-citations .src-top { display: flex; align-items: center; gap: var(--ds-space-2); }
+  .c-source-citations .fav {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-panel);
+    border: var(--ds-hairline) solid var(--ds-line);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ds-ink);
+  }
+  .c-source-citations .domain { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-source-citations .num { margin-left: auto; font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted); }
+  .c-source-citations .src-title { margin: 0; font-size: var(--ds-text-sm); font-weight: 600; line-height: var(--ds-leading-snug); color: var(--ds-ink); }
+  @media (max-width: 600px) {
+    .c-source-citations { padding: var(--ds-space-5); }
+    .c-source-citations .sources { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="c-source-citations">
+  <p class="answer">Remote teams that hold a short weekly planning meeting report fewer missed handoffs<button class="cite" type="button" data-src="1" aria-label="Source 1: Async handoffs in distributed teams">1</button>, and written updates beat live status calls once a team passes eight people<button class="cite" type="button" data-src="2" aria-label="Source 2: Meeting load and focus time">2</button>. The gain is largest when every update ends with a named owner and a date<button class="cite" type="button" data-src="3" aria-label="Source 3: What makes a handoff stick">3</button><button class="cite" type="button" data-src="1" aria-label="Source 1: Async handoffs in distributed teams">1</button>.</p>
+
+  <div>
+    <div class="sources-label">Sources</div>
+    <ol class="sources">
+      <li class="src" data-src="1">
+        <div class="src-top"><span class="fav" aria-hidden="true">A</span><span class="domain">asyncwork.example</span><span class="num">1</span></div>
+        <h3 class="src-title">Async handoffs in distributed teams</h3>
+      </li>
+      <li class="src" data-src="2">
+        <div class="src-top"><span class="fav" aria-hidden="true">F</span><span class="domain">focusstudies.example</span><span class="num">2</span></div>
+        <h3 class="src-title">Meeting load and focus time</h3>
+      </li>
+      <li class="src" data-src="3">
+        <div class="src-top"><span class="fav" aria-hidden="true">O</span><span class="domain">opsjournal.example</span><span class="num">3</span></div>
+        <h3 class="src-title">What makes a handoff stick</h3>
+      </li>
+    </ol>
+  </div>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-source-citations').forEach((root) => {
+    const cites = [...root.querySelectorAll('.cite')];
+    const cards = [...root.querySelectorAll('.src')];
+    const set = (id, on) => {
+      cards.forEach((c) => c.classList.toggle('is-on', on && c.dataset.src === id));
+      cites.forEach((c) => c.classList.toggle('is-on', on && c.dataset.src === id));
+    };
+    cites.forEach((c) => {
+      const id = c.dataset.src;
+      c.addEventListener('mouseenter', () => set(id, true));
+      c.addEventListener('mouseleave', () => set(id, false));
+      c.addEventListener('focus', () => set(id, true));
+      c.addEventListener('blur', () => set(id, false));
+    });
+    cards.forEach((c) => {
+      const id = c.dataset.src;
+      c.addEventListener('mouseenter', () => set(id, true));
+      c.addEventListener('mouseleave', () => set(id, false));
+    });
+  });
+})();
+</script>

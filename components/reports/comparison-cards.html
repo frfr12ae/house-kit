@@ -1,0 +1,155 @@
+<!--
+@title Comparison cards
+@description Three options side by side with cost, time, pros and cons. The recommended option is marked with the highlight pair so the eye lands there first.
+@tags compare, options, pricing, recommendation, pros, cons
+@preview fill
+@height 640
+@added 2026-10-31
+-->
+<style>
+  .c-comparison-cards {
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-comparison-cards .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--ds-space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .c-comparison-cards .card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--ds-space-5);
+    padding: var(--ds-space-6);
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+  }
+  .c-comparison-cards .card.is-pick {
+    background: var(--ds-highlight-fill);
+    border: var(--ds-stroke) solid var(--ds-highlight-line);
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-comparison-cards .badge {
+    position: absolute;
+    top: -13px;
+    left: var(--ds-space-6);
+    padding: 2px 10px;
+    border: var(--ds-hairline) solid var(--ds-highlight-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+  }
+  .c-comparison-cards .name { margin: 0; font-size: var(--ds-text-lg); font-weight: 700; color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-comparison-cards .sub { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); }
+  .c-comparison-cards .facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--ds-space-4);
+    margin: 0;
+    padding: var(--ds-space-4) 0;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-comparison-cards .is-pick .facts { border-color: color-mix(in srgb, var(--ds-highlight-line) 55%, transparent); }
+  .c-comparison-cards .facts dt { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-comparison-cards .facts dd { margin: 2px 0 0; font-size: var(--ds-text-lg); font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-comparison-cards .group h5 { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted); }
+  .c-comparison-cards .group + .group { margin-top: calc(var(--ds-space-1) * -1); }
+  .c-comparison-cards .group ul { display: grid; gap: var(--ds-space-3); margin: 0; padding: 0; list-style: none; }
+  .c-comparison-cards .group li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: var(--ds-space-3); align-items: start; font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); }
+  .c-comparison-cards .ico { width: 20px; height: 20px; padding: 4px; border-radius: 50%; color: var(--ds-ink); }
+  .c-comparison-cards .ico.is-pro { background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); }
+  .c-comparison-cards .ico.is-con { background: var(--ds-danger-fill); border: var(--ds-hairline) solid var(--ds-danger-line); }
+  @media (max-width: 860px) {
+    .c-comparison-cards { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-comparison-cards .grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<section class="c-comparison-cards" aria-label="Options compared">
+  <ul class="grid">
+    <li class="card">
+      <div>
+        <h4 class="name">Build in-house</h4>
+        <p class="sub">Our own team designs and runs the platform from scratch.</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Year-one cost</dt><dd>€420k</dd></div>
+        <div><dt>Time to launch</dt><dd>9 months</dd></div>
+      </dl>
+      <div class="group">
+        <h5>Pros</h5>
+        <ul>
+          <li><svg class="ico is-pro" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 6.4 2.5 2.4L10 3.4"/></svg><span>Full control of the roadmap</span></li>
+          <li><svg class="ico is-pro" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 6.4 2.5 2.4L10 3.4"/></svg><span>No licence fees after launch</span></li>
+        </ul>
+      </div>
+      <div class="group">
+        <h5>Cons</h5>
+        <ul>
+          <li><svg class="ico is-con" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg><span>Slowest route to value</span></li>
+          <li><svg class="ico is-con" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg><span>Needs two senior hires first</span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="card is-pick">
+      <span class="badge">Recommended</span>
+      <div>
+        <h4 class="name">Buy and configure</h4>
+        <p class="sub">License an established platform and adapt it to our workflow.</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Year-one cost</dt><dd>€185k</dd></div>
+        <div><dt>Time to launch</dt><dd>10 weeks</dd></div>
+      </dl>
+      <div class="group">
+        <h5>Pros</h5>
+        <ul>
+          <li><svg class="ico is-pro" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 6.4 2.5 2.4L10 3.4"/></svg><span>Live before the January peak</span></li>
+          <li><svg class="ico is-pro" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 6.4 2.5 2.4L10 3.4"/></svg><span>Lowest upfront spend</span></li>
+          <li><svg class="ico is-pro" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 6.4 2.5 2.4L10 3.4"/></svg><span>Vendor carries upgrades and security</span></li>
+        </ul>
+      </div>
+      <div class="group">
+        <h5>Cons</h5>
+        <ul>
+          <li><svg class="ico is-con" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg><span>Annual fee rises with seat count</span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="card">
+      <div>
+        <h4 class="name">Outsource to a partner</h4>
+        <p class="sub">A delivery partner builds and operates it under a service contract.</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Year-one cost</dt><dd>€260k</dd></div>
+        <div><dt>Time to launch</dt><dd>4 months</dd></div>
+      </dl>
+      <div class="group">
+        <h5>Pros</h5>
+        <ul>
+          <li><svg class="ico is-pro" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 6.4 2.5 2.4L10 3.4"/></svg><span>No hiring needed</span></li>
+          <li><svg class="ico is-pro" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 6.4 2.5 2.4L10 3.4"/></svg><span>Fixed monthly service fee</span></li>
+        </ul>
+      </div>
+      <div class="group">
+        <h5>Cons</h5>
+        <ul>
+          <li><svg class="ico is-con" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg><span>Knowledge stays with the partner</span></li>
+          <li><svg class="ico is-con" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg><span>Hard to switch after year two</span></li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</section>

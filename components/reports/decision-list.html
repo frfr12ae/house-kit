@@ -1,0 +1,100 @@
+<!--
+@title Decision list
+@description Numbered recommendations for the reader to act on, each with a one-sentence rationale, an owner and a due date. Use at the end of a report or memo.
+@tags decisions, recommendations, actions, owners, next steps
+@preview fill
+@height 560
+@added 2026-10-31
+-->
+<style>
+  .c-decision-list {
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-decision-list .head { margin: 0 auto var(--ds-space-5); max-width: 760px; }
+  .c-decision-list h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-decision-list .head p { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-decision-list .list { margin: 0 auto; padding: 0; list-style: none; max-width: 760px; counter-reset: c-decision; }
+  .c-decision-list .item {
+    counter-increment: c-decision;
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    column-gap: var(--ds-space-4);
+    padding: var(--ds-space-6) 0;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-decision-list .item:last-child { padding-bottom: 0; }
+  .c-decision-list .item::before {
+    content: counter(c-decision, decimal-leading-zero);
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.1;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-decision-list .body { display: grid; gap: var(--ds-space-2); }
+  .c-decision-list .title { margin: 0; font-size: var(--ds-text-md); font-weight: 700; line-height: var(--ds-leading-snug); color: var(--ds-ink); }
+  .c-decision-list .why { margin: 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); max-width: 60ch; }
+  .c-decision-list .meta { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-6); margin: var(--ds-space-2) 0 0; font-size: var(--ds-text-sm); }
+  .c-decision-list .meta div { display: flex; gap: var(--ds-space-2); }
+  .c-decision-list .meta dt { color: var(--ds-muted); }
+  .c-decision-list .meta dd { margin: 0; color: var(--ds-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  @media (max-width: 560px) {
+    .c-decision-list { padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-decision-list .item { grid-template-columns: 40px minmax(0, 1fr); column-gap: var(--ds-space-3); }
+  }
+</style>
+
+<section class="c-decision-list" aria-label="Recommendations">
+  <div class="head">
+    <h3>Recommendations</h3>
+    <p>Four decisions requested from the leadership team before the November planning round.</p>
+  </div>
+  <ol class="list">
+    <li class="item">
+      <div class="body">
+        <h4 class="title">Freeze custom onboarding scope until gross margin recovers to 64%</h4>
+        <p class="why">Bespoke setup work accounts for roughly 70% of the margin decline, and a standard package already covers most requests.</p>
+        <dl class="meta">
+          <div><dt>Owner</dt><dd>Head of Delivery</dd></div>
+          <div><dt>Due</dt><dd><time datetime="2026-11-14">14 Nov 2026</time></dd></div>
+        </dl>
+      </div>
+    </li>
+    <li class="item">
+      <div class="body">
+        <h4 class="title">Add annual price indexation to all enterprise renewals</h4>
+        <p class="why">Input costs rose 6% this year while list prices stayed flat; indexation recovers about €140k without new contract negotiations.</p>
+        <dl class="meta">
+          <div><dt>Owner</dt><dd>Commercial Director</dd></div>
+          <div><dt>Due</dt><dd><time datetime="2026-11-30">30 Nov 2026</time></dd></div>
+        </dl>
+      </div>
+    </li>
+    <li class="item">
+      <div class="body">
+        <h4 class="title">Approve two permanent support hires in Q1</h4>
+        <p class="why">The ticket backlog fell 18% only because of temporary cover that ends in January.</p>
+        <dl class="meta">
+          <div><dt>Owner</dt><dd>Head of Support</dd></div>
+          <div><dt>Due</dt><dd><time datetime="2026-12-15">15 Dec 2026</time></dd></div>
+        </dl>
+      </div>
+    </li>
+    <li class="item">
+      <div class="body">
+        <h4 class="title">Commission an independent review of the SMB price list</h4>
+        <p class="why">SMB accounts are the fastest growing segment but carry the lowest margin, and nobody has tested price sensitivity since 2024.</p>
+        <dl class="meta">
+          <div><dt>Owner</dt><dd>Chief Financial Officer</dd></div>
+          <div><dt>Due</dt><dd><time datetime="2027-01-31">31 Jan 2027</time></dd></div>
+        </dl>
+      </div>
+    </li>
+  </ol>
+</section>

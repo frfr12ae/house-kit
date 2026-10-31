@@ -1,0 +1,138 @@
+<!--
+@title Activity heatmap
+@description A weeks-by-days activity grid in tints of the first series colour, with month and weekday labels, a legend and a hover title on every cell. Shows as many recent weeks as fit the width. The demo data is generated from a fixed seed, so it is identical on every load.
+@tags heatmap, calendar, activity, contributions, grid, svg
+@preview fill
+@height 360
+@added 2026-10-31
+@source GitHub contributions graph | https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/viewing-contributions-on-your-profile | inspired-by
+-->
+<style>
+  .c-heatmap {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-heatmap .head { display: grid; gap: var(--ds-space-1); margin-bottom: var(--ds-space-6); }
+  .c-heatmap h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-heatmap .hint { margin: 0; font-size: var(--ds-text-sm); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-heatmap .hint b { color: var(--ds-ink); font-weight: 700; }
+  .c-heatmap .plot { width: 100%; }
+  .c-heatmap svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .c-heatmap text { font-family: var(--ds-font-sans); font-size: 12px; fill: var(--ds-muted); }
+  .c-heatmap .cell { stroke: transparent; stroke-width: 1.5; }
+  .c-heatmap .cell:hover { stroke: var(--ds-ink); }
+  .c-heatmap .l0 { fill: color-mix(in srgb, var(--ds-line) 55%, transparent); }
+  .c-heatmap .l1 { fill: color-mix(in srgb, var(--ds-series-1) 28%, transparent); }
+  .c-heatmap .l2 { fill: color-mix(in srgb, var(--ds-series-1) 52%, transparent); }
+  .c-heatmap .l3 { fill: color-mix(in srgb, var(--ds-series-1) 76%, transparent); }
+  .c-heatmap .l4 { fill: var(--ds-series-1); }
+  .c-heatmap .legend { display: flex; align-items: center; justify-content: flex-end; gap: var(--ds-space-2); margin-top: var(--ds-space-5); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-heatmap .legend i { width: 14px; height: 14px; border-radius: 3px; }
+  .c-heatmap .legend i.l0 { background: color-mix(in srgb, var(--ds-line) 55%, transparent); }
+  .c-heatmap .legend i.l1 { background: color-mix(in srgb, var(--ds-series-1) 28%, transparent); }
+  .c-heatmap .legend i.l2 { background: color-mix(in srgb, var(--ds-series-1) 52%, transparent); }
+  .c-heatmap .legend i.l3 { background: color-mix(in srgb, var(--ds-series-1) 76%, transparent); }
+  .c-heatmap .legend i.l4 { background: var(--ds-series-1); }
+  @media (max-width: 560px) {
+    .c-heatmap { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+  }
+</style>
+
+<figure class="c-heatmap">
+  <figcaption class="head">
+    <h3>Tasks completed per day</h3>
+    <p class="hint"></p>
+  </figcaption>
+  <div class="plot"></div>
+  <div class="legend" aria-hidden="true"><span>Less</span><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i><span>More</span></div>
+</figure>
+
+<script>
+(() => {
+  // The grid ends on END (a Saturday) and runs back WEEKS weeks, Sunday first.
+  // To use real data, replace makeCounts() with an array of WEEKS * 7 daily counts in date order.
+  const END = Date.UTC(2026, 9, 31);
+  const WEEKS = 52;
+  const UNIT = 'tasks';
+  const LEVELS = [1, 3, 6, 9]; // counts at which levels 1 to 4 begin
+
+  function makeCounts() {
+    let s = 20261031; // seeded generator (mulberry32), so the picture never changes
+    const rnd = () => { s |= 0; s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const out = [];
+    for (let w = 0; w < WEEKS; w++) {
+      const season = 0.75 + 0.45 * Math.sin((w / WEEKS) * Math.PI * 3);
+      const sprint = w % 9 === 4 || w % 9 === 5 ? 1.5 : 1;
+      const holiday = w === 20 || w === 21 || w === 48 || w === 49 ? 0.25 : 1;
+      for (let d = 0; d < 7; d++) {
+        const weekend = d === 0 || d === 6 ? 0.16 : 1;
+        out.push(Math.floor(Math.pow(rnd(), 1.6) * 12 * season * sprint * holiday * weekend));
+      }
+    }
+    return out;
+  }
+
+  const COUNTS = makeCounts();
+  const DAY = 86400000;
+  const START = END - (WEEKS * 7 - 1) * DAY;
+  const level = (n) => LEVELS.filter((t) => n >= t).length;
+  const dateOf = (i) => new Date(START + i * DAY);
+  const fmtDate = (dt) => dt.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  const month = (dt) => dt.toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' });
+
+  document.querySelectorAll('.c-heatmap').forEach((root) => {
+    const plot = root.querySelector('.plot');
+    const hint = root.querySelector('.hint');
+
+    function render() {
+      const W = Math.max(240, Math.round(plot.clientWidth));
+      const gap = 3;
+      const left = 32;
+      const top = 22;
+      const minCell = 11;
+      const weeks = Math.min(WEEKS, Math.floor((W - left + gap) / (minCell + gap)));
+      const cell = Math.min(20, Math.floor((W - left - gap * (weeks - 1)) / weeks));
+      const firstWeek = WEEKS - weeks;
+      const H = top + 7 * (cell + gap) - gap;
+
+      let out = '';
+      ['Mon', 'Wed', 'Fri'].forEach((name, k) => {
+        const row = 1 + k * 2;
+        out += '<text x="0" y="' + (top + row * (cell + gap) + cell / 2) + '" dominant-baseline="central">' + name + '</text>';
+      });
+      let prev = -1;
+      let lastX = -99;
+      for (let w = 0; w < weeks; w++) {
+        const dt = dateOf((firstWeek + w) * 7);
+        const m = dt.getUTCMonth();
+        if (m !== prev) {
+          const x = left + w * (cell + gap);
+          if (x - lastX > 36) { out += '<text x="' + x + '" y="8" dominant-baseline="central">' + month(dt) + '</text>'; lastX = x; }
+          prev = m;
+        }
+      }
+      let total = 0;
+      let best = { n: -1, i: 0 };
+      for (let w = 0; w < weeks; w++) {
+        for (let d = 0; d < 7; d++) {
+          const i = (firstWeek + w) * 7 + d;
+          const n = COUNTS[i];
+          total += n;
+          if (n > best.n) best = { n, i };
+          const title = (n === 0 ? 'No ' + UNIT : n + ' ' + (n === 1 ? UNIT.replace(/s$/, '') : UNIT)) + ' on ' + fmtDate(dateOf(i));
+          out += '<rect class="cell l' + level(n) + '" x="' + (left + w * (cell + gap)) + '" y="' + (top + d * (cell + gap)) + '" width="' + cell + '" height="' + cell + '" rx="' + Math.min(3, cell / 4) + '"><title>' + title + '</title></rect>';
+        }
+      }
+      plot.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Activity heatmap, ' + total.toLocaleString('en-GB') + ' ' + UNIT + ' over the last ' + weeks + ' weeks">' + out + '</svg>';
+      hint.innerHTML = '<b>' + total.toLocaleString('en-GB') + '</b> ' + UNIT + ' in the last ' + weeks + ' weeks. Busiest day: ' + fmtDate(dateOf(best.i)) + ' with ' + best.n + '.';
+    }
+
+    render();
+    new ResizeObserver(render).observe(plot);
+  });
+})();
+</script>

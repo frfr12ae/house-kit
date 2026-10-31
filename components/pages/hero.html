@@ -1,0 +1,215 @@
+<!--
+@title Hero
+@description Landing hero with one display headline, a subline, a filled and an outlined call to action, a proof line, and a product frame mock built from plain divs.
+@tags hero, landing, headline, cta, product, mock
+@preview fill
+@height 640
+@added 2026-10-31
+@featured true
+-->
+<style>
+  .c-hero {
+    background: var(--ds-bg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    overflow: hidden;
+  }
+  .c-hero .wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--ds-space-9);
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--ds-space-10) var(--ds-space-6);
+  }
+  .c-hero .copy { display: grid; gap: var(--ds-space-5); justify-items: start; }
+  .c-hero .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    padding: var(--ds-space-1) var(--ds-space-3) var(--ds-space-1) var(--ds-space-1);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-text);
+  }
+  .c-hero .eyebrow b {
+    padding: 2px var(--ds-space-2);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-highlight-fill);
+    border: var(--ds-hairline) solid var(--ds-highlight-line);
+    color: var(--ds-ink);
+    font-weight: 700;
+  }
+  .c-hero h1 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-3xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.02;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-hero .sub { max-width: 30em; font-size: var(--ds-text-lg); line-height: var(--ds-leading-snug); color: var(--ds-text); text-wrap: pretty; }
+  .c-hero .ctas { display: flex; flex-wrap: wrap; gap: var(--ds-space-3); margin-top: var(--ds-space-2); }
+  .c-hero .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    height: 48px;
+    padding: 0 var(--ds-space-6);
+    border: var(--ds-stroke) solid transparent;
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-md);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-hero .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-hero .btn svg { width: 16px; height: 16px; }
+  .c-hero .btn--filled { background: var(--ds-action); color: var(--ds-on-action); }
+  .c-hero .btn--filled:hover { background: color-mix(in srgb, var(--ds-action) 86%, var(--ds-on-action)); }
+  .c-hero .btn--outlined { background: transparent; color: var(--ds-ink); border-color: var(--ds-line); }
+  .c-hero .btn--outlined:hover { border-color: var(--ds-muted); background: var(--ds-surface); }
+  .c-hero .proof { display: flex; align-items: center; gap: var(--ds-space-3); margin-top: var(--ds-space-3); font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-hero .faces { display: flex; flex: none; }
+  .c-hero .faces i {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-left: -6px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-raised);
+    color: var(--ds-text);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+  }
+  .c-hero .faces i:first-child { margin-left: 0; }
+  .c-hero .proof b { color: var(--ds-ink); font-weight: 700; }
+
+  /* product frame mock */
+  .c-hero .stage { position: relative; }
+  .c-hero .frame {
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-raised);
+    box-shadow: var(--ds-shadow-lg);
+    overflow: hidden;
+  }
+  .c-hero .chrome { display: flex; align-items: center; gap: var(--ds-space-2); padding: var(--ds-space-3) var(--ds-space-4); border-bottom: var(--ds-hairline) solid var(--ds-line); background: var(--ds-surface); }
+  .c-hero .chrome i { width: 10px; height: 10px; border-radius: var(--ds-radius-pill); background: var(--ds-line); }
+  .c-hero .url { flex: 1; max-width: 240px; margin: 0 auto; padding: 3px var(--ds-space-3); border-radius: var(--ds-radius-pill); background: var(--ds-panel); color: var(--ds-muted); font-size: var(--ds-text-xs); text-align: center; }
+  .c-hero .app { display: grid; grid-template-columns: 148px minmax(0, 1fr); min-height: 340px; }
+  .c-hero .side { display: grid; align-content: start; gap: var(--ds-space-1); padding: var(--ds-space-4) var(--ds-space-3); border-right: var(--ds-hairline) solid var(--ds-line); background: var(--ds-surface); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-hero .side span { padding: var(--ds-space-2) var(--ds-space-3); border-radius: var(--ds-radius-sm); }
+  .c-hero .side span.on { background: var(--ds-panel); color: var(--ds-ink); }
+  .c-hero .main { display: grid; align-content: start; gap: var(--ds-space-4); padding: var(--ds-space-5); }
+  .c-hero .main-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); }
+  .c-hero .main-head b { color: var(--ds-ink); font-size: var(--ds-text-md); font-weight: 700; }
+  .c-hero .main-head span { color: var(--ds-muted); font-size: var(--ds-text-xs); }
+  .c-hero .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ds-space-3); }
+  .c-hero .kpi { display: grid; gap: var(--ds-space-1); padding: var(--ds-space-3) var(--ds-space-4); border-radius: var(--ds-radius-md); background: var(--ds-panel); }
+  .c-hero .kpi span { color: var(--ds-muted); font-size: var(--ds-text-xs); font-weight: 600; }
+  .c-hero .kpi b { color: var(--ds-ink); font-size: var(--ds-text-lg); font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .c-hero .progress { height: 6px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); overflow: hidden; }
+  .c-hero .progress i { display: block; width: 78%; height: 100%; border-radius: inherit; background: var(--ds-series-1); }
+  .c-hero .tasks { display: grid; gap: var(--ds-space-2); }
+  .c-hero .task { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-3); padding: var(--ds-space-3) var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-hero .pill { padding: 2px var(--ds-space-3); border: var(--ds-hairline) solid; border-radius: var(--ds-radius-pill); font-size: var(--ds-text-xs); font-weight: 700; white-space: nowrap; }
+  .c-hero .pill--note { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-hero .pill--highlight { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-hero .pill--danger { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-hero .float {
+    position: absolute;
+    left: calc(var(--ds-space-6) * -1);
+    bottom: var(--ds-space-6);
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-raised);
+    box-shadow: var(--ds-shadow-md);
+    font-size: var(--ds-text-xs);
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-muted);
+  }
+  .c-hero .float b { display: block; color: var(--ds-ink); font-size: var(--ds-text-sm); }
+  .c-hero .float svg { width: 28px; height: 28px; padding: 6px; border-radius: var(--ds-radius-pill); background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); color: var(--ds-ink); }
+
+  @media (max-width: 960px) {
+    .c-hero .wrap { grid-template-columns: 1fr; gap: var(--ds-space-8); padding: var(--ds-space-9) var(--ds-space-5); }
+    .c-hero .float { left: var(--ds-space-4); }
+  }
+  @media (max-width: 560px) {
+    .c-hero .wrap { padding: var(--ds-space-8) var(--ds-space-4); }
+    .c-hero h1 { font-size: var(--ds-text-2xl); }
+    .c-hero .sub { font-size: var(--ds-text-md); }
+    .c-hero .btn { flex: 1 1 100%; justify-content: center; }
+    .c-hero .app { grid-template-columns: 1fr; }
+    .c-hero .side { display: none; }
+    .c-hero .kpis { gap: var(--ds-space-2); }
+    .c-hero .kpi { padding: var(--ds-space-3); }
+    .c-hero .float { display: none; }
+  }
+</style>
+
+<section class="c-hero">
+  <div class="wrap">
+    <div class="copy">
+      <span class="eyebrow"><b>New</b>AI variance notes for every close</span>
+      <h1>Close the books in days, not weeks</h1>
+      <p class="sub">Stackwell matches transactions, chases approvals and drafts the variance notes, so your finance team stops living in spreadsheets at month end.</p>
+      <div class="ctas">
+        <a class="btn btn--filled" href="#">
+          Start free trial
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a class="btn btn--outlined" href="#">Book a demo</a>
+      </div>
+      <div class="proof">
+        <span class="faces" aria-hidden="true"><i>PA</i><i>TR</i><i>HV</i><i>MK</i></span>
+        <span>Trusted by <b>1,200 finance teams</b>. Rated 4.8 out of 5.</span>
+      </div>
+    </div>
+
+    <div class="stage" aria-hidden="true">
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">app.stackwell.example</span></div>
+        <div class="app">
+          <div class="side">
+            <span class="on">Close</span><span>Reconcile</span><span>Approvals</span><span>Reports</span><span>Settings</span>
+          </div>
+          <div class="main">
+            <div class="main-head"><b>March close</b><span>Due in 3 days</span></div>
+            <div class="progress"><i></i></div>
+            <div class="kpis">
+              <div class="kpi"><span>Reconciled</span><b>94%</b></div>
+              <div class="kpi"><span>Open items</span><b>12</b></div>
+              <div class="kpi"><span>Days to close</span><b>3.5</b></div>
+            </div>
+            <div class="tasks">
+              <div class="task">Bank reconciliation <span class="pill pill--note">Done</span></div>
+              <div class="task">Accrual review <span class="pill pill--highlight">In review</span></div>
+              <div class="task">Intercompany eliminations <span class="pill pill--danger">Blocked</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="float">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>
+        <span><b>218 matched</b>in 4 seconds</span>
+      </div>
+    </div>
+  </div>
+</section>

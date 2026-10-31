@@ -1,0 +1,175 @@
+<!--
+@title Data table
+@description A spacious, sortable table: click a column heading to sort, numbers are right-aligned with tabular figures, the header stays put while the body scrolls, and a status column uses semantic pills.
+@tags table, sort, data, rows, status, grid
+@preview fill
+@height 620
+@added 2026-10-31
+-->
+<style>
+  .c-data-table {
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-data-table .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .c-data-table .head { display: grid; gap: var(--ds-space-1); margin-bottom: var(--ds-space-5); }
+  .c-data-table h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-data-table .hint { margin: 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-data-table .scroll {
+    max-height: 440px;
+    overflow: auto;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+  }
+  .c-data-table .scroll:focus-visible { box-shadow: var(--ds-focus); }
+  .c-data-table table { width: 100%; min-width: 680px; border-collapse: separate; border-spacing: 0; font-size: var(--ds-text-sm); }
+  .c-data-table th,
+  .c-data-table td { padding: var(--ds-space-4) var(--ds-space-5); text-align: left; white-space: nowrap; }
+  .c-data-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding-top: var(--ds-space-3);
+    padding-bottom: var(--ds-space-3);
+    background: var(--ds-raised);
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+    font-weight: 600;
+    color: var(--ds-muted);
+  }
+  .c-data-table tbody th { font-weight: 600; color: var(--ds-ink); }
+  .c-data-table tbody tr > * { border-bottom: var(--ds-hairline) solid color-mix(in srgb, var(--ds-line) 55%, transparent); }
+  .c-data-table tbody tr:last-child > * { border-bottom: 0; }
+  .c-data-table tbody tr { transition: background var(--ds-dur-fast) var(--ds-ease); }
+  .c-data-table tbody tr:hover { background: color-mix(in srgb, var(--ds-panel) 70%, transparent); }
+  .c-data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .c-data-table .sort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    margin: calc(var(--ds-space-1) * -1) calc(var(--ds-space-2) * -1);
+    padding: var(--ds-space-1) var(--ds-space-2);
+    border: 0;
+    border-radius: var(--ds-radius-sm);
+    background: transparent;
+    font: inherit;
+    font-weight: 600;
+    color: inherit;
+    cursor: pointer;
+  }
+  .c-data-table .sort:hover { color: var(--ds-ink); }
+  .c-data-table .sort:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-data-table th.num .sort { flex-direction: row-reverse; }
+  .c-data-table .ind { width: 8px; height: 12px; flex: none; }
+  .c-data-table .ind path { fill: var(--ds-line); transition: fill var(--ds-dur-fast) var(--ds-ease); }
+  .c-data-table th[aria-sort="ascending"] .ind .up,
+  .c-data-table th[aria-sort="descending"] .ind .dn { fill: var(--ds-ink); }
+  .c-data-table th[aria-sort="ascending"],
+  .c-data-table th[aria-sort="descending"] { color: var(--ds-ink); }
+  .c-data-table .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px 2px 8px;
+    border: var(--ds-hairline) solid;
+    border-radius: var(--ds-radius-pill);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+  }
+  .c-data-table .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.55; }
+  .c-data-table .pill.is-note { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-data-table .pill.is-note::before { background: var(--ds-note-line); opacity: 1; }
+  .c-data-table .pill.is-highlight { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-data-table .pill.is-highlight::before { background: var(--ds-highlight-line); opacity: 1; }
+  .c-data-table .pill.is-danger { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-data-table .pill.is-danger::before { background: var(--ds-danger-line); opacity: 1; }
+  .c-data-table .pill.is-info { background: var(--ds-info-fill); border-color: var(--ds-info-line); }
+  .c-data-table .pill.is-info::before { background: var(--ds-info-line); opacity: 1; }
+  @media (max-width: 640px) {
+    .c-data-table { padding: var(--ds-space-5) var(--ds-space-4); }
+  }
+</style>
+
+<section class="c-data-table">
+  <div class="head">
+    <h3 id="c-data-table-title">Key accounts by annual recurring revenue</h3>
+    <p class="hint">Click a column heading to sort. Figures in thousands of euros.</p>
+  </div>
+  <div class="scroll" role="region" aria-labelledby="c-data-table-title" tabindex="0">
+    <table aria-labelledby="c-data-table-title">
+      <thead>
+        <tr>
+          <th scope="col" data-type="text" aria-sort="none"><button class="sort" type="button">Account<svg class="ind" viewBox="0 0 8 12" aria-hidden="true"><path class="up" d="M4 0 8 4.5H0z"/><path class="dn" d="M4 12 0 7.5h8z"/></svg></button></th>
+          <th scope="col" data-type="text" aria-sort="none"><button class="sort" type="button">Segment<svg class="ind" viewBox="0 0 8 12" aria-hidden="true"><path class="up" d="M4 0 8 4.5H0z"/><path class="dn" d="M4 12 0 7.5h8z"/></svg></button></th>
+          <th scope="col" class="num" data-type="num" aria-sort="descending"><button class="sort" type="button">ARR (€k)<svg class="ind" viewBox="0 0 8 12" aria-hidden="true"><path class="up" d="M4 0 8 4.5H0z"/><path class="dn" d="M4 12 0 7.5h8z"/></svg></button></th>
+          <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sort" type="button">Growth<svg class="ind" viewBox="0 0 8 12" aria-hidden="true"><path class="up" d="M4 0 8 4.5H0z"/><path class="dn" d="M4 12 0 7.5h8z"/></svg></button></th>
+          <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sort" type="button">Seats<svg class="ind" viewBox="0 0 8 12" aria-hidden="true"><path class="up" d="M4 0 8 4.5H0z"/><path class="dn" d="M4 12 0 7.5h8z"/></svg></button></th>
+          <th scope="col" data-type="num" data-first="ascending" aria-sort="none"><button class="sort" type="button">Status<svg class="ind" viewBox="0 0 8 12" aria-hidden="true"><path class="up" d="M4 0 8 4.5H0z"/><path class="dn" d="M4 12 0 7.5h8z"/></svg></button></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Alder Logistics Group</th><td>Enterprise</td><td class="num" data-sort="1240">1,240</td><td class="num" data-sort="14.2">+14.2%</td><td class="num" data-sort="860">860</td><td data-sort="2"><span class="pill is-note">On track</span></td></tr>
+        <tr><th scope="row">Delta Ridge Manufacturing</th><td>Enterprise</td><td class="num" data-sort="1105">1,105</td><td class="num" data-sort="21.7">+21.7%</td><td class="num" data-sort="740">740</td><td data-sort="2"><span class="pill is-note">On track</span></td></tr>
+        <tr><th scope="row">Cedar Health Partners</th><td>Enterprise</td><td class="num" data-sort="932">932</td><td class="num" data-sort="-3.1">−3.1%</td><td class="num" data-sort="620">620</td><td data-sort="0"><span class="pill is-danger">At risk</span></td></tr>
+        <tr><th scope="row">Juniper Public Sector</th><td>Enterprise</td><td class="num" data-sort="806">806</td><td class="num" data-sort="0.9">+0.9%</td><td class="num" data-sort="520">520</td><td data-sort="2"><span class="pill is-note">On track</span></td></tr>
+        <tr><th scope="row">Birch Retail Collective</th><td>Mid-market</td><td class="num" data-sort="684">684</td><td class="num" data-sort="8.5">+8.5%</td><td class="num" data-sort="410">410</td><td data-sort="2"><span class="pill is-note">On track</span></td></tr>
+        <tr><th scope="row">Fjord Energy Services</th><td>Mid-market</td><td class="num" data-sort="548">548</td><td class="num" data-sort="-9.8">−9.8%</td><td class="num" data-sort="330">330</td><td data-sort="0"><span class="pill is-danger">At risk</span></td></tr>
+        <tr><th scope="row">Harbour Education Trust</th><td>Mid-market</td><td class="num" data-sort="391">391</td><td class="num" data-sort="5.6">+5.6%</td><td class="num" data-sort="280">280</td><td data-sort="2"><span class="pill is-note">On track</span></td></tr>
+        <tr><th scope="row">Elm Street Foods</th><td>SMB</td><td class="num" data-sort="212">212</td><td class="num" data-sort="2.4">+2.4%</td><td class="num" data-sort="95">95</td><td data-sort="1"><span class="pill is-highlight">Watch</span></td></tr>
+        <tr><th scope="row">Granite Works</th><td>SMB</td><td class="num" data-sort="164">164</td><td class="num" data-sort="31">+31.0%</td><td class="num" data-sort="70">70</td><td data-sort="3"><span class="pill is-info">New</span></td></tr>
+        <tr><th scope="row">Ivy Lane Hospitality</th><td>SMB</td><td class="num" data-sort="128">128</td><td class="num" data-sort="-1.2">−1.2%</td><td class="num" data-sort="64">64</td><td data-sort="1"><span class="pill is-highlight">Watch</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sr" role="status" aria-live="polite"></p>
+</section>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-data-table').forEach((root) => {
+    const body = root.querySelector('tbody');
+    const heads = [...root.querySelectorAll('thead th')];
+    const live = root.querySelector('[role="status"]');
+
+    const value = (row, col, type) => {
+      const cell = row.children[col];
+      const raw = cell.dataset.sort !== undefined ? cell.dataset.sort : cell.textContent.trim();
+      return type === 'num' ? parseFloat(raw) : raw.toLowerCase();
+    };
+
+    function sortBy(col, dir) {
+      const type = heads[col].dataset.type;
+      const rows = [...body.rows].map((row, i) => ({ row, i }));
+      rows.sort((a, b) => {
+        const x = value(a.row, col, type);
+        const y = value(b.row, col, type);
+        const d = type === 'num' ? x - y : x.localeCompare(y);
+        return (d || a.i - b.i) * (dir === 'ascending' ? 1 : -1);
+      });
+      rows.forEach(({ row }) => body.appendChild(row));
+      heads.forEach((th, i) => th.setAttribute('aria-sort', i === col ? dir : 'none'));
+      live.textContent = 'Sorted by ' + heads[col].textContent.trim() + ', ' + dir;
+    }
+
+    heads.forEach((th, col) => {
+      th.querySelector('.sort').addEventListener('click', () => {
+        const current = th.getAttribute('aria-sort');
+        const first = th.dataset.first || (th.dataset.type === 'num' ? 'descending' : 'ascending');
+        const flip = first === 'ascending' ? 'descending' : 'ascending';
+        sortBy(col, current === first ? flip : first);
+      });
+    });
+  });
+})();
+</script>

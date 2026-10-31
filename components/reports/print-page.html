@@ -1,0 +1,175 @@
+<!--
+@title Print page
+@description An A4 portrait report page with a running header, two-column body and a footer with page number. On screen it scales to fit; printed or saved as PDF it is exactly one A4 sheet. The @page rule is global, so keep one print-page per document.
+@tags print, a4, pdf, page, report, layout
+@preview fill
+@height 1260
+@added 2026-10-31
+-->
+<style>
+  @page { size: A4 portrait; margin: 0; }
+
+  .c-print-page {
+    padding: var(--ds-space-6);
+    background: var(--ds-panel);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-print-page .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-3);
+    margin: 0 auto var(--ds-space-5);
+    max-width: 210mm;
+    font-size: var(--ds-text-sm);
+    color: var(--ds-muted);
+  }
+  .c-print-page .print-btn {
+    height: 36px;
+    padding: 0 var(--ds-space-5);
+    border: 0;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .c-print-page .print-btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-print-page .stage { display: flex; justify-content: center; }
+
+  .c-print-page .sheet {
+    flex: none;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    width: 210mm;
+    height: 297mm;
+    padding: 16mm 18mm 12mm;
+    overflow: hidden;
+    background: var(--ds-raised);
+    box-shadow: var(--ds-shadow-lg);
+    color: var(--ds-text);
+    font-size: var(--ds-text-sm);
+    line-height: 1.6;
+  }
+  .c-print-page .running,
+  .c-print-page .foot {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+    font-size: var(--ds-text-xs);
+    color: var(--ds-muted);
+  }
+  .c-print-page .running { padding-bottom: var(--ds-space-3); border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-print-page .running strong { color: var(--ds-ink); font-weight: 700; }
+  .c-print-page .foot { padding-top: var(--ds-space-3); border-top: var(--ds-hairline) solid var(--ds-line); font-variant-numeric: tabular-nums; }
+
+  .c-print-page .content { padding: var(--ds-space-8) 0 var(--ds-space-5); min-height: 0; }
+  .c-print-page .eyebrow { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-print-page h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-2xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+  }
+  .c-print-page .lede { margin: var(--ds-space-5) 0 var(--ds-space-6); font-size: var(--ds-text-md); line-height: 1.55; color: var(--ds-text); }
+  .c-print-page .cols { column-count: 2; column-gap: 9mm; }
+  .c-print-page h3 { margin: 0 0 var(--ds-space-2); font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); break-after: avoid; }
+  .c-print-page .cols p { margin: 0 0 var(--ds-space-4); orphans: 3; widows: 3; }
+  .c-print-page .cols h3:not(:first-child) { margin-top: var(--ds-space-5); }
+  .c-print-page .figures {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--ds-space-4);
+    margin: var(--ds-space-6) 0 0;
+    padding: var(--ds-space-5) var(--ds-space-5);
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+    break-inside: avoid;
+  }
+  .c-print-page .figures dt { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-print-page .figures dd { margin: 2px 0 0; font-size: var(--ds-text-lg); font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+
+  @media print {
+    .c-print-page { padding: 0; background: none; border-radius: 0; }
+    .c-print-page .toolbar { display: none; }
+    .c-print-page .stage { display: block; }
+    .c-print-page .sheet {
+      zoom: 1 !important;
+      width: 210mm;
+      height: 296.5mm;
+      box-shadow: none;
+      break-after: page;
+      break-inside: avoid;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+
+<section class="c-print-page">
+  <div class="toolbar">
+    <span>A4 portrait, scaled to fit this width.</span>
+    <button class="print-btn" type="button">Print or save as PDF</button>
+  </div>
+  <div class="stage">
+    <article class="sheet" aria-label="Report page 2 of 6">
+      <header class="running">
+        <span><strong>Q3 2026 operating review</strong></span>
+        <time datetime="2026-10-31">31 October 2026</time>
+      </header>
+      <div class="content">
+        <p class="eyebrow">Section 2</p>
+        <h2>Where the margin went</h2>
+        <p class="lede">Gross margin fell from 63.0% to 61.2% while revenue grew by 12%. Two causes explain almost all of the movement, and both are within our control.</p>
+        <div class="cols">
+          <h3>Onboarding effort</h3>
+          <p>Custom setup work now takes an average of 31 hours per new account, up from 22 hours a year ago. Enterprise customers drive most of the increase because they request integrations that fall outside the standard package.</p>
+          <p>We priced these requests as one-off projects, but only about half were invoiced. The remainder was absorbed into the subscription, which is why revenue looks healthy while delivery cost climbs.</p>
+          <h3>Pricing leakage</h3>
+          <p>Seven of the ten largest renewals closed at last year's list price. Input costs rose 6% over the same period, so every one of those contracts now earns a thinner margin than the one it replaced.</p>
+          <h3>Support coverage</h3>
+          <p>The ticket backlog fell by 18% over the quarter. That improvement relied on temporary contractors, whose cost sits in cost of sales until their contracts end in January.</p>
+          <p>Without them, we estimate the backlog would have grown by roughly 10%. Replacing the cover with permanent staff costs less per ticket but needs to be approved this year.</p>
+          <h3>Method and data</h3>
+          <p>Margin is measured on invoiced revenue against delivery and support cost recorded in the finance ledger. Contractor invoices were allocated by ticket volume; onboarding hours come from the time-tracking export.</p>
+          <h3>What we expect next</h3>
+          <p>If scope is held and indexation is applied at renewal, margin returns to about 64% by the end of the second quarter. The sensitivity table in the appendix shows the range.</p>
+        </div>
+        <dl class="figures">
+          <div><dt>Margin change</dt><dd>1.8 pts down</dd></div>
+          <div><dt>Unbilled setup</dt><dd>€96k</dd></div>
+          <div><dt>Contractor cost</dt><dd>€71k</dd></div>
+        </dl>
+      </div>
+      <footer class="foot">
+        <span>Confidential: prepared for the leadership team</span>
+        <span>Page 2 of 6</span>
+      </footer>
+    </article>
+  </div>
+</section>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-print-page').forEach((root) => {
+    const sheet = root.querySelector('.sheet');
+    const fit = () => {
+      sheet.style.zoom = 1;
+      const cs = getComputedStyle(root);
+      const room = root.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      sheet.style.zoom = Math.min(1, room / sheet.offsetWidth);
+    };
+    root.querySelector('.print-btn').addEventListener('click', () => window.print());
+    new ResizeObserver(fit).observe(root);
+    fit();
+  });
+})();
+</script>

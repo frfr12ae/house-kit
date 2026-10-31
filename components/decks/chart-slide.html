@@ -1,0 +1,96 @@
+<!--
+@title Chart slide
+@description A headline that states the takeaway above an inline SVG bar chart with the key bar in the highlight colour, axis labels and a source line.
+@tags slide, chart, bar, data, takeaway, svg
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-chart-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-chart-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.6cqi;
+    padding: 5.5cqi 7cqi 4.5cqi;
+  }
+  .c-chart-slide .head { display: grid; gap: 1cqi; }
+  .c-chart-slide h2 {
+    margin: 0;
+    max-width: 72cqi;
+    font-family: var(--ds-font-display);
+    font-size: 4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.08;
+    color: var(--ds-ink);
+  }
+  .c-chart-slide .sub { margin: 0; font-size: 1.6cqi; color: var(--ds-muted); font-weight: 600; }
+  .c-chart-slide .plot { min-height: 0; }
+  .c-chart-slide svg { display: block; width: 100%; height: 100%; }
+  .c-chart-slide .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-chart-slide .base { stroke: var(--ds-neutral-line); stroke-width: 1.5; }
+  .c-chart-slide .tick { fill: var(--ds-muted); font-size: 13px; text-anchor: end; font-variant-numeric: tabular-nums; }
+  .c-chart-slide .cat { fill: var(--ds-text); font-size: 15px; font-weight: 600; text-anchor: middle; }
+  .c-chart-slide .val { fill: var(--ds-muted); font-size: 16px; font-weight: 700; text-anchor: middle; font-variant-numeric: tabular-nums; }
+  .c-chart-slide .bar { fill: var(--ds-neutral-line); }
+  .c-chart-slide .is-key.bar { fill: var(--ds-highlight-line); }
+  .c-chart-slide .is-key.val { fill: var(--ds-ink); font-size: 20px; }
+  .c-chart-slide .is-key.cat { fill: var(--ds-ink); font-weight: 800; }
+  .c-chart-slide .foot { font-size: 1.3cqi; line-height: 1.4; color: var(--ds-muted); }
+</style>
+
+<section class="c-chart-slide">
+  <div class="inner">
+    <div class="head">
+      <h2>Referrals now bring in more qualified leads than any paid channel</h2>
+      <p class="sub">Qualified leads per quarter, by source, Q3 2026</p>
+    </div>
+    <div class="plot">
+      <svg viewBox="0 0 860 250" role="img" aria-label="Bar chart of qualified leads in Q3 2026. Referrals 412, paid search 268, events 190, organic 175, outbound 96." preserveAspectRatio="xMidYMid meet">
+        <g>
+          <line class="grid" x1="64" x2="860" y1="146.7" y2="146.7"/>
+          <line class="grid" x1="64" x2="860" y1="83.3" y2="83.3"/>
+          <line class="grid" x1="64" x2="860" y1="20" y2="20"/>
+          <line class="base" x1="64" x2="860" y1="210" y2="210"/>
+          <text class="tick" x="54" y="214">0</text>
+          <text class="tick" x="54" y="151">150</text>
+          <text class="tick" x="54" y="88">300</text>
+          <text class="tick" x="54" y="25">450</text>
+        </g>
+        <g>
+          <rect class="bar is-key" x="104" y="36" width="90" height="174" rx="3"/>
+          <rect class="bar" x="262" y="97" width="90" height="113" rx="3"/>
+          <rect class="bar" x="420" y="130" width="90" height="80" rx="3"/>
+          <rect class="bar" x="578" y="136" width="90" height="74" rx="3"/>
+          <rect class="bar" x="736" y="170" width="90" height="40" rx="3"/>
+        </g>
+        <g>
+          <text class="val is-key" x="149" y="27">412</text>
+          <text class="val" x="307" y="88">268</text>
+          <text class="val" x="465" y="121">190</text>
+          <text class="val" x="623" y="127">175</text>
+          <text class="val" x="781" y="161">96</text>
+        </g>
+        <g>
+          <text class="cat is-key" x="149" y="236">Referrals</text>
+          <text class="cat" x="307" y="236">Paid search</text>
+          <text class="cat" x="465" y="236">Events</text>
+          <text class="cat" x="623" y="236">Organic</text>
+          <text class="cat" x="781" y="236">Outbound</text>
+        </g>
+      </svg>
+    </div>
+    <div class="foot">Source: CRM export, Q3 2026. Qualified means accepted by sales within seven days.</div>
+  </div>
+</section>

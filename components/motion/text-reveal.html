@@ -1,0 +1,102 @@
+<!--
+@title Text reveal
+@description A kinetic headline whose words rise out of a mask with a stagger, followed by a fading subline. Starts when scrolled into view.
+@tags text, headline, kinetic, reveal, stagger, title
+@preview center
+@height 360
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-text-reveal,
+  .c-text-reveal *,
+  .c-text-reveal *::before,
+  .c-text-reveal *::after { box-sizing: border-box; }
+  .c-text-reveal {
+    display: grid;
+    gap: var(--ds-space-5);
+    width: min(820px, 100%);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-text-reveal .headline {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: clamp(36px, 7vw, var(--ds-text-3xl));
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+  }
+  .c-text-reveal .mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+  .c-text-reveal .word { display: inline-block; will-change: transform; }
+  .c-text-reveal .sub {
+    margin: 0;
+    max-width: 520px;
+    font-size: var(--ds-text-lg);
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-muted);
+  }
+
+  /* the hidden state carries no transition, so arming never animates; only the move to .is-in does */
+  .c-text-reveal.is-armed .word { transform: translateY(110%); }
+  .c-text-reveal.is-armed .sub { opacity: 0; transform: translateY(8px); }
+  .c-text-reveal.is-armed.is-in .word {
+    transform: none;
+    transition: transform var(--ds-dur-slow) var(--ds-ease);
+    transition-delay: calc(var(--i) * 70ms);
+  }
+  .c-text-reveal.is-armed.is-in .sub {
+    opacity: 1;
+    transform: none;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+    transition-delay: calc(var(--n) * 70ms + var(--ds-dur-base));
+  }
+</style>
+
+<div class="c-text-reveal">
+  <h2 class="headline">Clear numbers, calm decisions, every Monday</h2>
+  <p class="sub">A one-page weekly review that takes ten minutes to read and tells you exactly what changed.</p>
+</div>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-text-reveal').forEach((root) => {
+    const headline = root.querySelector('.headline');
+    const words = headline.textContent.trim().split(/\s+/);
+    const label = headline.textContent.trim();
+    headline.setAttribute('aria-label', label);
+    headline.textContent = '';
+    words.forEach((w, i) => {
+      const mask = document.createElement('span');
+      mask.className = 'mask';
+      mask.setAttribute('aria-hidden', 'true');
+      const word = document.createElement('span');
+      word.className = 'word';
+      word.style.setProperty('--i', i);
+      word.textContent = w;
+      mask.appendChild(word);
+      headline.appendChild(mask);
+      if (i < words.length - 1) headline.appendChild(document.createTextNode(' '));
+    });
+    root.style.setProperty('--n', words.length);
+    if (reduced) return;
+
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

@@ -1,0 +1,114 @@
+<!--
+@title Stat strip
+@description A row of four headline KPIs, each with a label and a delta chip. Green for a favourable change, red for an unfavourable one, with an arrow and screen-reader text so colour is never the only signal.
+@tags kpi, numbers, summary, delta, metrics, headline
+@preview fill
+@height 220
+@added 2026-10-31
+-->
+<style>
+  .c-stat-strip {
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-stat-strip .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .c-stat-strip .items {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .c-stat-strip .item {
+    display: grid;
+    align-content: start;
+    gap: var(--ds-space-3);
+    padding: 0 var(--ds-space-5);
+  }
+  .c-stat-strip .item + .item { border-left: var(--ds-hairline) solid var(--ds-line); }
+  .c-stat-strip .item:first-child { padding-left: 0; }
+  .c-stat-strip .label { margin: 0; color: var(--ds-muted); font-size: var(--ds-text-sm); font-weight: 600; }
+  .c-stat-strip .value {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-2xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-stat-strip .meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-2); margin: 0; }
+  .c-stat-strip .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px 3px 7px;
+    border: var(--ds-hairline) solid;
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-stat-strip .chip svg { width: 9px; height: 9px; fill: currentColor; }
+  .c-stat-strip .chip.is-down svg { transform: rotate(180deg); }
+  .c-stat-strip .chip.is-good { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-stat-strip .chip.is-bad { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-stat-strip .vs { color: var(--ds-muted); font-size: var(--ds-text-xs); }
+  @media (max-width: 720px) {
+    .c-stat-strip { padding: var(--ds-space-6) var(--ds-space-5); }
+    .c-stat-strip .items { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--ds-space-6); }
+    .c-stat-strip .item { padding: 0 0 0 var(--ds-space-5); }
+    .c-stat-strip .item:nth-child(odd) { padding-left: 0; border-left: 0; }
+    .c-stat-strip .value { font-size: var(--ds-text-xl); }
+  }
+</style>
+
+<section class="c-stat-strip" aria-label="Headline numbers, Q3 2026">
+  <ul class="items">
+    <li class="item">
+      <p class="label">Net revenue</p>
+      <p class="value">€2.84M</p>
+      <p class="meta">
+        <span class="chip is-up is-good"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9.5 8.5H.5z"/></svg>12.4%<span class="sr"> up, favourable</span></span>
+        <span class="vs">vs Q2</span>
+      </p>
+    </li>
+    <li class="item">
+      <p class="label">Active customers</p>
+      <p class="value">1,486</p>
+      <p class="meta">
+        <span class="chip is-up is-good"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9.5 8.5H.5z"/></svg>6.1%<span class="sr"> up, favourable</span></span>
+        <span class="vs">vs Q2</span>
+      </p>
+    </li>
+    <li class="item">
+      <p class="label">Gross margin</p>
+      <p class="value">61.2%</p>
+      <p class="meta">
+        <span class="chip is-down is-bad"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9.5 8.5H.5z"/></svg>1.8 pts<span class="sr"> down, unfavourable</span></span>
+        <span class="vs">vs Q2</span>
+      </p>
+    </li>
+    <li class="item">
+      <p class="label">Open support tickets</p>
+      <p class="value">142</p>
+      <p class="meta">
+        <span class="chip is-down is-good"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9.5 8.5H.5z"/></svg>18%<span class="sr"> down, favourable</span></span>
+        <span class="vs">vs Q2</span>
+      </p>
+    </li>
+  </ul>
+</section>

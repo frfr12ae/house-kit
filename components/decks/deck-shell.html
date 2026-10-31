@@ -1,0 +1,301 @@
+<!--
+@title Deck shell
+@description A presentation host: shows one slide at a time with a crossfade, keyboard navigation, prev and next buttons, a slide counter, a progress bar and fullscreen. Paste any slide component into a slide wrapper.
+@tags deck, presentation, slides, navigation, fullscreen, keyboard
+@preview fill
+@height 640
+@added 2026-10-31
+@featured true
+-->
+<style>
+  .c-deck-shell {
+    display: grid;
+    gap: var(--ds-space-4);
+    padding: var(--ds-space-4);
+    background: var(--ds-panel);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    outline: none;
+  }
+  .c-deck-shell:focus-visible { box-shadow: var(--ds-focus); }
+
+  .c-deck-shell .stage {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-deck-shell .slide {
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease-in-out), visibility 0s linear var(--ds-dur-slow);
+  }
+  .c-deck-shell .slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease-in-out), visibility 0s;
+  }
+  .c-deck-shell .slide > * { width: 100%; }
+
+  .c-deck-shell .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0.3cqi;
+    min-height: 3px;
+    background: color-mix(in srgb, var(--ds-line) 70%, transparent);
+    pointer-events: none;
+  }
+  .c-deck-shell .progress i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--ds-action);
+    transition: width var(--ds-dur-slow) var(--ds-ease);
+  }
+
+  .c-deck-shell .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+  }
+  .c-deck-shell .count {
+    min-width: 64px;
+    text-align: center;
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    color: var(--ds-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-deck-shell .spacer { flex: 1; }
+  .c-deck-shell .hint { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-deck-shell .btn {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-raised);
+    color: var(--ds-ink);
+    cursor: pointer;
+    transition: border-color var(--ds-dur-fast) var(--ds-ease), background var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-deck-shell .btn:hover:not(:disabled) { border-color: var(--ds-muted); }
+  .c-deck-shell .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-deck-shell .btn:disabled { color: var(--ds-muted); background: var(--ds-panel); cursor: not-allowed; opacity: 0.6; }
+  .c-deck-shell .btn svg { width: 16px; height: 16px; }
+
+  @media (max-width: 520px) { .c-deck-shell .hint { display: none; } }
+
+  .c-deck-shell:fullscreen {
+    grid-template-rows: minmax(0, 1fr) auto;
+    place-items: center;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    gap: var(--ds-space-3);
+    border-radius: 0;
+    background: var(--ds-bg);
+  }
+  .c-deck-shell:fullscreen .stage {
+    width: min(100%, calc((100vh - 72px) * 16 / 9));
+    border-radius: 0;
+  }
+  .c-deck-shell:fullscreen .bar { opacity: 0.55; transition: opacity var(--ds-dur-base) var(--ds-ease); }
+  .c-deck-shell:fullscreen .bar:hover, .c-deck-shell:fullscreen .bar:focus-within { opacity: 1; }
+
+  /* built-in sample slides */
+  .c-deck-shell .s-wrap {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    gap: 2.4cqi;
+    padding: 6cqi 8cqi;
+    background: var(--ds-surface);
+  }
+  .c-deck-shell .s-eyebrow { font-size: 1.6cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-deck-shell .s-title {
+    margin: 0;
+    max-width: 62cqi;
+    font-family: var(--ds-font-display);
+    font-size: 6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.05;
+    color: var(--ds-ink);
+  }
+  .c-deck-shell .s-sub { margin: 0; max-width: 52cqi; font-size: 2.1cqi; line-height: 1.45; }
+  .c-deck-shell .s-h {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.1;
+    color: var(--ds-ink);
+  }
+  .c-deck-shell .s-list { display: grid; gap: 0; margin: 1cqi 0 0; padding: 0; list-style: none; max-width: 70cqi; }
+  .c-deck-shell .s-list li {
+    display: grid;
+    grid-template-columns: 17cqi 1fr;
+    align-items: baseline;
+    gap: 2cqi;
+    padding: 1.8cqi 0;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 2.1cqi;
+    line-height: 1.4;
+  }
+  .c-deck-shell .s-list li:last-child { border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-deck-shell .s-list b {
+    font-family: var(--ds-font-display);
+    font-size: 3.2cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-deck-shell .s-pill {
+    justify-self: start;
+    padding: 0.9cqi 1.8cqi;
+    border: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-highlight-fill);
+    font-size: 1.7cqi;
+    font-weight: 700;
+    color: var(--ds-ink);
+  }
+</style>
+
+<!--
+How to use this shell
+Every direct child of the stage with class "slide" is one slide. To add your
+own slide, paste a slide component (its style block, once, and its markup) and
+place the markup inside a new slide wrapper:
+  <div class="slide"> ...pasted slide markup... </div>
+Order in the file is the order in the deck. Delete the three sample slides
+when you no longer need them. Slide components size themselves with container
+units, so they fill the wrapper at any width.
+-->
+<section class="c-deck-shell" tabindex="0" role="region" aria-roledescription="presentation" aria-label="Presentation">
+  <div class="stage">
+    <div class="slide is-active">
+      <div class="s-wrap">
+        <div class="s-eyebrow">Operating review, Q4</div>
+        <h1 class="s-title">Steady growth, with one decision to make</h1>
+        <p class="s-sub">Where we stand, what changed this quarter and what we ask of this room.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="s-wrap">
+        <div class="s-eyebrow">This quarter</div>
+        <h2 class="s-h">Three results worth knowing</h2>
+        <ul class="s-list">
+          <li><b>+18%</b><span>Recurring revenue against the same quarter last year</span></li>
+          <li><b>41 days</b><span>Average time from first call to signed contract, down from 56</span></li>
+          <li><b>94%</b><span>Of customers renewed without a discount</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="s-wrap">
+        <div class="s-eyebrow">Next</div>
+        <h2 class="s-h">One decision, then three next steps</h2>
+        <p class="s-sub">Approve the pilot budget today and the first customers go live before year end.</p>
+        <span class="s-pill">Decision needed today</span>
+      </div>
+    </div>
+    <div class="progress" aria-hidden="true"><i></i></div>
+  </div>
+
+  <div class="bar">
+    <button class="btn" type="button" data-act="prev" aria-label="Previous slide">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+    </button>
+    <span class="count" aria-live="polite">1 / 3</span>
+    <button class="btn" type="button" data-act="next" aria-label="Next slide">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg>
+    </button>
+    <span class="spacer"></span>
+    <span class="hint">Arrow keys to move, F for fullscreen</span>
+    <button class="btn" type="button" data-act="fs" aria-label="Toggle fullscreen">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+(() => {
+  const isEditable = (el) => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+
+  document.querySelectorAll('.c-deck-shell').forEach((root) => {
+    const slides = Array.from(root.querySelectorAll('.stage > .slide'));
+    const count = root.querySelector('.count');
+    const fill = root.querySelector('.progress i');
+    const prev = root.querySelector('[data-act="prev"]');
+    const next = root.querySelector('[data-act="next"]');
+    const fs = root.querySelector('[data-act="fs"]');
+    let index = 0;
+
+    function go(n) {
+      index = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, k) => {
+        const on = k === index;
+        s.classList.toggle('is-active', on);
+        s.setAttribute('aria-hidden', on ? 'false' : 'true');
+        s.inert = !on;
+      });
+      count.textContent = (index + 1) + ' / ' + slides.length;
+      fill.style.width = ((index + 1) / slides.length * 100) + '%';
+      prev.disabled = index === 0;
+      next.disabled = index === slides.length - 1;
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement === root) {
+        document.exitFullscreen();
+      } else if (root.requestFullscreen) {
+        root.requestFullscreen().catch(() => {});
+      }
+    }
+
+    prev.addEventListener('click', () => go(index - 1));
+    next.addEventListener('click', () => go(index + 1));
+    if (document.fullscreenEnabled) fs.addEventListener('click', toggleFullscreen);
+    else fs.hidden = true;
+    root.querySelector('.stage').addEventListener('click', () => root.focus({ preventScroll: true }));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (isEditable(e.target)) return;
+      const inside = root.contains(document.activeElement);
+      const alone = document.querySelectorAll('.c-deck-shell').length === 1;
+      if (!inside && !alone) return;
+      if (e.key === ' ' && e.target.closest && e.target.closest('button, a, summary, [role="button"]')) return;
+
+      let handled = true;
+      switch (e.key) {
+        case 'ArrowRight': case 'PageDown': go(index + 1); break;
+        case 'ArrowLeft': case 'PageUp': go(index - 1); break;
+        case ' ': go(e.shiftKey ? index - 1 : index + 1); break;
+        case 'Home': go(0); break;
+        case 'End': go(slides.length - 1); break;
+        case 'f': case 'F': if (document.fullscreenEnabled) toggleFullscreen(); break;
+        default: handled = false;
+      }
+      if (handled) e.preventDefault();
+    });
+
+    go(0);
+  });
+})();
+</script>

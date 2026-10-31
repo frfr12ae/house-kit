@@ -1,0 +1,109 @@
+<!--
+@title Dialog
+@description Modal dialog on the native dialog element: opened by a button, with title, body, cancel and confirm, a dimmed backdrop, Escape and backdrop click to close, and an entry animation.
+@tags dialog, modal, confirm, overlay, native
+@preview center
+@height 360
+@added 2026-10-31
+-->
+<style>
+  .c-dialog {
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-4);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-dialog .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 var(--ds-space-5);
+    border: var(--ds-stroke) solid transparent;
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease), transform var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-dialog .btn:active { transform: translateY(1px); }
+  .c-dialog .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-dialog .btn--filled { background: var(--ds-action); color: var(--ds-on-action); }
+  .c-dialog .btn--filled:hover { background: color-mix(in srgb, var(--ds-action) 86%, var(--ds-on-action)); }
+  .c-dialog .btn--outlined { background: transparent; color: var(--ds-ink); border-color: var(--ds-line); }
+  .c-dialog .btn--outlined:hover { border-color: var(--ds-muted); background: var(--ds-surface); }
+  .c-dialog .result { min-height: 1.5em; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+
+  .c-dialog .modal {
+    width: min(440px, calc(100vw - 32px));
+    margin: auto;
+    padding: 0;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-raised);
+    color: var(--ds-text);
+    box-shadow: var(--ds-shadow-lg);
+    overflow: hidden;
+  }
+  .c-dialog .modal[open] { animation: c-dialog-in var(--ds-dur-base) var(--ds-ease-spring); }
+  .c-dialog .modal::backdrop {
+    background: color-mix(in srgb, var(--ds-ink) 38%, transparent);
+    backdrop-filter: blur(2px);
+  }
+  .c-dialog .modal[open]::backdrop { animation: c-dialog-fade var(--ds-dur-base) var(--ds-ease); }
+  @keyframes c-dialog-in { from { opacity: 0; transform: translateY(12px) scale(0.96); } to { opacity: 1; transform: none; } }
+  @keyframes c-dialog-fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .c-dialog .body { display: grid; gap: var(--ds-space-3); padding: var(--ds-space-6) var(--ds-space-6) var(--ds-space-5); }
+  .c-dialog .modal h2 { margin: 0; font-size: var(--ds-text-lg); font-weight: 700; line-height: var(--ds-leading-snug); color: var(--ds-ink); }
+  .c-dialog .modal p { margin: 0; font-size: var(--ds-text-md); line-height: var(--ds-leading-body); }
+  .c-dialog .foot { display: flex; justify-content: flex-end; gap: var(--ds-space-3); padding: var(--ds-space-4) var(--ds-space-6) var(--ds-space-6); }
+  @media (max-width: 440px) {
+    .c-dialog .foot { flex-direction: column-reverse; }
+    .c-dialog .foot .btn { height: 46px; }
+  }
+</style>
+
+<div class="c-dialog">
+  <button class="btn btn--filled open" type="button">Publish March close</button>
+  <p class="result" aria-live="polite"></p>
+
+  <dialog class="modal" aria-labelledby="c-dialog-title" aria-describedby="c-dialog-desc">
+    <form method="dialog">
+      <div class="body">
+        <h2 id="c-dialog-title">Publish the March close?</h2>
+        <p id="c-dialog-desc">Reviewers will be notified and the period locks for editing. You can reopen it later from the audit log.</p>
+      </div>
+      <div class="foot">
+        <button class="btn btn--outlined" type="submit" value="cancel">Cancel</button>
+        <button class="btn btn--filled" type="submit" value="confirm" autofocus>Publish</button>
+      </div>
+    </form>
+  </dialog>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-dialog').forEach((root, n) => {
+    const opener = root.querySelector('.open');
+    const modal = root.querySelector('.modal');
+    const result = root.querySelector('.result');
+    const title = root.querySelector('h2');
+    const desc = root.querySelector('.body p');
+    title.id = `c-dialog-title-${n}`; desc.id = `c-dialog-desc-${n}`;
+    modal.setAttribute('aria-labelledby', title.id);
+    modal.setAttribute('aria-describedby', desc.id);
+
+    opener.addEventListener('click', () => modal.showModal());
+    // a click on the dimmed backdrop lands on the dialog element itself
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.close('cancel');
+    });
+    modal.addEventListener('close', () => {
+      result.textContent = modal.returnValue === 'confirm' ? 'Published. Reviewers have been notified.' : 'Cancelled. Nothing changed.';
+    });
+  });
+})();
+</script>

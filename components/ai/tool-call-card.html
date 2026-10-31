@@ -1,0 +1,169 @@
+<!--
+@title Tool call cards
+@description Collapsible cards for agent tool calls: tool name, a status pill for running, done or failed, then arguments and result in mono.
+@tags tool, function call, agent, status, json, collapsible, llm
+@preview center
+@height 620
+@added 2026-10-31
+-->
+<style>
+  .c-tool-call-card,
+  .c-tool-call-card *,
+  .c-tool-call-card *::before,
+  .c-tool-call-card *::after { box-sizing: border-box; }
+  .c-tool-call-card {
+    display: grid;
+    gap: var(--ds-space-3);
+    width: min(640px, 100%);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-tool-call-card .card {
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    overflow: hidden;
+  }
+  .c-tool-call-card .head {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    width: 100%;
+    padding: var(--ds-space-4);
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+  }
+  .c-tool-call-card .head:hover { background: var(--ds-panel); }
+  .c-tool-call-card .head:focus-visible { outline: none; box-shadow: inset var(--ds-focus); }
+  .c-tool-call-card .chev { flex: none; width: 16px; height: 16px; color: var(--ds-muted); transition: transform var(--ds-dur-base) var(--ds-ease); }
+  .c-tool-call-card .card.is-open .chev { transform: rotate(90deg); }
+  .c-tool-call-card .name { font-family: var(--ds-font-mono); font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-tool-call-card .summary { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-tool-call-card .dur { flex: none; font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-tool-call-card .pill {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px var(--ds-space-3);
+    border: var(--ds-hairline) solid;
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+  }
+  .c-tool-call-card .pill--running { background: var(--ds-info-fill); border-color: var(--ds-info-line); color: var(--ds-ink); }
+  .c-tool-call-card .pill--done { background: var(--ds-note-fill); border-color: var(--ds-note-line); color: var(--ds-ink); }
+  .c-tool-call-card .pill--failed { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); color: var(--ds-ink); }
+  .c-tool-call-card .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--ds-note-line); }
+  .c-tool-call-card .pill--failed i { background: var(--ds-danger-line); }
+  .c-tool-call-card .pill--running i {
+    background: transparent;
+    border: 2px solid var(--ds-info-line);
+    border-right-color: transparent;
+    animation: c-tool-call-card-spin 800ms linear infinite;
+  }
+  .c-tool-call-card .body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--ds-dur-base) var(--ds-ease); }
+  .c-tool-call-card .card.is-open .body { grid-template-rows: 1fr; }
+  .c-tool-call-card .body-inner { min-height: 0; overflow: hidden; }
+  .c-tool-call-card .sections { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-4); padding: 0 var(--ds-space-4) var(--ds-space-4); }
+  .c-tool-call-card .sections > div { min-width: 0; }
+  .c-tool-call-card .sec-label { margin-bottom: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-tool-call-card pre {
+    margin: 0;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    overflow-x: auto;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+    font-family: var(--ds-font-mono);
+    font-size: var(--ds-text-xs);
+    line-height: 1.7;
+    color: var(--ds-text);
+  }
+  .c-tool-call-card pre.is-error { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-tool-call-card pre.is-wait { color: var(--ds-muted); }
+  @keyframes c-tool-call-card-spin { to { transform: rotate(360deg); } }
+  @media (max-width: 480px) { .c-tool-call-card .summary { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .c-tool-call-card .pill--running i { animation: none; border-right-color: var(--ds-info-line); }
+  }
+</style>
+
+<div class="c-tool-call-card">
+  <div class="card is-open">
+    <button class="head" type="button" aria-expanded="true">
+      <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>
+      <span class="name">search_orders</span>
+      <span class="summary">3 matches for customer 4821</span>
+      <span class="dur">0.4s</span>
+      <span class="pill pill--done"><i></i>Done</span>
+    </button>
+    <div class="body"><div class="body-inner"><div class="sections">
+      <div><div class="sec-label">Arguments</div><pre>{
+  "customer_id": 4821,
+  "status": "open",
+  "limit": 5
+}</pre></div>
+      <div><div class="sec-label">Result</div><pre>{
+  "count": 3,
+  "orders": ["A-1042", "A-1057", "A-1063"],
+  "total_open": 1840.50
+}</pre></div>
+    </div></div></div>
+  </div>
+
+  <div class="card">
+    <button class="head" type="button" aria-expanded="false">
+      <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>
+      <span class="name">send_reminder</span>
+      <span class="summary">Invoice A-1042, second notice</span>
+      <span class="dur">1.2s</span>
+      <span class="pill pill--running"><i></i>Running</span>
+    </button>
+    <div class="body"><div class="body-inner"><div class="sections">
+      <div><div class="sec-label">Arguments</div><pre>{
+  "invoice": "A-1042",
+  "template": "second_notice",
+  "channel": "email"
+}</pre></div>
+      <div><div class="sec-label">Result</div><pre class="is-wait">Waiting for response...</pre></div>
+    </div></div></div>
+  </div>
+
+  <div class="card">
+    <button class="head" type="button" aria-expanded="false">
+      <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>
+      <span class="name">fetch_rates</span>
+      <span class="summary">Request timed out</span>
+      <span class="dur">8.0s</span>
+      <span class="pill pill--failed"><i></i>Failed</span>
+    </button>
+    <div class="body"><div class="body-inner"><div class="sections">
+      <div><div class="sec-label">Arguments</div><pre>{
+  "base": "EUR",
+  "symbols": ["DKK", "SEK", "NOK"]
+}</pre></div>
+      <div><div class="sec-label">Result</div><pre class="is-error">{
+  "error": "timeout",
+  "message": "No response after 8000 ms",
+  "retryable": true
+}</pre></div>
+    </div></div></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-tool-call-card').forEach((root) => {
+    root.querySelectorAll('.card').forEach((card) => {
+      const head = card.querySelector('.head');
+      head.addEventListener('click', () => {
+        const open = card.classList.toggle('is-open');
+        head.setAttribute('aria-expanded', String(open));
+      });
+    });
+  });
+})();
+</script>

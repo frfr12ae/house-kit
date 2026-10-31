@@ -1,0 +1,137 @@
+<!--
+@title Tabs
+@description Accessible tabs with a tablist, roving tabindex, arrow, Home and End keys, and an underline indicator that slides to the active tab.
+@tags tabs, tablist, navigation, underline, keyboard
+@preview center
+@height 340
+@added 2026-10-31
+-->
+<style>
+  .c-tabs {
+    width: min(560px, 100%);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-tabs .list {
+    position: relative;
+    display: flex;
+    gap: var(--ds-space-1);
+    overflow-x: auto;
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+    scrollbar-width: none;
+  }
+  .c-tabs .list::-webkit-scrollbar { display: none; }
+  .c-tabs .tab {
+    flex: none;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    border: 0;
+    border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0;
+    background: transparent;
+    color: var(--ds-muted);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: color var(--ds-dur-fast) var(--ds-ease), background var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-tabs .tab:hover { color: var(--ds-ink); background: var(--ds-surface); }
+  .c-tabs .tab[aria-selected="true"] { color: var(--ds-ink); }
+  .c-tabs .tab:focus-visible { outline: none; box-shadow: inset var(--ds-focus); }
+  .c-tabs .ink {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: var(--w, 0px);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-ink);
+    transform: translateX(var(--x, 0px));
+    pointer-events: none;
+  }
+  .c-tabs .ink.is-ready { transition: transform var(--ds-dur-base) var(--ds-ease), width var(--ds-dur-base) var(--ds-ease); }
+  .c-tabs .panel { padding: var(--ds-space-6) var(--ds-space-4); }
+  .c-tabs .panel[hidden] { display: none; }
+  .c-tabs .panel:focus-visible { outline: none; box-shadow: var(--ds-focus); border-radius: var(--ds-radius-md); }
+  .c-tabs .panel h3 { margin: 0 0 var(--ds-space-2); font-size: var(--ds-text-lg); font-weight: 700; color: var(--ds-ink); }
+  .c-tabs .panel p { margin: 0; max-width: 42em; font-size: var(--ds-text-md); line-height: var(--ds-leading-body); }
+  .c-tabs .panel.is-in { animation: c-tabs-in var(--ds-dur-base) var(--ds-ease); }
+  @media (max-width: 440px) {
+    .c-tabs .list { gap: 0; }
+    .c-tabs .tab { padding: var(--ds-space-3) var(--ds-space-2); }
+    .c-tabs .panel { padding: var(--ds-space-5) var(--ds-space-3); }
+  }
+  @keyframes c-tabs-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+</style>
+
+<div class="c-tabs">
+  <div class="list" role="tablist" aria-label="Workspace sections">
+    <button class="tab" role="tab" type="button" id="c-tabs-t1" aria-controls="c-tabs-p1" aria-selected="true">Overview</button>
+    <button class="tab" role="tab" type="button" id="c-tabs-t2" aria-controls="c-tabs-p2" aria-selected="false" tabindex="-1">Integrations</button>
+    <button class="tab" role="tab" type="button" id="c-tabs-t3" aria-controls="c-tabs-p3" aria-selected="false" tabindex="-1">Billing</button>
+    <button class="tab" role="tab" type="button" id="c-tabs-t4" aria-controls="c-tabs-p4" aria-selected="false" tabindex="-1">Audit log</button>
+    <span class="ink" aria-hidden="true"></span>
+  </div>
+  <div class="panel" role="tabpanel" id="c-tabs-p1" aria-labelledby="c-tabs-t1" tabindex="0">
+    <h3>Workspace overview</h3>
+    <p>See close progress, open items and who is waiting on whom, all in one view. Pin the accounts you check every morning.</p>
+  </div>
+  <div class="panel" role="tabpanel" id="c-tabs-p2" aria-labelledby="c-tabs-t2" tabindex="0" hidden>
+    <h3>Connected systems</h3>
+    <p>Two banks and one ledger are syncing hourly. Add a payroll connector to bring salary accruals into the close automatically.</p>
+  </div>
+  <div class="panel" role="tabpanel" id="c-tabs-p3" aria-labelledby="c-tabs-t3" tabindex="0" hidden>
+    <h3>Plan and invoices</h3>
+    <p>You are on the Growth plan, billed yearly. The next invoice is issued on 1 January and sent to the finance contact.</p>
+  </div>
+  <div class="panel" role="tabpanel" id="c-tabs-p4" aria-labelledby="c-tabs-t4" tabindex="0" hidden>
+    <h3>Audit log</h3>
+    <p>Every sign-off, rule change and permission update is recorded with who, what and when. Export the log as a CSV for your auditors.</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-tabs').forEach((root, n) => {
+    const list = root.querySelector('.list');
+    const ink = root.querySelector('.ink');
+    const tabs = [...root.querySelectorAll('[role="tab"]')];
+    const panels = tabs.map((t) => root.querySelector('#' + t.getAttribute('aria-controls')));
+    // unique ids so several instances can share a page
+    tabs.forEach((t, i) => {
+      const tid = `c-tabs-${n}-t${i}`, pid = `c-tabs-${n}-p${i}`;
+      t.id = tid; panels[i].id = pid;
+      t.setAttribute('aria-controls', pid); panels[i].setAttribute('aria-labelledby', tid);
+    });
+
+    const place = () => {
+      const t = tabs.find((x) => x.getAttribute('aria-selected') === 'true');
+      ink.style.setProperty('--x', t.offsetLeft + 'px');
+      ink.style.setProperty('--w', t.offsetWidth + 'px');
+    };
+    const select = (i, focus) => {
+      tabs.forEach((t, j) => {
+        const on = i === j;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        panels[j].hidden = !on;
+        panels[j].classList.toggle('is-in', on && ink.classList.contains('is-ready'));
+      });
+      if (focus) tabs[i].focus();
+      tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      place();
+    };
+
+    tabs.forEach((t, i) => t.addEventListener('click', () => select(i)));
+    list.addEventListener('keydown', (e) => {
+      const i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      const keys = { ArrowRight: (i + 1) % tabs.length, ArrowLeft: (i - 1 + tabs.length) % tabs.length, Home: 0, End: tabs.length - 1 };
+      if (e.key in keys) { e.preventDefault(); select(keys[e.key], true); }
+    });
+
+    place();
+    requestAnimationFrame(() => ink.classList.add('is-ready'));
+    if (window.ResizeObserver) new ResizeObserver(place).observe(list);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  });
+})();
+</script>

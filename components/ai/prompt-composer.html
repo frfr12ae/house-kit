@@ -1,0 +1,263 @@
+<!--
+@title Prompt composer
+@description An autosizing prompt box with attach button, model chip and a send button that enables with text. Enter sends, Shift+Enter adds a line, and sent prompts append to the list above.
+@tags prompt, input, composer, textarea, chat, send
+@preview center
+@height 420
+@added 2026-10-31
+-->
+<style>
+  .c-prompt-composer,
+  .c-prompt-composer *,
+  .c-prompt-composer *::before,
+  .c-prompt-composer *::after { box-sizing: border-box; }
+  .c-prompt-composer {
+    display: grid;
+    gap: var(--ds-space-4);
+    width: min(680px, 100%);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-md);
+    color: var(--ds-text);
+  }
+  .c-prompt-composer .list {
+    display: grid;
+    align-content: end;
+    gap: var(--ds-space-3);
+    min-height: 120px;
+    max-height: 260px;
+    padding: var(--ds-space-1);
+    overflow-y: auto;
+  }
+  .c-prompt-composer .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .c-prompt-composer .field { display: block; }
+  .c-prompt-composer .sent { display: grid; justify-items: end; gap: var(--ds-space-1); animation: c-prompt-composer-in var(--ds-dur-base) var(--ds-ease); }
+  .c-prompt-composer .sent .bubble {
+    max-width: 88%;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg) var(--ds-radius-lg) var(--ds-radius-sm) var(--ds-radius-lg);
+    color: var(--ds-ink);
+    line-height: var(--ds-leading-snug);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .c-prompt-composer .sent .meta { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  @keyframes c-prompt-composer-in { from { opacity: 0; transform: translateY(6px); } }
+
+  .c-prompt-composer .box {
+    display: grid;
+    gap: var(--ds-space-2);
+    padding: var(--ds-space-4) var(--ds-space-4) var(--ds-space-3);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    box-shadow: var(--ds-shadow-md);
+    transition: border-color var(--ds-dur-fast) var(--ds-ease), box-shadow var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-prompt-composer .box:focus-within { border-color: var(--ds-info-line); box-shadow: var(--ds-shadow-md), var(--ds-focus); }
+  .c-prompt-composer textarea {
+    display: block;
+    width: 100%;
+    min-height: 28px;
+    max-height: 160px;
+    padding: 0;
+    border: 0;
+    outline: none;
+    resize: none;
+    background: transparent;
+    color: var(--ds-ink);
+    line-height: var(--ds-leading-snug);
+  }
+  .c-prompt-composer textarea:focus-visible,
+  .c-prompt-composer .chip select:focus-visible { box-shadow: none; }
+  .c-prompt-composer textarea::placeholder { color: var(--ds-muted); }
+  .c-prompt-composer .files { display: flex; flex-wrap: wrap; gap: var(--ds-space-2); }
+  .c-prompt-composer .files:empty { display: none; }
+  .c-prompt-composer .file {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    max-width: 100%;
+    padding: 2px var(--ds-space-2) 2px var(--ds-space-3);
+    background: var(--ds-panel);
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-text);
+  }
+  .c-prompt-composer .file span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .c-prompt-composer .file button { display: grid; place-items: center; width: 18px; height: 18px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--ds-muted); cursor: pointer; }
+  .c-prompt-composer .file button:hover { color: var(--ds-ink); background: var(--ds-line); }
+  .c-prompt-composer .file button svg { width: 10px; height: 10px; }
+  .c-prompt-composer .bar { display: flex; align-items: center; gap: var(--ds-space-2); }
+  .c-prompt-composer .grow { flex: 1; }
+  .c-prompt-composer .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ds-muted);
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-prompt-composer .icon-btn:hover { background: var(--ds-panel); color: var(--ds-ink); }
+  .c-prompt-composer .icon-btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-prompt-composer .icon-btn svg { width: 18px; height: 18px; }
+  .c-prompt-composer .chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+  }
+  .c-prompt-composer .chip:hover { border-color: var(--ds-muted); }
+  .c-prompt-composer .chip:focus-within { box-shadow: var(--ds-focus); }
+  .c-prompt-composer .chip select {
+    height: 100%;
+    padding: 0 var(--ds-space-6) 0 var(--ds-space-4);
+    border: 0;
+    outline: none;
+    border-radius: inherit;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .c-prompt-composer .chip svg { position: absolute; right: var(--ds-space-3); top: 50%; width: 12px; height: 12px; margin-top: -6px; pointer-events: none; color: var(--ds-muted); }
+  .c-prompt-composer .send {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    cursor: pointer;
+    transition: transform var(--ds-dur-fast) var(--ds-ease), opacity var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-prompt-composer .send:not(:disabled):active { transform: scale(0.94); }
+  .c-prompt-composer .send:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-prompt-composer .send:disabled { background: var(--ds-panel); color: var(--ds-muted); cursor: not-allowed; }
+  .c-prompt-composer .send svg { width: 16px; height: 16px; }
+  .c-prompt-composer .hint { text-align: center; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-prompt-composer kbd { padding: 0 5px; background: var(--ds-panel); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-sm); font-family: var(--ds-font-mono); font-size: 11px; }
+  @media (max-width: 480px) { .c-prompt-composer .hint { display: none; } }
+</style>
+
+<div class="c-prompt-composer">
+  <div class="list" role="log" aria-live="polite" aria-label="Sent prompts">
+    <div class="sent"><div class="bubble">Summarise this week's support tickets by theme and flag anything urgent.</div><span class="meta">Balanced · 09:14</span></div>
+  </div>
+
+  <form class="box" autocomplete="off">
+    <div class="files"></div>
+    <label class="field"><span class="sr">Prompt</span><textarea rows="1" placeholder="Ask anything about your project"></textarea></label>
+    <div class="bar">
+      <input type="file" class="file-input" multiple hidden>
+      <button class="icon-btn attach" type="button" aria-label="Attach files">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 8.6l-5.9 5.9a3.5 3.5 0 0 1-5-5l6.2-6.2a2.3 2.3 0 0 1 3.3 3.3L7.4 12.8a1.1 1.1 0 0 1-1.6-1.6L11.5 5.5"/></svg>
+      </button>
+      <label class="chip">
+        <span class="sr">Model</span>
+        <select class="model">
+          <option>Fast</option>
+          <option selected>Balanced</option>
+          <option>Deep reasoning</option>
+        </select>
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg>
+      </label>
+      <span class="grow"></span>
+      <button class="send" type="submit" aria-label="Send prompt" disabled>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V3M3.5 7.5L8 3l4.5 4.5"/></svg>
+      </button>
+    </div>
+  </form>
+  <p class="hint"><kbd>Enter</kbd> to send, <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line</p>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-prompt-composer').forEach((root) => {
+    const form = root.querySelector('.box');
+    const area = form.querySelector('textarea');
+    const send = form.querySelector('.send');
+    const list = root.querySelector('.list');
+    const files = form.querySelector('.files');
+    const fileInput = form.querySelector('.file-input');
+    const model = form.querySelector('.model');
+    let attached = [];
+
+    const fit = () => {
+      area.style.height = 'auto';
+      area.style.height = Math.min(area.scrollHeight, 160) + 'px';
+    };
+    const sync = () => { send.disabled = !area.value.trim(); fit(); };
+    area.addEventListener('input', sync);
+
+    const renderFiles = () => {
+      files.textContent = '';
+      attached.forEach((name, i) => {
+        const chip = document.createElement('span');
+        chip.className = 'file';
+        const label = document.createElement('span');
+        label.textContent = name;
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.setAttribute('aria-label', 'Remove ' + name);
+        x.innerHTML = '<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 2l6 6M8 2l-6 6"/></svg>';
+        x.addEventListener('click', () => { attached.splice(i, 1); renderFiles(); });
+        chip.append(label, x);
+        files.appendChild(chip);
+      });
+    };
+    form.querySelector('.attach').addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+      attached = attached.concat([...fileInput.files].map((f) => f.name));
+      fileInput.value = '';
+      renderFiles();
+    });
+
+    const submit = () => {
+      const text = area.value.trim();
+      if (!text) return;
+      const item = document.createElement('div');
+      item.className = 'sent';
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+      const meta = document.createElement('span');
+      meta.className = 'meta';
+      const stamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      meta.textContent = [model.value, attached.length ? attached.length + (attached.length === 1 ? ' file' : ' files') : '', stamp].filter(Boolean).join(' · ');
+      item.append(bubble, meta);
+      list.appendChild(item);
+      list.scrollTop = list.scrollHeight;
+      area.value = '';
+      attached = [];
+      renderFiles();
+      sync();
+      area.focus();
+    };
+
+    form.addEventListener('submit', (e) => { e.preventDefault(); submit(); });
+    area.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); submit(); }
+    });
+    sync();
+  });
+})();
+</script>

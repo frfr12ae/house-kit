@@ -1,0 +1,154 @@
+<!--
+@title FAQ accordion
+@description Frequently asked questions in a two-column section. Built on details and summary, with a smooth height animation and a rotating chevron. Works without JavaScript.
+@tags faq, accordion, details, summary, questions
+@preview fill
+@height 620
+@added 2026-10-31
+-->
+<style>
+  .c-faq {
+    background: var(--ds-bg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-faq .wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: var(--ds-space-9);
+    align-items: start;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: var(--ds-space-10) var(--ds-space-6);
+  }
+  .c-faq .side { display: grid; gap: var(--ds-space-4); justify-items: start; }
+  .c-faq h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-2xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-faq .lede { font-size: var(--ds-text-md); line-height: var(--ds-leading-body); }
+  .c-faq .lede a { color: var(--ds-ink); font-weight: 600; text-underline-offset: 3px; border-radius: var(--ds-radius-sm); }
+  .c-faq .lede a:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-faq .list { border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-faq details { border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-5);
+    padding: var(--ds-space-5) 0;
+    border-radius: var(--ds-radius-sm);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-md);
+    font-weight: 600;
+    line-height: var(--ds-leading-snug);
+    cursor: pointer;
+    list-style: none;
+  }
+  .c-faq summary::-webkit-details-marker { display: none; }
+  .c-faq summary:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-faq .chev {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    color: var(--ds-text);
+    transition: transform var(--ds-dur-base) var(--ds-ease), background var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-faq summary:hover .chev { background: var(--ds-surface); }
+  .c-faq .chev svg { width: 14px; height: 14px; }
+  .c-faq details.is-open .chev { transform: rotate(180deg); background: var(--ds-surface); }
+  .c-faq .answer { overflow: hidden; }
+  .c-faq .answer p { max-width: 38em; margin: 0; padding: 0 var(--ds-space-8) var(--ds-space-5) 0; font-size: var(--ds-text-md); line-height: var(--ds-leading-body); text-wrap: pretty; }
+
+  @media (max-width: 860px) {
+    .c-faq .wrap { grid-template-columns: 1fr; gap: var(--ds-space-7); padding: var(--ds-space-9) var(--ds-space-5); }
+  }
+  @media (max-width: 600px) {
+    .c-faq .wrap { padding: var(--ds-space-8) var(--ds-space-4); }
+    .c-faq h2 { font-size: var(--ds-text-xl); }
+    .c-faq .answer p { padding-right: 0; }
+  }
+</style>
+
+<section class="c-faq">
+  <div class="wrap">
+    <div class="side">
+      <h2>Questions, answered</h2>
+      <p class="lede">Cannot find what you need? Our finance specialists reply within one working day at <a href="#">help@stackwell.example</a>.</p>
+    </div>
+    <div class="list">
+      <details open>
+        <summary>How long does setup take?<span class="chev"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l4 4 4-4"/></svg></span></summary>
+        <div class="answer"><p>Most teams connect their bank and ledger in under an hour. Matching rules are suggested from your last three months of history, so the first close already runs on a sensible baseline.</p></div>
+      </details>
+      <details>
+        <summary>Which accounting systems do you connect to?<span class="chev"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l4 4 4-4"/></svg></span></summary>
+        <div class="answer"><p>We read from the major cloud ledgers and from any bank that supports open banking. If your system exports files on a schedule, a secure folder drop works as a fallback.</p></div>
+      </details>
+      <details>
+        <summary>Is our financial data used to train models?<span class="chev"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l4 4 4-4"/></svg></span></summary>
+        <div class="answer"><p>No. Your data stays in your workspace, is encrypted at rest and in transit, and is never used to train shared models. Variance notes are generated per workspace and can be switched off.</p></div>
+      </details>
+      <details>
+        <summary>Can auditors get read-only access?<span class="chev"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l4 4 4-4"/></svg></span></summary>
+        <div class="answer"><p>Yes. Invite them with the auditor role and they see closed periods, supporting entries and the full change history, with no ability to edit anything.</p></div>
+      </details>
+      <details>
+        <summary>What happens when the free trial ends?<span class="chev"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l4 4 4-4"/></svg></span></summary>
+        <div class="answer"><p>Nothing is charged automatically. You choose a plan when you are ready, and until then your workspace turns read-only so no data is lost.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-faq').forEach((root) => {
+    const dur = () => parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-base')) || 0;
+    const ease = getComputedStyle(root).getPropertyValue('--ds-ease').trim() || 'ease';
+
+    root.querySelectorAll('details').forEach((d) => {
+      const summary = d.querySelector('summary');
+      const answer = d.querySelector('.answer');
+      let anim = null;
+      d.classList.toggle('is-open', d.open);
+
+      const run = (from, to, done) => {
+        if (anim) anim.cancel();
+        const ms = dur();
+        if (!ms) { done(); return; }
+        anim = answer.animate({ height: [from + 'px', to + 'px'], opacity: [from ? 1 : 0, to ? 1 : 0] }, { duration: ms, easing: ease });
+        anim.onfinish = () => { anim = null; done(); };
+        anim.oncancel = () => { anim = null; };
+      };
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!d.open || d.classList.contains('is-closing')) {
+          // open: reveal first, then grow from the height it currently shows
+          const from = anim ? answer.getBoundingClientRect().height : 0;
+          d.open = true;
+          d.classList.remove('is-closing');
+          d.classList.add('is-open');
+          run(from, answer.scrollHeight, () => {});
+        } else {
+          const from = answer.getBoundingClientRect().height;
+          d.classList.remove('is-open');
+          d.classList.add('is-closing');
+          run(from, 0, () => { d.open = false; d.classList.remove('is-closing'); });
+        }
+      });
+    });
+  });
+})();
+</script>

@@ -1,0 +1,126 @@
+<!--
+@title Typewriter terminal
+@description A terminal window that types two commands, prints their output line by line and ends on a blinking cursor. Edit the lines in the markup.
+@tags terminal, cli, typing, code, command, console
+@preview center
+@height 380
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-typewriter-terminal,
+  .c-typewriter-terminal *,
+  .c-typewriter-terminal *::before,
+  .c-typewriter-terminal *::after { box-sizing: border-box; }
+  .c-typewriter-terminal {
+    width: min(680px, 100%);
+    overflow: hidden;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-lg);
+    font-family: var(--ds-font-sans);
+  }
+  .c-typewriter-terminal .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-panel);
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-typewriter-terminal .bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--ds-line); }
+  .c-typewriter-terminal .bar span { margin-left: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-typewriter-terminal .body {
+    min-height: 236px;
+    padding: var(--ds-space-5) var(--ds-space-5) var(--ds-space-6);
+    font-family: var(--ds-font-mono);
+    font-size: var(--ds-text-sm);
+    line-height: 1.75;
+    color: var(--ds-text);
+    overflow-x: auto;
+  }
+  .c-typewriter-terminal .ln { white-space: pre; }
+  .c-typewriter-terminal .ln.out { color: var(--ds-muted); }
+  .c-typewriter-terminal .ln.out.ok b { color: var(--ds-note-line); font-weight: 400; }
+  .c-typewriter-terminal .ps { color: var(--ds-muted); }
+  .c-typewriter-terminal .cmd { color: var(--ds-ink); font-weight: 600; }
+  .c-typewriter-terminal .gap { height: 0.9em; }
+  .c-typewriter-terminal .cursor {
+    display: inline-block;
+    width: 0.6em;
+    height: 1.15em;
+    margin-left: 1px;
+    vertical-align: text-bottom;
+    background: var(--ds-ink);
+    animation: c-typewriter-terminal-blink 1060ms steps(1) infinite;
+  }
+  .c-typewriter-terminal .ln[hidden] { display: none; }
+  @keyframes c-typewriter-terminal-blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .c-typewriter-terminal .cursor { animation: none; }
+  }
+</style>
+
+<div class="c-typewriter-terminal" role="img" aria-label="Terminal running npm run build, then npx serve dist">
+  <div class="bar"><i></i><i></i><i></i><span>site: zsh</span></div>
+  <div class="body" aria-hidden="true">
+    <div class="ln"><span class="ps">~/site $ </span><span class="cmd" data-type>npm run build</span></div>
+    <div class="ln out">building 24 pages</div>
+    <div class="ln out ok"><b>✓</b> compiled in 1.8s</div>
+    <div class="ln out ok"><b>✓</b> 24 pages, 0 errors</div>
+    <div class="gap"></div>
+    <div class="ln"><span class="ps">~/site $ </span><span class="cmd" data-type>npx serve dist</span></div>
+    <div class="ln out ok"><b>✓</b> ready on http://127.0.0.1:3000</div>
+    <div class="ln" data-final><span class="ps">~/site $ </span></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CHAR = 28, LINE = 140, PAUSE = 160;
+
+  document.querySelectorAll('.c-typewriter-terminal').forEach((root) => {
+    const body = root.querySelector('.body');
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    const rows = [...body.children];
+    const final = body.querySelector('[data-final]');
+    if (reduced) { final.appendChild(cursor); return; }
+
+    // keep the layout height stable while the lines appear
+    body.style.minHeight = body.offsetHeight + 'px';
+    const texts = new Map();
+    rows.forEach((row) => {
+      const t = row.querySelector('[data-type]');
+      if (t) { texts.set(t, t.textContent); t.textContent = ''; }
+      row.hidden = true;
+    });
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    async function play() {
+      for (const row of rows) {
+        row.hidden = false;
+        const t = row.querySelector('[data-type]');
+        if (t) {
+          row.appendChild(cursor);
+          await wait(PAUSE);
+          for (const ch of texts.get(t)) { t.textContent += ch; await wait(CHAR); }
+          await wait(PAUSE);
+        } else if (row.classList.contains('out')) {
+          await wait(LINE);
+        }
+      }
+      final.appendChild(cursor);
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      play();
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

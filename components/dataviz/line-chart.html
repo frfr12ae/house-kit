@@ -1,0 +1,210 @@
+<!--
+@title Line chart
+@description Two series over six months with y gridlines and labels, a legend, and a hover crosshair with a tooltip card. Works with a pointer or the arrow keys. Edit MONTHS and SERIES at the top of the script.
+@tags chart, line, trend, tooltip, crosshair, svg, time series
+@preview fill
+@height 560
+@added 2026-10-31
+-->
+<style>
+  .c-line-chart {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-line-chart .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .c-line-chart .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-4); margin-bottom: var(--ds-space-5); }
+  .c-line-chart h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-line-chart .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-line-chart .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-line-chart .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-line-chart .swatch { width: 22px; height: 0; border-top: 3px solid var(--c); border-radius: 2px; }
+  .c-line-chart .swatch.is-dashed { border-top-style: dashed; }
+  .c-line-chart .plot { position: relative; width: 100%; border-radius: var(--ds-radius-md); touch-action: pan-y; cursor: crosshair; }
+  .c-line-chart .plot:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-line-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .c-line-chart text { font-family: var(--ds-font-sans); font-size: 13px; fill: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-line-chart .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-line-chart .grid.is-base { stroke: var(--ds-muted); stroke-opacity: 0.5; }
+  .c-line-chart .line { fill: none; stroke: var(--c); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .c-line-chart .line.is-dashed { stroke-dasharray: 7 6; }
+  .c-line-chart .dot { fill: var(--ds-surface); stroke: var(--c); stroke-width: 2; }
+  .c-line-chart .cross { stroke: var(--ds-muted); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0; transition: opacity var(--ds-dur-fast) var(--ds-ease); }
+  .c-line-chart .focus-dot { fill: var(--c); stroke: var(--ds-surface); stroke-width: 3; opacity: 0; transition: opacity var(--ds-dur-fast) var(--ds-ease); }
+  .c-line-chart .plot.is-active .cross,
+  .c-line-chart .plot.is-active .focus-dot { opacity: 1; }
+  .c-line-chart .x-label.is-on { fill: var(--ds-ink); font-weight: 700; }
+  .c-line-chart .tip {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    min-width: 170px;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+    box-shadow: var(--ds-shadow-md);
+    font-size: var(--ds-text-sm);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-line-chart .plot.is-active .tip { opacity: 1; }
+  .c-line-chart .tip .month { margin: 0 0 var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted); }
+  .c-line-chart .tip .row { display: flex; align-items: center; gap: var(--ds-space-2); padding: 2px 0; color: var(--ds-text); }
+  .c-line-chart .tip .row i { width: 10px; height: 10px; border-radius: 3px; background: var(--c); flex: none; }
+  .c-line-chart .tip .row b { margin-left: auto; padding-left: var(--ds-space-4); color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  @media (max-width: 560px) {
+    .c-line-chart { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+  }
+</style>
+
+<figure class="c-line-chart">
+  <figcaption class="head">
+    <div>
+      <h3>Monthly revenue against plan</h3>
+      <p class="hint">Thousands of euros, May to October 2026.</p>
+    </div>
+    <ul class="legend"></ul>
+  </figcaption>
+  <div class="plot" tabindex="0" role="group" aria-label="Line chart of actual revenue against plan. Use the left and right arrow keys to move between months, Escape to clear."></div>
+  <p class="sr" role="status" aria-live="polite"></p>
+</figure>
+
+<script>
+(() => {
+  // Replace with your own data. Series colours come from --ds-series-1 and --ds-series-2 in order.
+  const MONTHS = ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+  const YEAR = 2026;
+  const SERIES = [
+    { name: 'Actual revenue', values: [182, 195, 188, 214, 236, 251] },
+    { name: 'Plan', values: [185, 192, 200, 208, 222, 235], dashed: true },
+  ];
+  const format = (v) => '€' + v + 'k';
+
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const NS = 'http://www.w3.org/2000/svg';
+
+  document.querySelectorAll('.c-line-chart').forEach((root) => {
+    const plot = root.querySelector('.plot');
+    const live = root.querySelector('[role="status"]');
+    root.querySelector('.legend').innerHTML = SERIES.map((s, i) =>
+      '<li style="--c:var(--ds-series-' + (i + 1) + ')"><span class="swatch' + (s.dashed ? ' is-dashed' : '') + '"></span>' + esc(s.name) + '</li>'
+    ).join('');
+
+    const all = SERIES.flatMap((s) => s.values);
+    const lo0 = Math.min(...all);
+    const hi0 = Math.max(...all);
+    const rough = (hi0 - lo0) / 4;
+    const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+    const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((s) => s >= rough);
+    const lo = Math.floor(lo0 / step) * step;
+    const hi = Math.ceil(hi0 / step) * step;
+    const ticks = [];
+    for (let t = lo; t <= hi + 1e-9; t += step) ticks.push(t);
+
+    let geo = null;
+    let active = null;
+    let tip = null;
+    let cross = null;
+    let dots = [];
+    let xLabels = [];
+
+    function render() {
+      const W = Math.max(280, Math.round(plot.clientWidth));
+      const H = Math.round(Math.min(380, Math.max(260, W * 0.4)));
+      const m = { l: 52, r: 12, t: 12, b: 34 };
+      const band = (W - m.l - m.r) / MONTHS.length;
+      const x = (i) => m.l + band * (i + 0.5);
+      const y = (v) => m.t + (H - m.t - m.b) * (1 - (v - lo) / (hi - lo));
+      geo = { W, H, m, band, x, y };
+
+      let out = '';
+      ticks.forEach((t, i) => {
+        out += '<line class="grid' + (i === 0 ? ' is-base' : '') + '" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y(t) + '" y2="' + y(t) + '"/>';
+        out += '<text x="' + (m.l - 10) + '" y="' + y(t) + '" text-anchor="end" dominant-baseline="central">' + format(t) + '</text>';
+      });
+      MONTHS.forEach((mo, i) => {
+        out += '<text class="x-label" x="' + x(i) + '" y="' + (H - 8) + '" text-anchor="middle">' + mo + '</text>';
+      });
+      out += '<line class="cross" y1="' + m.t + '" y2="' + (H - m.b) + '"/>';
+      SERIES.forEach((s, si) => {
+        const d = s.values.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join('');
+        out += '<g style="--c:var(--ds-series-' + (si + 1) + ')"><path class="line' + (s.dashed ? ' is-dashed' : '') + '" d="' + d + '"/>';
+        s.values.forEach((v, i) => { out += '<circle class="dot" cx="' + x(i) + '" cy="' + y(v) + '" r="3.5"/>'; });
+        out += '<circle class="focus-dot" r="6"/></g>';
+      });
+      const svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svg.setAttribute('aria-hidden', 'true');
+      svg.innerHTML = out;
+      plot.querySelectorAll('svg').forEach((n) => n.remove());
+      plot.prepend(svg);
+
+      if (!tip) {
+        tip = document.createElement('div');
+        tip.className = 'tip';
+        plot.appendChild(tip);
+      }
+      cross = svg.querySelector('.cross');
+      dots = [...svg.querySelectorAll('.focus-dot')];
+      xLabels = [...svg.querySelectorAll('.x-label')];
+      if (active !== null) show(active); else plot.classList.remove('is-active');
+    }
+
+    function show(i, announce) {
+      active = i;
+      const { W, x, y } = geo;
+      cross.setAttribute('x1', x(i));
+      cross.setAttribute('x2', x(i));
+      dots.forEach((d, si) => { d.setAttribute('cx', x(i)); d.setAttribute('cy', y(SERIES[si].values[i])); });
+      xLabels.forEach((l, li) => l.classList.toggle('is-on', li === i));
+      tip.innerHTML = '<p class="month">' + MONTHS[i] + ' ' + YEAR + '</p>' + SERIES.map((s, si) =>
+        '<div class="row" style="--c:var(--ds-series-' + (si + 1) + ')"><i></i>' + esc(s.name) + '<b>' + format(s.values[i]) + '</b></div>'
+      ).join('');
+      const w = tip.offsetWidth;
+      const left = x(i) + 16 + w > W ? x(i) - 16 - w : x(i) + 16;
+      tip.style.left = Math.max(0, left) + 'px';
+      plot.classList.add('is-active');
+      if (announce) live.textContent = MONTHS[i] + ' ' + YEAR + ': ' + SERIES.map((s) => s.name + ' ' + format(s.values[i])).join(', ');
+    }
+
+    function hide() {
+      active = null;
+      plot.classList.remove('is-active');
+      xLabels.forEach((l) => l.classList.remove('is-on'));
+    }
+
+    const indexAt = (clientX) => {
+      const px = clientX - plot.getBoundingClientRect().left;
+      return Math.min(MONTHS.length - 1, Math.max(0, Math.floor((px - geo.m.l) / geo.band)));
+    };
+
+    plot.addEventListener('pointermove', (e) => show(indexAt(e.clientX)));
+    plot.addEventListener('pointerdown', (e) => show(indexAt(e.clientX)));
+    plot.addEventListener('pointerleave', () => { if (document.activeElement !== plot) hide(); });
+    plot.addEventListener('blur', hide);
+    plot.addEventListener('focus', () => { if (active === null && plot.matches(':focus-visible')) show(MONTHS.length - 1, true); });
+    plot.addEventListener('keydown', (e) => {
+      const last = MONTHS.length - 1;
+      const cur = active === null ? last : active;
+      const next = { ArrowLeft: Math.max(0, cur - 1), ArrowRight: Math.min(last, cur + 1), Home: 0, End: last }[e.key];
+      if (next !== undefined) { e.preventDefault(); show(next, true); }
+      else if (e.key === 'Escape') hide();
+    });
+
+    render();
+    new ResizeObserver(render).observe(plot);
+  });
+})();
+</script>

@@ -1,0 +1,173 @@
+<!--
+@title Donut chart
+@description A four-segment donut with the total in the centre and a legend showing value and percentage. Hover or focus a legend row or segment to read its value in the centre. Edit DATA at the top of the script.
+@tags chart, donut, pie, share, breakdown, svg, legend
+@preview fill
+@height 380
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-donut {
+    display: grid;
+    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    gap: var(--ds-space-8);
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-7);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-donut .chart { position: relative; width: 100%; max-width: 280px; margin: 0 auto; }
+  .c-donut svg { display: block; width: 100%; height: auto; }
+  .c-donut .seg {
+    fill: none;
+    stroke: var(--c);
+    stroke-width: 28;
+    stroke-dasharray: 0 100;
+    cursor: pointer;
+    transition: stroke-dasharray var(--ds-dur-story) var(--ds-ease), opacity var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-donut.is-in .seg { stroke-dasharray: var(--len) calc(100 - var(--len)); }
+  .c-donut.has-hover .seg:not(.is-on) { opacity: 0.3; }
+  .c-donut .centre { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none; }
+  .c-donut .total {
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-2xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-donut .caption { margin-top: var(--ds-space-2); max-width: 11ch; font-size: var(--ds-text-xs); font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-donut .legend-head { margin: 0 0 var(--ds-space-4); }
+  .c-donut h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-donut .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-donut .legend { margin: 0; padding: 0; list-style: none; }
+  .c-donut .item {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) 64px 48px;
+    align-items: center;
+    gap: var(--ds-space-4);
+    padding: var(--ds-space-4) var(--ds-space-3);
+    margin: 0 calc(var(--ds-space-3) * -1);
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-sm);
+    font-size: var(--ds-text-sm);
+    cursor: default;
+    transition: background var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-donut .item:first-child { border-top: 0; }
+  .c-donut .item:hover,
+  .c-donut .item.is-on { background: color-mix(in srgb, var(--ds-panel) 70%, transparent); }
+  .c-donut .item:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-donut .sw { width: 12px; height: 12px; border-radius: 3px; background: var(--c); }
+  .c-donut .name { color: var(--ds-ink); font-weight: 600; }
+  .c-donut .amt { text-align: right; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-donut .pct { text-align: right; color: var(--ds-ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+  @media (max-width: 720px) {
+    .c-donut { grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-6); padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-donut .chart { max-width: 240px; }
+  }
+</style>
+
+<figure class="c-donut">
+  <div class="chart">
+    <svg viewBox="0 0 200 200" role="img" aria-label="Donut chart of revenue by product line"></svg>
+    <div class="centre" aria-hidden="true"><span class="total"></span><span class="caption"></span></div>
+  </div>
+  <div>
+    <figcaption class="legend-head">
+      <h3>Revenue by product line</h3>
+      <p class="hint">Q3 2026, thousands of euros.</p>
+    </figcaption>
+    <ul class="legend"></ul>
+  </div>
+</figure>
+
+<script>
+(() => {
+  // Replace with your own data. Segment colours come from --ds-series-1 to --ds-series-4 in order.
+  const DATA = [
+    { label: 'Platform subscriptions', value: 182 },
+    { label: 'Implementation services', value: 96 },
+    { label: 'Support plans', value: 63 },
+    { label: 'Training', value: 41 },
+  ];
+  const TOTAL_CAPTION = 'Total revenue';
+  const money = (v) => '€' + v.toLocaleString('en-GB') + 'k';
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // Percentages that always add up to 100 (largest remainder method).
+  function percentages(values) {
+    const sum = values.reduce((a, b) => a + b, 0);
+    const raw = values.map((v) => (v / sum) * 100);
+    const out = raw.map(Math.floor);
+    let left = 100 - out.reduce((a, b) => a + b, 0);
+    raw.map((r, i) => [r - Math.floor(r), i]).sort((a, b) => b[0] - a[0]).forEach(([, i]) => { if (left > 0) { out[i] += 1; left -= 1; } });
+    return out;
+  }
+
+  document.querySelectorAll('.c-donut').forEach((root) => {
+    const svg = root.querySelector('svg');
+    const legend = root.querySelector('.legend');
+    const totalEl = root.querySelector('.total');
+    const capEl = root.querySelector('.caption');
+    const total = DATA.reduce((a, d) => a + d.value, 0);
+    const pct = percentages(DATA.map((d) => d.value));
+    const gap = 1.2;
+    const r = 80;
+
+    let acc = 0;
+    svg.innerHTML = DATA.map((d, i) => {
+      const share = (d.value / total) * 100;
+      const len = Math.max(0, share - gap);
+      const delay = reduced ? 0 : i * 160;
+      const html = '<circle class="seg" data-i="' + i + '" cx="100" cy="100" r="' + r + '" pathLength="100" transform="rotate(-90 100 100)" ' +
+        'style="--c:var(--ds-series-' + (i + 1) + ');--len:' + len.toFixed(2) + ';stroke-dashoffset:' + (-(acc + gap / 2)).toFixed(2) + ';transition-delay:' + delay + 'ms"/>';
+      acc += share;
+      return html;
+    }).join('');
+    svg.setAttribute('aria-label', 'Donut chart of revenue by product line. ' + DATA.map((d, i) => d.label + ' ' + pct[i] + ' percent').join(', '));
+
+    legend.innerHTML = DATA.map((d, i) =>
+      '<li class="item" tabindex="0" data-i="' + i + '" style="--c:var(--ds-series-' + (i + 1) + ')">' +
+      '<span class="sw"></span><span class="name">' + esc(d.label) + '</span><span class="amt">' + money(d.value) + '</span><span class="pct">' + pct[i] + '%</span></li>'
+    ).join('');
+
+    const segs = [...svg.querySelectorAll('.seg')];
+    const items = [...legend.querySelectorAll('.item')];
+
+    function focusOn(i) {
+      root.classList.toggle('has-hover', i !== null);
+      segs.forEach((s, k) => s.classList.toggle('is-on', k === i));
+      items.forEach((s, k) => s.classList.toggle('is-on', k === i));
+      totalEl.textContent = i === null ? money(total) : money(DATA[i].value);
+      capEl.textContent = i === null ? TOTAL_CAPTION : DATA[i].label;
+    }
+    focusOn(null);
+
+    [...segs, ...items].forEach((el) => {
+      const i = Number(el.dataset.i);
+      el.addEventListener('pointerenter', () => focusOn(i));
+      el.addEventListener('pointerleave', () => focusOn(null));
+    });
+    items.forEach((el) => {
+      const i = Number(el.dataset.i);
+      el.addEventListener('focus', () => focusOn(i));
+      el.addEventListener('blur', () => focusOn(null));
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in'))); }
+    }, { threshold: 0.3 });
+    io.observe(root);
+  });
+})();
+</script>

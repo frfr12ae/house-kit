@@ -1,0 +1,129 @@
+<!--
+@title Progress bars
+@description Four goals as progress bars with a target marker showing where each should be today. Fill colour and a status word say whether the goal is on track, at risk or off track. Edit GOALS at the top of the script.
+@tags progress, goals, okr, target, bar, status, svg
+@preview fill
+@height 700
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-progress-bars {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-progress-bars .head { max-width: 760px; margin: 0 auto var(--ds-space-6); }
+  .c-progress-bars h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-progress-bars .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-progress-bars .list { display: grid; gap: var(--ds-space-6); max-width: 760px; margin: 0 auto; padding: 0; list-style: none; }
+  .c-progress-bars .top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--ds-space-2) var(--ds-space-4); margin-bottom: var(--ds-space-3); }
+  .c-progress-bars .name { font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-progress-bars .figs { font-size: var(--ds-text-sm); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-progress-bars .figs b { color: var(--ds-ink); font-weight: 700; }
+  .c-progress-bars .bar { width: 100%; }
+  .c-progress-bars .bar svg { display: block; width: 100%; height: 20px; overflow: visible; }
+  .c-progress-bars .track { fill: color-mix(in srgb, var(--ds-line) 70%, transparent); }
+  .c-progress-bars .fill {
+    fill: var(--c);
+    transform-box: fill-box;
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform var(--ds-dur-story) var(--ds-ease);
+  }
+  .c-progress-bars.is-in .fill { transform: scaleX(1); }
+  .c-progress-bars .mark { fill: var(--ds-ink); }
+  .c-progress-bars .foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-2) var(--ds-space-4); margin-top: var(--ds-space-3); font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-progress-bars .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px 2px 8px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    color: var(--ds-ink);
+    font-weight: 700;
+  }
+  .c-progress-bars .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ds-neutral-line); }
+  .c-progress-bars .pill.is-note { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-progress-bars .pill.is-note::before { background: var(--ds-note-line); }
+  .c-progress-bars .pill.is-highlight { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-progress-bars .pill.is-highlight::before { background: var(--ds-highlight-line); }
+  .c-progress-bars .pill.is-danger { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-progress-bars .pill.is-danger::before { background: var(--ds-danger-line); }
+  .c-progress-bars .key { display: flex; align-items: center; gap: var(--ds-space-2); max-width: 760px; margin: var(--ds-space-6) auto 0; padding-top: var(--ds-space-4); border-top: var(--ds-hairline) solid var(--ds-line); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-progress-bars .key i { width: 3px; height: 14px; border-radius: 2px; background: var(--ds-ink); flex: none; }
+  @media (max-width: 560px) {
+    .c-progress-bars { padding: var(--ds-space-6) var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-progress-bars">
+  <figcaption class="head">
+    <h3>Annual goals, progress at 31 October</h3>
+    <p class="hint">Bars show progress towards each full-year goal.</p>
+  </figcaption>
+  <ul class="list"></ul>
+  <p class="key"><i aria-hidden="true"></i>Marker shows where we should be at this point in the year.</p>
+</figure>
+
+<script>
+(() => {
+  // Replace with your own goals. value = progress so far, goal = full target, pace = where it should be today.
+  const GOALS = [
+    { label: 'Annual recurring revenue', value: 3.42, goal: 4.5, pace: 3.2, fmt: (v) => '€' + v.toFixed(2) + 'M' },
+    { label: 'New customers signed', value: 34, goal: 50, pace: 36, fmt: (v) => String(v) },
+    { label: 'Customer interviews completed', value: 18, goal: 24, pace: 16, fmt: (v) => String(v) },
+    { label: 'Open roles filled', value: 3, goal: 8, pace: 5, fmt: (v) => String(v) },
+  ];
+
+  // On track: at or past pace. At risk: within 10% of pace. Off track: further behind.
+  function status(g) {
+    const ratio = g.value / g.pace;
+    if (ratio >= 1) return { text: 'On track', cls: 'is-note', c: 'var(--ds-note-line)' };
+    if (ratio >= 0.9) return { text: 'At risk', cls: 'is-highlight', c: 'var(--ds-highlight-line)' };
+    return { text: 'Off track', cls: 'is-danger', c: 'var(--ds-danger-line)' };
+  }
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  document.querySelectorAll('.c-progress-bars').forEach((root) => {
+    const list = root.querySelector('.list');
+    list.innerHTML = GOALS.map((g, i) => {
+      const s = status(g);
+      const pct = Math.round((g.value / g.goal) * 100);
+      return '<li class="row" data-i="' + i + '">' +
+        '<div class="top"><span class="name">' + esc(g.label) + '</span><span class="figs"><b>' + g.fmt(g.value) + '</b> of ' + g.fmt(g.goal) + ' (' + pct + '%)</span></div>' +
+        '<div class="bar" role="progressbar" aria-label="' + esc(g.label) + '" aria-valuemin="0" aria-valuemax="' + g.goal + '" aria-valuenow="' + g.value + '" aria-valuetext="' + g.fmt(g.value) + ' of ' + g.fmt(g.goal) + ', ' + s.text.toLowerCase() + ', pace marker at ' + g.fmt(g.pace) + '"></div>' +
+        '<div class="foot"><span class="pill ' + s.cls + '">' + s.text + '</span><span>Pace today: ' + g.fmt(g.pace) + '</span></div></li>';
+    }).join('');
+    const bars = [...list.querySelectorAll('.bar')];
+
+    function render() {
+      bars.forEach((bar, i) => {
+        const g = GOALS[i];
+        const W = Math.max(160, Math.round(bar.clientWidth));
+        const fillW = Math.max(6, (g.value / g.goal) * W);
+        const markX = Math.min(W - 1.5, Math.max(1.5, (g.pace / g.goal) * W));
+        const delay = reduced ? 0 : i * 120;
+        bar.innerHTML = '<svg viewBox="0 0 ' + W + ' 20" aria-hidden="true">' +
+          '<rect class="track" x="0" y="5" width="' + W + '" height="10" rx="5"/>' +
+          '<rect class="fill" x="0" y="5" width="' + fillW + '" height="10" rx="5" style="--c:' + status(g).c + ';transition-delay:' + delay + 'ms"/>' +
+          '<rect class="mark" x="' + (markX - 1.5) + '" y="0" width="3" height="20" rx="1.5"/></svg>';
+      });
+    }
+
+    render();
+    new ResizeObserver(render).observe(list);
+
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in'))); }
+    }, { threshold: 0.3 });
+    io.observe(root);
+  });
+})();
+</script>

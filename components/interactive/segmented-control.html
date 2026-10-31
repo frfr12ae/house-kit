@@ -1,0 +1,115 @@
+<!--
+@title Segmented control
+@description Pill segmented control with a sliding active indicator that animates between options. Radio group semantics with arrow key navigation.
+@tags segmented, toggle, pill, switcher, filter, radio
+@preview center
+@height 240
+@added 2026-10-31
+@featured true
+-->
+<style>
+  .c-segmented-control {
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-4);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-segmented-control .track {
+    position: relative;
+    display: inline-flex;
+    max-width: 100%;
+    padding: var(--ds-space-1);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-panel);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .c-segmented-control .track::-webkit-scrollbar { display: none; }
+  .c-segmented-control .thumb {
+    position: absolute;
+    top: var(--ds-space-1);
+    bottom: var(--ds-space-1);
+    left: 0;
+    width: var(--w, 0px);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    box-shadow: var(--ds-shadow-sm);
+    transform: translateX(var(--x, 0px));
+    pointer-events: none;
+  }
+  .c-segmented-control .thumb.is-ready { transition: transform var(--ds-dur-base) var(--ds-ease-spring), width var(--ds-dur-base) var(--ds-ease); }
+  .c-segmented-control .opt {
+    position: relative;
+    flex: none;
+    height: 36px;
+    padding: 0 var(--ds-space-5);
+    border: 0;
+    border-radius: var(--ds-radius-pill);
+    background: transparent;
+    color: var(--ds-text);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-segmented-control .opt:hover { color: var(--ds-ink); }
+  .c-segmented-control .opt[aria-checked="true"] { color: var(--ds-on-action); }
+  .c-segmented-control .opt:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-segmented-control .caption { min-height: 1.5em; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-segmented-control .caption b { color: var(--ds-ink); font-weight: 600; }
+  @media (max-width: 440px) {
+    .c-segmented-control .opt { padding: 0 var(--ds-space-3); }
+  }
+</style>
+
+<div class="c-segmented-control">
+  <div class="track" role="radiogroup" aria-label="Report view">
+    <span class="thumb" aria-hidden="true"></span>
+    <button class="opt" type="button" role="radio" aria-checked="true">Overview</button>
+    <button class="opt" type="button" role="radio" aria-checked="false" tabindex="-1">Activity</button>
+    <button class="opt" type="button" role="radio" aria-checked="false" tabindex="-1">Manage</button>
+    <button class="opt" type="button" role="radio" aria-checked="false" tabindex="-1">Reports</button>
+  </div>
+  <p class="caption" aria-live="polite">Showing <b>Overview</b></p>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-segmented-control').forEach((root) => {
+    const track = root.querySelector('.track');
+    const thumb = root.querySelector('.thumb');
+    const opts = [...root.querySelectorAll('[role="radio"]')];
+    const caption = root.querySelector('.caption');
+
+    const place = () => {
+      const on = opts.find((o) => o.getAttribute('aria-checked') === 'true');
+      thumb.style.setProperty('--x', on.offsetLeft + 'px');
+      thumb.style.setProperty('--w', on.offsetWidth + 'px');
+    };
+    const select = (i, focus) => {
+      opts.forEach((o, j) => { o.setAttribute('aria-checked', String(i === j)); o.tabIndex = i === j ? 0 : -1; });
+      if (focus) opts[i].focus();
+      caption.innerHTML = 'Showing <b></b>';
+      caption.querySelector('b').textContent = opts[i].textContent;
+      place();
+    };
+
+    opts.forEach((o, i) => o.addEventListener('click', () => select(i)));
+    track.addEventListener('keydown', (e) => {
+      const i = opts.indexOf(document.activeElement);
+      if (i < 0) return;
+      const next = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: opts.length - 1 }[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      select((next + opts.length) % opts.length, true);
+    });
+
+    place();
+    requestAnimationFrame(() => thumb.classList.add('is-ready'));
+    if (window.ResizeObserver) new ResizeObserver(place).observe(track);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  });
+})();
+</script>

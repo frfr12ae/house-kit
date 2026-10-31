@@ -1,0 +1,66 @@
+<!--
+@title Quote slide
+@description One large pull quote with an attribution and no competing title. Use for a customer voice or a line the room should remember.
+@tags slide, quote, testimonial, voice, pull-quote
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-quote-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-quote-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    padding: 6cqi 10cqi;
+  }
+  .c-quote-slide .glyph {
+    font-family: var(--ds-font-display);
+    font-size: 16cqi;
+    font-weight: var(--ds-weight-display);
+    line-height: 0.6;
+    height: 6.4cqi;
+    color: var(--ds-neutral-line);
+  }
+  .c-quote-slide blockquote {
+    margin: 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 4.1cqi;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.22;
+    color: var(--ds-ink);
+  }
+  .c-quote-slide figcaption {
+    display: grid;
+    gap: 0.4cqi;
+    margin-top: 4cqi;
+    padding-left: 2cqi;
+    border-left: calc(var(--ds-stroke) * 2) solid var(--ds-highlight-line);
+    font-size: 1.7cqi;
+    line-height: 1.35;
+    color: var(--ds-muted);
+  }
+  .c-quote-slide figcaption b { font-size: 1.9cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-quote-slide figure { margin: 0; }
+</style>
+
+<section class="c-quote-slide">
+  <div class="inner">
+    <figure>
+      <div class="glyph" aria-hidden="true">&ldquo;</div>
+      <blockquote>We stopped asking which tool was cheapest and started asking which one our team would still open in six months.</blockquote>
+      <figcaption><b>Head of Operations</b><span>Regional logistics firm, customer interview, September 2026</span></figcaption>
+    </figure>
+  </div>
+</section>

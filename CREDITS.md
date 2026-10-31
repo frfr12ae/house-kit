@@ -12,7 +12,63 @@ The sidebar-and-grid browsing layout is inspired by the component browser at [21
 
 | Component | Category | Source | Author | License |
 |---|---|---|---|---|
+| [Chat thread](components/ai/chat-thread.html) | ai | Original | Frederik | MIT |
+| [Prompt composer](components/ai/prompt-composer.html) | ai | Original | Frederik | MIT |
+| [Source citations](components/ai/source-citations.html) | ai | Original | Frederik | MIT |
+| [Streaming answer](components/ai/streaming-answer.html) | ai | Original | Frederik | MIT |
+| [Suggestion chips](components/ai/suggestion-chips.html) | ai | Original | Frederik | MIT |
+| [Thinking indicator](components/ai/thinking-indicator.html) | ai | Original | Frederik | MIT |
+| [Tool call cards](components/ai/tool-call-card.html) | ai | Original | Frederik | MIT |
+| [Bar chart](components/dataviz/bar-chart.html) | dataviz | Original | Frederik | MIT |
+| [Donut chart](components/dataviz/donut.html) | dataviz | Original | Frederik | MIT |
+| [Activity heatmap](components/dataviz/heatmap.html) | dataviz | Inspired by [GitHub contributions graph](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/viewing-contributions-on-your-profile) | Frederik | MIT |
+| [Line chart](components/dataviz/line-chart.html) | dataviz | Original | Frederik | MIT |
+| [Progress bars](components/dataviz/progress-bars.html) | dataviz | Original | Frederik | MIT |
+| [Sparkline cards](components/dataviz/sparkline-cards.html) | dataviz | Original | Frederik | MIT |
+| [Agenda slide](components/decks/agenda-slide.html) | decks | Original | Frederik | MIT |
+| [Big number slide](components/decks/big-number-slide.html) | decks | Original | Frederik | MIT |
+| [Chart slide](components/decks/chart-slide.html) | decks | Original | Frederik | MIT |
+| [Closing slide](components/decks/closing-slide.html) | decks | Original | Frederik | MIT |
+| [Comparison slide](components/decks/comparison-slide.html) | decks | Original | Frederik | MIT |
+| [Deck shell](components/decks/deck-shell.html) | decks | Original | Frederik | MIT |
+| [Quote slide](components/decks/quote-slide.html) | decks | Original | Frederik | MIT |
+| [Section slide](components/decks/section-slide.html) | decks | Original | Frederik | MIT |
 | [Title slide](components/decks/title-slide.html) | decks | Original | Frederik | MIT |
+| [Two column slide](components/decks/two-column-slide.html) | decks | Original | Frederik | MIT |
 | [Button set](components/interactive/button-set.html) | interactive | Inspired by [Material Design 3 common buttons](https://m3.material.io/components/buttons/overview) | Frederik | MIT |
+| [Command palette](components/interactive/command-palette.html) | interactive | Original | Frederik | MIT |
+| [Copy field](components/interactive/copy-field.html) | interactive | Original | Frederik | MIT |
+| [Dialog](components/interactive/dialog.html) | interactive | Original | Frederik | MIT |
+| [Dropdown menu](components/interactive/dropdown-menu.html) | interactive | Original | Frederik | MIT |
+| [File chips](components/interactive/file-chips.html) | interactive | Original | Frederik | MIT |
+| [Segmented control](components/interactive/segmented-control.html) | interactive | Original | Frederik | MIT |
+| [Tabs](components/interactive/tabs.html) | interactive | Original | Frederik | MIT |
+| [Toasts](components/interactive/toast.html) | interactive | Original | Frederik | MIT |
+| [Toggle switches](components/interactive/toggle-switch.html) | interactive | Original | Frederik | MIT |
+| [Tooltips](components/interactive/tooltip.html) | interactive | Original | Frederik | MIT |
+| [Bar grow](components/motion/bar-grow.html) | motion | Original | Frederik | MIT |
 | [Count-up numbers](components/motion/count-up.html) | motion | Original | Frederik | MIT |
+| [Line draw](components/motion/line-draw.html) | motion | Original | Frederik | MIT |
+| [Lower third](components/motion/lower-third.html) | motion | Original | Frederik | MIT |
+| [Marquee ticker](components/motion/marquee.html) | motion | Original | Frederik | MIT |
+| [Progress rings](components/motion/progress-ring.html) | motion | Original | Frederik | MIT |
+| [Stagger cards](components/motion/stagger-cards.html) | motion | Original | Frederik | MIT |
+| [Text reveal](components/motion/text-reveal.html) | motion | Original | Frederik | MIT |
+| [Typewriter terminal](components/motion/typewriter-terminal.html) | motion | Original | Frederik | MIT |
+| [CTA band](components/pages/cta-band.html) | pages | Original | Frederik | MIT |
+| [FAQ accordion](components/pages/faq.html) | pages | Original | Frederik | MIT |
+| [Feature grid](components/pages/feature-grid.html) | pages | Original | Frederik | MIT |
+| [Footer](components/pages/footer.html) | pages | Original | Frederik | MIT |
+| [Hero](components/pages/hero.html) | pages | Original | Frederik | MIT |
+| [Navbar](components/pages/navbar.html) | pages | Original | Frederik | MIT |
+| [Pricing](components/pages/pricing.html) | pages | Original | Frederik | MIT |
+| [Testimonials](components/pages/testimonials.html) | pages | Original | Frederik | MIT |
 | [Annotated callout](components/reports/annotated-callout.html) | reports | Original | Frederik | MIT |
+| [Comparison cards](components/reports/comparison-cards.html) | reports | Original | Frederik | MIT |
+| [Data table](components/reports/data-table.html) | reports | Original | Frederik | MIT |
+| [Decision list](components/reports/decision-list.html) | reports | Original | Frederik | MIT |
+| [Print page](components/reports/print-page.html) | reports | Original | Frederik | MIT |
+| [Pull quote](components/reports/pull-quote.html) | reports | Original | Frederik | MIT |
+| [Report header](components/reports/report-header.html) | reports | Original | Frederik | MIT |
+| [Stat strip](components/reports/stat-strip.html) | reports | Original | Frederik | MIT |
+| [Timeline](components/reports/timeline.html) | reports | Original | Frederik | MIT |

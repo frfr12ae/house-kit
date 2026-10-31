@@ -1,0 +1,92 @@
+<!--
+@title CTA band
+@description Closing call to action on an inverted band: one headline, a supporting line, a primary button, a text link and a reassurance line.
+@tags cta, band, closing, conversion, banner
+@preview fill
+@height 380
+@added 2026-10-31
+-->
+<style>
+  .c-cta-band {
+    background: var(--ds-bg);
+    padding: var(--ds-space-9) var(--ds-space-6);
+    font-family: var(--ds-font-sans);
+  }
+  .c-cta-band .band {
+    position: relative;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: var(--ds-space-9) var(--ds-space-7);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    text-align: center;
+    overflow: hidden;
+  }
+  .c-cta-band .rings {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--ds-on-action);
+    opacity: 0.1;
+    pointer-events: none;
+  }
+  .c-cta-band .inner { position: relative; display: grid; gap: var(--ds-space-4); justify-items: center; }
+  .c-cta-band h2 {
+    max-width: 16em;
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-2xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-on-action);
+    text-wrap: balance;
+  }
+  .c-cta-band .sub { max-width: 34em; font-size: var(--ds-text-lg); line-height: var(--ds-leading-snug); color: color-mix(in srgb, var(--ds-on-action) 78%, transparent); text-wrap: pretty; }
+  .c-cta-band .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--ds-space-3); margin-top: var(--ds-space-4); }
+  .c-cta-band .btn {
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 var(--ds-space-6);
+    border: var(--ds-stroke) solid transparent;
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-md);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-cta-band .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-on-action) 55%, transparent); }
+  .c-cta-band .btn--inverse { background: var(--ds-on-action); color: var(--ds-action); }
+  .c-cta-band .btn--inverse:hover { background: color-mix(in srgb, var(--ds-on-action) 88%, var(--ds-action)); }
+  .c-cta-band .btn--ghost { color: var(--ds-on-action); border-color: color-mix(in srgb, var(--ds-on-action) 35%, transparent); }
+  .c-cta-band .btn--ghost:hover { background: color-mix(in srgb, var(--ds-on-action) 10%, transparent); }
+  .c-cta-band .fine { font-size: var(--ds-text-sm); color: color-mix(in srgb, var(--ds-on-action) 62%, transparent); }
+  @media (max-width: 600px) {
+    .c-cta-band { padding: var(--ds-space-7) var(--ds-space-4); }
+    .c-cta-band .band { padding: var(--ds-space-8) var(--ds-space-5); }
+    .c-cta-band h2 { font-size: var(--ds-text-xl); }
+    .c-cta-band .sub { font-size: var(--ds-text-md); }
+    .c-cta-band .btn { flex: 1 1 100%; justify-content: center; }
+  }
+</style>
+
+<section class="c-cta-band">
+  <div class="band">
+    <svg class="rings" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <circle cx="120" cy="300" r="120"/><circle cx="120" cy="300" r="200"/><circle cx="120" cy="300" r="280"/>
+      <circle cx="700" cy="0" r="120"/><circle cx="700" cy="0" r="200"/><circle cx="700" cy="0" r="280"/>
+    </svg>
+    <div class="inner">
+      <h2>Make next month's close the calm one</h2>
+      <p class="sub">Start a 14 day trial with your own data. Most teams are reconciling their first account the same afternoon.</p>
+      <div class="actions">
+        <a class="btn btn--inverse" href="#">Start free trial</a>
+        <a class="btn btn--ghost" href="#">Talk to sales</a>
+      </div>
+      <p class="fine">No credit card needed. Cancel any time.</p>
+    </div>
+  </div>
+</section>

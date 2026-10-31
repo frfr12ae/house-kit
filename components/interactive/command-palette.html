@@ -1,0 +1,283 @@
+<!--
+@title Command palette
+@description Search-first palette opened with Cmd or Ctrl plus K or a button. Grouped results filter as you type, arrow keys and Enter run a command, Escape closes. Combobox and listbox semantics.
+@tags command, palette, search, spotlight, shortcut, combobox
+@preview fill
+@height 520
+@added 2026-10-31
+@featured true
+-->
+<style>
+  .c-command-palette {
+    position: relative;
+    min-height: 520px;
+    padding: var(--ds-space-6);
+    background: var(--ds-bg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    overflow: hidden;
+  }
+  .c-command-palette .page { display: grid; gap: var(--ds-space-5); max-width: 760px; margin: 0 auto; }
+  .c-command-palette .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-4); }
+  .c-command-palette .bar b { font-size: var(--ds-text-lg); font-weight: 700; color: var(--ds-ink); }
+  .c-command-palette .open {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    height: 40px;
+    padding: 0 var(--ds-space-3) 0 var(--ds-space-4);
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    color: var(--ds-muted);
+    font-size: var(--ds-text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-command-palette .open:hover { border-color: var(--ds-muted); }
+  .c-command-palette .open:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-command-palette .open svg { width: 16px; height: 16px; }
+  .c-command-palette kbd {
+    padding: 1px 6px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-panel);
+    color: var(--ds-muted);
+    font-family: var(--ds-font-sans);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .c-command-palette .status { min-height: 1.5em; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-command-palette .status b { color: var(--ds-ink); font-weight: 600; }
+  .c-command-palette .ghost { display: grid; gap: var(--ds-space-3); }
+  .c-command-palette .ghost i { display: block; height: 56px; border-radius: var(--ds-radius-lg); background: var(--ds-surface); border: var(--ds-hairline) solid var(--ds-line); }
+  .c-command-palette .ghost i:nth-child(2) { width: 82%; }
+  .c-command-palette .ghost i:nth-child(3) { width: 64%; }
+
+  .c-command-palette .scrim {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: var(--ds-space-8) var(--ds-space-4) var(--ds-space-4);
+    background: color-mix(in srgb, var(--ds-ink) 30%, transparent);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--ds-dur-base) var(--ds-ease), visibility 0s linear var(--ds-dur-base);
+  }
+  .c-command-palette .scrim.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
+  .c-command-palette .dialog {
+    display: flex;
+    flex-direction: column;
+    width: min(560px, 100%);
+    max-height: calc(100% - var(--ds-space-4));
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-raised);
+    box-shadow: var(--ds-shadow-lg);
+    overflow: hidden;
+    transform: translateY(-8px) scale(0.98);
+    transition: transform var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-command-palette .scrim.is-open .dialog { transform: none; }
+  .c-command-palette .search { display: flex; align-items: center; gap: var(--ds-space-3); padding: 0 var(--ds-space-5); border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-command-palette .search svg { flex: none; width: 18px; height: 18px; color: var(--ds-muted); }
+  .c-command-palette .input {
+    flex: 1;
+    min-width: 0;
+    height: 56px;
+    border: 0;
+    background: transparent;
+    color: var(--ds-ink);
+    font-size: var(--ds-text-md);
+    outline: none;
+  }
+  .c-command-palette .input:focus-visible { box-shadow: none; }
+  .c-command-palette .input::placeholder { color: var(--ds-muted); }
+  .c-command-palette .results { flex: 1; min-height: 0; margin: 0; padding: var(--ds-space-2); overflow-y: auto; list-style: none; }
+  .c-command-palette .group-title { padding: var(--ds-space-3) var(--ds-space-3) var(--ds-space-1); color: var(--ds-muted); font-size: var(--ds-text-xs); font-weight: 700; }
+  .c-command-palette .group-list { margin: 0; padding: 0; list-style: none; }
+  .c-command-palette .opt {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-3);
+    border-radius: var(--ds-radius-md);
+    color: var(--ds-text);
+    font-size: var(--ds-text-sm);
+    cursor: pointer;
+  }
+  .c-command-palette .opt svg { flex: none; width: 18px; height: 18px; color: var(--ds-muted); }
+  .c-command-palette .opt .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: var(--ds-ink); }
+  .c-command-palette .opt .hint { display: inline-flex; gap: var(--ds-space-1); }
+  .c-command-palette .opt[aria-selected="true"] { background: var(--ds-panel); }
+  .c-command-palette .opt[aria-selected="true"] svg { color: var(--ds-ink); }
+  .c-command-palette mark { background: var(--ds-highlight-fill); box-shadow: 0 1px 0 var(--ds-highlight-line); color: inherit; border-radius: 2px; }
+  .c-command-palette .empty { padding: var(--ds-space-7) var(--ds-space-5); text-align: center; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-command-palette .foot { display: flex; gap: var(--ds-space-5); padding: var(--ds-space-3) var(--ds-space-5); border-top: var(--ds-hairline) solid var(--ds-line); background: var(--ds-surface); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-command-palette .foot span { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  @media (max-width: 520px) {
+    .c-command-palette { padding: var(--ds-space-4); }
+    .c-command-palette .foot span:nth-child(3) { display: none; }
+    .c-command-palette .open kbd { display: none; }
+  }
+</style>
+
+<div class="c-command-palette" data-autoopen>
+  <div class="page">
+    <div class="bar">
+      <b>Workspace</b>
+      <button class="open" type="button" aria-haspopup="dialog">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2L17 17"/></svg>
+        Search or jump to
+        <kbd class="mod">Ctrl K</kbd>
+      </button>
+    </div>
+    <p class="status" aria-live="polite"></p>
+    <div class="ghost" aria-hidden="true"><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="scrim" aria-hidden="true">
+    <div class="dialog" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="search">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2L17 17"/></svg>
+        <input class="input" type="text" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-controls="c-command-palette-list" aria-label="Search commands" placeholder="Type a command or search..." autocomplete="off" spellcheck="false">
+        <kbd>Esc</kbd>
+      </div>
+      <ul class="results" role="listbox" id="c-command-palette-list" aria-label="Results"></ul>
+      <div class="foot">
+        <span><kbd>&uarr;</kbd><kbd>&darr;</kbd> Navigate</span>
+        <span><kbd>&crarr;</kbd> Run</span>
+        <span><kbd>Esc</kbd> Close</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const ICONS = {
+    home: '<path d="M3 9.5L10 4l7 5.5V16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>',
+    list: '<path d="M7 5h9M7 10h9M7 15h9M3.5 5h.01M3.5 10h.01M3.5 15h.01"/>',
+    check: '<circle cx="10" cy="10" r="7"/><path d="M7 10.2l2.2 2.2L13.3 8"/>',
+    plus: '<path d="M10 4v12M4 10h12"/>',
+    doc: '<path d="M6 3h5l4 4v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M11 3v4h4"/>',
+    user: '<circle cx="10" cy="7" r="3"/><path d="M4 17c.6-3 3-4.5 6-4.5s5.4 1.5 6 4.5"/>',
+    gear: '<circle cx="10" cy="10" r="2.5"/><path d="M10 3v2M10 15v2M3 10h2M15 10h2M5 5l1.4 1.4M13.6 13.6L15 15M5 15l1.4-1.4M13.6 6.4L15 5"/>',
+    moon: '<path d="M16 11.5A6.5 6.5 0 1 1 8.5 4 5 5 0 0 0 16 11.5z"/>',
+  };
+  const ITEMS = [
+    { group: 'Go to', name: 'Close dashboard', icon: 'home', keys: ['G', 'D'] },
+    { group: 'Go to', name: 'Reconciliation', icon: 'list', keys: ['G', 'R'] },
+    { group: 'Go to', name: 'Approvals', icon: 'check', keys: ['G', 'A'] },
+    { group: 'Actions', name: 'New journal entry', icon: 'plus', keys: ['N'] },
+    { group: 'Actions', name: 'Export trial balance', icon: 'doc', keys: ['E'] },
+    { group: 'Actions', name: 'Invite a reviewer', icon: 'user', keys: [] },
+    { group: 'Settings', name: 'Open settings', icon: 'gear', keys: [','] },
+    { group: 'Settings', name: 'Switch theme', icon: 'moon', keys: [] },
+  ];
+
+  document.querySelectorAll('.c-command-palette').forEach((root, n) => {
+    const scrim = root.querySelector('.scrim');
+    const input = root.querySelector('.input');
+    const list = root.querySelector('.results');
+    const opener = root.querySelector('.open');
+    const status = root.querySelector('.status');
+    const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+    const listId = `c-command-palette-list-${n}`;
+    list.id = listId;
+    input.setAttribute('aria-controls', listId);
+    root.querySelector('.mod').textContent = mac ? '⌘ K' : 'Ctrl K';
+
+    let shown = [];   // flat list of currently visible items
+    let active = 0;
+
+    const svg = (key) => '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[key] + '</svg>';
+    const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const mark = (name, q) => {
+      const i = q ? name.toLowerCase().indexOf(q) : -1;
+      return i < 0 ? esc(name) : esc(name.slice(0, i)) + '<mark>' + esc(name.slice(i, i + q.length)) + '</mark>' + esc(name.slice(i + q.length));
+    };
+
+    const render = () => {
+      const q = input.value.trim().toLowerCase();
+      shown = ITEMS.filter((it) => !q || it.name.toLowerCase().includes(q) || it.group.toLowerCase().includes(q));
+      active = Math.min(active, Math.max(shown.length - 1, 0));
+      if (!shown.length) {
+        list.innerHTML = '<li class="empty" role="presentation">No results for “' + esc(input.value.trim()) + '”</li>';
+        input.removeAttribute('aria-activedescendant');
+        return;
+      }
+      let html = '', last = '', idx = 0, open = false;
+      shown.forEach((it) => {
+        if (it.group !== last) {
+          if (open) html += '</ul></li>';
+          const gid = `c-command-palette-${n}-g${idx}`;
+          html += '<li role="presentation"><div class="group-title" id="' + gid + '" role="presentation">' + esc(it.group) + '</div><ul class="group-list" role="group" aria-labelledby="' + gid + '">';
+          last = it.group; open = true;
+        }
+        html += '<li class="opt" role="option" id="c-command-palette-' + n + '-o' + idx + '" data-i="' + idx + '" aria-selected="' + (idx === active) + '">' +
+          svg(it.icon) + '<span class="name">' + mark(it.name, q) + '</span>' +
+          '<span class="hint">' + it.keys.map((k) => '<kbd>' + esc(k) + '</kbd>').join('') + '</span></li>';
+        idx++;
+      });
+      html += '</ul></li>';
+      list.innerHTML = html;
+      input.setAttribute('aria-activedescendant', `c-command-palette-${n}-o${active}`);
+    };
+
+    const setActive = (i, scroll) => {
+      if (!shown.length) return;
+      active = (i + shown.length) % shown.length;
+      list.querySelectorAll('.opt').forEach((el) => el.setAttribute('aria-selected', String(+el.dataset.i === active)));
+      const el = list.querySelector('[data-i="' + active + '"]');
+      input.setAttribute('aria-activedescendant', el.id);
+      if (scroll) el.scrollIntoView({ block: 'nearest' });
+    };
+
+    const open = () => {
+      input.value = ''; active = 0; render();
+      scrim.classList.add('is-open');
+      scrim.setAttribute('aria-hidden', 'false');
+      input.focus();
+    };
+    const close = (restore) => {
+      scrim.classList.remove('is-open');
+      scrim.setAttribute('aria-hidden', 'true');
+      if (restore) opener.focus();
+    };
+    const run = (i) => {
+      const it = shown[i];
+      if (!it) return;
+      status.innerHTML = 'Ran <b></b>';
+      status.querySelector('b').textContent = it.name;
+      close(true);
+    };
+
+    opener.addEventListener('click', open);
+    input.addEventListener('input', () => { active = 0; render(); });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1, true); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1, true); }
+      else if (e.key === 'Home') { e.preventDefault(); setActive(0, true); }
+      else if (e.key === 'End') { e.preventDefault(); setActive(shown.length - 1, true); }
+      else if (e.key === 'Enter') { e.preventDefault(); run(active); }
+    });
+    list.addEventListener('mousemove', (e) => { const o = e.target.closest('.opt'); if (o && +o.dataset.i !== active) setActive(+o.dataset.i); });
+    list.addEventListener('click', (e) => { const o = e.target.closest('.opt'); if (o) run(+o.dataset.i); });
+    scrim.addEventListener('mousedown', (e) => { if (e.target === scrim) close(true); });
+    document.addEventListener('keydown', (e) => {
+      const isOpen = scrim.classList.contains('is-open');
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); isOpen ? close(true) : open(); }
+      else if (e.key === 'Escape' && isOpen) { e.preventDefault(); close(true); }
+    });
+
+    render();
+    // the preview starts open so the component is visible at a glance; drop data-autoopen in your page
+    if (root.hasAttribute('data-autoopen')) { scrim.classList.add('is-open'); scrim.setAttribute('aria-hidden', 'false'); }
+  });
+})();
+</script>

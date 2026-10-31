@@ -1,0 +1,137 @@
+<!--
+@title Timeline
+@description A vertical list of milestones with a date, title and one-line note. Done, current and next states are told apart by marker, label and the highlight pair on the current step.
+@tags timeline, milestones, roadmap, progress, plan
+@preview fill
+@height 640
+@added 2026-10-31
+-->
+<style>
+  .c-timeline {
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-timeline .list { margin: 0 auto; padding: 0; list-style: none; max-width: 720px; }
+  .c-timeline .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 112px 28px minmax(0, 1fr);
+    column-gap: var(--ds-space-4);
+    padding-bottom: var(--ds-space-6);
+  }
+  .c-timeline .step:last-child { padding-bottom: 0; }
+  .c-timeline .date {
+    padding-top: 3px;
+    text-align: right;
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-timeline .rail { position: relative; display: flex; justify-content: center; }
+  .c-timeline .rail::before {
+    content: "";
+    position: absolute;
+    top: 28px;
+    bottom: calc(var(--ds-space-6) * -1 + 2px);
+    left: 50%;
+    width: 0;
+    border-left: var(--ds-stroke) solid var(--ds-neutral-line);
+    transform: translateX(-50%);
+  }
+  .c-timeline .step:last-child .rail::before { display: none; }
+  .c-timeline .step.is-next .rail::before { border-left-style: dashed; border-left-color: var(--ds-line); }
+  .c-timeline .step.is-current .rail::before { border-left-style: dashed; border-left-color: var(--ds-highlight-line); }
+  .c-timeline .marker {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    margin-top: 1px;
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: 50%;
+    background: var(--ds-surface);
+  }
+  .c-timeline .marker svg { width: 12px; height: 12px; }
+  .c-timeline .is-done .marker { background: var(--ds-note-fill); border-color: var(--ds-note-line); color: var(--ds-ink); }
+  .c-timeline .is-current .marker { background: var(--ds-highlight-line); border-color: var(--ds-highlight-line); box-shadow: 0 0 0 5px var(--ds-highlight-fill); }
+  .c-timeline .is-current .marker::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ds-surface); }
+  .c-timeline .is-next .marker { border-style: dashed; border-color: var(--ds-neutral-line); }
+  .c-timeline .body { display: grid; gap: var(--ds-space-1); padding: 0 0 0 var(--ds-space-1); }
+  .c-timeline .is-current .body {
+    margin-top: calc(var(--ds-space-2) * -1);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-highlight-fill);
+    border: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-radius: var(--ds-radius-lg);
+  }
+  .c-timeline .title { margin: 0; font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-timeline .is-next .title { color: var(--ds-text); }
+  .c-timeline .note { margin: 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); }
+  .c-timeline .status { margin: 0; font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted); }
+  .c-timeline .is-current .status { color: var(--ds-ink); }
+  @media (max-width: 560px) {
+    .c-timeline { padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-timeline .step { grid-template-columns: 28px minmax(0, 1fr); column-gap: var(--ds-space-3); }
+    .c-timeline .date { grid-column: 2; grid-row: 1; text-align: left; padding: 0 0 var(--ds-space-1) var(--ds-space-1); }
+    .c-timeline .rail { grid-column: 1; grid-row: 1 / span 2; }
+    .c-timeline .body { grid-column: 2; grid-row: 2; }
+    .c-timeline .rail::before { bottom: calc(var(--ds-space-6) * -1 + 2px); }
+    .c-timeline .is-current .body { margin-top: 0; }
+  }
+</style>
+
+<section class="c-timeline" aria-label="Programme milestones">
+  <ol class="list">
+    <li class="step is-done">
+      <span class="date">12 Jun 2026</span>
+      <span class="rail"><span class="marker"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 6.3 2.3 2.3 4.7-5"/></svg></span></span>
+      <div class="body">
+        <p class="status">Done</p>
+        <h4 class="title">Discovery and baseline</h4>
+        <p class="note">Twelve stakeholder interviews and a cost baseline for the current process.</p>
+      </div>
+    </li>
+    <li class="step is-done">
+      <span class="date">04 Sep 2026</span>
+      <span class="rail"><span class="marker"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 6.3 2.3 2.3 4.7-5"/></svg></span></span>
+      <div class="body">
+        <p class="status">Done</p>
+        <h4 class="title">Pilot with two regional teams</h4>
+        <p class="note">Handling time fell 22% against the baseline across 1,900 cases.</p>
+      </div>
+    </li>
+    <li class="step is-current" aria-current="step">
+      <span class="date">31 Oct 2026</span>
+      <span class="rail"><span class="marker"></span></span>
+      <div class="body">
+        <p class="status">In progress</p>
+        <h4 class="title">Roll out to all nine teams</h4>
+        <p class="note">Six teams are live; the remaining three are scheduled for the week of 9 November.</p>
+      </div>
+    </li>
+    <li class="step is-next">
+      <span class="date">15 Dec 2026</span>
+      <span class="rail"><span class="marker"></span></span>
+      <div class="body">
+        <p class="status">Up next</p>
+        <h4 class="title">Retire the legacy workflow</h4>
+        <p class="note">Switch off the old queue once two clean month-end closes have passed.</p>
+      </div>
+    </li>
+    <li class="step is-next">
+      <span class="date">28 Feb 2027</span>
+      <span class="rail"><span class="marker"></span></span>
+      <div class="body">
+        <p class="status">Up next</p>
+        <h4 class="title">Benefits review</h4>
+        <p class="note">Compare realised savings with the business case and report to the board.</p>
+      </div>
+    </li>
+  </ol>
+</section>

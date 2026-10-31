@@ -1,0 +1,134 @@
+<!--
+@title Tooltips
+@description Tooltips that appear above a control on hover and keyboard focus, with a small arrow, a short delay on hover and Escape to dismiss. Pure CSS positioning, wired with aria-describedby.
+@tags tooltip, hint, hover, focus, popover, label
+@preview center
+@height 260
+@added 2026-10-31
+-->
+<style>
+  .c-tooltip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--ds-space-4);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-tooltip .tip { position: relative; display: inline-flex; }
+  .c-tooltip .trigger {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-tooltip .trigger:hover { border-color: var(--ds-muted); background: var(--ds-raised); }
+  .c-tooltip .trigger:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-tooltip .trigger svg { width: 20px; height: 20px; }
+  .c-tooltip .bubble {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    padding: var(--ds-space-2) var(--ds-space-3);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-ink);
+    color: var(--ds-bg);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-shadow: var(--ds-shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 4px);
+    pointer-events: none;
+    transition: opacity var(--ds-dur-fast) var(--ds-ease), transform var(--ds-dur-fast) var(--ds-ease), visibility 0s linear var(--ds-dur-fast);
+  }
+  .c-tooltip .bubble::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 10px;
+    height: 10px;
+    margin-top: -5px;
+    border-radius: 2px;
+    background: var(--ds-ink);
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .c-tooltip .bubble kbd {
+    padding: 1px 5px;
+    border-radius: var(--ds-radius-sm);
+    background: color-mix(in srgb, var(--ds-bg) 22%, transparent);
+    font-family: var(--ds-font-sans);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  /* hover waits a beat so passing the pointer across does not flicker; focus shows at once */
+  .c-tooltip .tip:hover:not(.is-dismissed) .bubble,
+  .c-tooltip .tip:focus-within:not(.is-dismissed) .bubble {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition-delay: 0s;
+  }
+  .c-tooltip .tip:hover:not(.is-dismissed) .bubble { transition-delay: 350ms; }
+</style>
+
+<div class="c-tooltip">
+  <span class="tip">
+    <button class="trigger" type="button" aria-label="Copy link" aria-describedby="c-tooltip-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+    </button>
+    <span class="bubble" role="tooltip" id="c-tooltip-1">Copy link <kbd>L</kbd></span>
+  </span>
+  <span class="tip">
+    <button class="trigger" type="button" aria-label="Share" aria-describedby="c-tooltip-2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+    </button>
+    <span class="bubble" role="tooltip" id="c-tooltip-2">Share with reviewers</span>
+  </span>
+  <span class="tip">
+    <button class="trigger" type="button" aria-label="Archive" aria-describedby="c-tooltip-3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9M10 13h4"/></svg>
+    </button>
+    <span class="bubble" role="tooltip" id="c-tooltip-3">Archive <kbd>E</kbd></span>
+  </span>
+  <span class="tip">
+    <button class="trigger" type="button" aria-label="Delete" aria-describedby="c-tooltip-4">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>
+    </button>
+    <span class="bubble" role="tooltip" id="c-tooltip-4">Delete permanently</span>
+  </span>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-tooltip').forEach((root, n) => {
+    root.querySelectorAll('.tip').forEach((tip, i) => {
+      const trigger = tip.querySelector('.trigger');
+      const bubble = tip.querySelector('.bubble');
+      const id = `c-tooltip-${n}-${i}`;
+      bubble.id = id;
+      trigger.setAttribute('aria-describedby', id);
+      // Escape hides the tooltip until the pointer leaves or focus moves on
+      const reset = () => tip.classList.remove('is-dismissed');
+      tip.addEventListener('mouseleave', reset);
+      trigger.addEventListener('blur', reset);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') root.querySelectorAll('.tip').forEach((tip) => { if (tip.matches(':hover, :focus-within')) tip.classList.add('is-dismissed'); });
+    });
+  });
+})();
+</script>

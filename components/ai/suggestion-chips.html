@@ -1,0 +1,158 @@
+<!--
+@title Suggestion chips
+@description An empty-state greeting with four starter prompt chips. Clicking a chip fills the input below it so the user can edit and send.
+@tags empty state, suggestions, starter prompts, chips, greeting, chat
+@preview center
+@height 460
+@added 2026-10-31
+-->
+<style>
+  .c-suggestion-chips,
+  .c-suggestion-chips *,
+  .c-suggestion-chips *::before,
+  .c-suggestion-chips *::after { box-sizing: border-box; }
+  .c-suggestion-chips {
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-6);
+    width: min(680px, 100%);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    text-align: center;
+  }
+  .c-suggestion-chips .mark {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+  }
+  .c-suggestion-chips .mark svg { width: 22px; height: 22px; }
+  .c-suggestion-chips .greeting { display: grid; gap: var(--ds-space-2); }
+  .c-suggestion-chips h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+  }
+  .c-suggestion-chips .sub { margin: 0; font-size: var(--ds-text-md); color: var(--ds-muted); }
+  .c-suggestion-chips .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--ds-space-2); }
+  .c-suggestion-chips .chip {
+    padding: var(--ds-space-3) var(--ds-space-4);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease), transform var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-suggestion-chips .chip:hover { background: var(--ds-raised); border-color: var(--ds-muted); }
+  .c-suggestion-chips .chip:active { transform: translateY(1px); }
+  .c-suggestion-chips .chip:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-suggestion-chips .chip.is-on { background: var(--ds-info-fill); border-color: var(--ds-info-line); color: var(--ds-ink); }
+  .c-suggestion-chips .field {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    width: 100%;
+    padding: var(--ds-space-2) var(--ds-space-2) var(--ds-space-2) var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    box-shadow: var(--ds-shadow-md);
+    transition: border-color var(--ds-dur-fast) var(--ds-ease), box-shadow var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-suggestion-chips .field:focus-within { border-color: var(--ds-info-line); box-shadow: var(--ds-shadow-md), var(--ds-focus); }
+  .c-suggestion-chips .field label { flex: 1; min-width: 0; display: block; }
+  .c-suggestion-chips .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .c-suggestion-chips input {
+    width: 100%;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--ds-ink);
+    font-size: var(--ds-text-md);
+  }
+  .c-suggestion-chips input:focus-visible { box-shadow: none; }
+  .c-suggestion-chips input::placeholder { color: var(--ds-muted); }
+  .c-suggestion-chips .send {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    cursor: pointer;
+  }
+  .c-suggestion-chips .send:disabled { background: var(--ds-panel); color: var(--ds-muted); cursor: not-allowed; }
+  .c-suggestion-chips .send:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-suggestion-chips .send svg { width: 16px; height: 16px; }
+</style>
+
+<section class="c-suggestion-chips" aria-label="New conversation">
+  <div class="mark" aria-hidden="true">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 2v12M2 8h12M3.8 3.8l8.4 8.4M12.2 3.8l-8.4 8.4"/></svg>
+  </div>
+  <div class="greeting">
+    <h2>Good morning. What should we dig into?</h2>
+    <p class="sub">Pick a starting point or write your own.</p>
+  </div>
+  <div class="chips">
+    <button class="chip" type="button">Summarise last week's customer feedback</button>
+    <button class="chip" type="button">Draft a project update for the team</button>
+    <button class="chip" type="button">Explain this error message</button>
+    <button class="chip" type="button">Plan a two-day workshop agenda</button>
+  </div>
+  <form class="field" autocomplete="off">
+    <label><span class="sr">Message</span><input type="text" placeholder="Ask anything"></label>
+    <button class="send" type="submit" aria-label="Send" disabled>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V3M3.5 7.5L8 3l4.5 4.5"/></svg>
+    </button>
+  </form>
+</section>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-suggestion-chips').forEach((root) => {
+    const input = root.querySelector('input');
+    const send = root.querySelector('.send');
+    const chips = [...root.querySelectorAll('.chip')];
+    let picked = '';
+
+    const sync = () => {
+      send.disabled = !input.value.trim();
+      chips.forEach((c) => c.classList.toggle('is-on', c.textContent === input.value));
+    };
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        picked = chip.textContent;
+        input.value = picked;
+        sync();
+        input.focus();
+        input.setSelectionRange(picked.length, picked.length);
+      });
+    });
+    input.addEventListener('input', sync);
+    root.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      input.value = '';
+      sync();
+    });
+    sync();
+  });
+})();
+</script>

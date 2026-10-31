@@ -1,0 +1,94 @@
+<!--
+@title Two column slide
+@description The claim on the left and three supporting evidence points on the right. Use to make one argument and back it up.
+@tags slide, claim, evidence, argument, two-column
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-two-column-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-two-column-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: 7cqi;
+    padding: 6cqi 7cqi;
+  }
+  .c-two-column-slide .claim { display: grid; align-content: center; gap: 2.2cqi; }
+  .c-two-column-slide .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-two-column-slide h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 5cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.06;
+    color: var(--ds-ink);
+  }
+  .c-two-column-slide .lede { margin: 0; font-size: 1.9cqi; line-height: 1.45; max-width: 34cqi; }
+  .c-two-column-slide .evidence {
+    display: grid;
+    align-content: center;
+    margin: 0;
+    padding: 0 0 0 5cqi;
+    list-style: none;
+    border-left: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-two-column-slide .evidence li {
+    display: grid;
+    grid-template-columns: 4.4cqi minmax(0, 1fr);
+    column-gap: 2cqi;
+    padding: 2.4cqi 0;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-two-column-slide .evidence li:first-child { border-top: 0; padding-top: 0; }
+  .c-two-column-slide .evidence li:last-child { padding-bottom: 0; }
+  .c-two-column-slide .mark {
+    display: grid;
+    place-items: center;
+    width: 4.4cqi;
+    height: 4.4cqi;
+    border: var(--ds-stroke) solid var(--ds-info-line);
+    border-radius: 50%;
+    background: var(--ds-info-fill);
+    font-size: 1.8cqi;
+    font-weight: 800;
+    color: var(--ds-ink);
+  }
+  .c-two-column-slide h3 { margin: 0 0 0.6cqi; font-size: 2.3cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-two-column-slide p { margin: 0; font-size: 1.75cqi; line-height: 1.45; }
+</style>
+
+<section class="c-two-column-slide">
+  <div class="inner">
+    <div class="claim">
+      <div class="eyebrow">Our claim</div>
+      <h2>Self-serve setup will halve time to first value</h2>
+      <p class="lede">The delay is not the product. It is the wait for someone on our side.</p>
+    </div>
+    <ol class="evidence">
+      <li>
+        <span class="mark">1</span>
+        <div><h3>Setup waits on us, not on the customer</h3><p>74% of setup time is spent waiting for a call or an email reply.</p></div>
+      </li>
+      <li>
+        <span class="mark">2</span>
+        <div><h3>The pilot already shows the effect</h3><p>Accounts in the self-serve pilot reached first value in 6 days, against 14.</p></div>
+      </li>
+      <li>
+        <span class="mark">3</span>
+        <div><h3>Support load stays flat</h3><p>Tickets per new account did not rise during the eight-week pilot.</p></div>
+      </li>
+    </ol>
+  </div>
+</section>

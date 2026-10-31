@@ -1,0 +1,195 @@
+<!--
+@title File chips
+@description Attachment chips in three states: done, uploading with an animated progress bar, and failed with a retry action. Every chip has a remove button.
+@tags file, attachment, upload, progress, chip, retry
+@preview center
+@height 340
+@added 2026-10-31
+-->
+<style>
+  .c-file-chips {
+    display: grid;
+    gap: var(--ds-space-3);
+    width: min(440px, 100%);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-file-chips .list { display: grid; gap: var(--ds-space-3); margin: 0; padding: 0; list-style: none; }
+  .c-file-chips .chip {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-3) var(--ds-space-3) var(--ds-space-3) var(--ds-space-4);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-raised);
+    transition: border-color var(--ds-dur-base) var(--ds-ease), background var(--ds-dur-base) var(--ds-ease), opacity var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-base) var(--ds-ease);
+    animation: c-file-chips-in var(--ds-dur-base) var(--ds-ease);
+  }
+  @keyframes c-file-chips-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .c-file-chips .chip.is-leaving { opacity: 0; transform: translateX(12px); }
+  .c-file-chips .chip.is-error { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-file-chips .ico {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-panel);
+    color: var(--ds-ink);
+    transition: background var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-file-chips .ico svg { width: 20px; height: 20px; }
+  .c-file-chips .chip.is-done .ico { background: var(--ds-note-fill); }
+  .c-file-chips .chip.is-uploading .ico { background: var(--ds-info-fill); }
+  .c-file-chips .chip.is-error .ico { background: var(--ds-raised); }
+  .c-file-chips .info { display: grid; flex: 1; gap: 2px; min-width: 0; }
+  .c-file-chips .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-file-chips .meta { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-file-chips .chip.is-error .meta { color: var(--ds-text); }
+  .c-file-chips .track { display: none; height: 4px; margin-top: var(--ds-space-1); border-radius: var(--ds-radius-pill); background: var(--ds-panel); overflow: hidden; }
+  .c-file-chips .chip.is-uploading .track { display: block; }
+  .c-file-chips .track i { display: block; width: var(--pct, 0%); height: 100%; border-radius: inherit; background: var(--ds-info-line); transition: width var(--ds-dur-base) linear; }
+  .c-file-chips .retry {
+    flex: none;
+    display: none;
+    height: 32px;
+    padding: 0 var(--ds-space-4);
+    border: var(--ds-stroke) solid var(--ds-danger-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-raised);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .c-file-chips .chip.is-error .retry { display: inline-flex; align-items: center; }
+  .c-file-chips .retry:hover { background: var(--ds-danger-fill); }
+  .c-file-chips .remove {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: var(--ds-radius-pill);
+    background: transparent;
+    color: var(--ds-muted);
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-file-chips .remove:hover { background: var(--ds-panel); color: var(--ds-ink); }
+  .c-file-chips .remove svg { width: 14px; height: 14px; }
+  .c-file-chips .retry:focus-visible,
+  .c-file-chips .remove:focus-visible,
+  .c-file-chips .reset:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-file-chips .reset {
+    justify-self: start;
+    padding: var(--ds-space-2) var(--ds-space-3);
+    border: 0;
+    border-radius: var(--ds-radius-pill);
+    background: transparent;
+    color: var(--ds-ink);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .c-file-chips .reset[hidden] { display: none; }
+  .c-file-chips .live { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+</style>
+
+<div class="c-file-chips">
+  <ul class="list" aria-label="Attachments"></ul>
+  <button class="reset" type="button" hidden>Restore sample files</button>
+  <p class="live" role="status" aria-live="polite"></p>
+</div>
+
+<script>
+(() => {
+  const FILE = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h5.5L16 7v9.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1z"/><path d="M11.5 2.5V7H16"/></svg>';
+  const CLOSE = '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8"/></svg>';
+  const SAMPLE = [
+    { name: 'report.pdf', size: 2.4, state: 'done', pct: 100 },
+    { name: 'forecast.xlsx', size: 1.9, state: 'uploading', pct: 34 },
+    { name: 'contract-draft.docx', size: 0.8, state: 'error', pct: 0 },
+  ];
+  const meta = (f) => ({
+    done: f.size.toFixed(1) + ' MB, uploaded',
+    uploading: Math.round(f.pct) + '%, ' + (f.size * f.pct / 100).toFixed(1) + ' of ' + f.size.toFixed(1) + ' MB',
+    error: 'Upload failed. Check your connection.',
+  }[f.state]);
+
+  document.querySelectorAll('.c-file-chips').forEach((root) => {
+    const list = root.querySelector('.list');
+    const reset = root.querySelector('.reset');
+    const live = root.querySelector('.live');
+    let timers = [];
+
+    const paint = (li, f) => {
+      li.className = 'chip is-' + f.state;
+      li.querySelector('.meta').textContent = meta(f);
+      const bar = li.querySelector('.track');
+      bar.style.setProperty('--pct', f.pct + '%');
+      bar.setAttribute('aria-valuenow', String(Math.round(f.pct)));
+    };
+
+    const tick = (li, f) => {
+      const t = setInterval(() => {
+        if (!li.isConnected || f.state !== 'uploading') { clearInterval(t); return; }
+        f.pct = Math.min(100, f.pct + 4 + Math.random() * 5);
+        if (f.pct >= 100) {
+          f.pct = 100; f.state = 'done'; clearInterval(t);
+          live.textContent = f.name + ' uploaded.';
+        }
+        paint(li, f);
+      }, 420);
+      timers.push(t);
+    };
+
+    const add = (f) => {
+      const li = document.createElement('li');
+      li.innerHTML =
+        '<span class="ico">' + FILE + '</span>' +
+        '<span class="info"><span class="name"></span><span class="meta"></span>' +
+        '<span class="track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i></i></span></span>' +
+        '<button class="retry" type="button">Retry</button>' +
+        '<button class="remove" type="button">' + CLOSE + '</button>';
+      li.querySelector('.name').textContent = f.name;
+      li.querySelector('.name').title = f.name;
+      li.querySelector('.track').setAttribute('aria-label', 'Uploading ' + f.name);
+      li.querySelector('.retry').setAttribute('aria-label', 'Retry uploading ' + f.name);
+      li.querySelector('.remove').setAttribute('aria-label', 'Remove ' + f.name);
+      paint(li, f);
+      list.appendChild(li);
+      if (f.state === 'uploading') tick(li, f);
+
+      li.querySelector('.retry').addEventListener('click', () => {
+        f.state = 'uploading'; f.pct = 0; paint(li, f); tick(li, f);
+        live.textContent = 'Retrying ' + f.name + '.';
+      });
+      li.querySelector('.remove').addEventListener('click', () => {
+        f.state = 'removed';
+        li.classList.add('is-leaving');
+        live.textContent = f.name + ' removed.';
+        setTimeout(() => {
+          li.remove();
+          reset.hidden = list.children.length > 0;
+          if (!list.children.length) reset.focus();
+        }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260);
+      });
+    };
+
+    const load = () => {
+      timers.forEach(clearInterval); timers = [];
+      list.innerHTML = '';
+      SAMPLE.forEach((f) => add({ ...f }));
+      reset.hidden = true;
+    };
+    reset.addEventListener('click', load);
+    load();
+  });
+})();
+</script>

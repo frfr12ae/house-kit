@@ -1,0 +1,88 @@
+<!--
+@title Agenda slide
+@description Numbered agenda of five items with the current item marked in the highlight colours and a duration on each row.
+@tags slide, agenda, outline, contents, meeting
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-agenda-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-agenda-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 26cqi minmax(0, 1fr);
+    column-gap: 8cqi;
+    align-items: center;
+    padding: 6cqi 7cqi;
+  }
+  .c-agenda-slide .head { display: grid; gap: 1.4cqi; align-self: start; padding-top: 3cqi; }
+  .c-agenda-slide .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-agenda-slide h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 5cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.05;
+    color: var(--ds-ink);
+  }
+  .c-agenda-slide .sub { margin: 0; font-size: 1.8cqi; line-height: 1.45; }
+  .c-agenda-slide ol { display: grid; margin: 0; padding: 0; list-style: none; }
+  .c-agenda-slide li {
+    display: grid;
+    grid-template-columns: 6cqi minmax(0, 1fr) auto;
+    align-items: center;
+    padding: 2.1cqi 2cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    border-left: var(--ds-stroke) solid transparent;
+    border-right: var(--ds-stroke) solid transparent;
+    font-size: 2.3cqi;
+    line-height: 1.2;
+  }
+  .c-agenda-slide li:last-child { border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-agenda-slide .n {
+    font-size: 1.7cqi;
+    font-weight: 700;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-agenda-slide .t { font-weight: 600; color: var(--ds-text); }
+  .c-agenda-slide .d { font-size: 1.6cqi; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-agenda-slide li.is-current {
+    background: var(--ds-highlight-fill);
+    border-color: var(--ds-highlight-line);
+    border-bottom: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-radius: calc(0.9cqi * var(--ds-radius-scale, 1));
+  }
+  .c-agenda-slide li.is-current + li { border-top-color: transparent; }
+  .c-agenda-slide li.is-current .n,
+  .c-agenda-slide li.is-current .d { color: var(--ds-text); }
+  .c-agenda-slide li.is-current .t { color: var(--ds-ink); font-weight: 800; }
+</style>
+
+<section class="c-agenda-slide">
+  <div class="inner">
+    <div class="head">
+      <div class="eyebrow">Today, 60 minutes</div>
+      <h2>Agenda</h2>
+      <p class="sub">We are at item 3.</p>
+    </div>
+    <ol>
+      <li><span class="n">01</span><span class="t">Where we are today</span><span class="d">10 min</span></li>
+      <li><span class="n">02</span><span class="t">What customers told us</span><span class="d">10 min</span></li>
+      <li class="is-current" aria-current="step"><span class="n">03</span><span class="t">Three growth options</span><span class="d">20 min</span></li>
+      <li><span class="n">04</span><span class="t">Economics and risks</span><span class="d">10 min</span></li>
+      <li><span class="n">05</span><span class="t">Decision and next steps</span><span class="d">10 min</span></li>
+    </ol>
+  </div>
+</section>

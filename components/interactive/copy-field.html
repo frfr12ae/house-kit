@@ -1,0 +1,121 @@
+<!--
+@title Copy field
+@description Read-only input with a copy button that confirms with a Copied state. Uses navigator.clipboard and falls back to a selection and execCommand where it is unavailable.
+@tags copy, clipboard, input, link, api key, share
+@preview center
+@height 240
+@added 2026-10-31
+-->
+<style>
+  .c-copy-field {
+    display: grid;
+    gap: var(--ds-space-2);
+    width: min(480px, 100%);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-copy-field .label { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-copy-field .field {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    padding: var(--ds-space-1) var(--ds-space-1) var(--ds-space-1) var(--ds-space-4);
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    transition: border-color var(--ds-dur-fast) var(--ds-ease), box-shadow var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-copy-field .field:focus-within { border-color: var(--ds-info-line); box-shadow: var(--ds-focus); }
+  .c-copy-field .input {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ds-ink);
+    font-family: var(--ds-font-mono);
+    font-size: var(--ds-text-sm);
+    text-overflow: ellipsis;
+    outline: none;
+  }
+  .c-copy-field .input:focus-visible { box-shadow: none; }
+  .c-copy-field .copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ds-space-2);
+    flex: none;
+    min-width: 104px;
+    height: 40px;
+    padding: 0 var(--ds-space-4);
+    border: var(--ds-stroke) solid transparent;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--ds-dur-base) var(--ds-ease), color var(--ds-dur-base) var(--ds-ease), border-color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-copy-field .copy:hover { background: color-mix(in srgb, var(--ds-action) 86%, var(--ds-on-action)); }
+  .c-copy-field .copy:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-copy-field .copy svg { width: 16px; height: 16px; }
+  .c-copy-field .copy .done { display: none; }
+  .c-copy-field .copy.is-copied { background: var(--ds-note-fill); border-color: var(--ds-note-line); color: var(--ds-ink); }
+  .c-copy-field .copy.is-copied .idle { display: none; }
+  .c-copy-field .copy.is-copied .done { display: inline-flex; align-items: center; gap: var(--ds-space-2); animation: c-copy-field-pop var(--ds-dur-base) var(--ds-ease-spring); }
+  @keyframes c-copy-field-pop { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: none; } }
+  .c-copy-field .copy .idle { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-copy-field .help { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+</style>
+
+<div class="c-copy-field">
+  <label class="label" for="c-copy-field-input">Invite link</label>
+  <div class="field">
+    <input class="input" id="c-copy-field-input" type="text" readonly value="https://app.stackwell.example/invite/k7x2-91fm-q4tz">
+    <button class="copy" type="button" aria-label="Copy invite link">
+      <span class="idle"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4A1.5 1.5 0 0 0 9 2.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg>Copy</span>
+      <span class="done"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Copied</span>
+    </button>
+  </div>
+  <p class="help" role="status" aria-live="polite">Anyone with this link can join as a reviewer for 7 days.</p>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-copy-field').forEach((root, n) => {
+    const input = root.querySelector('.input');
+    const label = root.querySelector('.label');
+    const btn = root.querySelector('.copy');
+    const help = root.querySelector('.help');
+    const original = help.textContent;
+    input.id = `c-copy-field-input-${n}`;
+    label.setAttribute('for', input.id);
+    let timer;
+
+    const fallback = (text) => {
+      input.focus();
+      input.select();
+      input.setSelectionRange(0, text.length);
+      try { return document.execCommand('copy'); } catch (e) { return false; }
+    };
+    const copy = async (text) => {
+      if (navigator.clipboard && window.isSecureContext) {
+        try { await navigator.clipboard.writeText(text); return true; } catch (e) { /* fall through */ }
+      }
+      return fallback(text);
+    };
+
+    btn.addEventListener('click', async () => {
+      const ok = await copy(input.value);
+      clearTimeout(timer);
+      btn.classList.toggle('is-copied', ok);
+      help.textContent = ok ? 'Link copied to your clipboard.' : 'Press Ctrl or Cmd C to copy the selected link.';
+      timer = setTimeout(() => { btn.classList.remove('is-copied'); help.textContent = original; }, 2000);
+    });
+    // selecting the whole value on focus makes manual copying one keystroke
+    input.addEventListener('focus', () => input.select());
+  });
+})();
+</script>

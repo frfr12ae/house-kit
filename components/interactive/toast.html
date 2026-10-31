@@ -1,0 +1,167 @@
+<!--
+@title Toasts
+@description Success, info and error toasts that stack in the bottom corner, dismiss themselves after a few seconds with a progress line, pause on hover, and announce through an aria-live region.
+@tags toast, notification, snackbar, alert, live region
+@preview center
+@height 360
+@added 2026-10-31
+-->
+<style>
+  .c-toast {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--ds-space-3);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-toast .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    height: 40px;
+    padding: 0 var(--ds-space-5);
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: transparent;
+    color: var(--ds-ink);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-toast .btn:hover { border-color: var(--ds-muted); background: var(--ds-surface); }
+  .c-toast .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-toast .dot { width: 8px; height: 8px; border-radius: var(--ds-radius-pill); background: var(--c, var(--ds-muted)); }
+
+  .c-toast .stack {
+    position: fixed;
+    right: var(--ds-space-5);
+    bottom: var(--ds-space-5);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-space-3);
+    width: min(360px, calc(100vw - 32px));
+    pointer-events: none;
+  }
+  .c-toast .item {
+    --c: var(--ds-neutral-line);
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-4);
+    border: var(--ds-hairline) solid var(--c);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-raised);
+    box-shadow: var(--ds-shadow-lg);
+    overflow: hidden;
+    pointer-events: auto;
+    animation: c-toast-in var(--ds-dur-base) var(--ds-ease-spring);
+    transition: opacity var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-toast .item.is-success { --c: var(--ds-note-line); --f: var(--ds-note-fill); }
+  .c-toast .item.is-info { --c: var(--ds-info-line); --f: var(--ds-info-fill); }
+  .c-toast .item.is-error { --c: var(--ds-danger-line); --f: var(--ds-danger-fill); }
+  .c-toast .item.is-leaving { opacity: 0; transform: translateX(24px); }
+  @keyframes c-toast-in { from { opacity: 0; transform: translateX(32px) scale(0.97); } to { opacity: 1; transform: none; } }
+  .c-toast .icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--ds-radius-pill); background: var(--f); border: var(--ds-hairline) solid var(--c); color: var(--ds-ink); }
+  .c-toast .icon svg { width: 14px; height: 14px; }
+  .c-toast .msg { display: grid; gap: 2px; min-width: 0; padding-top: 2px; }
+  .c-toast .msg b { font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); }
+  .c-toast .msg span { font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); color: var(--ds-text); }
+  .c-toast .close {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin: -4px -4px 0 0;
+    border: 0;
+    border-radius: var(--ds-radius-pill);
+    background: transparent;
+    color: var(--ds-muted);
+    cursor: pointer;
+  }
+  .c-toast .close:hover { background: var(--ds-panel); color: var(--ds-ink); }
+  .c-toast .close:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-toast .close svg { width: 12px; height: 12px; }
+  .c-toast .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: color-mix(in srgb, var(--c) 22%, transparent); }
+  .c-toast .bar i {
+    display: block;
+    height: 100%;
+    background: var(--c);
+    transform-origin: left center;
+    animation: c-toast-life var(--life, 5000ms) linear forwards;
+  }
+  .c-toast .item:hover .bar i, .c-toast .item:focus-within .bar i { animation-play-state: paused; }
+  @keyframes c-toast-life { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+  @media (prefers-reduced-motion: reduce) {
+    .c-toast .bar i { animation: none; }
+  }
+  @media (max-width: 440px) {
+    .c-toast .stack { right: var(--ds-space-4); bottom: var(--ds-space-4); }
+  }
+</style>
+
+<div class="c-toast">
+  <button class="btn" type="button" data-kind="success"><span class="dot" style="--c: var(--ds-note-line)"></span>Success</button>
+  <button class="btn" type="button" data-kind="info"><span class="dot" style="--c: var(--ds-info-line)"></span>Info</button>
+  <button class="btn" type="button" data-kind="error"><span class="dot" style="--c: var(--ds-danger-line)"></span>Error</button>
+  <div class="stack" role="region" aria-label="Notifications" aria-live="polite" aria-relevant="additions"></div>
+</div>
+
+<script>
+(() => {
+  const LIFE = 5000;
+  const MAX = 4;
+  const COPY = {
+    success: { title: 'Reconciliation saved', text: '218 transactions matched. 12 need your review.', icon: '<path d="M3 8.5l3 3 7-7.5"/>' },
+    info: { title: 'Sync started', text: 'Pulling the latest bank lines. This takes about a minute.', icon: '<path d="M8 7v5M8 4v.01"/>' },
+    error: { title: 'Could not reach the ledger', text: 'The connection timed out. Check your credentials and retry.', icon: '<path d="M8 4v5M8 12v.01"/>' },
+  };
+
+  document.querySelectorAll('.c-toast').forEach((root) => {
+    const stack = root.querySelector('.stack');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+    const remove = (el) => {
+      if (!el.isConnected || el.classList.contains('is-leaving')) return;
+      el.classList.add('is-leaving');
+      setTimeout(() => el.remove(), reduced.matches ? 0 : 260);
+    };
+
+    const show = (kind) => {
+      const c = COPY[kind];
+      const el = document.createElement('div');
+      el.className = 'item is-' + kind;
+      if (kind === 'error') el.setAttribute('role', 'alert');
+      el.style.setProperty('--life', LIFE + 'ms');
+      el.innerHTML =
+        '<span class="icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + c.icon + '</svg></span>' +
+        '<div class="msg"><b></b><span></span></div>' +
+        '<button class="close" type="button" aria-label="Dismiss"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>' +
+        '<div class="bar" aria-hidden="true"><i></i></div>';
+      el.querySelector('b').textContent = c.title;
+      el.querySelector('.msg span').textContent = c.text;
+
+      // auto dismiss with pause on hover or focus
+      let left = LIFE, started = performance.now(), timer;
+      const arm = () => { started = performance.now(); timer = setTimeout(() => remove(el), left); };
+      const pause = () => { clearTimeout(timer); left -= performance.now() - started; };
+      el.addEventListener('mouseenter', pause);
+      el.addEventListener('mouseleave', arm);
+      el.addEventListener('focusin', pause);
+      el.addEventListener('focusout', arm);
+      el.querySelector('.close').addEventListener('click', () => { clearTimeout(timer); remove(el); });
+
+      stack.appendChild(el);
+      while (stack.children.length > MAX) stack.firstElementChild.remove();
+      arm();
+    };
+
+    root.querySelectorAll('.btn').forEach((b) => b.addEventListener('click', () => show(b.dataset.kind)));
+  });
+})();
+</script>

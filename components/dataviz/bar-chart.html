@@ -1,0 +1,109 @@
+<!--
+@title Bar chart
+@description Horizontal bars with labels and values, one highlighted bar, and bars that grow in when the chart scrolls into view. Edit the DATA array at the top of the script.
+@tags chart, bar, horizontal, ranking, comparison, svg
+@preview fill
+@height 440
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-bar-chart {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-bar-chart .head { display: grid; gap: var(--ds-space-1); margin-bottom: var(--ds-space-6); }
+  .c-bar-chart h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-bar-chart .hint { margin: 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-bar-chart .plot { width: 100%; }
+  .c-bar-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .c-bar-chart text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-bar-chart .axis { stroke: var(--ds-line); stroke-width: 1; }
+  .c-bar-chart .label.is-hot,
+  .c-bar-chart .value.is-hot { fill: var(--ds-ink); font-weight: 700; }
+  .c-bar-chart .value { font-variant-numeric: tabular-nums; font-weight: 600; fill: var(--ds-text); }
+  .c-bar-chart .bar {
+    fill: color-mix(in srgb, var(--ds-series-4) 42%, transparent);
+    transform-box: fill-box;
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform var(--ds-dur-slow) var(--ds-ease);
+  }
+  .c-bar-chart .bar.is-hot { fill: var(--ds-series-1); }
+  .c-bar-chart .value { opacity: 0; transition: opacity var(--ds-dur-slow) var(--ds-ease); }
+  .c-bar-chart.is-in .bar { transform: scaleX(1); }
+  .c-bar-chart.is-in .value { opacity: 1; }
+  @media (max-width: 560px) {
+    .c-bar-chart { padding: var(--ds-space-6) var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-bar-chart">
+  <figcaption class="head">
+    <h3>Pipeline created by source, Q3 2026</h3>
+    <p class="hint">Thousands of euros. Expansion from existing customers is the largest source.</p>
+  </figcaption>
+  <div class="plot"></div>
+</figure>
+
+<script>
+(() => {
+  // Replace these rows with your own data. HIGHLIGHT is the label of the bar to emphasise.
+  const DATA = [
+    { label: 'Customer expansion', value: 529 },
+    { label: 'Partner referrals', value: 412 },
+    { label: 'Inbound web', value: 368 },
+    { label: 'Outbound', value: 301 },
+    { label: 'Events', value: 187 },
+    { label: 'Other', value: 96 },
+  ];
+  const HIGHLIGHT = 'Customer expansion';
+  const format = (v) => '€' + v.toLocaleString('en-GB') + 'k';
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  document.querySelectorAll('.c-bar-chart').forEach((root) => {
+    const plot = root.querySelector('.plot');
+    const max = Math.max(...DATA.map((d) => d.value));
+
+    function render() {
+      const W = Math.max(260, Math.round(plot.clientWidth));
+      const narrow = W < 460;
+      const labelW = narrow ? 0 : Math.min(220, Math.round(W * 0.3));
+      const x0 = narrow ? 0 : labelW + 16;
+      const valueW = 72;
+      const span = W - x0 - valueW;
+      const rowH = narrow ? 56 : 48;
+      const barH = narrow ? 14 : 22;
+      const H = DATA.length * rowH;
+      let out = '<line class="axis" x1="' + x0 + '" x2="' + x0 + '" y1="0" y2="' + H + '"/>';
+      DATA.forEach((d, i) => {
+        const hot = d.label === HIGHLIGHT ? ' is-hot' : '';
+        const y = i * rowH;
+        const w = Math.max(2, (d.value / max) * span);
+        const by = narrow ? y + 28 : y + (rowH - barH) / 2;
+        const ty = narrow ? y + 12 : y + rowH / 2;
+        const delay = reduced ? 0 : i * 80;
+        out += '<text class="label' + hot + '" x="0" y="' + ty + '" dominant-baseline="central">' + esc(d.label) + '</text>';
+        out += '<rect class="bar' + hot + '" x="' + x0 + '" y="' + by + '" width="' + w + '" height="' + barH + '" rx="4" style="transition-delay:' + delay + 'ms"/>';
+        out += '<text class="value' + hot + '" x="' + (x0 + w + 10) + '" y="' + (by + barH / 2) + '" dominant-baseline="central" style="transition-delay:' + (delay + 200) + 'ms">' + format(d.value) + '</text>';
+      });
+      const summary = DATA.map((d) => d.label + ' ' + format(d.value)).join(', ');
+      plot.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Bar chart. ' + esc(summary) + '">' + out + '</svg>';
+    }
+
+    render();
+    new ResizeObserver(render).observe(plot);
+
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in'))); }
+    }, { threshold: 0.3 });
+    io.observe(root);
+  });
+})();
+</script>

@@ -6,6 +6,7 @@
 //   node scripts/build.mjs           write registry.js and CREDITS.md
 //   node scripts/build.mjs --check   lint, and fail if the generated files are stale (CI)
 //   node scripts/build.mjs --lint    lint only, write nothing
+//   node scripts/build.mjs --lint --registry-out <file>   lint and write the registry to <file> only
 
 import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
@@ -76,8 +77,10 @@ function lintCssScope(css, root, file) {
 }
 
 function lintText(text, file) {
-  if (/[–—]/.test(text)) fail(file, 'contains an en or em dash; use a comma, colon or full stop');
+  if (/[\u2013\u2014]/.test(text)) fail(file, 'contains an en or em dash; use a comma, colon or full stop');
 }
+
+const declared = [...new Set([read('design-system/tokens.css'), read('design-system/themes/house.css')].join('\n').match(/--ds-[a-z0-9-]+(?=\s*:)/g))];
 
 const components = [];
 for (const cat of readdirSync(join(ROOT, 'components')).sort()) {
@@ -107,7 +110,9 @@ for (const cat of readdirSync(join(ROOT, 'components')).sort()) {
     if (parts.css) lintCssScope(parts.css, root, file);
     if (parts.js && !/^\(\s*(\(\)\s*=>|function)/.test(parts.js)) warn(file, 'wrap the script in an IIFE so it leaves no globals');
     if (/#[0-9a-fA-F]{3,8}\b|rgba?\(/.test(parts.css.replace(/\/\*[\s\S]*?\*\//g, ''))) warn(file, 'hardcoded colour in CSS; use a --ds-* token');
-    const tokens = [...new Set((parts.css + parts.html + parts.js).match(/--ds-[a-z0-9-]+/g) || [])].sort();
+    // A name ending in "-" is built at runtime ('--ds-series-' + i): expand it to every token with that prefix.
+    const tokens = [...new Set(((parts.css + parts.html + parts.js).match(/--ds-[a-z0-9-]+/g) || [])
+      .flatMap((t) => (t.endsWith('-') ? declared.filter((d) => d.startsWith(t)) : [t])))].sort();
     components.push({
       id: `${cat}/${slug}`,
       slug,
@@ -182,6 +187,8 @@ if (mode === 'check') {
   if (stale.length) { console.error(`stale: ${stale.join(', ')}. Run: node scripts/build.mjs`); process.exit(1); }
   console.log(`ok: ${components.length} components, generated files are current`);
 } else if (mode === 'lint') {
+  const i = process.argv.indexOf('--registry-out');
+  if (i > 0) writeFileSync(process.argv[i + 1], registryJs);
   console.log(`ok: ${components.length} components lint clean`);
 } else {
   for (const [p, c] of Object.entries(outputs)) writeFileSync(join(ROOT, p), c);

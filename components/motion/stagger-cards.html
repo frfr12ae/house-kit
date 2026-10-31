@@ -1,0 +1,78 @@
+<!--
+@title Stagger cards
+@description A grid of six cards that enter one after another with a fade, rise and slight scale. Starts when scrolled into view.
+@tags cards, grid, stagger, entrance, fade, services
+@preview fill
+@height 440
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-stagger-cards,
+  .c-stagger-cards *,
+  .c-stagger-cards *::before,
+  .c-stagger-cards *::after { box-sizing: border-box; }
+  .c-stagger-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--ds-space-4);
+    max-width: 960px;
+    margin-inline: auto;
+    padding: var(--ds-space-7);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-stagger-cards .card {
+    display: grid;
+    align-content: start;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-5);
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+  }
+  .c-stagger-cards .num { font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-stagger-cards .title { margin: 0; font-size: var(--ds-text-lg); font-weight: 700; line-height: var(--ds-leading-snug); color: var(--ds-ink); }
+  .c-stagger-cards .text { margin: 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); }
+  @media (max-width: 760px) {
+    .c-stagger-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--ds-space-5); }
+  }
+  @media (max-width: 480px) {
+    .c-stagger-cards { grid-template-columns: 1fr; }
+  }
+
+  /* the hidden state carries no transition, so arming never animates; only the move to .is-in does */
+  .c-stagger-cards.is-armed .card { opacity: 0; transform: translateY(20px) scale(0.96); }
+  .c-stagger-cards.is-armed.is-in .card {
+    opacity: 1;
+    transform: none;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+    transition-delay: calc(var(--i) * 90ms);
+  }
+</style>
+
+<div class="c-stagger-cards">
+  <article class="card" style="--i: 0"><span class="num">01</span><h3 class="title">Discovery</h3><p class="text">Interviews and a data review to find the real constraint.</p></article>
+  <article class="card" style="--i: 1"><span class="num">02</span><h3 class="title">Positioning</h3><p class="text">One sentence the whole team can repeat without notes.</p></article>
+  <article class="card" style="--i: 2"><span class="num">03</span><h3 class="title">Design system</h3><p class="text">Tokens and components that make the next page fast.</p></article>
+  <article class="card" style="--i: 3"><span class="num">04</span><h3 class="title">Build</h3><p class="text">Thin slices shipped weekly, each one testable on its own.</p></article>
+  <article class="card" style="--i: 4"><span class="num">05</span><h3 class="title">Launch</h3><p class="text">Tracking, redirects and a rollback plan before go-live.</p></article>
+  <article class="card" style="--i: 5"><span class="num">06</span><h3 class="title">Handover</h3><p class="text">Documentation and a recorded walkthrough for your team.</p></article>
+</div>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-stagger-cards').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.3 });
+    io.observe(root);
+  });
+})();
+</script>

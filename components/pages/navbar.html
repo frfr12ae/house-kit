@@ -1,0 +1,194 @@
+<!--
+@title Navbar
+@description Top navigation with a wordmark, links and a call to action. Below 760px it collapses to a menu button that opens an accessible disclosure panel.
+@tags navigation, header, menu, responsive, disclosure
+@preview fill
+@height 120
+@added 2026-10-31
+-->
+<style>
+  .c-navbar {
+    position: relative;
+    background: var(--ds-surface);
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-navbar .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-6);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--ds-space-4) var(--ds-space-6);
+  }
+  .c-navbar .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    flex: none;
+    border-radius: var(--ds-radius-sm);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-lg);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .c-navbar .mark { width: 28px; height: 28px; color: var(--ds-ink); }
+  .c-navbar .panel { flex: 1; min-width: 0; }
+  .c-navbar .panel-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-5);
+  }
+  .c-navbar .links { display: flex; align-items: center; gap: var(--ds-space-1); margin: 0; padding: 0; list-style: none; }
+  .c-navbar .link {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 var(--ds-space-3);
+    border-radius: var(--ds-radius-pill);
+    color: var(--ds-text);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-navbar .link:hover { background: var(--ds-panel); color: var(--ds-ink); }
+  .c-navbar .link[aria-current="page"] { color: var(--ds-ink); background: var(--ds-panel); }
+  .c-navbar .actions { display: flex; align-items: center; gap: var(--ds-space-2); }
+  .c-navbar .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 var(--ds-space-5);
+    border: var(--ds-stroke) solid transparent;
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-navbar .btn--filled { background: var(--ds-action); color: var(--ds-on-action); }
+  .c-navbar .btn--filled:hover { background: color-mix(in srgb, var(--ds-action) 86%, var(--ds-on-action)); }
+  .c-navbar .btn--text { background: transparent; color: var(--ds-ink); padding: 0 var(--ds-space-3); }
+  .c-navbar .btn--text:hover { background: var(--ds-panel); }
+  .c-navbar .brand:focus-visible,
+  .c-navbar .link:focus-visible,
+  .c-navbar .btn:focus-visible,
+  .c-navbar .toggle:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+
+  .c-navbar .toggle {
+    display: none;
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: transparent;
+    color: var(--ds-ink);
+    cursor: pointer;
+  }
+  .c-navbar .toggle svg { width: 20px; height: 20px; }
+  .c-navbar .toggle .line { transform-origin: 12px 12px; transition: transform var(--ds-dur-base) var(--ds-ease), opacity var(--ds-dur-fast) var(--ds-ease); }
+  .c-navbar .toggle[aria-expanded="true"] .l1 { transform: translateY(5px) rotate(45deg); }
+  .c-navbar .toggle[aria-expanded="true"] .l2 { opacity: 0; }
+  .c-navbar .toggle[aria-expanded="true"] .l3 { transform: translateY(-5px) rotate(-45deg); }
+
+  @media (max-width: 760px) {
+    .c-navbar .bar { flex-wrap: wrap; gap: 0; padding: var(--ds-space-3) var(--ds-space-4); }
+    .c-navbar .toggle { display: inline-flex; }
+    .c-navbar .panel {
+      flex: 1 0 100%;
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--ds-dur-base) var(--ds-ease);
+    }
+    .c-navbar .panel.is-open { grid-template-rows: 1fr; }
+    .c-navbar .panel-inner {
+      min-height: 0;
+      overflow: hidden;
+      visibility: hidden;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--ds-space-4);
+      transition: visibility 0s linear var(--ds-dur-base);
+    }
+    .c-navbar .panel.is-open .panel-inner { visibility: visible; transition-delay: 0s; }
+    .c-navbar .links { flex-direction: column; align-items: stretch; gap: 0; padding-top: var(--ds-space-3); }
+    .c-navbar .link { height: 48px; padding: 0 var(--ds-space-3); border-radius: var(--ds-radius-md); font-size: var(--ds-text-md); }
+    .c-navbar .actions { flex-direction: column; align-items: stretch; padding-bottom: var(--ds-space-3); border-top: var(--ds-hairline) solid var(--ds-line); padding-top: var(--ds-space-4); }
+    .c-navbar .btn { height: 48px; }
+  }
+</style>
+
+<header class="c-navbar">
+  <div class="bar">
+    <a class="brand" href="#">
+      <svg class="mark" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="3" width="22" height="22" rx="6"/><path d="M9 17l4-4 3 3 4-5"/>
+      </svg>
+      Stackwell
+    </a>
+    <button class="toggle" type="button" aria-expanded="false" aria-controls="c-navbar-panel" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path class="line l1" d="M4 7h16"/><path class="line l2" d="M4 12h16"/><path class="line l3" d="M4 17h16"/>
+      </svg>
+    </button>
+    <div class="panel" id="c-navbar-panel">
+      <div class="panel-inner">
+        <nav aria-label="Primary">
+          <ul class="links">
+            <li><a class="link" href="#" aria-current="page">Product</a></li>
+            <li><a class="link" href="#">Solutions</a></li>
+            <li><a class="link" href="#">Pricing</a></li>
+            <li><a class="link" href="#">Customers</a></li>
+            <li><a class="link" href="#">Docs</a></li>
+          </ul>
+        </nav>
+        <div class="actions">
+          <a class="btn btn--text" href="#">Sign in</a>
+          <a class="btn btn--filled" href="#">Book a demo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+(() => {
+  const mq = matchMedia('(max-width: 760px)');
+  document.querySelectorAll('.c-navbar').forEach((root, i) => {
+    const toggle = root.querySelector('.toggle');
+    const panel = root.querySelector('.panel');
+    const id = 'c-navbar-panel-' + i;
+    panel.id = id;
+    toggle.setAttribute('aria-controls', id);
+
+    const set = (open, returnFocus) => {
+      panel.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+      if (!open && returnFocus) toggle.focus();
+    };
+    const sync = () => {
+      // On desktop the links are always visible; on mobile they follow the toggle.
+      if (!mq.matches) { panel.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', 'Menu'); }
+    };
+    toggle.addEventListener('click', () => set(toggle.getAttribute('aria-expanded') !== 'true'));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') set(false, true);
+    });
+    panel.addEventListener('click', (e) => { if (e.target.closest('a') && mq.matches) set(false); });
+    mq.addEventListener('change', sync);
+    sync();
+  });
+})();
+</script>

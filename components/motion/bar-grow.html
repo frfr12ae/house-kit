@@ -1,0 +1,133 @@
+<!--
+@title Bar grow
+@description Vertical bar chart whose bars grow from the baseline with a stagger while their value labels count up. Starts when scrolled into view.
+@tags chart, bar, growth, dataviz, count, stagger
+@preview center
+@height 420
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-bar-grow,
+  .c-bar-grow *,
+  .c-bar-grow *::before,
+  .c-bar-grow *::after { box-sizing: border-box; }
+  .c-bar-grow {
+    width: min(640px, 100%);
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-bar-grow .head { display: grid; gap: var(--ds-space-1); margin-bottom: var(--ds-space-6); }
+  .c-bar-grow .title { font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-bar-grow .unit { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-bar-grow .plot {
+    position: relative;
+    height: 240px;
+    border-bottom: var(--ds-stroke) solid var(--ds-neutral-line);
+    background: repeating-linear-gradient(to top, transparent 0, transparent calc(25% - 1px), var(--ds-line) calc(25% - 1px), var(--ds-line) 25%);
+  }
+  .c-bar-grow .cols {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 6), 1fr);
+    gap: clamp(8px, 3vw, var(--ds-space-5));
+    padding-inline: var(--ds-space-2);
+  }
+  .c-bar-grow .col { position: relative; height: 100%; }
+  .c-bar-grow .bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--h);
+    border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0;
+    background: var(--ds-series-1);
+  }
+  .c-bar-grow .col.is-peak .bar { background: var(--ds-highlight-line); }
+  .c-bar-grow .val {
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translateX(-50%);
+    padding-bottom: var(--ds-space-2);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .c-bar-grow .axis {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 6), 1fr);
+    gap: clamp(8px, 3vw, var(--ds-space-5));
+    padding: var(--ds-space-3) var(--ds-space-2) 0;
+    font-size: var(--ds-text-sm);
+    color: var(--ds-muted);
+    text-align: center;
+  }
+
+  /* the hidden state carries no transition, so arming never animates; only the move to .is-in does */
+  .c-bar-grow.is-armed .bar { height: 0; }
+  .c-bar-grow.is-armed .val { opacity: 0; }
+  .c-bar-grow.is-armed.is-in .bar { height: var(--h); transition: height var(--ds-dur-story) var(--ds-ease); transition-delay: calc(var(--i) * 110ms); }
+  .c-bar-grow.is-armed.is-in .val { opacity: 1; transition: opacity var(--ds-dur-base) var(--ds-ease); transition-delay: calc(var(--i) * 110ms + 200ms); }
+</style>
+
+<figure class="c-bar-grow" style="--cols: 6; margin: 0;">
+  <div class="head">
+    <span class="title">Qualified leads per month</span>
+    <span class="unit">Inbound only, first half of the year</span>
+  </div>
+  <div class="plot" role="img" aria-label="Bar chart of qualified leads: January 42, February 58, March 71, April 66, May 94, June 118">
+    <div class="cols">
+      <div class="col" style="--i: 0; --h: 30%"><div class="bar"><span class="val" data-to="42">42</span></div></div>
+      <div class="col" style="--i: 1; --h: 41.4%"><div class="bar"><span class="val" data-to="58">58</span></div></div>
+      <div class="col" style="--i: 2; --h: 50.7%"><div class="bar"><span class="val" data-to="71">71</span></div></div>
+      <div class="col" style="--i: 3; --h: 47.1%"><div class="bar"><span class="val" data-to="66">66</span></div></div>
+      <div class="col" style="--i: 4; --h: 67.1%"><div class="bar"><span class="val" data-to="94">94</span></div></div>
+      <div class="col is-peak" style="--i: 5; --h: 84.3%"><div class="bar"><span class="val" data-to="118">118</span></div></div>
+    </div>
+  </div>
+  <div class="axis" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
+</figure>
+
+<script>
+(() => {
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-bar-grow').forEach((root) => {
+    if (reduced) return;
+    const ms = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
+    const vals = [...root.querySelectorAll('.val')];
+    vals.forEach((el) => { el.textContent = '0'; });
+    root.classList.add('is-armed');
+
+    function run() {
+      root.classList.add('is-in');
+      vals.forEach((el, i) => {
+        const to = parseFloat(el.dataset.to);
+        const delay = i * 110;
+        const start = performance.now() + delay;
+        const tick = (now) => {
+          const t = Math.max(0, Math.min(1, (now - start) / ms));
+          el.textContent = Math.round(to * ease(t)).toLocaleString();
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(run));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

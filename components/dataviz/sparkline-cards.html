@@ -1,0 +1,129 @@
+<!--
+@title Sparkline cards
+@description Three KPI cards, each with a value, a delta chip and a small sparkline of the last twelve weeks. Put the points in data-points; the chip colour says whether the change is good or bad.
+@tags kpi, sparkline, trend, cards, metrics, svg
+@preview fill
+@height 300
+@added 2026-10-31
+-->
+<style>
+  .c-sparkline-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--ds-space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-sparkline-cards .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .c-sparkline-cards .card {
+    display: grid;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+  }
+  .c-sparkline-cards .label { margin: 0; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-muted); }
+  .c-sparkline-cards .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-3); }
+  .c-sparkline-cards .value {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-2xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-sparkline-cards .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px 3px 7px;
+    border: var(--ds-hairline) solid;
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-sparkline-cards .chip svg { width: 9px; height: 9px; fill: currentColor; }
+  .c-sparkline-cards .chip.is-down svg { transform: rotate(180deg); }
+  .c-sparkline-cards .chip.is-good { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-sparkline-cards .chip.is-bad { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-sparkline-cards .spark { margin-top: var(--ds-space-3); }
+  .c-sparkline-cards .spark svg { display: block; width: 100%; height: 64px; overflow: visible; }
+  .c-sparkline-cards .area { fill: color-mix(in srgb, var(--ds-series-1) 14%, transparent); stroke: none; }
+  .c-sparkline-cards .line { fill: none; stroke: var(--ds-series-1); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; }
+  .c-sparkline-cards .end { fill: var(--ds-series-1); stroke: var(--ds-surface); stroke-width: 3; }
+  .c-sparkline-cards .span { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+</style>
+
+<ul class="c-sparkline-cards" aria-label="Key metrics, last twelve weeks">
+  <li class="card">
+    <p class="label">Monthly recurring revenue</p>
+    <div class="row">
+      <p class="value">€412k</p>
+      <span class="chip is-up is-good"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9.5 8.5H.5z"/></svg>8.2%<span class="sr"> up, favourable</span></span>
+    </div>
+    <div class="spark" data-points="352,358,355,364,371,369,380,388,392,401,406,412" data-label="Monthly recurring revenue, up from 352 to 412 thousand euros over twelve weeks"></div>
+    <p class="span">Last 12 weeks</p>
+  </li>
+  <li class="card">
+    <p class="label">Weekly active teams</p>
+    <div class="row">
+      <p class="value">3,240</p>
+      <span class="chip is-up is-good"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9.5 8.5H.5z"/></svg>4.7%<span class="sr"> up, favourable</span></span>
+    </div>
+    <div class="spark" data-points="2980,3010,2960,3040,3075,3050,3120,3105,3170,3190,3215,3240" data-label="Weekly active teams, up from 2,980 to 3,240 over twelve weeks"></div>
+    <p class="span">Last 12 weeks</p>
+  </li>
+  <li class="card">
+    <p class="label">Gross churn</p>
+    <div class="row">
+      <p class="value">2.8%</p>
+      <span class="chip is-up is-bad"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9.5 8.5H.5z"/></svg>0.4 pts<span class="sr"> up, unfavourable</span></span>
+    </div>
+    <div class="spark" data-points="2.3,2.4,2.2,2.4,2.5,2.4,2.6,2.5,2.7,2.6,2.7,2.8" data-label="Gross churn, up from 2.3 to 2.8 percent over twelve weeks"></div>
+    <p class="span">Last 12 weeks</p>
+  </li>
+</ul>
+
+<script>
+(() => {
+  const H = 64;
+  const PAD = 6;
+
+  function draw(host) {
+    const pts = host.dataset.points.split(',').map(Number);
+    const W = Math.max(120, Math.round(host.clientWidth));
+    const lo = Math.min(...pts);
+    const hi = Math.max(...pts);
+    const x = (i) => (W - PAD) * (i / (pts.length - 1));
+    const y = (v) => PAD + (H - PAD * 2) * (1 - (v - lo) / (hi - lo || 1));
+    const line = pts.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join('');
+    const area = line + 'L' + x(pts.length - 1).toFixed(1) + ' ' + H + 'L' + x(0).toFixed(1) + ' ' + H + 'Z';
+    const last = pts.length - 1;
+    host.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + host.dataset.label.replace(/"/g, '&quot;') + '">' +
+      '<path class="area" d="' + area + '"/><path class="line" d="' + line + '"/>' +
+      '<circle class="end" cx="' + x(last).toFixed(1) + '" cy="' + y(pts[last]).toFixed(1) + '" r="5"/></svg>';
+  }
+
+  document.querySelectorAll('.c-sparkline-cards').forEach((root) => {
+    const hosts = [...root.querySelectorAll('.spark')];
+    const run = () => hosts.forEach(draw);
+    run();
+    new ResizeObserver(run).observe(root);
+  });
+})();
+</script>

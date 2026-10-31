@@ -1,0 +1,126 @@
+<!--
+@title Comparison slide
+@description Three options as columns against the same criteria, with the recommended column marked in the highlight colours. Use to land a choice.
+@tags slide, comparison, options, matrix, recommendation, decision
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-comparison-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-comparison-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    row-gap: 2.6cqi;
+    padding: 5.5cqi 7cqi 4.5cqi;
+  }
+  .c-comparison-slide h2 {
+    margin: 0;
+    max-width: 72cqi;
+    font-family: var(--ds-font-display);
+    font-size: 4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.08;
+    color: var(--ds-ink);
+  }
+  .c-comparison-slide .grid {
+    display: grid;
+    grid-template-columns: 17cqi repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto repeat(4, minmax(0, 1fr));
+    align-self: stretch;
+  }
+  .c-comparison-slide .grid > div {
+    display: flex;
+    align-items: center;
+    padding: 0 2.2cqi;
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+    font-size: 2cqi;
+    font-weight: 600;
+    color: var(--ds-ink);
+  }
+  .c-comparison-slide .grid > .crit {
+    padding-left: 0;
+    font-size: 1.6cqi;
+    font-weight: 600;
+    color: var(--ds-muted);
+  }
+  .c-comparison-slide .grid > .head {
+    display: grid;
+    align-content: end;
+    gap: 0.4cqi;
+    padding-top: 1.6cqi;
+    padding-bottom: 1.6cqi;
+    font-size: 2.1cqi;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  .c-comparison-slide .head small { font-size: 1.4cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-comparison-slide .head.is-blank { border-bottom-color: var(--ds-line); }
+
+  .c-comparison-slide .grid > .rec {
+    background: var(--ds-highlight-fill);
+    border-left: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-right: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-bottom-color: color-mix(in srgb, var(--ds-highlight-line) 40%, transparent);
+  }
+  .c-comparison-slide .grid > .rec.head {
+    border-top: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-radius: calc(1cqi * var(--ds-radius-scale, 1)) calc(1cqi * var(--ds-radius-scale, 1)) 0 0;
+  }
+  .c-comparison-slide .grid > .rec.last {
+    border-bottom: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-radius: 0 0 calc(1cqi * var(--ds-radius-scale, 1)) calc(1cqi * var(--ds-radius-scale, 1));
+  }
+  .c-comparison-slide .grid > .last:not(.rec), .c-comparison-slide .grid > .crit.last { border-bottom-color: transparent; }
+  .c-comparison-slide .tag {
+    justify-self: start;
+    padding: 0.35cqi 1cqi;
+    border-radius: 99px;
+    background: var(--ds-highlight-line);
+    font-size: 1.2cqi;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--ds-bg);
+  }
+  .c-comparison-slide .risk { gap: 1cqi; }
+  .c-comparison-slide .risk i { width: 1.2cqi; height: 1.2cqi; border-radius: 50%; background: var(--ds-neutral-line); flex: none; }
+  .c-comparison-slide .risk .low { background: var(--ds-note-line); }
+  .c-comparison-slide .risk .high { background: var(--ds-danger-line); }
+</style>
+
+<section class="c-comparison-slide">
+  <div class="inner">
+    <h2>Option B reaches the market fastest at the lowest risk</h2>
+    <div class="grid">
+      <div class="head is-blank"></div>
+      <div class="head"><small>Option A</small>Build in-house</div>
+      <div class="head rec"><span class="tag">Recommended</span><small>Option B</small>Partner with a reseller</div>
+      <div class="head"><small>Option C</small>Acquire a competitor</div>
+
+      <div class="crit">Time to launch</div>
+      <div>6 months</div><div class="rec">3 months</div><div>9 months</div>
+
+      <div class="crit">Upfront cost</div>
+      <div>EUR 1.2m</div><div class="rec">EUR 0.6m</div><div>EUR 2.1m</div>
+
+      <div class="crit">Year-one revenue</div>
+      <div>EUR 3.4m</div><div class="rec">EUR 2.8m</div><div>EUR 4.1m</div>
+
+      <div class="crit last">Delivery risk</div>
+      <div class="risk last"><i></i>Medium</div>
+      <div class="risk rec last"><i class="low"></i>Low</div>
+      <div class="risk last"><i class="high"></i>High</div>
+    </div>
+  </div>
+</section>

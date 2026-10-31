@@ -1,0 +1,175 @@
+<!--
+@title Dropdown menu
+@description Button that opens a menu of actions with icons, shortcuts, a divider and a destructive item. Arrow, Home, End and type-ahead navigation, Escape and click outside to close.
+@tags dropdown, menu, actions, context, popover, keyboard
+@preview center
+@height 460
+@added 2026-10-31
+-->
+<style>
+  .c-dropdown-menu {
+    position: relative;
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--ds-space-4);
+    min-height: 340px;
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-dropdown-menu .wrap { position: relative; }
+  .c-dropdown-menu .trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    height: 40px;
+    padding: 0 var(--ds-space-4) 0 var(--ds-space-5);
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-dropdown-menu .trigger:hover { border-color: var(--ds-muted); background: var(--ds-raised); }
+  .c-dropdown-menu .trigger[aria-expanded="true"] { border-color: var(--ds-muted); background: var(--ds-raised); }
+  .c-dropdown-menu .trigger:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-dropdown-menu .trigger .chev { width: 14px; height: 14px; color: var(--ds-muted); transition: transform var(--ds-dur-base) var(--ds-ease); }
+  .c-dropdown-menu .trigger[aria-expanded="true"] .chev { transform: rotate(180deg); }
+  .c-dropdown-menu .menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 10;
+    min-width: 240px;
+    margin: 0;
+    padding: var(--ds-space-2);
+    list-style: none;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-raised);
+    box-shadow: var(--ds-shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.98);
+    transform-origin: top left;
+    transition: opacity var(--ds-dur-fast) var(--ds-ease), transform var(--ds-dur-base) var(--ds-ease), visibility 0s linear var(--ds-dur-base);
+  }
+  .c-dropdown-menu .menu.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  .c-dropdown-menu .item {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    width: 100%;
+    padding: var(--ds-space-2) var(--ds-space-3);
+    border: 0;
+    border-radius: var(--ds-radius-md);
+    background: transparent;
+    color: var(--ds-text);
+    font-size: var(--ds-text-sm);
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+  }
+  .c-dropdown-menu .item svg { flex: none; width: 16px; height: 16px; color: var(--ds-muted); }
+  .c-dropdown-menu .item .name { flex: 1; }
+  .c-dropdown-menu .item kbd { color: var(--ds-muted); font-family: var(--ds-font-sans); font-size: var(--ds-text-xs); }
+  .c-dropdown-menu .item:hover,
+  .c-dropdown-menu .item:focus-visible { outline: none; background: var(--ds-panel); color: var(--ds-ink); }
+  .c-dropdown-menu .item:hover svg,
+  .c-dropdown-menu .item:focus-visible svg { color: var(--ds-ink); }
+  .c-dropdown-menu .item:focus-visible { box-shadow: inset 0 0 0 var(--ds-stroke) color-mix(in srgb, var(--ds-info-line) 55%, transparent); }
+  .c-dropdown-menu .item--danger,
+  .c-dropdown-menu .item--danger svg { color: var(--ds-danger-line); }
+  .c-dropdown-menu .item--danger:hover,
+  .c-dropdown-menu .item--danger:focus-visible { background: var(--ds-danger-fill); color: var(--ds-danger-line); }
+  .c-dropdown-menu .item--danger:hover svg,
+  .c-dropdown-menu .item--danger:focus-visible svg { color: var(--ds-danger-line); }
+  .c-dropdown-menu .sep { height: 1px; margin: var(--ds-space-2) calc(var(--ds-space-2) * -1); background: var(--ds-line); }
+  .c-dropdown-menu .status { min-height: 1.5em; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-dropdown-menu .status b { color: var(--ds-ink); font-weight: 600; }
+</style>
+
+<div class="c-dropdown-menu">
+  <div class="wrap">
+    <button class="trigger" type="button" id="c-dropdown-menu-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="c-dropdown-menu-list">
+      March close
+      <svg class="chev" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l4 4 4-4"/></svg>
+    </button>
+    <ul class="menu" id="c-dropdown-menu-list" role="menu" aria-labelledby="c-dropdown-menu-trigger">
+      <li role="none"><button class="item" type="button" role="menuitem" tabindex="-1"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 2.5l3 3L6 13H3v-3z"/></svg><span class="name">Rename</span><kbd>R</kbd></button></li>
+      <li role="none"><button class="item" type="button" role="menuitem" tabindex="-1"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4A1.5 1.5 0 0 0 9 2.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span class="name">Duplicate</span><kbd>D</kbd></button></li>
+      <li role="none"><button class="item" type="button" role="menuitem" tabindex="-1"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5a1 1 0 0 1 1-1H6l1.5 1.5h5a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1z"/></svg><span class="name">Move to folder</span></button></li>
+      <li role="none"><button class="item" type="button" role="menuitem" tabindex="-1"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2.5M5 5.5l3-3 3 3M3 9.5v3a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-3"/></svg><span class="name">Share</span><kbd>S</kbd></button></li>
+      <li role="separator" class="sep"></li>
+      <li role="none"><button class="item item--danger" type="button" role="menuitem" tabindex="-1"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.5 8a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1l.5-8"/></svg><span class="name">Delete close</span></button></li>
+    </ul>
+  </div>
+  <p class="status" role="status" aria-live="polite"></p>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-dropdown-menu').forEach((root, n) => {
+    const trigger = root.querySelector('.trigger');
+    const menu = root.querySelector('.menu');
+    const items = [...menu.querySelectorAll('[role="menuitem"]')];
+    const status = root.querySelector('.status');
+    menu.id = `c-dropdown-menu-list-${n}`;
+    trigger.id = `c-dropdown-menu-trigger-${n}`;
+    trigger.setAttribute('aria-controls', menu.id);
+    menu.setAttribute('aria-labelledby', trigger.id);
+
+    const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+    const open = (focusIndex) => {
+      menu.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+      const i = focusIndex < 0 ? items.length + focusIndex : focusIndex;
+      items[i].focus({ preventScroll: true });
+    };
+    const close = (restore) => {
+      menu.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+      if (restore) trigger.focus();
+    };
+    const move = (delta) => {
+      const i = items.indexOf(document.activeElement);
+      items[(i + delta + items.length) % items.length].focus();
+    };
+
+    trigger.addEventListener('click', () => (isOpen() ? close() : open(0)));
+    trigger.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); open(0); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); open(-1); }
+    });
+
+    let buffer = '', clear;
+    menu.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Home') { e.preventDefault(); items[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); items[items.length - 1].focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); close(true); }
+      else if (e.key === 'Tab') { close(); }
+      else if (e.key.length === 1 && /\S/.test(e.key) && !e.metaKey && !e.ctrlKey) {
+        // type-ahead: jump to the next item whose label starts with what was typed
+        buffer += e.key.toLowerCase();
+        clearTimeout(clear); clear = setTimeout(() => { buffer = ''; }, 600);
+        const start = items.indexOf(document.activeElement) + (buffer.length === 1 ? 1 : 0);
+        for (let k = 0; k < items.length; k++) {
+          const it = items[(start + k) % items.length];
+          if (it.textContent.trim().toLowerCase().startsWith(buffer)) { it.focus(); break; }
+        }
+      }
+    });
+    items.forEach((it) => it.addEventListener('click', () => {
+      status.innerHTML = 'Chose <b></b>';
+      status.querySelector('b').textContent = it.querySelector('.name').textContent;
+      close(true);
+    }));
+    document.addEventListener('pointerdown', (e) => { if (isOpen() && !root.contains(e.target)) close(); });
+  });
+})();
+</script>

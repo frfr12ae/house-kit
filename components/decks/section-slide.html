@@ -1,0 +1,77 @@
+<!--
+@title Section slide
+@description Section divider with one large section number, the section name and a single line of framing, plus a progress rail showing where the talk is.
+@tags slide, section, divider, chapter, transition
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-section-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-section-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 6cqi 7cqi;
+  }
+  .c-section-slide .top { display: flex; justify-content: space-between; align-items: center; }
+  .c-section-slide .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-section-slide .rail { display: flex; gap: 0.7cqi; }
+  .c-section-slide .rail i {
+    display: block;
+    width: 4cqi;
+    height: 0.7cqi;
+    border-radius: 99px;
+    background: var(--ds-line);
+  }
+  .c-section-slide .rail i.is-done { background: var(--ds-neutral-line); }
+  .c-section-slide .rail i.is-now { background: var(--ds-highlight-line); }
+  .c-section-slide .num {
+    align-self: center;
+    font-family: var(--ds-font-display);
+    font-size: 25cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 0.85;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-section-slide .bottom {
+    display: grid;
+    gap: 1.2cqi;
+    padding-top: 2.4cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-section-slide h2 {
+    margin: 0;
+    font-size: 3.8cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--ds-ink);
+  }
+  .c-section-slide p { margin: 0; max-width: 56cqi; font-size: 1.9cqi; line-height: 1.45; }
+</style>
+
+<section class="c-section-slide">
+  <div class="inner">
+    <div class="top">
+      <div class="eyebrow">Section 2 of 5</div>
+      <div class="rail" aria-hidden="true"><i class="is-done"></i><i class="is-now"></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="num">02</div>
+    <div class="bottom">
+      <h2>What customers told us</h2>
+      <p>Forty-one interviews, three recurring frustrations, and one that explains most of our churn.</p>
+    </div>
+  </div>
+</section>

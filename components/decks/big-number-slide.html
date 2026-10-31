@@ -1,0 +1,58 @@
+<!--
+@title Big number slide
+@description One huge number as the only display element, a sentence that gives it meaning and a source footnote. Use when a single figure carries the argument.
+@tags slide, number, stat, kpi, headline
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-big-number-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-big-number-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 6cqi 7cqi;
+  }
+  .c-big-number-slide .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-big-number-slide .main { align-self: center; display: grid; gap: 2.2cqi; padding: 1cqi 0; }
+  .c-big-number-slide .figure {
+    font-family: var(--ds-font-display);
+    font-size: 23cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 0.88;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-big-number-slide .figure span { font-size: 0.5em; margin-left: 0.04em; color: var(--ds-muted); }
+  .c-big-number-slide .context { margin: 0; max-width: 64cqi; font-size: 2.5cqi; line-height: 1.38; color: var(--ds-text); }
+  .c-big-number-slide .context b { color: var(--ds-ink); font-weight: 700; }
+  .c-big-number-slide .foot {
+    padding-top: 1.8cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 1.3cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+</style>
+
+<section class="c-big-number-slide">
+  <div class="inner">
+    <div class="eyebrow">Onboarding</div>
+    <div class="main">
+      <div class="figure">62<span>%</span></div>
+      <p class="context">of new accounts that stop using the product do so <b>within the first three screens</b>, before they ever see a result.</p>
+    </div>
+    <div class="foot">Source: internal product analytics, January to September 2026, 48,200 new accounts.</div>
+  </div>
+</section>

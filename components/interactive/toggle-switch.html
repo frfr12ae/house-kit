@@ -1,0 +1,104 @@
+<!--
+@title Toggle switches
+@description Labelled switches using role=switch and aria-checked, with a helper line under each label and one disabled example. The label text toggles too.
+@tags switch, toggle, settings, preferences, checkbox
+@preview center
+@height 360
+@added 2026-10-31
+-->
+<style>
+  .c-toggle-switch {
+    width: min(460px, 100%);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-surface);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-toggle-switch .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-5);
+    padding: var(--ds-space-5) var(--ds-space-6);
+    cursor: pointer;
+  }
+  .c-toggle-switch .row + .row { border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-toggle-switch .row.is-disabled { cursor: not-allowed; }
+  .c-toggle-switch .text { display: grid; gap: 2px; min-width: 0; }
+  .c-toggle-switch .label { font-size: var(--ds-text-md); font-weight: 600; color: var(--ds-ink); }
+  .c-toggle-switch .hint { font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); color: var(--ds-muted); }
+  .c-toggle-switch .row.is-disabled .label { color: var(--ds-muted); }
+  .c-toggle-switch .switch {
+    position: relative;
+    flex: none;
+    width: 48px;
+    height: 28px;
+    padding: 0;
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-panel);
+    cursor: inherit;
+    transition: background var(--ds-dur-base) var(--ds-ease), border-color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-toggle-switch .switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-raised);
+    box-shadow: var(--ds-shadow-sm);
+    transition: transform var(--ds-dur-base) var(--ds-ease-spring), background var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-toggle-switch .switch[aria-checked="true"] { background: var(--ds-action); border-color: var(--ds-action); }
+  .c-toggle-switch .switch[aria-checked="true"]::after { transform: translateX(20px); background: var(--ds-on-action); }
+  .c-toggle-switch .switch:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-toggle-switch .switch:disabled { opacity: 0.5; }
+</style>
+
+<div class="c-toggle-switch">
+  <div class="row">
+    <div class="text">
+      <span class="label" id="c-toggle-switch-l1">Weekly digest</span>
+      <span class="hint" id="c-toggle-switch-h1">A Monday summary of open items and approvals.</span>
+    </div>
+    <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="c-toggle-switch-l1" aria-describedby="c-toggle-switch-h1"></button>
+  </div>
+  <div class="row">
+    <div class="text">
+      <span class="label" id="c-toggle-switch-l2">Slack alerts</span>
+      <span class="hint" id="c-toggle-switch-h2">Post to the finance channel when a task is blocked.</span>
+    </div>
+    <button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="c-toggle-switch-l2" aria-describedby="c-toggle-switch-h2"></button>
+  </div>
+  <div class="row is-disabled">
+    <div class="text">
+      <span class="label" id="c-toggle-switch-l3">Auto-approve small items</span>
+      <span class="hint" id="c-toggle-switch-h3">Available on the Scale plan.</span>
+    </div>
+    <button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="c-toggle-switch-l3" aria-describedby="c-toggle-switch-h3" disabled></button>
+  </div>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-toggle-switch').forEach((root, n) => {
+    root.querySelectorAll('.row').forEach((row, i) => {
+      const sw = row.querySelector('[role="switch"]');
+      // per-instance ids, so two copies on one page never clash
+      const label = row.querySelector('.label');
+      const hint = row.querySelector('.hint');
+      if (label) { label.id = `c-toggle-switch-${n}-l${i}`; sw.setAttribute('aria-labelledby', label.id); }
+      if (hint) { hint.id = `c-toggle-switch-${n}-h${i}`; sw.setAttribute('aria-describedby', hint.id); }
+      // one handler on the row: a click on the switch bubbles here, so it toggles exactly once
+      row.addEventListener('click', () => {
+        if (sw.disabled) return;
+        sw.setAttribute('aria-checked', String(sw.getAttribute('aria-checked') !== 'true'));
+      });
+    });
+  });
+})();
+</script>

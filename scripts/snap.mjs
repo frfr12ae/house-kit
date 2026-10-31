@@ -2,7 +2,7 @@
 // Optional, author machine only: screenshot components for a visual check.
 // Needs Playwright and Google Chrome; nothing else in the kit depends on this.
 //
-//   NODE_PATH=<dir containing playwright> node scripts/snap.mjs [filter] [--theme house] [--width 1280] [--out dir]
+//   NODE_PATH=<dir containing playwright> node scripts/snap.mjs [filter] [--theme house] [--width 1280] [--out dir] [--registry file]
 //
 // Renders each matching component standalone (tokens + theme + base + component)
 // and writes <out>/<category>__<slug>.png. Prints console errors from the page.
@@ -24,7 +24,7 @@ const width = Number(opt('width', 1280));
 const out = opt('out', join(ROOT, '.snaps'));
 mkdirSync(out, { recursive: true });
 
-const src = readFileSync(join(ROOT, 'navigator/registry.js'), 'utf8');
+const src = readFileSync(opt('registry', join(ROOT, 'navigator/registry.js')), 'utf8');
 const R = JSON.parse(src.slice(src.indexOf('{'), src.lastIndexOf('}') + 1));
 const list = R.components.filter((c) => c.id.includes(filter));
 

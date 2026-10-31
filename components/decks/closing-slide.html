@@ -1,0 +1,102 @@
+<!--
+@title Closing slide
+@description Closing slide that states the decision needed, three numbered next steps with owner and date, and a contact line.
+@tags slide, closing, decision, next-steps, owners, cta
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-closing-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-closing-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: 5cqi;
+    padding: 6cqi 7cqi 4.5cqi;
+  }
+  .c-closing-slide .decision {
+    align-self: center;
+    display: grid;
+    gap: 1.8cqi;
+    padding: 3.4cqi;
+    background: var(--ds-highlight-fill);
+    border: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-radius: calc(1.4cqi * var(--ds-radius-scale, 1));
+  }
+  .c-closing-slide .label { font-size: 1.5cqi; font-weight: 700; color: var(--ds-text); }
+  .c-closing-slide h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 4.2cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.08;
+    color: var(--ds-ink);
+  }
+  .c-closing-slide .why { margin: 0; font-size: 1.7cqi; line-height: 1.45; }
+  .c-closing-slide .steps { align-self: center; display: grid; margin: 0; padding: 0; list-style: none; }
+  .c-closing-slide .steps-head { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); padding-bottom: 1.4cqi; }
+  .c-closing-slide .right { align-self: center; display: grid; }
+  .c-closing-slide .steps li {
+    display: grid;
+    grid-template-columns: 4cqi minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 1.8cqi;
+    padding: 2cqi 0;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-closing-slide .steps li:last-child { border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-closing-slide .n {
+    display: grid;
+    place-items: center;
+    width: 3.4cqi;
+    height: 3.4cqi;
+    border-radius: 50%;
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: 1.6cqi;
+    font-weight: 800;
+  }
+  .c-closing-slide .what { display: grid; gap: 0.3cqi; }
+  .c-closing-slide .what b { font-size: 2cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-closing-slide .what span { font-size: 1.5cqi; color: var(--ds-muted); }
+  .c-closing-slide .when { font-size: 1.7cqi; font-weight: 700; color: var(--ds-text); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .c-closing-slide .foot {
+    grid-column: 1 / -1;
+    padding-top: 1.8cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 1.4cqi;
+    color: var(--ds-muted);
+  }
+  .c-closing-slide .foot b { color: var(--ds-text); font-weight: 600; }
+</style>
+
+<section class="c-closing-slide">
+  <div class="inner">
+    <div class="decision">
+      <div class="label">Decision we need</div>
+      <h2>Approve EUR&nbsp;0.6m to launch Option B in January</h2>
+      <p class="why">It is the fastest route to market, and the contract can be exited after the first year.</p>
+    </div>
+    <div class="right">
+      <div class="steps-head">Next steps</div>
+      <ol class="steps">
+        <li><span class="n">1</span><div class="what"><b>Sign the reseller agreement</b><span>Head of Partnerships</span></div><span class="when">7 Nov</span></li>
+        <li><span class="n">2</span><div class="what"><b>Release the pilot budget</b><span>Finance lead</span></div><span class="when">21 Nov</span></li>
+        <li><span class="n">3</span><div class="what"><b>Onboard the first ten accounts</b><span>Product lead</span></div><span class="when">5 Dec</span></li>
+      </ol>
+    </div>
+    <div class="foot">Questions before Friday: <b>strategy@example.com</b></div>
+  </div>
+</section>

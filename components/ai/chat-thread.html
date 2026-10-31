@@ -1,0 +1,156 @@
+<!--
+@title Chat thread
+@description A user and assistant conversation with a short list and inline code in the reply, timestamps, and a copy, retry and rating row under the assistant message.
+@tags chat, conversation, assistant, messages, thread, llm
+@preview center
+@height 620
+@added 2026-10-31
+-->
+<style>
+  .c-chat-thread,
+  .c-chat-thread *,
+  .c-chat-thread *::before,
+  .c-chat-thread *::after { box-sizing: border-box; }
+  .c-chat-thread {
+    display: grid;
+    gap: var(--ds-space-6);
+    width: min(720px, 100%);
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-md);
+    line-height: var(--ds-leading-body);
+    color: var(--ds-text);
+  }
+  .c-chat-thread .msg { display: grid; gap: var(--ds-space-2); }
+  .c-chat-thread .msg--user { justify-items: end; }
+  .c-chat-thread .bubble {
+    max-width: 85%;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-panel);
+    border-radius: var(--ds-radius-lg) var(--ds-radius-lg) var(--ds-radius-sm) var(--ds-radius-lg);
+    color: var(--ds-ink);
+  }
+  .c-chat-thread .time { font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-chat-thread .msg--ai { grid-template-columns: 32px minmax(0, 1fr); column-gap: var(--ds-space-4); }
+  .c-chat-thread .avatar {
+    grid-row: 1 / span 3;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+  }
+  .c-chat-thread .avatar svg { width: 16px; height: 16px; }
+  .c-chat-thread .reply { display: grid; gap: var(--ds-space-3); color: var(--ds-text); }
+  .c-chat-thread .reply p { margin: 0; }
+  .c-chat-thread .reply ol { margin: 0; padding-left: var(--ds-space-5); display: grid; gap: var(--ds-space-2); }
+  .c-chat-thread .reply li::marker { color: var(--ds-muted); font-weight: 600; }
+  .c-chat-thread .reply strong { color: var(--ds-ink); font-weight: 700; }
+  .c-chat-thread code {
+    padding: 1px 6px;
+    background: var(--ds-panel);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-sm);
+    font-family: var(--ds-font-mono);
+    font-size: 0.88em;
+    color: var(--ds-ink);
+    white-space: nowrap;
+  }
+  .c-chat-thread .actions { display: flex; align-items: center; gap: var(--ds-space-1); margin-left: calc(var(--ds-space-2) * -1); }
+  .c-chat-thread .act {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--ds-radius-md);
+    background: transparent;
+    color: var(--ds-muted);
+    cursor: pointer;
+    transition: background var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-chat-thread .act:hover { background: var(--ds-panel); color: var(--ds-ink); }
+  .c-chat-thread .act:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-chat-thread .act svg { width: 16px; height: 16px; }
+  .c-chat-thread .act[aria-pressed="true"] { color: var(--ds-ink); background: var(--ds-panel); }
+  .c-chat-thread .act.is-done { color: var(--ds-note-line); }
+  .c-chat-thread .sep { width: var(--ds-hairline); height: 16px; margin: 0 var(--ds-space-1); background: var(--ds-line); }
+  .c-chat-thread .actions .time { margin-left: var(--ds-space-2); }
+  @media (max-width: 480px) {
+    .c-chat-thread { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-chat-thread .msg--ai { column-gap: var(--ds-space-3); }
+    .c-chat-thread .bubble { max-width: 92%; }
+  }
+</style>
+
+<section class="c-chat-thread" aria-label="Conversation">
+  <div class="msg msg--user">
+    <div class="bubble">Can you summarise the main risks in the supplier contract before I sign it on Friday?</div>
+    <span class="time">10:42</span>
+  </div>
+
+  <div class="msg msg--ai">
+    <div class="avatar" aria-hidden="true">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 2v12M2 8h12M3.8 3.8l8.4 8.4M12.2 3.8l-8.4 8.4"/></svg>
+    </div>
+    <div class="reply">
+      <p>Three clauses carry most of the risk:</p>
+      <ol>
+        <li><strong>Auto-renewal.</strong> The term renews for 24 months unless you cancel 90 days ahead.</li>
+        <li><strong>Price indexation.</strong> Increases are uncapped and tied to <code>CPI + 2%</code>.</li>
+        <li><strong>Liability cap.</strong> Limited to the fees paid in the prior <code>12 months</code>.</li>
+      </ol>
+      <p>I can draft a redline for the first two. Want me to start with <code>clause 4.2</code>?</p>
+    </div>
+    <div class="actions">
+      <button class="act" type="button" data-act="copy" aria-label="Copy reply">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5a1.5 1.5 0 0 0-1.5-1.5H3.5A1.5 1.5 0 0 0 2 3v5.5A1.5 1.5 0 0 0 3.5 10H4"/></svg>
+      </button>
+      <button class="act" type="button" data-act="retry" aria-label="Retry">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.5v3h-3"/></svg>
+      </button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="act" type="button" data-act="up" aria-label="Good response" aria-pressed="false">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5V14H3a1 1 0 0 1-1-1V8.5a1 1 0 0 1 1-1h2zm0 0 2.5-5a1.5 1.5 0 0 1 1.5 1.5V6h3.4a1.2 1.2 0 0 1 1.2 1.4l-.8 5A1.5 1.5 0 0 1 11.3 13.5H5"/></svg>
+      </button>
+      <button class="act" type="button" data-act="down" aria-label="Bad response" aria-pressed="false">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(180deg)"><path d="M5 7.5V14H3a1 1 0 0 1-1-1V8.5a1 1 0 0 1 1-1h2zm0 0 2.5-5a1.5 1.5 0 0 1 1.5 1.5V6h3.4a1.2 1.2 0 0 1 1.2 1.4l-.8 5A1.5 1.5 0 0 1 11.3 13.5H5"/></svg>
+      </button>
+      <span class="time">10:43</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-chat-thread').forEach((root) => {
+    root.querySelectorAll('.msg--ai').forEach((msg) => {
+      const reply = msg.querySelector('.reply');
+      const up = msg.querySelector('[data-act="up"]');
+      const down = msg.querySelector('[data-act="down"]');
+
+      msg.querySelector('[data-act="copy"]').addEventListener('click', (e) => {
+        const btn = e.currentTarget;
+        try { navigator.clipboard.writeText(reply.innerText); } catch (err) { /* clipboard blocked */ }
+        btn.classList.add('is-done');
+        btn.setAttribute('aria-label', 'Copied');
+        setTimeout(() => { btn.classList.remove('is-done'); btn.setAttribute('aria-label', 'Copy reply'); }, 1400);
+      });
+
+      const rate = (on, off) => {
+        const next = on.getAttribute('aria-pressed') !== 'true';
+        on.setAttribute('aria-pressed', String(next));
+        off.setAttribute('aria-pressed', 'false');
+      };
+      up.addEventListener('click', () => rate(up, down));
+      down.addEventListener('click', () => rate(down, up));
+    });
+  });
+})();
+</script>

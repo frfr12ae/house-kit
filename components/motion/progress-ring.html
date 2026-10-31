@@ -1,0 +1,124 @@
+<!--
+@title Progress rings
+@description Three SVG rings that fill to their percentage while the centre label counts up. Set each target with data-value.
+@tags ring, progress, donut, gauge, percentage, kpi
+@preview center
+@height 340
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-progress-ring,
+  .c-progress-ring *,
+  .c-progress-ring *::before,
+  .c-progress-ring *::after { box-sizing: border-box; }
+  .c-progress-ring {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--ds-space-7) var(--ds-space-6);
+    width: min(720px, 100%);
+    font-family: var(--ds-font-sans);
+  }
+  .c-progress-ring .item { display: grid; justify-items: center; gap: var(--ds-space-4); }
+  .c-progress-ring .ring { position: relative; width: 144px; height: 144px; }
+  .c-progress-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .c-progress-ring circle { fill: none; stroke-width: 10; }
+  .c-progress-ring .track { stroke: var(--ds-line); }
+  .c-progress-ring .fill {
+    stroke: var(--c, var(--ds-series-1));
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: calc(100 - var(--v));
+  }
+  .c-progress-ring .centre {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-progress-ring .label { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-muted); text-align: center; }
+
+  /* the hidden state carries no transition, so arming never animates; only the move to .is-in does */
+  .c-progress-ring.is-armed .fill { opacity: 0; stroke-dashoffset: 100; }
+  .c-progress-ring.is-armed.is-in .fill {
+    opacity: 1;
+    stroke-dashoffset: calc(100 - var(--v));
+    transition: stroke-dashoffset var(--ds-dur-story) var(--ds-ease), opacity var(--ds-dur-fast) linear;
+    transition-delay: calc(var(--i) * 140ms);
+  }
+</style>
+
+<div class="c-progress-ring">
+  <div class="item" style="--i: 0">
+    <div class="ring" role="img" aria-label="Onboarding complete, 82 percent">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="track" cx="60" cy="60" r="52" pathLength="100"/>
+        <circle class="fill" cx="60" cy="60" r="52" pathLength="100" style="--v: 82; --c: var(--ds-series-1)"/>
+      </svg>
+      <span class="centre" data-value="82" data-suffix="%">82%</span>
+    </div>
+    <span class="label">Onboarding complete</span>
+  </div>
+  <div class="item" style="--i: 1">
+    <div class="ring" role="img" aria-label="Weekly active accounts, 64 percent">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="track" cx="60" cy="60" r="52" pathLength="100"/>
+        <circle class="fill" cx="60" cy="60" r="52" pathLength="100" style="--v: 64; --c: var(--ds-series-2)"/>
+      </svg>
+      <span class="centre" data-value="64" data-suffix="%">64%</span>
+    </div>
+    <span class="label">Weekly active accounts</span>
+  </div>
+  <div class="item" style="--i: 2">
+    <div class="ring" role="img" aria-label="Tickets resolved in time, 91 percent">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="track" cx="60" cy="60" r="52" pathLength="100"/>
+        <circle class="fill" cx="60" cy="60" r="52" pathLength="100" style="--v: 91; --c: var(--ds-series-3)"/>
+      </svg>
+      <span class="centre" data-value="91" data-suffix="%">91%</span>
+    </div>
+    <span class="label">Tickets resolved in time</span>
+  </div>
+</div>
+
+<script>
+(() => {
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-progress-ring').forEach((root) => {
+    if (reduced) return;
+    const ms = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
+    const centres = [...root.querySelectorAll('.centre')];
+    centres.forEach((el) => { el.textContent = '0' + (el.dataset.suffix || ''); });
+    root.classList.add('is-armed');
+
+    function run() {
+      root.classList.add('is-in');
+      centres.forEach((el, i) => {
+        const to = parseFloat(el.dataset.value);
+        const start = performance.now() + i * 140;
+        const tick = (now) => {
+          const t = Math.max(0, Math.min(1, (now - start) / ms));
+          el.textContent = Math.round(to * ease(t)) + (el.dataset.suffix || '');
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(run));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>
