@@ -1,0 +1,276 @@
+<!--
+@title Flowing gradient
+@description A WebGL background of slow, domain-warped colour bands drawn from your theme tokens, with a CSS gradient fallback and a still frame for reduced motion.
+@tags background, gradient, webgl, shader, flow, hero
+@preview fill
+@height 420
+@added 2026-10-31
+@source HyperFrames shader blocks by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-flowing-gradient,
+  .c-flowing-gradient *,
+  .c-flowing-gradient *::before,
+  .c-flowing-gradient *::after { box-sizing: border-box; }
+  .c-flowing-gradient {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 420px;
+    overflow: hidden;
+    background: var(--ds-bg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-flowing-gradient .fallback { position: absolute; inset: 0; z-index: -3; background: radial-gradient(ellipse 60% 80% at 15% 20%, color-mix(in srgb, var(--ds-highlight-line) 38%, transparent), transparent 70%),
+      radial-gradient(ellipse 55% 75% at 85% 75%, color-mix(in srgb, var(--ds-info-line) 40%, transparent), transparent 70%),
+      var(--ds-bg); }
+  .c-flowing-gradient .canvas {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease);
+  }
+  .c-flowing-gradient.is-live .canvas { opacity: 1; }
+  .c-flowing-gradient .probe { position: absolute; width: 0; height: 0; visibility: hidden; pointer-events: none; }
+  .c-flowing-gradient .scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse 52% 60% at 50% 50%, color-mix(in srgb, var(--ds-bg) 62%, transparent), transparent 100%);
+    pointer-events: none;
+  }
+  .c-flowing-gradient .content {
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-4);
+    max-width: 720px;
+    padding: var(--ds-space-8) var(--ds-space-5);
+    text-align: center;
+  }
+  .c-flowing-gradient .eyebrow {
+    padding: var(--ds-space-1) var(--ds-space-3);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: color-mix(in srgb, var(--ds-surface) 70%, transparent);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-text);
+  }
+  .c-flowing-gradient h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: clamp(32px, 6vw, var(--ds-text-3xl));
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-flowing-gradient .sub { margin: 0; max-width: 34em; font-size: var(--ds-text-lg); line-height: var(--ds-leading-snug); color: var(--ds-text); text-wrap: pretty; }
+  .c-flowing-gradient .btn {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    margin-top: var(--ds-space-2);
+    padding: 0 var(--ds-space-6);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-md);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .c-flowing-gradient .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  @media (max-width: 560px) {
+    .c-flowing-gradient .sub { font-size: var(--ds-text-md); }
+  }
+</style>
+
+<section class="c-flowing-gradient">
+  <div class="fallback" aria-hidden="true"></div>
+  <canvas class="canvas" aria-hidden="true"></canvas>
+  <span class="probe" aria-hidden="true"></span>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="content">
+    <span class="eyebrow">Quarterly review</span>
+    <h2>Where the quarter was won, in one page</h2>
+    <p class="sub">Revenue, margin and pipeline on a single calm surface your board can read in a minute.</p>
+    <a class="btn" href="#">Open the summary</a>
+  </div>
+</section>
+
+<script>
+(() => {
+  // Colours are read from these tokens, so the background follows any theme.
+  const TOKENS = ["--ds-bg","--ds-info-line","--ds-highlight-line","--ds-note-line","--ds-ink"];
+  const RES = 0.5;
+  const STILL_TIME = 9;
+  const VERT = 'attribute vec2 p; void main() { gl_Position = vec4(p, 0.0, 1.0); }';
+  const FRAG = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+uniform vec2 uRes;
+uniform float uTime;
+uniform vec3 uC[5];
+uniform float uAmt;
+
+float h21(vec2 p) { return fract(sin(dot(p, vec2(41.37, 289.91))) * 9371.3); }
+float vn(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(h21(i), h21(i + vec2(1.0, 0.0)), f.x), mix(h21(i + vec2(0.0, 1.0)), h21(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+float fbm(vec2 p) {
+  float a = 0.5, s = 0.0;
+  for (int i = 0; i < 5; i++) { s += a * vn(p); p = p * 2.03 + vec2(11.7, 5.3); a *= 0.5; }
+  return s;
+}
+float fbmL(vec2 p) {
+  float a = 0.5, s = 0.0;
+  for (int i = 0; i < 3; i++) { s += a * vn(p); p = p * 2.03 + vec2(11.7, 5.3); a *= 0.5; }
+  return s;
+}
+
+void main() {
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / sqrt(uRes.x * uRes.y);
+  float t = uTime * 0.05;
+  vec2 p = uv * 1.5;
+  vec2 q = vec2(fbmL(p + vec2(0.0, t)), fbmL(p + vec2(5.2, 1.3) - t));
+  vec2 r = vec2(fbmL(p + 2.0 * q + vec2(1.7, 9.2) + t * 1.3), fbmL(p + 2.0 * q + vec2(8.3, 2.8) - t * 1.1));
+  float f = fbmL(p + 2.0 * r);
+  float band = 0.5 + 0.5 * sin((f - 0.44) * 18.0 + (r.x - 0.44) * 10.0 + 1.2);
+  vec3 col = uC[0];
+  col = mix(col, uC[1], smoothstep(0.25, 0.9, band) * 0.5);
+  col = mix(col, uC[2], smoothstep(0.42, 0.62, r.y) * (1.0 - band) * 0.6);
+  col = mix(col, uC[3], smoothstep(0.62, 0.95, q.x) * 0.22);
+  gl_FragColor = vec4(mix(uC[0], col, uAmt), 1.0);
+}
+`;
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const swatch = document.createElement('canvas');
+  swatch.width = swatch.height = 1;
+  const sctx = swatch.getContext('2d', { willReadFrequently: true });
+
+  // Resolve any CSS colour (hex, rgb, oklch, color-mix) to sRGB floats through a 1px canvas.
+  function readColours(probe) {
+    const out = [];
+    for (const name of TOKENS) {
+      probe.style.color = 'var(' + name + ')';
+      sctx.clearRect(0, 0, 1, 1);
+      sctx.fillStyle = '#000';
+      sctx.fillStyle = getComputedStyle(probe).color;
+      sctx.fillRect(0, 0, 1, 1);
+      const d = sctx.getImageData(0, 0, 1, 1).data;
+      out.push(d[0] / 255, d[1] / 255, d[2] / 255);
+    }
+    return out;
+  }
+
+  function shader(gl, type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+  }
+
+  function init(root) {
+    const canvas = root.querySelector('.canvas');
+    const probe = root.querySelector('.probe');
+    const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
+    if (!gl) return;
+    const vs = shader(gl, gl.VERTEX_SHADER, VERT);
+    const fs = shader(gl, gl.FRAGMENT_SHADER, FRAG);
+    if (!vs || !fs) return;
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const uRes = gl.getUniformLocation(prog, 'uRes');
+    const uTime = gl.getUniformLocation(prog, 'uTime');
+    const uC = gl.getUniformLocation(prog, 'uC');
+    const uAmt = gl.getUniformLocation(prog, 'uAmt');
+
+    let t = reduced ? STILL_TIME : 0;
+    let last = 0;
+    let raf = 0;
+    let visible = false;
+    let key = '';
+
+    const draw = () => {
+      gl.uniform1f(uTime, t);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+    const size = () => {
+      const r = root.getBoundingClientRect();
+      const s = Math.min(window.devicePixelRatio || 1, 1.5) * RES;
+      const w = Math.max(2, Math.round(r.width * s));
+      const h = Math.max(2, Math.round(r.height * s));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        gl.viewport(0, 0, w, h);
+        gl.uniform2f(uRes, w, h);
+        draw();
+      }
+    };
+    const refresh = () => {
+      if (!root.isConnected) { clearInterval(timer); return; }
+      const c = readColours(probe);
+      const k = c.join();
+      if (k === key) return;
+      key = k;
+      gl.uniform3fv(uC, new Float32Array(c));
+      // Dark grounds get a gentler tint so light text keeps its contrast.
+      gl.uniform1f(uAmt, 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] < 0.4 ? 0.6 : 1.0);
+      draw();
+    };
+    const tick = (now) => {
+      raf = 0;
+      if (!visible || document.hidden) return;
+      t += Math.min(0.1, (now - last) / 1000);
+      last = now;
+      draw();
+      raf = requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (reduced || raf || !visible || document.hidden) return;
+      last = performance.now();
+      raf = requestAnimationFrame(tick);
+    };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
+
+    canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); stop(); root.classList.remove('is-live'); });
+
+    const timer = setInterval(refresh, 2000);
+    refresh();
+    size();
+    root.classList.add('is-live');
+
+    new ResizeObserver(size).observe(root);
+    new IntersectionObserver((entries) => {
+      visible = entries[entries.length - 1].isIntersecting;
+      if (visible) start(); else stop();
+    }).observe(root);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+  }
+
+  document.querySelectorAll('.c-flowing-gradient').forEach(init);
+})();
+</script>

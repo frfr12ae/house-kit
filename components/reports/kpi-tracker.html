@@ -1,0 +1,179 @@
+<!--
+@title KPI tracker
+@description KPI rows with the current value, a bar with a target tick, a small trend line, a status mark that reads in monochrome (filled, half or hollow dot plus a word) and a badge saying whether the number is live or a placeholder. Edit KPIS at the top of the script.
+@tags kpi, scorecard, target, status, sparkline, dashboard, tracker
+@preview fill
+@height 620
+@added 2026-10-31
+-->
+<style>
+  .c-kpi-tracker {
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-kpi-tracker .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-3) var(--ds-space-5); margin: 0 0 var(--ds-space-5); }
+  .c-kpi-tracker h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-kpi-tracker .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-kpi-tracker .tally { margin: 0; font-size: var(--ds-text-sm); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-kpi-tracker .tally b { color: var(--ds-ink); }
+  .c-kpi-tracker .table { background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); overflow: hidden; }
+  .c-kpi-tracker .cols,
+  .c-kpi-tracker .row {
+    display: grid;
+    grid-template-columns: minmax(150px, 1.25fr) 104px minmax(150px, 1.6fr) 104px 112px 112px;
+    align-items: center;
+    gap: var(--ds-space-5);
+    padding: 0 var(--ds-space-5);
+  }
+  .c-kpi-tracker .cols { padding-top: var(--ds-space-3); padding-bottom: var(--ds-space-3); background: var(--ds-panel); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-kpi-tracker .rows { margin: 0; padding: 0; list-style: none; }
+  .c-kpi-tracker .row { padding-top: var(--ds-space-4); padding-bottom: var(--ds-space-4); border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-kpi-tracker .rows .row:first-child { border-top: 0; }
+  .c-kpi-tracker .name { margin: 0; font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-kpi-tracker .sub { margin: 2px 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-kpi-tracker .value { font-family: var(--ds-font-display); font-size: var(--ds-text-lg); font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .c-kpi-tracker .value small { display: block; margin-top: 2px; font-family: var(--ds-font-sans); font-size: var(--ds-text-xs); font-weight: 400; letter-spacing: 0; color: var(--ds-muted); }
+  .c-kpi-tracker .row.is-placeholder .value { color: var(--ds-muted); }
+  .c-kpi-tracker .gauge { position: relative; height: 26px; }
+  .c-kpi-tracker .track { position: absolute; left: 0; right: 0; top: 10px; height: 6px; border-radius: var(--ds-radius-pill); background: color-mix(in srgb, var(--ds-line) 80%, transparent); overflow: hidden; }
+  .c-kpi-tracker .fill { display: block; height: 100%; width: var(--w); border-radius: inherit; background: var(--ds-info-line); }
+  .c-kpi-tracker .is-placeholder .fill {
+    background: repeating-linear-gradient(135deg, var(--ds-info-line) 0 4px, color-mix(in srgb, var(--ds-info-line) 30%, transparent) 4px 8px);
+  }
+  .c-kpi-tracker .tick { position: absolute; top: 3px; bottom: 3px; left: var(--t); width: 2px; margin-left: -1px; border-radius: 1px; background: var(--ds-ink); }
+  .c-kpi-tracker .tick-label { position: absolute; top: 100%; left: var(--t); transform: translateX(-50%); margin-top: -4px; font-size: 11px; line-height: 1; color: var(--ds-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .c-kpi-tracker .spark { display: block; width: 100%; height: 28px; overflow: visible; }
+  .c-kpi-tracker .spark path { fill: none; stroke: var(--ds-muted); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .c-kpi-tracker .spark circle { fill: var(--ds-ink); }
+  .c-kpi-tracker .status { display: inline-flex; align-items: center; gap: var(--ds-space-2); font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); }
+  .c-kpi-tracker .mark { width: 16px; height: 16px; flex: none; }
+  .c-kpi-tracker .mark circle { fill: none; stroke: currentColor; stroke-width: 1.75; }
+  .c-kpi-tracker .mark path { fill: currentColor; stroke: none; }
+  .c-kpi-tracker .is-ahead { color: var(--ds-note-line); }
+  .c-kpi-tracker .is-watch { color: var(--ds-highlight-line); }
+  .c-kpi-tracker .is-behind { color: var(--ds-danger-line); }
+  .c-kpi-tracker .status span { color: var(--ds-ink); }
+  .c-kpi-tracker .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    padding: 2px 9px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-ink);
+  }
+  .c-kpi-tracker .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ds-ink); }
+  .c-kpi-tracker .badge.is-placeholder { border-style: dashed; border-color: var(--ds-muted); color: var(--ds-muted); }
+  .c-kpi-tracker .badge.is-placeholder::before { background: transparent; border: var(--ds-hairline) solid var(--ds-muted); }
+  .c-kpi-tracker .key { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-kpi-tracker .key li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-kpi-tracker .key .tick-sample { width: 2px; height: 14px; background: var(--ds-ink); }
+  .c-kpi-tracker .key .badge { font-size: 11px; padding: 1px 8px; }
+  @container (max-width: 820px) {
+    .c-kpi-tracker { padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-kpi-tracker .cols { display: none; }
+    .c-kpi-tracker .row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "name value" "name trend" "gauge gauge" "status source";
+      gap: var(--ds-space-3) var(--ds-space-4);
+      padding: var(--ds-space-5) var(--ds-space-4);
+    }
+    .c-kpi-tracker .row > :nth-child(1) { grid-area: name; }
+    .c-kpi-tracker .row > :nth-child(2) { grid-area: value; text-align: right; }
+    .c-kpi-tracker .row > :nth-child(3) { grid-area: gauge; margin-bottom: var(--ds-space-3); }
+    .c-kpi-tracker .row > :nth-child(4) { grid-area: trend; width: 80px; justify-self: end; align-self: start; }
+    .c-kpi-tracker .row > :nth-child(5) { grid-area: status; }
+    .c-kpi-tracker .row > :nth-child(6) { grid-area: source; justify-self: end; }
+  }
+</style>
+
+<section class="c-kpi-tracker" aria-label="KPI tracker, October 2026">
+  <div class="head">
+    <div>
+      <h3>Commercial scorecard, October</h3>
+      <p class="hint">The bar shows where each measure stands; the tick marks the target.</p>
+    </div>
+    <p class="tally"></p>
+  </div>
+  <div class="table">
+    <div class="cols" aria-hidden="true"><span>Measure</span><span>Now</span><span>Against target</span><span>Last 8 weeks</span><span>Status</span><span>Source</span></div>
+    <ul class="rows"></ul>
+  </div>
+  <ul class="key" aria-label="How to read the status marks">
+    <li><svg class="mark is-ahead" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="6" style="fill:currentColor"/></svg>Ahead: target met</li>
+    <li><svg class="mark is-watch" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 2a6 6 0 0 0 0 12z"/></svg>Watch: within 10% of target</li>
+    <li><svg class="mark is-behind" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6"/></svg>Behind: more than 10% off</li>
+    <li><span class="badge">Live</span>Pulled from the system</li>
+    <li><span class="badge is-placeholder">Placeholder</span>Planning assumption</li>
+  </ul>
+</section>
+
+<script>
+(() => {
+  // Replace with your own measures. lowerIsBetter flips how the bar and status read.
+  const KPIS = [
+    { name: 'Qualified leads', sub: 'Per month', value: 184, target: 200, unit: '', series: [150, 158, 149, 162, 171, 168, 179, 184], source: 'live' },
+    { name: 'Win rate', sub: 'Proposals sent', value: 27, target: 25, unit: '%', series: [21, 22, 24, 23, 25, 26, 25, 27], source: 'live' },
+    { name: 'Median reply time', sub: 'Hours, lower is better', value: 5.4, target: 4, unit: ' h', lowerIsBetter: true, series: [7.1, 6.8, 6.9, 6.2, 6.0, 5.8, 5.9, 5.4], source: 'live' },
+    { name: 'Net revenue retention', sub: 'Trailing 12 months', value: 103, target: 105, unit: '%', series: [101, 101, 102, 102, 103, 102, 103, 103], source: 'live' },
+    { name: 'Onboarding time', sub: 'Days, lower is better', value: 11, target: 14, unit: ' d', lowerIsBetter: true, series: [16, 15, 15, 14, 13, 13, 12, 11], source: 'placeholder' },
+    { name: 'Gross margin', sub: 'Services', value: 54, target: 62, unit: '%', series: [57, 56, 56, 55, 55, 54, 54, 54], source: 'placeholder' },
+  ];
+  const WATCH_BAND = 0.1;
+  const LABEL = { ahead: 'Ahead', watch: 'Watch', behind: 'Behind' };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const num = (v, unit) => (Number.isInteger(v) ? v : v.toFixed(1)) + unit;
+
+  const MARK = {
+    ahead: '<circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="6" style="fill:currentColor"/>',
+    watch: '<circle cx="8" cy="8" r="6"/><path d="M8 2a6 6 0 0 0 0 12z"/>',
+    behind: '<circle cx="8" cy="8" r="6"/>',
+  };
+
+  function status(k) {
+    const gap = k.lowerIsBetter ? (k.value - k.target) / k.target : (k.target - k.value) / k.target;
+    if (gap <= 0) return 'ahead';
+    return gap <= WATCH_BAND ? 'watch' : 'behind';
+  }
+
+  function spark(series) {
+    const lo = Math.min(...series);
+    const hi = Math.max(...series);
+    const pts = series.map((v, i) => [(i / (series.length - 1)) * 96, 24 - ((v - lo) / (hi - lo || 1)) * 20]);
+    const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
+    return '<svg class="spark" viewBox="0 0 96 28" preserveAspectRatio="none" aria-hidden="true"><path d="' + d + '"/></svg>';
+  }
+
+  document.querySelectorAll('.c-kpi-tracker').forEach((root) => {
+    const counts = { ahead: 0, watch: 0, behind: 0 };
+    const rows = KPIS.map((k) => {
+      const st = status(k);
+      counts[st]++;
+      const scale = Math.max(k.value, k.target) * 1.18;
+      const w = (k.value / scale) * 100;
+      const t = (k.target / scale) * 100;
+      const placeholder = k.source === 'placeholder';
+      return '<li class="row' + (placeholder ? ' is-placeholder' : '') + '">' +
+        '<div><p class="name">' + esc(k.name) + '</p><p class="sub">' + esc(k.sub) + '</p></div>' +
+        '<div class="value">' + num(k.value, k.unit) + '</div>' +
+        '<div class="gauge" role="img" aria-label="' + esc(k.name) + ' ' + num(k.value, k.unit) + ' against a target of ' + num(k.target, k.unit) + '">' +
+          '<div class="track"><span class="fill" style="--w:' + w.toFixed(1) + '%"></span></div>' +
+          '<span class="tick" style="--t:' + t.toFixed(1) + '%"></span>' +
+          '<span class="tick-label" style="--t:' + t.toFixed(1) + '%">Target ' + num(k.target, k.unit) + '</span></div>' +
+        '<div>' + spark(k.series) + '</div>' +
+        '<div class="status is-' + st + '"><svg class="mark" viewBox="0 0 16 16" aria-hidden="true">' + MARK[st] + '</svg><span>' + LABEL[st] + '</span></div>' +
+        '<div><span class="badge' + (placeholder ? ' is-placeholder' : '') + '">' + (placeholder ? 'Placeholder' : 'Live') + '</span></div>' +
+        '</li>';
+    });
+    root.querySelector('.rows').innerHTML = rows.join('');
+    root.querySelector('.tally').innerHTML = '<b>' + counts.ahead + '</b> ahead · <b>' + counts.watch + '</b> watch · <b>' + counts.behind + '</b> behind';
+  });
+})();
+</script>

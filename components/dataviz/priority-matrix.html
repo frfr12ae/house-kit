@@ -1,0 +1,272 @@
+<!--
+@title Priority matrix
+@description An impact by effort 2x2 with four labelled zones (quick wins, big bets, fill-ins, money pits), ten numbered dots with deterministic jitter so equal scores do not stack, tooltips on hover and focus, and a legend that highlights its dot. Edit ITEMS at the top of the script.
+@tags matrix, prioritisation, impact, effort, 2x2, quadrant, scatter, roadmap
+@preview fill
+@height 700
+@added 2026-10-31
+-->
+<style>
+  .c-priority-matrix {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-priority-matrix .head { margin: 0 0 var(--ds-space-6); max-width: 60ch; }
+  .c-priority-matrix h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-priority-matrix .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-priority-matrix .board { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: var(--ds-space-2) var(--ds-space-3); }
+  .c-priority-matrix .axis { display: flex; justify-content: space-between; font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-priority-matrix .axis b { color: var(--ds-ink); font-weight: 700; }
+  .c-priority-matrix .axis-y { writing-mode: vertical-rl; transform: rotate(180deg); padding: var(--ds-space-1) 0; }
+  .c-priority-matrix .axis-x { grid-column: 2; padding: 0 var(--ds-space-1); }
+  .c-priority-matrix .plot {
+    position: relative;
+    aspect-ratio: 2 / 1;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+  }
+  .c-priority-matrix .zone { position: absolute; width: 50%; height: 50%; padding: var(--ds-space-3) var(--ds-space-4); }
+  .c-priority-matrix .zone.q-win { left: 0; top: 0; background: color-mix(in srgb, var(--ds-highlight-fill) 75%, transparent); border-top-left-radius: var(--ds-radius-md); }
+  .c-priority-matrix .zone.q-bet { right: 0; top: 0; background: color-mix(in srgb, var(--ds-info-fill) 75%, transparent); border-top-right-radius: var(--ds-radius-md); text-align: right; }
+  .c-priority-matrix .zone.q-fill { left: 0; bottom: 0; background: color-mix(in srgb, var(--ds-neutral-fill) 75%, transparent); border-bottom-left-radius: var(--ds-radius-md); display: flex; flex-direction: column; justify-content: flex-end; }
+  .c-priority-matrix .zone.q-pit { right: 0; bottom: 0; background: color-mix(in srgb, var(--ds-danger-fill) 75%, transparent); border-bottom-right-radius: var(--ds-radius-md); text-align: right; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c-priority-matrix .zone b { display: block; font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); }
+  .c-priority-matrix .zone span { display: block; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-priority-matrix .dot {
+    position: absolute;
+    left: var(--x);
+    bottom: var(--y);
+    width: 30px;
+    height: 30px;
+    margin: 0 0 -15px -15px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    background: var(--f);
+    border: var(--ds-stroke) solid var(--l);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--ds-raised);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: transform var(--ds-dur-fast) var(--ds-ease);
+    z-index: 1;
+  }
+  .c-priority-matrix .dot:hover,
+  .c-priority-matrix .dot.is-hot { transform: scale(1.18); z-index: 2; }
+  .c-priority-matrix .dot:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ds-raised), var(--ds-focus); z-index: 2; }
+  .c-priority-matrix .q-win-c { --f: var(--ds-highlight-fill); --l: var(--ds-highlight-line); }
+  .c-priority-matrix .q-bet-c { --f: var(--ds-info-fill); --l: var(--ds-info-line); }
+  .c-priority-matrix .q-fill-c { --f: var(--ds-neutral-fill); --l: var(--ds-neutral-line); }
+  .c-priority-matrix .q-pit-c { --f: var(--ds-danger-fill); --l: var(--ds-danger-line); }
+  .c-priority-matrix .tag { position: absolute; z-index: 1; font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-ink); white-space: nowrap; pointer-events: none; opacity: 0; }
+  .c-priority-matrix.has-labels .tag { opacity: 1; }
+  .c-priority-matrix .tag.is-hot { text-decoration: underline; text-underline-offset: 3px; }
+  .c-priority-matrix .tip {
+    position: absolute;
+    z-index: 3;
+    min-width: 190px;
+    max-width: 260px;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+    box-shadow: var(--ds-shadow-md);
+    font-size: var(--ds-text-sm);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-priority-matrix .tip.is-on { opacity: 1; }
+  .c-priority-matrix .tip b { display: block; color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-priority-matrix .tip .nums { display: block; margin-top: 2px; color: var(--ds-muted); font-size: var(--ds-text-xs); font-variant-numeric: tabular-nums; }
+  .c-priority-matrix .tip .zn { display: flex; align-items: center; gap: var(--ds-space-2); margin-top: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-ink); }
+  .c-priority-matrix .sw { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--f); border: var(--ds-stroke) solid var(--l); }
+  .c-priority-matrix .legend { margin: var(--ds-space-6) 0 0; padding-top: var(--ds-space-5); border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-priority-matrix .zones { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: 0 0 var(--ds-space-5); padding: 0; list-style: none; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-priority-matrix .zones li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-priority-matrix .zones small { font-size: var(--ds-text-xs); font-weight: 400; color: var(--ds-muted); }
+  .c-priority-matrix .names { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--ds-space-6); margin: 0; padding: 0; list-style: none; }
+  .c-priority-matrix .names li {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-2) var(--ds-space-2);
+    margin: 0 calc(var(--ds-space-2) * -1);
+    border-radius: var(--ds-radius-sm);
+    font-size: var(--ds-text-sm);
+    color: var(--ds-text);
+  }
+  .c-priority-matrix .names li.is-hot { background: var(--ds-panel); }
+  .c-priority-matrix .names .n { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--f); border: var(--ds-stroke) solid var(--l); font-size: 11px; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-priority-matrix .names em { margin-left: auto; font-style: normal; font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  @container (max-width: 640px) {
+    .c-priority-matrix { padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-priority-matrix .plot { aspect-ratio: 1 / 1.05; }
+    .c-priority-matrix .zone { padding: var(--ds-space-2) var(--ds-space-3); }
+    .c-priority-matrix .zone span { display: none; }
+    .c-priority-matrix .dot { width: 26px; height: 26px; margin: 0 0 -13px -13px; }
+    .c-priority-matrix .names { grid-template-columns: 1fr; }
+  }
+</style>
+
+<figure class="c-priority-matrix">
+  <figcaption class="head">
+    <h3>Where the ten improvement ideas sit</h3>
+    <p class="hint">Each idea scored 1 to 10 for impact and for effort. Hover or focus a dot for detail.</p>
+  </figcaption>
+  <div class="board">
+    <div class="axis axis-y" aria-hidden="true"><span>Low</span><b>Impact</b><span>High</span></div>
+    <div class="plot" role="group" aria-label="Impact by effort matrix with ten numbered ideas">
+      <div class="zone q-win"><b>Quick wins</b><span>High impact, low effort</span></div>
+      <div class="zone q-bet"><b>Big bets</b><span>High impact, high effort</span></div>
+      <div class="zone q-fill"><b>Fill-ins</b><span>Low impact, low effort</span></div>
+      <div class="zone q-pit"><b>Money pits</b><span>Low impact, high effort</span></div>
+      <div class="tip" role="tooltip" aria-hidden="true"></div>
+    </div>
+    <div class="axis axis-x" aria-hidden="true"><span>Low</span><b>Effort</b><span>High</span></div>
+  </div>
+  <div class="legend">
+    <ul class="zones"></ul>
+    <ol class="names"></ol>
+  </div>
+</figure>
+
+<script>
+(() => {
+  // Replace with your own ideas. Scores run 1 to 10. A score above SPLIT counts as high.
+  const ITEMS = [
+    { name: 'Merge the two intake forms', impact: 8, effort: 2 },
+    { name: 'Auto-assign by postcode', impact: 7, effort: 3 },
+    { name: 'Weekly queue review', impact: 5, effort: 1 },
+    { name: 'Self-service status page', impact: 7, effort: 6 },
+    { name: 'Replace the ticketing tool', impact: 8, effort: 9 },
+    { name: 'Custom reporting suite', impact: 3, effort: 7 },
+    { name: 'Rewrite the legacy export', impact: 2, effort: 8 },
+    { name: 'Reply macros for common cases', impact: 4, effort: 2 },
+    { name: 'Priority tagging on arrival', impact: 6, effort: 4 },
+    { name: 'Live chat widget', impact: 4, effort: 6 },
+  ];
+  const SPLIT = 5.5;
+  const ZONES = {
+    win: { name: 'Quick wins', hint: 'High impact, low effort' },
+    bet: { name: 'Big bets', hint: 'High impact, high effort' },
+    fill: { name: 'Fill-ins', hint: 'Low impact, low effort' },
+    pit: { name: 'Money pits', hint: 'Low impact, high effort' },
+  };
+  const zoneOf = (it) => (it.impact > SPLIT ? (it.effort > SPLIT ? 'bet' : 'win') : (it.effort > SPLIT ? 'pit' : 'fill'));
+  // Deterministic jitter in score units (about +/- 0.3), so equal scores never stack and a re-render never moves a dot.
+  const jit = (i, k) => { const v = Math.sin((i + 1) * 12.9898 + k * 78.233) * 43758.5453; return (v - Math.floor(v) - 0.5) * 0.6; };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  document.querySelectorAll('.c-priority-matrix').forEach((root) => {
+    const plot = root.querySelector('.plot');
+    const tip = root.querySelector('.tip');
+    const items = ITEMS.map((it, i) => {
+      const z = zoneOf(it);
+      return Object.assign({}, it, { i, z, x: ((it.effort + jit(i, 1)) / 11) * 100, y: ((it.impact + jit(i, 2)) / 11) * 100 });
+    });
+
+    plot.insertAdjacentHTML('beforeend', items.map((it) =>
+      '<button type="button" class="dot q-' + it.z + '-c" data-i="' + it.i + '" style="--x:' + it.x.toFixed(2) + '%;--y:' + it.y.toFixed(2) + '%" aria-label="' +
+      (it.i + 1) + ', ' + esc(it.name) + ', impact ' + it.impact + ', effort ' + it.effort + ', ' + ZONES[it.z].name + '">' + (it.i + 1) + '</button>' +
+      '<span class="tag" data-i="' + it.i + '" aria-hidden="true">' + esc(it.name) + '</span>'
+    ).join(''));
+
+    const counts = {};
+    items.forEach((it) => { counts[it.z] = (counts[it.z] || 0) + 1; });
+    root.querySelector('.zones').innerHTML = Object.keys(ZONES).map((z) =>
+      '<li class="q-' + z + '-c"><i class="sw"></i>' + ZONES[z].name + '<small>' + (counts[z] || 0) + '</small></li>').join('');
+    root.querySelector('.names').innerHTML = items.map((it) =>
+      '<li class="q-' + it.z + '-c" data-i="' + it.i + '"><span class="n">' + (it.i + 1) + '</span>' + esc(it.name) + '<em>Impact ' + it.impact + ' · Effort ' + it.effort + '</em></li>').join('');
+
+    const dots = [...plot.querySelectorAll('.dot')];
+    const tags = [...plot.querySelectorAll('.tag')];
+    const names = [...root.querySelectorAll('.names li')];
+
+    // Place each label beside its dot on the first side that stays inside the plot and clear of other labels and dots.
+    function layout() {
+      const W = plot.clientWidth;
+      const H = plot.clientHeight;
+      const on = W >= 600;
+      root.classList.toggle('has-labels', on);
+      if (!on) return;
+      const centre = (d) => [d.offsetLeft + d.offsetWidth / 2, d.offsetTop + d.offsetHeight / 2];
+      const placed = dots.map((d) => { const [x, y] = centre(d); return { l: x - 17, t: y - 17, r: x + 17, b: y + 17 }; });
+      const hit = (a, b) => a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t;
+      tags.forEach((tg, i) => {
+        const d = dots[i];
+        const w = tg.offsetWidth;
+        const h = tg.offsetHeight;
+        const [cx, cy] = centre(d);
+        const cands = [
+          [cx + 21, cy - h / 2], [cx - 21 - w, cy - h / 2],
+          [cx - w / 2, cy - 21 - h], [cx - w / 2, cy + 21],
+        ];
+        let pick = null;
+        for (const [l, t] of cands) {
+          const r = { l, t, r: l + w, b: t + h };
+          if (l < 4 || r.r > W - 4 || t < 4 || r.b > H - 4) continue;
+          if (placed.some((p, k) => k !== i && hit(r, p))) continue;
+          pick = r; break;
+        }
+        if (!pick) { tg.style.opacity = '0'; return; }
+        tg.style.opacity = '';
+        tg.style.left = pick.l + 'px';
+        tg.style.top = pick.t + 'px';
+        placed.push(pick);
+      });
+    }
+
+    function hot(i, on) {
+      dots[i].classList.toggle('is-hot', on);
+      tags[i].classList.toggle('is-hot', on);
+      names[i].classList.toggle('is-hot', on);
+    }
+
+    function show(i) {
+      const it = items[i];
+      const z = ZONES[it.z];
+      tip.innerHTML = '<b>' + (i + 1) + '. ' + esc(it.name) + '</b><span class="nums">Impact ' + it.impact + ' of 10 · Effort ' + it.effort + ' of 10</span>' +
+        '<span class="zn q-' + it.z + '-c"><i class="sw"></i>' + z.name + '</span>';
+      const d = dots[i];
+      const W = plot.clientWidth;
+      const w = tip.offsetWidth;
+      const h = tip.offsetHeight;
+      const [dx, dy] = [d.offsetLeft + d.offsetWidth / 2, d.offsetTop + d.offsetHeight / 2];
+      let left = dx - w / 2;
+      left = Math.max(6, Math.min(W - w - 6, left));
+      let top = dy - 24 - h;
+      if (top < 6) top = dy + 24;
+      tip.style.left = left + 'px';
+      tip.style.top = top + 'px';
+      tip.classList.add('is-on');
+      hot(i, true);
+    }
+    function hide(i) { tip.classList.remove('is-on'); hot(i, false); }
+
+    dots.forEach((d, i) => {
+      d.addEventListener('pointerenter', () => show(i));
+      d.addEventListener('pointerleave', () => { if (document.activeElement !== d) hide(i); });
+      d.addEventListener('focus', () => show(i));
+      d.addEventListener('blur', () => hide(i));
+      d.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(i); });
+    });
+    names.forEach((li, i) => {
+      li.addEventListener('pointerenter', () => hot(i, true));
+      li.addEventListener('pointerleave', () => hot(i, false));
+    });
+
+    layout();
+    new ResizeObserver(layout).observe(plot);
+  });
+})();
+</script>

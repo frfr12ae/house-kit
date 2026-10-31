@@ -1,0 +1,137 @@
+<!--
+@title Receipt
+@description Order or booking receipt email with a hero line, line items, totals, payment details and footer, in a 600px table layout.
+@tags email, receipt, order, booking, invoice, transactional
+@preview fill
+@height 1000
+@added 2026-10-31
+-->
+<table class="c-receipt" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="var(--ds-panel)" style='background: var(--ds-panel); font-family: var(--ds-font-sans);'>
+  <tr>
+    <td align="center" style='padding: 40px 16px;'>
+      <div style='display: none; max-height: 0; overflow: hidden; opacity: 0; font-size: 1px; color: var(--ds-panel);'>Paid in full. Your darkroom workshop seats are confirmed for 14 November.</div>
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style='width: 100%; max-width: 600px;'>
+        <tr>
+          <td style='padding: 0 8px 16px 8px; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink);'>Northlight Studio</td>
+          <td align="right" style='padding: 0 8px 16px 8px; font-family: var(--ds-font-sans); font-size: var(--ds-text-xs); color: var(--ds-muted);'>Receipt for your records</td>
+        </tr>
+        <tr>
+          <td colspan="2" bgcolor="var(--ds-surface)" style='background: var(--ds-surface); border: 1px solid var(--ds-line); border-radius: var(--ds-radius-xl);'>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+
+              <tr>
+                <td style='padding: 40px 40px 8px 40px;'>
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                    <td bgcolor="var(--ds-note-fill)" style='background: var(--ds-note-fill); border: 1px solid var(--ds-note-line); border-radius: 999px; padding: 4px 12px; font-family: var(--ds-font-sans); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-ink);'>Paid in full</td>
+                  </tr></table>
+                </td>
+              </tr>
+              <tr>
+                <td style='padding: 8px 40px 8px 40px; font-family: var(--ds-font-display); font-size: 30px; line-height: 36px; font-weight: 800; color: var(--ds-ink);'>You are booked in for Saturday, 14 November.</td>
+              </tr>
+              <tr>
+                <td style='padding: 0 40px 32px 40px; font-family: var(--ds-font-sans); font-size: var(--ds-text-md); line-height: 26px; color: var(--ds-text);'>Thanks, Maren. Two seats are held for the Saturday darkroom workshop. Doors open at 09:30 at 14 Mill Lane. Bring a camera with a roll of film, we supply the rest.</td>
+              </tr>
+
+              <tr>
+                <td style='padding: 0 40px;'>
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td style='padding: 0 0 10px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted);'>Item</td>
+                      <td align="center" width="56" style='padding: 0 0 10px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted);'>Qty</td>
+                      <td align="right" width="96" style='padding: 0 0 10px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted);'>Amount</td>
+                    </tr>
+                    <tr>
+                      <td style='padding: 16px 12px 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); line-height: 22px; color: var(--ds-ink);'><b>Darkroom workshop seat</b><br><span style='font-size: var(--ds-text-sm); color: var(--ds-muted);'>Sat 14 Nov, 09:30 to 16:00</span></td>
+                      <td align="center" valign="top" style='padding: 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); color: var(--ds-text);'>2</td>
+                      <td align="right" valign="top" style='padding: 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); color: var(--ds-text);'>$140.00</td>
+                    </tr>
+                    <tr>
+                      <td style='padding: 16px 12px 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); line-height: 22px; color: var(--ds-ink);'><b>Film and chemistry pack</b><br><span style='font-size: var(--ds-text-sm); color: var(--ds-muted);'>Black and white, 35mm</span></td>
+                      <td align="center" valign="top" style='padding: 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); color: var(--ds-text);'>1</td>
+                      <td align="right" valign="top" style='padding: 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); color: var(--ds-text);'>$18.00</td>
+                    </tr>
+                    <tr>
+                      <td style='padding: 16px 12px 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); line-height: 22px; color: var(--ds-ink);'><b>Print credit</b><br><span style='font-size: var(--ds-text-sm); color: var(--ds-muted);'>Two 8x10 fibre prints</span></td>
+                      <td align="center" valign="top" style='padding: 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); color: var(--ds-text);'>1</td>
+                      <td align="right" valign="top" style='padding: 16px 0; border-bottom: 1px solid var(--ds-line); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); color: var(--ds-text);'>$12.00</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <td align="right" style='padding: 16px 40px 0 40px;'>
+                  <table role="presentation" width="260" cellpadding="0" cellspacing="0" border="0" style='width: 260px;'>
+                    <tr>
+                      <td style='padding: 4px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-muted);'>Subtotal</td>
+                      <td align="right" style='padding: 4px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-text);'>$170.00</td>
+                    </tr>
+                    <tr>
+                      <td style='padding: 4px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-muted);'>Early booking (10%)</td>
+                      <td align="right" style='padding: 4px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-text);'>-$17.00</td>
+                    </tr>
+                    <tr>
+                      <td style='padding: 4px 0 12px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-muted);'>Sales tax (8%)</td>
+                      <td align="right" style='padding: 4px 0 12px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-text);'>$12.24</td>
+                    </tr>
+                    <tr>
+                      <td style='padding: 12px 0 0 0; border-top: 1.5px solid var(--ds-ink); font-family: var(--ds-font-sans); font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink);'>Total paid</td>
+                      <td align="right" style='padding: 12px 0 0 0; border-top: 1.5px solid var(--ds-ink); font-family: var(--ds-font-sans); font-size: var(--ds-text-lg); font-weight: 800; color: var(--ds-ink);'>$165.24</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <td style='padding: 32px 40px 8px 40px;'>
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td bgcolor="var(--ds-neutral-fill)" style='background: var(--ds-neutral-fill); border: 1px solid var(--ds-neutral-line); border-radius: var(--ds-radius-md); padding: 16px 20px;'>
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            <td width="120" style='padding: 3px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-muted);'>Order number</td>
+                            <td style='padding: 3px 0; font-family: var(--ds-font-mono); font-size: var(--ds-text-sm); color: var(--ds-ink);'>NL-20418</td>
+                          </tr>
+                          <tr>
+                            <td width="120" style='padding: 3px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-muted);'>Paid with</td>
+                            <td style='padding: 3px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-ink);'>Visa ending 4242</td>
+                          </tr>
+                          <tr>
+                            <td width="120" style='padding: 3px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-muted);'>Paid on</td>
+                            <td style='padding: 3px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-ink);'>31 October 2026</td>
+                          </tr>
+                          <tr>
+                            <td width="120" style='padding: 3px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-muted);'>Billed to</td>
+                            <td style='padding: 3px 0; font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); color: var(--ds-ink);'>Maren Holt, maren@example.com</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <td style='padding: 24px 40px 40px 40px;'>
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                    <td align="center" bgcolor="var(--ds-action)" style='background: var(--ds-action); border-radius: var(--ds-radius-md);'>
+                      <a href="#" style='display: inline-block; padding: 14px 28px; font-family: var(--ds-font-sans); font-size: var(--ds-text-md); font-weight: 700; line-height: 20px; color: var(--ds-on-action); text-decoration: none;'>Add to calendar</a>
+                    </td>
+                  </tr></table>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center" style='padding: 24px 16px 0 16px; font-family: var(--ds-font-sans); font-size: var(--ds-text-xs); line-height: 20px; color: var(--ds-muted);'>
+            Questions about your booking? Reply to this email and a person will answer.<br>
+            Northlight Studio, 14 Mill Lane, Harrowgate. Cancel free up to 48 hours before.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

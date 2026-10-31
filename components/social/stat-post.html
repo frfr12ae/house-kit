@@ -1,0 +1,78 @@
+<!--
+@title Stat post
+@description 4:5 social post built around one huge number, a line of context, a hand-drawn underline and a source line.
+@tags social, stat, number, data, post, statistic
+@preview center
+@height 740
+@added 2026-10-31
+-->
+<style>
+  .c-stat-post {
+    container-type: inline-size;
+    position: relative;
+    width: min(540px, 100%);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-stat-post .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 8cqi;
+  }
+  .c-stat-post .eyebrow { font-size: 3.4cqi; font-weight: 700; color: var(--ds-muted); }
+  .c-stat-post .main { align-self: center; display: grid; gap: 6cqi; }
+  .c-stat-post .num-wrap { position: relative; justify-self: start; padding-bottom: 3cqi; }
+  .c-stat-post .num {
+    display: block;
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 44cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-stat-post .num small { font-size: 0.55em; letter-spacing: 0; margin-left: 0.02em; }
+  .c-stat-post .ul {
+    position: absolute;
+    left: 0;
+    bottom: -1cqi;
+    width: 100%;
+    height: 5cqi;
+    max-width: none;
+    overflow: visible;
+    fill: none;
+    stroke: var(--ds-highlight-line);
+    stroke-width: 1.7cqi;
+    stroke-linecap: round;
+  }
+  .c-stat-post .ul path { vector-effect: non-scaling-stroke; }
+  .c-stat-post .context { margin: 0; max-width: 100%; font-size: 6cqi; line-height: 1.25; font-weight: 600; color: var(--ds-ink); text-wrap: balance; }
+  .c-stat-post .foot { display: flex; justify-content: space-between; align-items: end; gap: 4cqi; padding-top: 3.2cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 3cqi; line-height: 1.4; color: var(--ds-muted); }
+  .c-stat-post .foot b { color: var(--ds-text); font-weight: 600; }
+  .c-stat-post .foot .handle { white-space: nowrap; font-weight: 600; color: var(--ds-text); }
+</style>
+
+<article class="c-stat-post" aria-label="Stat post">
+  <div class="inner">
+    <div class="eyebrow">Admin, by the numbers</div>
+    <div class="main">
+      <div class="num-wrap">
+        <p class="num">73<small>%</small></p>
+        <svg class="ul" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 20 3, 34 11, 54 6 S 84 4, 98 7"/></svg>
+      </div>
+      <p class="context">of small teams still keep their client list in a spreadsheet nobody owns.</p>
+    </div>
+    <div class="foot">
+      <span><b>Source:</b> Example Research, survey of 1,200 small-business owners, 2026</span>
+      <span class="handle">@yourhandle</span>
+    </div>
+  </div>
+</article>

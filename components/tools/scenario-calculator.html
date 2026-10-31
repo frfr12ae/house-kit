@@ -1,0 +1,415 @@
+<!--
+@title Scenario calculator
+@description Compare plans side by side: scenario tabs you can add, duplicate, rename and delete, editable income and cost rows, a certainty filter, a sticky totals bar, a compare table and JSON backup.
+@tags calculator, scenarios, budget, planning, what-if, import, export, json
+@preview fill
+@height 720
+@added 2026-10-31
+-->
+<style>
+  .c-scenario-calculator {
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-scenario-calculator .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .c-scenario-calculator .top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-4); margin-bottom: var(--ds-space-5); }
+  .c-scenario-calculator h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-scenario-calculator .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-scenario-calculator .btns { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-2); }
+  .c-scenario-calculator .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-2); min-height: 36px; padding: 0 var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); color: var(--ds-ink); font-size: var(--ds-text-sm); font-weight: 600; cursor: pointer; }
+  .c-scenario-calculator .btn:hover:not(:disabled) { border-color: var(--ds-neutral-line); }
+  .c-scenario-calculator .btn:disabled { color: var(--ds-muted); cursor: not-allowed; opacity: 0.6; }
+  .c-scenario-calculator .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-scenario-calculator .btn.is-danger { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-scenario-calculator .link { padding: var(--ds-space-1) var(--ds-space-2); border: 0; border-radius: var(--ds-radius-sm); background: transparent; color: var(--ds-text); font-size: var(--ds-text-xs); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .c-scenario-calculator .link:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+
+  .c-scenario-calculator .tabs { display: flex; align-items: flex-end; gap: var(--ds-space-1); overflow-x: auto; scrollbar-width: thin; border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-scenario-calculator .tab { flex: none; max-width: 220px; padding: var(--ds-space-3) var(--ds-space-5); border: var(--ds-hairline) solid transparent; border-bottom: 0; border-radius: var(--ds-radius-md) var(--ds-radius-md) 0 0; background: transparent; color: var(--ds-muted); font-size: var(--ds-text-sm); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .c-scenario-calculator .tab:hover { color: var(--ds-ink); }
+  .c-scenario-calculator .tab[aria-selected="true"] { margin-bottom: -1px; border-color: var(--ds-line); background: var(--ds-raised); color: var(--ds-ink); }
+  .c-scenario-calculator .tab:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-scenario-calculator .tab.add { padding: var(--ds-space-3) var(--ds-space-4); color: var(--ds-text); }
+
+  .c-scenario-calculator .board { padding: var(--ds-space-5); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-top: 0; border-radius: 0 0 var(--ds-radius-lg) var(--ds-radius-lg); }
+  .c-scenario-calculator .tools { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-4); margin-bottom: var(--ds-space-5); }
+  .c-scenario-calculator .lab { display: block; margin-bottom: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-scenario-calculator .control { min-height: 40px; padding: 0 var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); color: var(--ds-ink); font-size: var(--ds-text-sm); min-width: 0; }
+  .c-scenario-calculator .control:focus-visible { outline: none; border-color: var(--ds-info-line); box-shadow: var(--ds-focus); }
+  .c-scenario-calculator .name-field .control { width: min(320px, 100%); font-weight: 600; }
+
+  .c-scenario-calculator .seg { display: inline-flex; padding: var(--ds-space-1); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-panel); }
+  .c-scenario-calculator .seg button { height: 32px; padding: 0 var(--ds-space-4); border: 0; border-radius: var(--ds-radius-pill); background: transparent; color: var(--ds-text); font-size: var(--ds-text-sm); font-weight: 600; cursor: pointer; transition: background var(--ds-dur-base) var(--ds-ease), color var(--ds-dur-base) var(--ds-ease); }
+  .c-scenario-calculator .seg button:hover { color: var(--ds-ink); }
+  .c-scenario-calculator .seg button[aria-checked="true"] { background: var(--ds-action); color: var(--ds-on-action); }
+  .c-scenario-calculator .seg button:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+
+  .c-scenario-calculator .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-5); }
+  .c-scenario-calculator .group { min-width: 0; padding: var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); }
+  .c-scenario-calculator .group-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); margin-bottom: var(--ds-space-3); }
+  .c-scenario-calculator .group-head h4 { margin: 0; font-size: var(--ds-text-sm); color: var(--ds-ink); }
+  .c-scenario-calculator .group-head span { font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-scenario-calculator .rows { display: grid; gap: var(--ds-space-2); margin: 0 0 var(--ds-space-3); padding: 0; list-style: none; }
+  .c-scenario-calculator .row { display: grid; grid-template-columns: minmax(0, 1fr) 104px 36px; gap: var(--ds-space-2); align-items: center; transition: opacity var(--ds-dur-base) var(--ds-ease); }
+  .c-scenario-calculator .row.has-cert { grid-template-columns: minmax(0, 1fr) 96px 104px 36px; }
+  .c-scenario-calculator .row.is-off { opacity: 0.45; }
+  .c-scenario-calculator .row .amount { text-align: right; font-variant-numeric: tabular-nums; }
+  .c-scenario-calculator .cert { padding: 0 var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 600; }
+  .c-scenario-calculator .cert[data-cert="signed"] { border-color: var(--ds-note-line); background: var(--ds-note-fill); }
+  .c-scenario-calculator .cert[data-cert="likely"] { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); }
+  .c-scenario-calculator .cert[data-cert="possible"] { border-color: var(--ds-neutral-line); background: var(--ds-neutral-fill); }
+  .c-scenario-calculator .x { width: 36px; height: 36px; border: 0; border-radius: var(--ds-radius-md); background: transparent; color: var(--ds-muted); font-size: var(--ds-text-lg); line-height: 1; cursor: pointer; }
+  .c-scenario-calculator .x:hover { background: var(--ds-danger-fill); color: var(--ds-ink); }
+  .c-scenario-calculator .x:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-scenario-calculator .empty { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-sm); color: var(--ds-muted); }
+
+  .c-scenario-calculator .totals { position: sticky; top: var(--ds-space-3); z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-4); margin-bottom: var(--ds-space-5); padding: var(--ds-space-4) var(--ds-space-5); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); background: var(--ds-surface); box-shadow: var(--ds-shadow-md); }
+  .c-scenario-calculator .stat { display: grid; gap: 2px; min-width: 0; }
+  .c-scenario-calculator .stat small { font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-scenario-calculator .stat b { font-size: var(--ds-text-lg); color: var(--ds-ink); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .c-scenario-calculator .stat em { font-style: normal; font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-scenario-calculator .stat.is-result b { display: inline-block; width: fit-content; padding: 0 var(--ds-space-2); margin-left: calc(var(--ds-space-2) * -1); border-radius: var(--ds-radius-sm); font-size: var(--ds-text-xl); font-weight: 800; }
+  .c-scenario-calculator .stat.is-result.is-pos b { background: var(--ds-note-fill); }
+  .c-scenario-calculator .stat.is-result.is-neg b { background: var(--ds-danger-fill); }
+
+  .c-scenario-calculator .compare { margin-top: var(--ds-space-6); }
+  .c-scenario-calculator .compare h4 { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-scenario-calculator .scroll { overflow-x: auto; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-scenario-calculator table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: var(--ds-text-sm); }
+  .c-scenario-calculator th, .c-scenario-calculator td { padding: var(--ds-space-3) var(--ds-space-4); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; border-bottom: var(--ds-hairline) solid color-mix(in srgb, var(--ds-line) 55%, transparent); }
+  .c-scenario-calculator th:first-child, .c-scenario-calculator td:first-child { text-align: left; }
+  .c-scenario-calculator thead th { font-weight: 600; color: var(--ds-muted); border-bottom-color: var(--ds-line); }
+  .c-scenario-calculator tbody tr:last-child > * { border-bottom: 0; }
+  .c-scenario-calculator tbody th { font-weight: 600; color: var(--ds-ink); }
+  .c-scenario-calculator tbody tr.is-active { background: var(--ds-highlight-fill); }
+  .c-scenario-calculator .pick { max-width: 220px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; text-decoration-color: var(--ds-line); text-underline-offset: 3px; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .c-scenario-calculator .pick:focus-visible { outline: none; box-shadow: var(--ds-focus); border-radius: var(--ds-radius-sm); }
+  .c-scenario-calculator .neg { color: var(--ds-danger-line); }
+  .c-scenario-calculator td.res { font-weight: 700; color: var(--ds-ink); }
+  .c-scenario-calculator td.res.neg { color: var(--ds-ink); }
+  .c-scenario-calculator .dot-neg { display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: var(--ds-danger-line); }
+  .c-scenario-calculator .status { min-height: 1.4em; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-scenario-calculator .status.is-bad { color: var(--ds-ink); }
+  .c-scenario-calculator .status.is-bad::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: var(--ds-danger-line); }
+
+  @media (max-width: 760px) {
+    .c-scenario-calculator .cols { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .c-scenario-calculator { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-scenario-calculator .board { padding: var(--ds-space-4) var(--ds-space-3); }
+    .c-scenario-calculator .totals { position: static; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--ds-space-3) var(--ds-space-4); gap: var(--ds-space-3); }
+    .c-scenario-calculator .stat.is-result { order: -1; grid-column: 1 / -1; }
+    .c-scenario-calculator .row.has-cert { grid-template-columns: minmax(0, 1fr) 36px; }
+    .c-scenario-calculator .row.has-cert .cert, .c-scenario-calculator .row.has-cert .amount { grid-row: 2; }
+    .c-scenario-calculator .row.has-cert { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px; }
+    .c-scenario-calculator .row.has-cert .name { grid-column: 1 / 3; }
+    .c-scenario-calculator .row.has-cert .x { grid-column: 3; grid-row: 1; }
+    .c-scenario-calculator .row.has-cert { padding-bottom: var(--ds-space-2); border-bottom: var(--ds-hairline) dashed var(--ds-line); }
+  }
+</style>
+
+<section class="c-scenario-calculator" aria-labelledby="c-scenario-calculator-title">
+  <div class="top">
+    <div>
+      <h3 id="c-scenario-calculator-title">Studio plan for the year</h3>
+      <p class="hint">Build a few versions of the year and see which one holds up. Everything stays in this browser.</p>
+    </div>
+    <div class="btns">
+      <button class="btn" type="button" data-act="export">Export JSON</button>
+      <button class="btn" type="button" data-act="import">Import JSON</button>
+      <input type="file" accept="application/json,.json" hidden data-file>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Scenarios"></div>
+
+  <div class="board" role="tabpanel">
+    <div class="tools">
+      <div class="name-field">
+        <label class="lab" for="c-scenario-calculator-name">Scenario name</label>
+        <input class="control" id="c-scenario-calculator-name" type="text" maxlength="40" data-name>
+      </div>
+      <div>
+        <span class="lab" id="c-scenario-calculator-lvl">Count income that is</span>
+        <div class="seg" role="radiogroup" aria-labelledby="c-scenario-calculator-lvl">
+          <button type="button" role="radio" data-level="signed" aria-checked="false">Signed</button>
+          <button type="button" role="radio" data-level="likely" aria-checked="false">Likely</button>
+          <button type="button" role="radio" data-level="all" aria-checked="false">Everything</button>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="btn" type="button" data-act="duplicate">Duplicate</button>
+        <button class="btn" type="button" data-act="delete">Delete</button>
+      </div>
+    </div>
+
+    <div class="totals" aria-label="Totals for this scenario">
+      <div class="stat"><small>Income counted</small><b data-t="income"></b><em data-t="incomeOf"></em></div>
+      <div class="stat"><small>Costs</small><b data-t="costs"></b><em data-t="costsOf"></em></div>
+      <div class="stat is-result"><small>Result</small><b data-t="result"></b><em data-t="resultNote"></em></div>
+      <div class="stat"><small>Margin</small><b data-t="margin"></b><em>of income counted</em></div>
+    </div>
+
+    <div class="cols">
+      <div class="group" data-kind="income">
+        <div class="group-head"><h4>Income</h4><span data-sub></span></div>
+        <ul class="rows" aria-label="Income rows"></ul>
+        <button class="btn" type="button" data-add="income">Add income</button>
+      </div>
+      <div class="group" data-kind="costs">
+        <div class="group-head"><h4>Costs</h4><span data-sub></span></div>
+        <ul class="rows" aria-label="Cost rows"></ul>
+        <button class="btn" type="button" data-add="costs">Add cost</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="compare">
+    <h4>All scenarios side by side</h4>
+    <div class="scroll" role="region" aria-label="Scenario comparison" tabindex="0">
+      <table>
+        <thead><tr><th scope="col">Scenario</th><th scope="col">Income</th><th scope="col">Costs</th><th scope="col">Result</th><th scope="col">Margin</th><th scope="col">Result, signed only</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="status" role="status" aria-live="polite"></p>
+    <button class="link" type="button" data-act="reset">Reset to the sample plan</button>
+  </div>
+</section>
+
+<script>
+(() => {
+  const LEVELS = { signed: ['signed'], likely: ['signed', 'likely'], all: ['signed', 'likely', 'possible'] };
+  const LEVEL_NAMES = { signed: 'signed work only', likely: 'signed and likely work', all: 'everything on the list' };
+  const eur = new Intl.NumberFormat('en', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  const pct = (v) => (Number.isFinite(v) ? Math.round(v * 100) + '%' : 'n/a');
+  const uid = () => Math.random().toString(36).slice(2, 8);
+  const row = (name, amount, cert) => (cert ? { id: uid(), name, amount, cert } : { id: uid(), name, amount });
+
+  const sample = () => ({
+    v: 1, level: 'likely', active: '',
+    scenarios: [
+      { id: uid(), name: 'Base plan',
+        income: [row('Brand retainer', 36000, 'signed'), row('Website rebuild', 18500, 'signed'), row('Packaging project', 14000, 'likely'), row('Workshop series', 6000, 'likely'), row('Open pitch', 9000, 'possible')],
+        costs: [row('Studio rent', 14400), row('Software and tools', 3200), row('Freelance help', 7500), row('Insurance and accounting', 4100), row('Owner salary', 36000)] },
+      { id: uid(), name: 'Hire a designer',
+        income: [row('Brand retainer', 36000, 'signed'), row('Website rebuild', 18500, 'signed'), row('Packaging project', 14000, 'likely'), row('Workshop series', 6000, 'likely'), row('Extra retainer capacity', 24000, 'likely'), row('Open pitch', 9000, 'possible')],
+        costs: [row('Studio rent', 14400), row('Software and tools', 4600), row('Designer salary', 42000), row('Insurance and accounting', 4400), row('Owner salary', 36000)] },
+      { id: uid(), name: 'Quiet year',
+        income: [row('Brand retainer', 36000, 'signed'), row('Website rebuild', 9000, 'signed'), row('Workshop series', 6000, 'possible')],
+        costs: [row('Studio rent', 14400), row('Software and tools', 2800), row('Insurance and accounting', 3900), row('Owner salary', 30000)] },
+    ],
+  });
+
+  const clean = (raw) => {
+    if (!raw || !Array.isArray(raw.scenarios) || !raw.scenarios.length) return null;
+    const num = (v) => { const n = Number(v); return Number.isFinite(n) && n >= 0 ? Math.round(n) : 0; };
+    const rows = (list, withCert) => (Array.isArray(list) ? list : []).slice(0, 60).map((r) => {
+      const base = { id: uid(), name: String((r && r.name) || '').slice(0, 60), amount: num(r && r.amount) };
+      if (withCert) base.cert = ['signed', 'likely', 'possible'].includes(r && r.cert) ? r.cert : 'likely';
+      return base;
+    });
+    const scenarios = raw.scenarios.slice(0, 12).map((s) => ({ id: uid(), name: String((s && s.name) || 'Untitled').slice(0, 40), income: rows(s && s.income, true), costs: rows(s && s.costs, false) }));
+    return { v: 1, level: LEVELS[raw.level] ? raw.level : 'likely', active: scenarios[0].id, scenarios };
+  };
+
+  document.querySelectorAll('.c-scenario-calculator').forEach((root, index) => {
+    const KEY = root.dataset.storageKey || 'ok:scenario-calculator:' + index;
+    const $ = (s) => root.querySelector(s);
+    const $$ = (s) => [...root.querySelectorAll(s)];
+    const status = $('.status');
+    const tabs = $('.tabs');
+    const nameInput = $('[data-name]');
+    let st = null;
+    let armed = null;
+
+    try { st = clean(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { st = null; }
+    if (!st) { st = sample(); st.active = st.scenarios[0].id; }
+
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { /* storage unavailable: keep working in memory */ } };
+    const say = (msg, bad) => { status.textContent = msg; status.classList.toggle('is-bad', !!bad); };
+    const cur = () => st.scenarios.find((s) => s.id === st.active) || st.scenarios[0];
+    const counts = (r, level) => LEVELS[level].includes(r.cert);
+    const sum = (list, pred) => list.reduce((t, r) => t + (pred(r) ? Number(r.amount) || 0 : 0), 0);
+    const calc = (s, level) => {
+      const income = sum(s.income, (r) => counts(r, level));
+      const all = sum(s.income, () => true);
+      const costs = sum(s.costs, () => true);
+      return { income, all, costs, result: income - costs, margin: income ? (income - costs) / income : NaN };
+    };
+    const signed = (v) => (v < 0 ? '-' : '') + eur.format(Math.abs(v));
+
+    function renderTabs() {
+      tabs.innerHTML = '';
+      st.scenarios.forEach((s) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'tab'; b.setAttribute('role', 'tab');
+        b.setAttribute('aria-selected', String(s.id === st.active)); b.tabIndex = s.id === st.active ? 0 : -1;
+        b.textContent = s.name || 'Untitled'; b.dataset.id = s.id;
+        b.addEventListener('click', () => { st.active = s.id; disarm(); renderAll(); save(); });
+        tabs.appendChild(b);
+      });
+      const add = document.createElement('button');
+      add.type = 'button'; add.className = 'tab add'; add.textContent = '+ New'; add.setAttribute('aria-label', 'New scenario');
+      add.addEventListener('click', () => {
+        const s = { id: uid(), name: 'Scenario ' + (st.scenarios.length + 1), income: [row('', 0, 'likely')], costs: [row('', 0)] };
+        st.scenarios.push(s); st.active = s.id; renderAll(); save(); nameInput.focus(); nameInput.select();
+      });
+      tabs.appendChild(add);
+    }
+
+    tabs.addEventListener('keydown', (e) => {
+      const list = [...tabs.querySelectorAll('[role="tab"]')];
+      const i = list.indexOf(document.activeElement);
+      if (i < 0) return;
+      const n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: list.length - 1 }[e.key];
+      if (n === undefined) return;
+      e.preventDefault();
+      const t = list[(n + list.length) % list.length]; st.active = t.dataset.id; renderAll(); save();
+      tabs.querySelector('[aria-selected="true"]').focus();
+    });
+
+    function renderRows(kind) {
+      const s = cur();
+      const ul = $('[data-kind="' + kind + '"] .rows');
+      ul.innerHTML = '';
+      const list = s[kind];
+      if (!list.length) { const p = document.createElement('li'); p.className = 'empty'; p.textContent = kind === 'income' ? 'No income yet. Add the first line.' : 'No costs yet. Add the first line.'; ul.appendChild(p); }
+      list.forEach((r, i) => {
+        const li = document.createElement('li');
+        li.className = 'row' + (kind === 'income' ? ' has-cert' : ''); li.dataset.id = r.id;
+        const name = document.createElement('input');
+        name.className = 'control name'; name.type = 'text'; name.value = r.name; name.placeholder = kind === 'income' ? 'Client or project' : 'Cost';
+        name.setAttribute('aria-label', (kind === 'income' ? 'Income' : 'Cost') + ' ' + (i + 1) + ' name'); name.maxLength = 60;
+        name.addEventListener('input', () => { r.name = name.value; save(); });
+        li.appendChild(name);
+        if (kind === 'income') {
+          const sel = document.createElement('select');
+          sel.className = 'control cert'; sel.dataset.cert = r.cert; sel.setAttribute('aria-label', 'Certainty of ' + (r.name || 'income ' + (i + 1)));
+          [['signed', 'Signed'], ['likely', 'Likely'], ['possible', 'Possible']].forEach((o) => { const op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; if (o[0] === r.cert) op.selected = true; sel.appendChild(op); });
+          sel.addEventListener('change', () => { r.cert = sel.value; sel.dataset.cert = r.cert; refresh(); save(); });
+          li.appendChild(sel);
+        }
+        const amt = document.createElement('input');
+        amt.className = 'control amount'; amt.type = 'number'; amt.min = '0'; amt.step = '100'; amt.inputMode = 'numeric'; amt.value = r.amount;
+        amt.setAttribute('aria-label', (r.name || (kind === 'income' ? 'Income ' : 'Cost ') + (i + 1)) + ' amount in euros');
+        amt.addEventListener('input', () => { r.amount = Math.max(0, Number(amt.value) || 0); refresh(); save(); });
+        li.appendChild(amt);
+        const x = document.createElement('button');
+        x.type = 'button'; x.className = 'x'; x.innerHTML = '&times;'; x.setAttribute('aria-label', 'Remove ' + (r.name || 'row ' + (i + 1)));
+        x.addEventListener('click', () => {
+          s[kind] = s[kind].filter((q) => q.id !== r.id); renderRows(kind); refresh(); save();
+          const next = $('[data-kind="' + kind + '"] .rows .name') || $('[data-add="' + kind + '"]'); next.focus();
+        });
+        li.appendChild(x);
+        ul.appendChild(li);
+      });
+    }
+
+    function refresh() {
+      const s = cur(); const c = calc(s, st.level);
+      $$('[data-kind="income"] .row').forEach((li) => {
+        const r = s.income.find((q) => q.id === li.dataset.id);
+        if (r) li.classList.toggle('is-off', !counts(r, st.level));
+      });
+      $('[data-kind="income"] [data-sub]').textContent = eur.format(c.income) + ' counted';
+      $('[data-kind="costs"] [data-sub]').textContent = eur.format(c.costs) + ' a year';
+      $('[data-t="income"]').textContent = eur.format(c.income);
+      $('[data-t="incomeOf"]').textContent = c.all > c.income ? 'of ' + eur.format(c.all) + ' listed' : 'all listed income';
+      $('[data-t="costs"]').textContent = eur.format(c.costs);
+      $('[data-t="costsOf"]').textContent = s.costs.length + ' lines';
+      $('[data-t="result"]').textContent = signed(c.result);
+      $('[data-t="resultNote"]').textContent = c.result >= 0 ? 'left over' : 'short';
+      $('[data-t="margin"]').textContent = pct(c.margin);
+      const box = $('.stat.is-result'); box.classList.toggle('is-pos', c.result >= 0); box.classList.toggle('is-neg', c.result < 0);
+      renderCompare();
+    }
+
+    function renderCompare() {
+      const body = $('tbody'); body.innerHTML = '';
+      st.scenarios.forEach((s) => {
+        const c = calc(s, st.level); const only = calc(s, 'signed');
+        const tr = document.createElement('tr'); if (s.id === st.active) tr.className = 'is-active';
+        const th = document.createElement('th'); th.scope = 'row';
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'pick'; b.textContent = s.name || 'Untitled'; b.title = 'Open ' + (s.name || 'scenario');
+        b.addEventListener('click', () => { st.active = s.id; renderAll(); save(); });
+        th.appendChild(b); tr.appendChild(th);
+        const cell = (text, cls) => { const td = document.createElement('td'); td.textContent = text; if (cls) td.className = cls; tr.appendChild(td); return td; };
+        cell(eur.format(c.income)); cell(eur.format(c.costs));
+        const r = cell(signed(c.result), 'res'); if (c.result < 0) { r.classList.add('neg'); const d = document.createElement('i'); d.className = 'dot-neg'; r.prepend(d); }
+        cell(pct(c.margin));
+        const o = cell(signed(only.result)); if (only.result < 0) { const d = document.createElement('i'); d.className = 'dot-neg'; o.prepend(d); }
+        body.appendChild(tr);
+      });
+    }
+
+    function disarm() { if (armed) { armed.textContent = 'Delete'; armed.classList.remove('is-danger'); armed = null; } }
+
+    function renderAll() {
+      const s = cur(); st.active = s.id;
+      renderTabs(); renderRows('income'); renderRows('costs');
+      nameInput.value = s.name;
+      $$('[data-level]').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.level === st.level)));
+      $('[data-act="delete"]').disabled = st.scenarios.length < 2;
+      $('.board').setAttribute('aria-label', s.name + ', counting ' + LEVEL_NAMES[st.level]);
+      refresh();
+    }
+
+    nameInput.addEventListener('input', () => {
+      const s = cur(); s.name = nameInput.value;
+      const t = tabs.querySelector('[aria-selected="true"]'); if (t) t.textContent = s.name || 'Untitled';
+      renderCompare(); save();
+    });
+    $$('[data-level]').forEach((b) => b.addEventListener('click', () => { st.level = b.dataset.level; $$('[data-level]').forEach((x) => x.setAttribute('aria-checked', String(x === b))); refresh(); save(); }));
+    $$('[data-add]').forEach((b) => b.addEventListener('click', () => {
+      const kind = b.dataset.add; cur()[kind].push(kind === 'income' ? row('', 0, 'likely') : row('', 0));
+      renderRows(kind); refresh(); save();
+      const names = $$('[data-kind="' + kind + '"] .name'); names[names.length - 1].focus();
+    }));
+    $('[data-act="duplicate"]').addEventListener('click', () => {
+      const s = cur(); const copy = JSON.parse(JSON.stringify(s)); copy.id = uid(); copy.name = (s.name || 'Scenario') + ' copy';
+      copy.income.forEach((r) => { r.id = uid(); }); copy.costs.forEach((r) => { r.id = uid(); });
+      st.scenarios.splice(st.scenarios.indexOf(s) + 1, 0, copy); st.active = copy.id; renderAll(); save(); say('Duplicated. Rename the copy and change what differs.');
+    });
+    $('[data-act="delete"]').addEventListener('click', (e) => {
+      const btn = e.currentTarget;
+      if (armed !== btn) { armed = btn; btn.textContent = 'Click again to delete'; btn.classList.add('is-danger'); setTimeout(disarm, 3500); return; }
+      const s = cur(); const i = st.scenarios.indexOf(s); st.scenarios.splice(i, 1); st.active = st.scenarios[Math.max(0, i - 1)].id;
+      disarm(); renderAll(); save(); say('Deleted "' + (s.name || 'Untitled') + '".');
+    });
+
+    $('[data-act="export"]').addEventListener('click', () => {
+      try {
+        const data = JSON.stringify({ app: 'scenario-calculator', version: 1, level: st.level, scenarios: st.scenarios.map((s) => ({ name: s.name, income: s.income.map((r) => ({ name: r.name, amount: r.amount, cert: r.cert })), costs: s.costs.map((r) => ({ name: r.name, amount: r.amount })) })) }, null, 2);
+        const url = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+        const a = document.createElement('a'); a.href = url; a.download = 'studio-plan-' + new Date().toISOString().slice(0, 10) + '.json';
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+        say('Exported ' + st.scenarios.length + ' scenarios as JSON.');
+      } catch (e) { say('Export is not available in this browser.', true); }
+    });
+    const file = $('[data-file]');
+    $('[data-act="import"]').addEventListener('click', () => file.click());
+    file.addEventListener('change', () => {
+      const f = file.files && file.files[0]; if (!f) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        let next = null;
+        try { next = clean(JSON.parse(String(reader.result))); } catch (e) { next = null; }
+        if (!next) { say('That file is not a plan backup. Nothing was changed.', true); }
+        else { st = next; renderAll(); save(); say('Imported ' + st.scenarios.length + ' scenarios from ' + f.name + '.'); }
+        file.value = '';
+      };
+      reader.onerror = () => say('Could not read that file.', true);
+      reader.readAsText(f);
+    });
+    $('[data-act="reset"]').addEventListener('click', () => { st = sample(); st.active = st.scenarios[0].id; renderAll(); save(); say('Sample plan restored.'); });
+
+    renderAll();
+  });
+})();
+</script>

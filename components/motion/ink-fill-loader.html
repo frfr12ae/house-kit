@@ -1,0 +1,102 @@
+<!--
+@title Ink fill loader
+@description A wordmark drawn as SVG text with a ghost outline, while an ink fill rises inside the letters on a slow wave. Loops as a loader; swap the word for your own.
+@tags loader, loading, wordmark, logo, svg, fill, ink
+@preview center
+@height 360
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-ink-fill-loader,
+  .c-ink-fill-loader *,
+  .c-ink-fill-loader *::before,
+  .c-ink-fill-loader *::after { box-sizing: border-box; }
+  .c-ink-fill-loader {
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-5);
+    width: min(640px, 100%);
+    margin: 0;
+    padding: var(--ds-space-8) var(--ds-space-5);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-ink);
+  }
+  .c-ink-fill-loader .stack {
+    width: min(520px, 100%);
+    animation: c-ink-fill-loader-cycle calc(var(--ds-dur-story) * 3.4) linear infinite;
+  }
+  .c-ink-fill-loader svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .c-ink-fill-loader .word {
+    font-family: var(--ds-font-display);
+    font-size: 118px;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: -0.02em;
+    text-anchor: middle;
+  }
+  .c-ink-fill-loader .ghost {
+    fill: color-mix(in srgb, var(--ds-ink) 6%, transparent);
+    stroke: color-mix(in srgb, var(--ds-ink) 30%, transparent);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .c-ink-fill-loader .ink { fill: var(--ds-ink); }
+  .c-ink-fill-loader .wave { fill: white; animation: c-ink-fill-loader-drift calc(var(--ds-dur-story) * 1.2) linear infinite; }
+  .c-ink-fill-loader .rise { animation: c-ink-fill-loader-rise calc(var(--ds-dur-story) * 3.4) var(--ds-ease-in-out) infinite; }
+  .c-ink-fill-loader .label { font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-ink-fill-loader.is-paused .stack,
+  .c-ink-fill-loader.is-paused .wave,
+  .c-ink-fill-loader.is-paused .rise { animation-play-state: paused; }
+
+  /* uneven stops, so the fill reads like real progress; the whole mark fades before the loop restarts */
+  @keyframes c-ink-fill-loader-rise {
+    0%   { transform: translateY(176px); }
+    8%   { transform: translateY(150px); }
+    34%  { transform: translateY(104px); }
+    54%  { transform: translateY(72px); }
+    74%  { transform: translateY(34px); }
+    86%  { transform: translateY(-14px); }
+    100% { transform: translateY(-14px); }
+  }
+  @keyframes c-ink-fill-loader-drift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-160px); }
+  }
+  @keyframes c-ink-fill-loader-cycle {
+    0%   { opacity: 0; }
+    6%   { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-ink-fill-loader .stack,
+    .c-ink-fill-loader .wave { animation: none; }
+    .c-ink-fill-loader .rise { animation: none; transform: translateY(-14px); }
+  }
+</style>
+
+<div class="c-ink-fill-loader" role="status" aria-label="Loading Northwind">
+  <div class="stack">
+    <svg viewBox="0 0 440 160" aria-hidden="true" focusable="false">
+      <defs>
+        <mask id="c-ink-fill-loader-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="440" height="160">
+          <g class="rise"><path class="wave" d="M-640,0 q40,-14 80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 t80,0 V400 H-640 Z"/></g>
+        </mask>
+      </defs>
+      <text class="word ghost" x="220" y="122">Northwind</text>
+      <text class="word ink" x="220" y="122" mask="url(#c-ink-fill-loader-mask)">Northwind</text>
+    </svg>
+  </div>
+  <span class="label">Preparing your workspace</span>
+</div>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-ink-fill-loader').forEach((root) => {
+    // paused while off screen, so a long page does not burn frames
+    new IntersectionObserver((entries) => {
+      root.classList.toggle('is-paused', !entries[entries.length - 1].isIntersecting);
+    }).observe(root);
+  });
+})();
+</script>

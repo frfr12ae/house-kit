@@ -62,7 +62,7 @@ That regenerates `navigator/registry.js` and `CREDITS.md`, and lints every compo
 
 Never copy code from a source whose license does not allow redistribution in a public repo. When in doubt, write it from scratch and use `inspired-by`.
 
-When code is adapted or ported, the upstream license text must be in `LICENSES/` (for example `LICENSES/diagram-design-MIT.txt`, `LICENSES/hyperframes-Apache-2.0.txt`), the `@source` must point at the upstream repo, and for Apache-2.0 code the file must say in a comment that it was changed.
+When code is adapted or ported, the upstream license text must be in `LICENSES/` (for example `LICENSES/diagram-design-MIT.txt`), the `@source` must point at the upstream repo, and for Apache-2.0 code the file must say in a comment that it was changed.
 
 ## Rules the build enforces
 

@@ -1,0 +1,257 @@
+<!--
+@title Filterable timeline
+@description A year of typed entries (shipped, decision, commercial, dropped, setback) as a newest-first timeline, with a colour legend, workstream filter chips and a plan versus actual track for the work that shipped.
+@tags timeline, register, log, filter, plan, actual, workstream, history
+@preview fill
+@height 640
+@added 2026-10-31
+-->
+<style>
+  .c-filterable-timeline {
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-filterable-timeline .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .c-filterable-timeline [hidden] { display: none !important; }
+  .c-filterable-timeline .head { margin-bottom: var(--ds-space-5); }
+  .c-filterable-timeline h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-filterable-timeline .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+
+  .c-filterable-timeline .filters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-2); margin-bottom: var(--ds-space-5); }
+  .c-filterable-timeline .filters .lab { margin-right: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-filterable-timeline .chip { min-height: 34px; padding: 0 var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); color: var(--ds-text); font-size: var(--ds-text-sm); font-weight: 600; cursor: pointer; transition: background var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease); }
+  .c-filterable-timeline .chip:hover { border-color: var(--ds-neutral-line); color: var(--ds-ink); }
+  .c-filterable-timeline .chip:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-filterable-timeline .chip[aria-pressed="true"] { border-color: var(--ds-action); background: var(--ds-action); color: var(--ds-on-action); }
+  .c-filterable-timeline .chip small { margin-left: 6px; font-size: var(--ds-text-xs); font-weight: 600; opacity: 0.7; font-variant-numeric: tabular-nums; }
+
+  .c-filterable-timeline .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: 0 0 var(--ds-space-6); padding: 0; list-style: none; font-size: var(--ds-text-xs); color: var(--ds-text); }
+  .c-filterable-timeline .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-filterable-timeline .legend i { width: 14px; height: 14px; border: var(--ds-stroke) solid var(--c-line); border-radius: 4px; background: var(--c-fill); }
+  .c-filterable-timeline .legend b { font-variant-numeric: tabular-nums; color: var(--ds-ink); }
+
+  .c-filterable-timeline [data-type="shipped"] { --c-fill: var(--ds-note-fill); --c-line: var(--ds-note-line); }
+  .c-filterable-timeline [data-type="decision"] { --c-fill: var(--ds-info-fill); --c-line: var(--ds-info-line); }
+  .c-filterable-timeline [data-type="commercial"] { --c-fill: var(--ds-highlight-fill); --c-line: var(--ds-highlight-line); }
+  .c-filterable-timeline [data-type="dropped"] { --c-fill: var(--ds-neutral-fill); --c-line: var(--ds-neutral-line); }
+  .c-filterable-timeline [data-type="setback"] { --c-fill: var(--ds-danger-fill); --c-line: var(--ds-danger-line); }
+
+  .c-filterable-timeline .pva { margin-bottom: var(--ds-space-7); padding: var(--ds-space-5); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-filterable-timeline .pva-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--ds-space-2) var(--ds-space-5); margin-bottom: var(--ds-space-4); }
+  .c-filterable-timeline h4 { margin: 0; font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-filterable-timeline .pva-sum { font-size: var(--ds-text-sm); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-filterable-timeline .pva-sum b { color: var(--ds-ink); }
+  .c-filterable-timeline .scroll { overflow-x: auto; }
+  .c-filterable-timeline .track { position: relative; min-width: 560px; height: 150px; }
+  .c-filterable-timeline .track svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .c-filterable-timeline .rail { position: absolute; left: 0; right: 0; height: 0; border-top: var(--ds-stroke) solid var(--ds-line); }
+  .c-filterable-timeline .rail.is-plan { top: 38px; border-top-style: dashed; }
+  .c-filterable-timeline .rail.is-actual { top: 100px; border-top-color: var(--ds-neutral-line); }
+  .c-filterable-timeline .rail-lab { position: absolute; left: 0; font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted); }
+  .c-filterable-timeline .rail-lab.is-plan { top: 8px; }
+  .c-filterable-timeline .rail-lab.is-actual { top: 112px; }
+  .c-filterable-timeline .months { position: absolute; left: 0; right: 0; bottom: 0; height: 18px; }
+  .c-filterable-timeline .months span { position: absolute; bottom: 0; transform: translateX(-50%); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-filterable-timeline .conn { stroke: var(--ds-neutral-line); stroke-width: 1.5; fill: none; vector-effect: non-scaling-stroke; }
+  .c-filterable-timeline .conn.is-late { stroke: var(--ds-danger-line); stroke-width: 2; }
+  .c-filterable-timeline .mk { position: absolute; display: grid; place-items: center; width: 24px; height: 24px; margin: -12px 0 0 -12px; padding: 0; border: var(--ds-stroke) solid var(--ds-neutral-line); border-radius: 50%; background: var(--ds-raised); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 800; font-variant-numeric: tabular-nums; cursor: pointer; }
+  .c-filterable-timeline .mk.is-actual { border-color: var(--ds-note-line); background: var(--ds-note-fill); }
+  .c-filterable-timeline .mk.is-late { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-filterable-timeline .mk:focus-visible, .c-filterable-timeline .mk.is-on { outline: none; box-shadow: var(--ds-focus); }
+  .c-filterable-timeline .pva-detail { min-height: 1.6em; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-filterable-timeline .pva-detail b { color: var(--ds-ink); }
+  .c-filterable-timeline .pva-empty { margin: 0; padding: var(--ds-space-5) 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-filterable-timeline .key { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-3) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-filterable-timeline .key li { display: inline-flex; align-items: center; gap: 6px; }
+  .c-filterable-timeline .key i { width: 12px; height: 12px; border: var(--ds-stroke) solid var(--ds-neutral-line); border-radius: 50%; background: var(--ds-raised); }
+  .c-filterable-timeline .key i.a { border-color: var(--ds-note-line); background: var(--ds-note-fill); }
+  .c-filterable-timeline .key i.l { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+
+  .c-filterable-timeline .reg { margin: 0; padding: 0; list-style: none; }
+  .c-filterable-timeline .reg-wrap { max-height: 520px; overflow-y: auto; padding: var(--ds-space-1) var(--ds-space-2) var(--ds-space-1) var(--ds-space-1); }
+  .c-filterable-timeline .reg-wrap:focus-visible { outline: none; box-shadow: var(--ds-focus); border-radius: var(--ds-radius-md); }
+  .c-filterable-timeline .entry { position: relative; display: grid; grid-template-columns: 92px 28px minmax(0, 1fr); column-gap: var(--ds-space-3); padding-bottom: var(--ds-space-5); }
+  .c-filterable-timeline .entry .date { padding-top: 4px; text-align: right; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-filterable-timeline .entry .rail-c { position: relative; display: flex; justify-content: center; }
+  .c-filterable-timeline .entry .rail-c::before { content: ""; position: absolute; top: 24px; bottom: -22px; left: 50%; border-left: var(--ds-stroke) solid var(--ds-line); transform: translateX(-50%); }
+  .c-filterable-timeline .entry.is-last .rail-c::before { display: none; }
+  .c-filterable-timeline .dotm { position: relative; z-index: 1; width: 14px; height: 14px; margin-top: 6px; border: var(--ds-stroke) solid var(--c-line); border-radius: 50%; background: var(--c-fill); }
+  .c-filterable-timeline .entry[data-type="decision"] .dotm { border-radius: 3px; transform: rotate(45deg) scale(0.85); }
+  .c-filterable-timeline .entry[data-type="dropped"] .dotm { background: var(--ds-surface); border-style: dashed; }
+  .c-filterable-timeline .card { padding: var(--ds-space-4) var(--ds-space-5); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-left: 4px solid var(--c-line); border-radius: var(--ds-radius-md); }
+  .c-filterable-timeline .card-top { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-2) var(--ds-space-3); margin-bottom: var(--ds-space-1); }
+  .c-filterable-timeline .pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 8px; border: var(--ds-hairline) solid var(--c-line); border-radius: var(--ds-radius-pill); background: var(--c-fill); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 700; }
+  .c-filterable-timeline .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c-line); }
+  .c-filterable-timeline .ws { font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-filterable-timeline .card h5 { margin: 0; font-size: var(--ds-text-md); color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-filterable-timeline .card p { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); }
+  .c-filterable-timeline .none { padding: var(--ds-space-6); border: var(--ds-hairline) dashed var(--ds-line); border-radius: var(--ds-radius-md); text-align: center; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+
+  @media (max-width: 640px) {
+    .c-filterable-timeline { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-filterable-timeline .pva { padding: var(--ds-space-4); }
+    .c-filterable-timeline .entry { grid-template-columns: 22px minmax(0, 1fr); }
+    .c-filterable-timeline .entry .date { grid-column: 2; grid-row: 1; padding: 0 0 var(--ds-space-1); text-align: left; }
+    .c-filterable-timeline .entry .rail-c { grid-column: 1; grid-row: 1 / span 2; }
+    .c-filterable-timeline .entry .card { grid-column: 2; grid-row: 2; }
+    .c-filterable-timeline .entry .rail-c::before { top: 18px; }
+    .c-filterable-timeline .dotm { margin-top: 3px; }
+  }
+</style>
+
+<section class="c-filterable-timeline" aria-labelledby="c-filterable-timeline-title">
+  <div class="head">
+    <h3 id="c-filterable-timeline-title">Orchard Coffee Club, 2026 so far</h3>
+    <p class="hint">What shipped, what we decided, and what went wrong. Pick workstreams to narrow it down.</p>
+  </div>
+
+  <div class="filters" role="group" aria-label="Filter by workstream"><span class="lab">Workstream</span></div>
+  <ul class="legend" aria-label="Entry types"></ul>
+
+  <div class="pva">
+    <div class="pva-head"><h4>Plan versus actual</h4><span class="pva-sum"></span></div>
+    <div class="scroll" tabindex="0" role="region" aria-label="Plan versus actual track, scrolls sideways on small screens"><div class="track"></div></div>
+    <p class="pva-detail" role="status" aria-live="polite"></p>
+    <ul class="key"><li><i></i>Planned date</li><li><i class="a"></i>Shipped on or near plan</li><li><i class="l"></i>Shipped more than two weeks late</li></ul>
+  </div>
+
+  <div class="reg-wrap" tabindex="0" role="region" aria-label="Register, newest first"><ol class="reg"></ol></div>
+  <p class="sr" role="status" aria-live="polite" data-live></p>
+</section>
+
+<script>
+(() => {
+  // Replace ENTRIES with your own. "plan" (optional, shipped entries only) is the date it was promised.
+  const TYPES = { shipped: 'Shipped', decision: 'Decision', commercial: 'Commercial', dropped: 'Dropped', setback: 'Setback' };
+  const WORKSTREAMS = ['Product', 'Brand', 'Growth', 'Operations'];
+  const ENTRIES = [
+    { date: '2026-01-14', type: 'decision', ws: 'Operations', title: 'Roast with a partner until our own roaster arrives', note: 'The roaster is delayed to autumn. The partner covers volume at a slightly higher cost per kilo.' },
+    { date: '2026-02-03', type: 'shipped', ws: 'Product', title: 'Pause button for subscriptions', note: 'Members can skip a month in two taps instead of writing in.', plan: '2026-02-01' },
+    { date: '2026-02-20', type: 'commercial', ws: 'Growth', title: 'First office client signed, 40 people', note: 'Weekly delivery, invoiced monthly.' },
+    { date: '2026-03-11', type: 'setback', ws: 'Operations', title: 'Packaging supplier delivered three weeks late', note: 'We shipped March orders in plain bags and wrote to every affected member.' },
+    { date: '2026-03-28', type: 'shipped', ws: 'Brand', title: 'New label and bag design is live', note: 'Delayed by the packaging problem above.', plan: '2026-02-15' },
+    { date: '2026-04-16', type: 'dropped', ws: 'Product', title: 'Gift cards put on hold', note: 'Low demand in the survey and a lot of accounting work. Revisit next year.' },
+    { date: '2026-05-09', type: 'shipped', ws: 'Product', title: 'Tasting notes quiz', note: 'Matches new members to a first bag. Trial to paid went from 31% to 38%.', plan: '2026-04-30' },
+    { date: '2026-05-30', type: 'decision', ws: 'Growth', title: 'Stop paid social, put the budget into referrals', note: 'Cost per member through ads was three times the referral cost.' },
+    { date: '2026-06-18', type: 'commercial', ws: 'Growth', title: 'Referral programme passes 600 sign-ups', note: 'Both sides get a free bag after the second order.' },
+    { date: '2026-07-07', type: 'setback', ws: 'Product', title: 'Checkout down for two hours on launch day', note: 'A payment provider update broke card entry. We added a status check before every release.' },
+    { date: '2026-08-02', type: 'shipped', ws: 'Operations', title: 'Second pick-and-pack shift', note: 'Orders now leave within one day instead of three.', plan: '2026-07-15' },
+    { date: '2026-08-26', type: 'dropped', ws: 'Brand', title: 'Sparkling cold brew range cancelled', note: 'Bottling minimums were higher than a year of expected sales.' },
+    { date: '2026-09-15', type: 'commercial', ws: 'Operations', title: 'Courier contract renegotiated, 11% cheaper', note: 'Two year term with a volume tier.' },
+    { date: '2026-10-08', type: 'shipped', ws: 'Growth', title: 'Self-serve page for office plans', note: 'Offices can start a plan without a call.', plan: '2026-09-30' },
+  ];
+  const START = Date.UTC(2026, 0, 1);
+  const END = Date.UTC(2026, 10, 1);
+  const LATE_DAYS = 14;
+
+  const utc = (s) => { const p = s.split('-').map(Number); return Date.UTC(p[0], p[1] - 1, p[2]); };
+  const DAY = 86400000;
+  const fmt = (s, year) => new Date(utc(s)).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: year ? 'numeric' : undefined, timeZone: 'UTC' });
+  const fmtLong = (s) => new Date(utc(s)).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+  const posX = (s) => 2 + ((utc(s) - START) / (END - START)) * 96;
+
+  document.querySelectorAll('.c-filterable-timeline').forEach((root, index) => {
+    const KEY = root.dataset.storageKey || 'ok:filterable-timeline:' + index;
+    const $ = (s) => root.querySelector(s);
+    const live = $('[data-live]');
+    const chips = $('.filters');
+    let active = [];
+    try { active = (JSON.parse(localStorage.getItem(KEY) || '[]') || []).filter((w) => WORKSTREAMS.includes(w)); } catch (e) { active = []; }
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(active)); } catch (e) { /* storage unavailable: keep working in memory */ } };
+    const visible = () => ENTRIES.filter((e) => !active.length || active.includes(e.ws));
+    const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
+
+    // chips
+    const mkChip = (label, value, count) => {
+      const b = el('button', 'chip'); b.type = 'button'; b.dataset.ws = value; b.appendChild(document.createTextNode(label));
+      const s = el('small', '', String(count)); b.appendChild(s);
+      b.addEventListener('click', () => {
+        if (value === '') active = [];
+        else active = active.includes(value) ? active.filter((w) => w !== value) : active.concat(value);
+        save(); paint();
+        live.textContent = 'Showing ' + visible().length + ' of ' + ENTRIES.length + ' entries' + (active.length ? ' for ' + active.join(', ') : '');
+      });
+      chips.appendChild(b);
+    };
+    mkChip('All', '', ENTRIES.length);
+    WORKSTREAMS.forEach((w) => mkChip(w, w, ENTRIES.filter((e) => e.ws === w).length));
+
+    // legend
+    const legend = $('.legend');
+    Object.keys(TYPES).forEach((t) => {
+      const li = el('li'); li.dataset.type = t; li.appendChild(el('i')); li.appendChild(document.createTextNode(TYPES[t] + ' '));
+      li.appendChild(el('b', '', '0')); legend.appendChild(li);
+    });
+
+    function paintTrack(list) {
+      const track = $('.track'); track.innerHTML = '';
+      const items = list.filter((e) => e.plan).sort((a, b) => utc(a.date) - utc(b.date));
+      const late = items.filter((e) => (utc(e.date) - utc(e.plan)) / DAY > LATE_DAYS).length;
+      const slips = items.map((e) => Math.round((utc(e.date) - utc(e.plan)) / DAY)).sort((a, b) => a - b);
+      const median = slips.length ? slips[Math.floor(slips.length / 2)] : 0;
+      const sum = $('.pva-sum');
+      sum.textContent = '';
+      const detail = $('.pva-detail');
+      if (!items.length) {
+        sum.textContent = 'No planned work in this view';
+        track.style.height = 'auto'; track.appendChild(el('p', 'pva-empty', 'None of the entries in this view had a planned date.')); detail.textContent = ''; return;
+      }
+      track.style.height = '';
+      const b1 = el('b', '', String(items.length)); sum.append(b1, document.createTextNode(' shipped, ')); sum.append(el('b', '', String(late)), document.createTextNode(' more than two weeks late, median slip '), el('b', '', median + ' days'));
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('viewBox', '0 0 1000 150'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
+      track.appendChild(svg);
+      track.append(el('div', 'rail is-plan'), el('div', 'rail is-actual'), el('span', 'rail-lab is-plan', 'Planned'), el('span', 'rail-lab is-actual', 'Actual'));
+      const months = el('div', 'months');
+      ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'].forEach((m, i) => { const s = el('span', '', m); s.style.left = (2 + (i + 0.5) / 10 * 96) + '%'; months.appendChild(s); });
+      track.appendChild(months);
+      const say = (e, n) => {
+        const d = Math.round((utc(e.date) - utc(e.plan)) / DAY);
+        detail.innerHTML = '';
+        detail.append(el('b', '', n + '. ' + e.title), document.createTextNode(' · planned ' + fmt(e.plan) + ', shipped ' + fmt(e.date) + ' · ' + (d > 0 ? d + ' days late' : d < 0 ? Math.abs(d) + ' days early' : 'on time')));
+      };
+      items.forEach((e, i) => {
+        const n = i + 1; const px = posX(e.plan); const ax = posX(e.date); const isLate = (utc(e.date) - utc(e.plan)) / DAY > LATE_DAYS;
+        const line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', String(px * 10)); line.setAttribute('x2', String(ax * 10)); line.setAttribute('y1', '38'); line.setAttribute('y2', '100');
+        line.setAttribute('class', 'conn' + (isLate ? ' is-late' : '')); svg.appendChild(line);
+        [['plan', px, 38], ['actual', ax, 100]].forEach((m) => {
+          const b = el('button', 'mk is-' + m[0] + (m[0] === 'actual' && isLate ? ' is-late' : ''), String(n)); b.type = 'button';
+          b.style.left = m[1] + '%'; b.style.top = m[2] + 'px';
+          b.setAttribute('aria-label', (m[0] === 'plan' ? 'Planned: ' : 'Shipped: ') + e.title + ', ' + fmtLong(m[0] === 'plan' ? e.plan : e.date));
+          ['mouseenter', 'focus', 'click'].forEach((ev) => b.addEventListener(ev, () => say(e, n)));
+          track.appendChild(b);
+        });
+      });
+      detail.textContent = 'Hover or focus a marker to compare planned and actual dates.';
+    }
+
+    function paintRegister(list) {
+      const reg = $('.reg'); reg.innerHTML = '';
+      if (!list.length) { const li = el('li', 'none', 'No entries for this selection.'); reg.appendChild(li); return; }
+      const sorted = list.slice().sort((a, b) => utc(b.date) - utc(a.date));
+      sorted.forEach((e, i) => {
+        const li = el('li', 'entry' + (i === sorted.length - 1 ? ' is-last' : '')); li.dataset.type = e.type;
+        li.appendChild(el('div', 'date', fmt(e.date, true)));
+        const rc = el('div', 'rail-c'); rc.appendChild(el('span', 'dotm')); li.appendChild(rc);
+        const card = el('div', 'card'); const top = el('div', 'card-top');
+        top.appendChild(el('span', 'pill', TYPES[e.type])); top.appendChild(el('span', 'ws', e.ws)); card.appendChild(top);
+        card.appendChild(el('h5', '', e.title));
+        card.appendChild(el('p', '', e.note));
+        li.appendChild(card); reg.appendChild(li);
+      });
+    }
+
+    function paint() {
+      const list = visible();
+      chips.querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ws === '' ? !active.length : active.includes(b.dataset.ws))));
+      legend.querySelectorAll('li').forEach((li) => { li.querySelector('b').textContent = String(list.filter((e) => e.type === li.dataset.type).length); });
+      paintTrack(list); paintRegister(list);
+    }
+    paint();
+  });
+})();
+</script>

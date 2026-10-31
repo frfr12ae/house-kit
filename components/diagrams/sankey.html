@@ -1,0 +1,156 @@
+<!--
+@title Sankey
+@description Three columns of proportional nodes joined by flows whose thickness is the amount, with the wasteful path in the danger colour.
+@tags sankey, flow, budget, proportion, allocation, diagram
+@preview fill
+@height 640
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-sankey {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-sankey .head { margin-bottom: var(--ds-space-5); }
+  .c-sankey h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-sankey .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-sankey .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-sankey svg { display: block; width: 100%; min-width: 680px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-sankey .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-sankey .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-sankey .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-sankey .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-sankey .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-sankey .ln.is-dashed { border-top-style: dashed; }
+  .c-sankey .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-sankey .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-sankey .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-sankey .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-sankey .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-sankey .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-sankey .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-sankey .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-sankey svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-sankey .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-sankey .node.dash { stroke-dasharray: 6 5; }
+  .c-sankey .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-sankey .edge.dash { stroke-dasharray: 6 5; }
+  .c-sankey .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-sankey .mk-n { stroke: var(--ds-neutral-line); }
+  .c-sankey .mk-i { stroke: var(--ds-info-line); }
+  .c-sankey .mk-h { stroke: var(--ds-highlight-line); }
+  .c-sankey .mk-d { stroke: var(--ds-danger-line); }
+  .c-sankey .mk-g { stroke: var(--ds-note-line); }
+  .c-sankey text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-sankey .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-sankey .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-sankey .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-sankey .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-sankey .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-sankey .e.k-h { fill: var(--ds-text); }
+  .c-sankey .e.k-d { fill: var(--ds-danger-line); }
+  .c-sankey .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-sankey .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  .c-sankey .flow { stroke: none; }
+  .c-sankey .f-i { fill: color-mix(in srgb, var(--ds-info-line) 30%, transparent); }
+  .c-sankey .f-d { fill: color-mix(in srgb, var(--ds-danger-line) 34%, transparent); }
+  @media (max-width: 720px) {
+    .c-sankey { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-sankey .frame { padding: var(--ds-space-3); }
+    .c-sankey .scrollhint { display: block; }
+    .c-sankey .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-sankey">
+  <figcaption class="head">
+    <h3>Where a year of project budget goes</h3>
+    <p class="hint">Share of a 100 unit budget. Rework is the red thread through three activities.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 860 500" role="img" aria-label="Sankey diagram: retainers and project fees fund discovery, design, build and review, which produce 80 percent shipped work and 20 percent rework.">
+<defs><marker id="sankey-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="sankey-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="sankey-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="sankey-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="sankey-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<path class="flow f-i" d="M140 59 C255 59 255 43 370 43 L370 113 C255 113 255 129 140 129 Z"/>
+<path class="flow f-i" d="M140 129 C255 129 255 133 370 133 L370 185.5 C255 185.5 255 181.5 140 181.5 Z"/>
+<path class="flow f-i" d="M140 181.5 C255 181.5 255 258 370 258 L370 345.5 C255 345.5 255 269 140 269 Z"/>
+<path class="flow f-i" d="M140 297 C255 297 255 185.5 370 185.5 L370 238 C255 238 255 349.5 140 349.5 Z"/>
+<path class="flow f-i" d="M140 349.5 C255 349.5 255 345.5 370 345.5 L370 380.5 C255 380.5 255 384.5 140 384.5 Z"/>
+<path class="flow f-i" d="M140 384.5 C255 384.5 255 400.5 370 400.5 L370 453 C255 453 255 437 140 437 Z"/>
+<path class="flow f-i" d="M490 43 C605 43 605 51 720 51 L720 121 C605 121 605 113 490 113 Z"/>
+<path class="flow f-i" d="M490 133 C605 133 605 121 720 121 L720 212 C605 212 605 224 490 224 Z"/>
+<path class="flow f-d" d="M490 224 C605 224 605 375 720 375 L720 389 C605 389 605 238 490 238 Z"/>
+<path class="flow f-i" d="M490 258 C605 258 605 212 720 212 L720 296 C605 296 605 342 490 342 Z"/>
+<path class="flow f-d" d="M490 342 C605 342 605 389 720 389 L720 427.5 C605 427.5 605 380.5 490 380.5 Z"/>
+<path class="flow f-i" d="M490 400.5 C605 400.5 605 296 720 296 L720 331 C605 331 605 435.5 490 435.5 Z"/>
+<path class="flow f-d" d="M490 435.5 C605 435.5 605 427.5 720 427.5 L720 445 C605 445 605 453 490 453 Z"/>
+<g class="k-n"><rect class="node" x="20" y="59" width="120" height="210" rx="8"/>
+<text class="t" x="80" y="161" text-anchor="middle">Retainers</text>
+<text class="s" x="80" y="179" text-anchor="middle">60%</text>
+</g>
+<g class="k-n"><rect class="node" x="20" y="297" width="120" height="140" rx="8"/>
+<text class="t" x="80" y="364" text-anchor="middle">Project fees</text>
+<text class="s" x="80" y="382" text-anchor="middle">40%</text>
+</g>
+<g class="k-n"><rect class="node" x="370" y="43" width="120" height="70" rx="8"/>
+<text class="t" x="430" y="75" text-anchor="middle">Discovery</text>
+<text class="s" x="430" y="93" text-anchor="middle">20%</text>
+</g>
+<g class="k-n"><rect class="node" x="370" y="133" width="120" height="105" rx="8"/>
+<text class="t" x="430" y="182.5" text-anchor="middle">Design</text>
+<text class="s" x="430" y="200.5" text-anchor="middle">30%</text>
+</g>
+<g class="k-n"><rect class="node" x="370" y="258" width="120" height="122.5" rx="8"/>
+<text class="t" x="430" y="316.2" text-anchor="middle">Build</text>
+<text class="s" x="430" y="334.2" text-anchor="middle">35%</text>
+</g>
+<g class="k-n"><rect class="node" x="370" y="400.5" width="120" height="52.5" rx="8"/>
+<text class="t" x="430" y="423.8" text-anchor="middle">Review</text>
+<text class="s" x="430" y="441.8" text-anchor="middle">15%</text>
+</g>
+<g class="k-g"><rect class="node" x="720" y="51" width="120" height="280" rx="8"/>
+<text class="t" x="780" y="188" text-anchor="middle">Shipped</text>
+<text class="s" x="780" y="206" text-anchor="middle">80%</text>
+</g>
+<g class="k-d"><rect class="node" x="720" y="375" width="120" height="70" rx="8"/>
+<text class="t" x="780" y="407" text-anchor="middle">Rework</text>
+<text class="s" x="780" y="425" text-anchor="middle">20%</text>
+</g>
+<text class="mu" x="80" y="24" text-anchor="middle">Where it comes from</text>
+<text class="mu" x="430" y="24" text-anchor="middle">What it pays for</text>
+<text class="mu" x="780" y="24" text-anchor="middle">What it produced</text>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <p class="note">One fifth of the budget returns as rework, and most of it comes from Build.</p>
+  <ul class="legend">
+    <li class="k-n"><span class="sw"></span>Source or activity</li>
+    <li class="k-g"><span class="sw"></span>Good outcome</li>
+    <li class="k-d"><span class="sw"></span>Rework</li>
+    <li>Band thickness is the share of the budget</li>
+  </ul>
+</figure>

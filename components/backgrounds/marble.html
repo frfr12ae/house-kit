@@ -1,0 +1,278 @@
+<!--
+@title Marble
+@description Slowly shifting marble veins in your theme ink on a pale ground, drawn in WebGL with a CSS fallback and a still frame for reduced motion.
+@tags background, marble, texture, veins, webgl, shader
+@preview fill
+@height 420
+@added 2026-10-31
+@source HyperFrames shader blocks by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-marble,
+  .c-marble *,
+  .c-marble *::before,
+  .c-marble *::after { box-sizing: border-box; }
+  .c-marble {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 420px;
+    overflow: hidden;
+    background: var(--ds-bg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-marble .fallback { position: absolute; inset: 0; z-index: -3; background: linear-gradient(115deg, transparent 38%, color-mix(in srgb, var(--ds-line) 80%, transparent) 40%, transparent 42%),
+      linear-gradient(72deg, transparent 58%, color-mix(in srgb, var(--ds-line) 70%, transparent) 60%, transparent 62%),
+      linear-gradient(180deg, var(--ds-surface), var(--ds-bg)); }
+  .c-marble .canvas {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease);
+  }
+  .c-marble.is-live .canvas { opacity: 1; }
+  .c-marble .probe { position: absolute; width: 0; height: 0; visibility: hidden; pointer-events: none; }
+  .c-marble .scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse 52% 60% at 50% 50%, color-mix(in srgb, var(--ds-bg) 62%, transparent), transparent 100%);
+    pointer-events: none;
+  }
+  .c-marble .content {
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-4);
+    max-width: 720px;
+    padding: var(--ds-space-8) var(--ds-space-5);
+    text-align: center;
+  }
+  .c-marble .eyebrow {
+    padding: var(--ds-space-1) var(--ds-space-3);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: color-mix(in srgb, var(--ds-surface) 70%, transparent);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-text);
+  }
+  .c-marble h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: clamp(32px, 6vw, var(--ds-text-3xl));
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-marble .sub { margin: 0; max-width: 34em; font-size: var(--ds-text-lg); line-height: var(--ds-leading-snug); color: var(--ds-text); text-wrap: pretty; }
+  .c-marble .btn {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    margin-top: var(--ds-space-2);
+    padding: 0 var(--ds-space-6);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-md);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .c-marble .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  @media (max-width: 560px) {
+    .c-marble .sub { font-size: var(--ds-text-md); }
+  }
+</style>
+
+<section class="c-marble">
+  <div class="fallback" aria-hidden="true"></div>
+  <canvas class="canvas" aria-hidden="true"></canvas>
+  <span class="probe" aria-hidden="true"></span>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="content">
+    <span class="eyebrow">Collection 2026</span>
+    <h2>Quiet texture for loud numbers</h2>
+    <p class="sub">Thin veins wander across a stone-white ground. Good behind a title, a quote or a price.</p>
+    <a class="btn" href="#">Browse the range</a>
+  </div>
+</section>
+
+<script>
+(() => {
+  // Colours are read from these tokens, so the background follows any theme.
+  const TOKENS = ["--ds-bg","--ds-surface","--ds-line","--ds-ink","--ds-info-line"];
+  const RES = 0.6;
+  const STILL_TIME = 12;
+  const VERT = 'attribute vec2 p; void main() { gl_Position = vec4(p, 0.0, 1.0); }';
+  const FRAG = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+uniform vec2 uRes;
+uniform float uTime;
+uniform vec3 uC[5];
+uniform float uAmt;
+
+float h21(vec2 p) { return fract(sin(dot(p, vec2(41.37, 289.91))) * 9371.3); }
+float vn(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(h21(i), h21(i + vec2(1.0, 0.0)), f.x), mix(h21(i + vec2(0.0, 1.0)), h21(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+float fbm(vec2 p) {
+  float a = 0.5, s = 0.0;
+  for (int i = 0; i < 5; i++) { s += a * vn(p); p = p * 2.03 + vec2(11.7, 5.3); a *= 0.5; }
+  return s;
+}
+float fbmL(vec2 p) {
+  float a = 0.5, s = 0.0;
+  for (int i = 0; i < 3; i++) { s += a * vn(p); p = p * 2.03 + vec2(11.7, 5.3); a *= 0.5; }
+  return s;
+}
+
+void main() {
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / sqrt(uRes.x * uRes.y);
+  float t = uTime * 0.035;
+  vec2 p = uv * 2.0;
+  float w = fbm(p * 1.3 + vec2(t, -t * 0.7));
+  float w2 = fbm(p * 2.6 - w * 1.6 + t);
+  float v1 = sin((p.x * 1.2 + p.y * 0.7) * 3.0 + w * 7.5 + w2 * 3.0);
+  float vein1 = pow(1.0 - smoothstep(0.0, 0.42, abs(v1)), 2.2);
+  float v2 = sin((p.x * 0.6 - p.y * 1.1) * 4.5 + w2 * 9.0 + w * 2.0);
+  float vein2 = 1.0 - smoothstep(0.0, 0.14, abs(v2));
+  vec3 col = mix(uC[0], uC[1], 0.35 + 0.5 * fbm(p * 0.9 + 4.0));
+  col = mix(col, uC[2], smoothstep(0.35, 0.85, w2) * 0.55);
+  col = mix(col, uC[3], vein1 * 0.2 + vein2 * 0.06);
+  col = mix(col, uC[4], vein1 * smoothstep(0.55, 0.9, w) * 0.10);
+  gl_FragColor = vec4(mix(uC[0], col, uAmt), 1.0);
+}
+`;
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const swatch = document.createElement('canvas');
+  swatch.width = swatch.height = 1;
+  const sctx = swatch.getContext('2d', { willReadFrequently: true });
+
+  // Resolve any CSS colour (hex, rgb, oklch, color-mix) to sRGB floats through a 1px canvas.
+  function readColours(probe) {
+    const out = [];
+    for (const name of TOKENS) {
+      probe.style.color = 'var(' + name + ')';
+      sctx.clearRect(0, 0, 1, 1);
+      sctx.fillStyle = '#000';
+      sctx.fillStyle = getComputedStyle(probe).color;
+      sctx.fillRect(0, 0, 1, 1);
+      const d = sctx.getImageData(0, 0, 1, 1).data;
+      out.push(d[0] / 255, d[1] / 255, d[2] / 255);
+    }
+    return out;
+  }
+
+  function shader(gl, type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+  }
+
+  function init(root) {
+    const canvas = root.querySelector('.canvas');
+    const probe = root.querySelector('.probe');
+    const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
+    if (!gl) return;
+    const vs = shader(gl, gl.VERTEX_SHADER, VERT);
+    const fs = shader(gl, gl.FRAGMENT_SHADER, FRAG);
+    if (!vs || !fs) return;
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const uRes = gl.getUniformLocation(prog, 'uRes');
+    const uTime = gl.getUniformLocation(prog, 'uTime');
+    const uC = gl.getUniformLocation(prog, 'uC');
+    const uAmt = gl.getUniformLocation(prog, 'uAmt');
+
+    let t = reduced ? STILL_TIME : 0;
+    let last = 0;
+    let raf = 0;
+    let visible = false;
+    let key = '';
+
+    const draw = () => {
+      gl.uniform1f(uTime, t);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+    const size = () => {
+      const r = root.getBoundingClientRect();
+      const s = Math.min(window.devicePixelRatio || 1, 1.5) * RES;
+      const w = Math.max(2, Math.round(r.width * s));
+      const h = Math.max(2, Math.round(r.height * s));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        gl.viewport(0, 0, w, h);
+        gl.uniform2f(uRes, w, h);
+        draw();
+      }
+    };
+    const refresh = () => {
+      if (!root.isConnected) { clearInterval(timer); return; }
+      const c = readColours(probe);
+      const k = c.join();
+      if (k === key) return;
+      key = k;
+      gl.uniform3fv(uC, new Float32Array(c));
+      // Dark grounds get a gentler tint so light text keeps its contrast.
+      gl.uniform1f(uAmt, 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] < 0.4 ? 0.6 : 1.0);
+      draw();
+    };
+    const tick = (now) => {
+      raf = 0;
+      if (!visible || document.hidden) return;
+      t += Math.min(0.1, (now - last) / 1000);
+      last = now;
+      draw();
+      raf = requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (reduced || raf || !visible || document.hidden) return;
+      last = performance.now();
+      raf = requestAnimationFrame(tick);
+    };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
+
+    canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); stop(); root.classList.remove('is-live'); });
+
+    const timer = setInterval(refresh, 2000);
+    refresh();
+    size();
+    root.classList.add('is-live');
+
+    new ResizeObserver(size).observe(root);
+    new IntersectionObserver((entries) => {
+      visible = entries[entries.length - 1].isIntersecting;
+      if (visible) start(); else stop();
+    }).observe(root);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+  }
+
+  document.querySelectorAll('.c-marble').forEach(init);
+})();
+</script>

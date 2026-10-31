@@ -1,0 +1,87 @@
+<!--
+@title Quote post
+@description 4:5 pull-quote post set in the serif face, with a marker highlight on the key phrase and an attribution line.
+@tags social, quote, pull quote, testimonial, post, serif
+@preview center
+@height 740
+@added 2026-10-31
+-->
+<style>
+  .c-quote-post {
+    container-type: inline-size;
+    position: relative;
+    width: min(540px, 100%);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-quote-post .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 8cqi;
+  }
+  .c-quote-post .mark {
+    font-family: var(--ds-font-serif);
+    font-size: 30cqi;
+    line-height: 0.7;
+    height: 12cqi;
+    color: var(--ds-highlight-line);
+  }
+  .c-quote-post .main { align-self: center; display: grid; gap: 3cqi; }
+  .c-quote-post blockquote { margin: 0; }
+  .c-quote-post .q {
+    margin: 0;
+    font-family: var(--ds-font-serif);
+    font-size: 8.4cqi;
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-quote-post .key {
+    background: linear-gradient(transparent 58%, color-mix(in srgb, var(--ds-highlight-line) 45%, transparent) 58%, color-mix(in srgb, var(--ds-highlight-line) 45%, transparent) 92%, transparent 92%);
+    padding: 0 0.6cqi;
+    margin: 0 -0.6cqi;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .c-quote-post .who { display: flex; align-items: center; gap: 3.6cqi; padding-top: 4cqi; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-quote-post .avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 11cqi;
+    height: 11cqi;
+    border-radius: 50%;
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: 4cqi;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+  .c-quote-post .name { display: block; font-size: 4.2cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-quote-post .role { display: block; margin-top: 0.4cqi; font-size: 3.4cqi; color: var(--ds-muted); }
+  .c-quote-post .handle { margin-left: auto; font-size: 3.2cqi; font-weight: 600; color: var(--ds-muted); white-space: nowrap; }
+</style>
+
+<article class="c-quote-post" aria-label="Quote post">
+  <div class="inner">
+    <div class="main">
+      <div class="mark" aria-hidden="true">&ldquo;</div>
+      <blockquote>
+        <p class="q">Good tools <span class="key">disappear</span>. You only notice them on the day they are gone.</p>
+      </blockquote>
+    </div>
+    <div class="who">
+      <span class="avatar" aria-hidden="true">IC</span>
+      <span><span class="name">Ines Calder</span><span class="role">Product designer</span></span>
+      <span class="handle">@yourhandle</span>
+    </div>
+  </div>
+</article>

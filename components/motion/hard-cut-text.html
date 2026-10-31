@@ -1,0 +1,110 @@
+<!--
+@title Hard-cut text
+@description A run of short phrases that cut in on the beat with no fades, swapping ground and colour each time. Made for video intros; edit the beats in the script.
+@tags text, kinetic, hard cut, intro, video, typography, beat
+@preview center
+@height 460
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-hard-cut-text,
+  .c-hard-cut-text *,
+  .c-hard-cut-text *::before,
+  .c-hard-cut-text *::after { box-sizing: border-box; }
+  .c-hard-cut-text {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(960px, 100%);
+    aspect-ratio: 16 / 9;
+    margin: 0;
+    overflow: hidden;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    container-type: inline-size;
+    font-family: var(--ds-font-sans);
+    /* no transition on purpose: every change is a hard cut */
+    background: var(--ds-bg);
+    color: var(--ds-ink);
+  }
+  .c-hard-cut-text[data-beat="0"] { background: var(--ds-bg); color: var(--ds-ink); }
+  .c-hard-cut-text[data-beat="1"] { background: var(--ds-ink); color: var(--ds-bg); }
+  .c-hard-cut-text[data-beat="2"] { background: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-hard-cut-text[data-beat="3"] { background: var(--ds-info-line); color: var(--ds-ink); }
+  .c-hard-cut-text[data-beat="4"] { background: var(--ds-action); color: var(--ds-on-action); }
+  .c-hard-cut-text .phrase {
+    margin: 0;
+    padding: 0 6cqi;
+    font-family: var(--ds-font-display);
+    font-size: 15cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    text-align: center;
+    text-wrap: balance;
+  }
+  .c-hard-cut-text[data-beat="4"] .phrase { font-size: 11cqi; }
+  .c-hard-cut-text .tag {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 5cqi;
+    margin: 0;
+    font-size: 1.6cqi;
+    font-weight: 700;
+    text-align: center;
+    opacity: 0;
+  }
+  .c-hard-cut-text[data-beat="4"] .tag { opacity: 0.75; }
+  .c-hard-cut-text .ticks { position: absolute; top: 3cqi; left: 3cqi; display: flex; gap: 0.8cqi; }
+  .c-hard-cut-text .ticks i { width: 3cqi; height: 0.5cqi; border-radius: var(--ds-radius-pill); background: currentColor; opacity: 0.22; }
+  .c-hard-cut-text .ticks i.on { opacity: 1; }
+</style>
+
+<figure class="c-hard-cut-text" data-beat="4" role="img" aria-label="Stop guessing. Start measuring. Northwind.">
+  <div class="ticks" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></div>
+  <p class="phrase" aria-hidden="true">Northwind</p>
+  <p class="tag" aria-hidden="true">Numbers, on time.</p>
+</figure>
+
+<script>
+(() => {
+  // One entry per beat. "hold" scales the beat length, which comes from --ds-dur-story.
+  const BEATS = [
+    { text: 'Stop', hold: 1 },
+    { text: 'guessing.', hold: 1 },
+    { text: 'Start', hold: 0.8 },
+    { text: 'measuring.', hold: 1.2 },
+    { text: 'Northwind', hold: 3 },
+  ];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-hard-cut-text').forEach((root) => {
+    const phrase = root.querySelector('.phrase');
+    const ticks = [...root.querySelectorAll('.ticks i')];
+    const show = (i) => {
+      root.dataset.beat = i;
+      phrase.textContent = BEATS[i].text;
+      ticks.forEach((t, n) => t.classList.toggle('on', n === i));
+    };
+    show(BEATS.length - 1); // the end state, which reduced motion keeps
+    if (reduced) return;
+    show(0);
+
+    const beat = (parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400) * 0.5;
+    let timer = 0;
+    let running = false;
+    const step = (i) => {
+      if (!running) return;
+      show(i);
+      timer = setTimeout(() => step((i + 1) % BEATS.length), beat * BEATS[i].hold);
+    };
+    new IntersectionObserver((entries) => {
+      const on = entries[entries.length - 1].isIntersecting;
+      if (on && !running) { running = true; step(0); }
+      if (!on) { running = false; clearTimeout(timer); show(BEATS.length - 1); }
+    }, { threshold: 0.4 }).observe(root);
+  });
+})();
+</script>

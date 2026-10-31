@@ -1,0 +1,239 @@
+<!--
+@title Gantt lanes
+@description A 12 week plan in two lanes, our team and the client team, with stage bars, gates between stages, hatched refinement windows that overlap them and a today marker. Below it a workload histogram sets a flat load against a spiky one.
+@tags gantt, plan, roadmap, lanes, schedule, workload, capacity, gates
+@preview fill
+@height 560
+@added 2026-10-31
+-->
+<style>
+  .c-gantt-lanes {
+    --lw: 124px;
+    margin: 0;
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-gantt-lanes .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-4); margin-bottom: var(--ds-space-5); }
+  .c-gantt-lanes h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-gantt-lanes .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-gantt-lanes .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: 0; padding: 0; list-style: none; font-size: var(--ds-text-xs); color: var(--ds-text); }
+  .c-gantt-lanes .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-gantt-lanes .sw { width: 18px; height: 12px; border: var(--ds-stroke) solid var(--ds-info-line); border-radius: 3px; background: var(--ds-info-fill); }
+  .c-gantt-lanes .sw.is-client { border-color: var(--ds-neutral-line); background: var(--ds-neutral-fill); }
+  .c-gantt-lanes .sw.is-refine { border-color: var(--ds-note-line); background: repeating-linear-gradient(135deg, var(--ds-note-line) 0 2px, var(--ds-note-fill) 2px 5px); }
+  .c-gantt-lanes .sw.is-gate { width: 11px; height: 11px; border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); border-radius: 2px; transform: rotate(45deg); }
+
+  .c-gantt-lanes .scroll { overflow-x: auto; padding-bottom: var(--ds-space-2); }
+  .c-gantt-lanes .inner { min-width: 720px; }
+  .c-gantt-lanes .plot { position: relative; display: grid; grid-template-columns: var(--lw) minmax(0, 1fr); align-items: stretch; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); overflow: hidden; }
+  .c-gantt-lanes .cell-l { display: flex; align-items: center; padding: 0 var(--ds-space-4); border-bottom: var(--ds-hairline) solid color-mix(in srgb, var(--ds-line) 60%, transparent); font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-gantt-lanes .cell-l.is-sub { font-size: var(--ds-text-xs); font-weight: 500; color: var(--ds-muted); }
+  .c-gantt-lanes .cell-l.is-lane { font-size: var(--ds-text-sm); }
+  .c-gantt-lanes .cell-t { position: relative; border-bottom: var(--ds-hairline) solid color-mix(in srgb, var(--ds-line) 60%, transparent); background: linear-gradient(to right, color-mix(in srgb, var(--ds-line) 70%, transparent) 1px, transparent 1px) 0 0 / calc(100% / 12) 100%; }
+  .c-gantt-lanes .last { border-bottom: 0; }
+  .c-gantt-lanes .wk { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); height: 36px; align-items: center; background: var(--ds-panel); border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-gantt-lanes .wk span { text-align: center; font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-gantt-lanes .head-l { background: var(--ds-panel); border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-gantt-lanes .h-bar { height: 52px; }
+  .c-gantt-lanes .h-gate { height: 44px; }
+  .c-gantt-lanes .h-ref { height: 38px; }
+
+  .c-gantt-lanes .bar { position: absolute; top: 11px; bottom: 11px; display: flex; align-items: center; padding: 0 var(--ds-space-3); border: var(--ds-stroke) solid var(--ds-info-line); border-radius: var(--ds-radius-md); background: var(--ds-info-fill); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; transition: box-shadow var(--ds-dur-fast) var(--ds-ease); }
+  .c-gantt-lanes .bar.is-client { border-color: var(--ds-neutral-line); background: var(--ds-neutral-fill); }
+  .c-gantt-lanes .bar:hover, .c-gantt-lanes .bar:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-gantt-lanes .refine { position: absolute; top: 8px; bottom: 8px; display: flex; align-items: center; padding: 0 var(--ds-space-3); border: var(--ds-stroke) dashed var(--ds-note-line); border-radius: var(--ds-radius-sm); background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--ds-note-line) 55%, transparent) 0 2px, var(--ds-note-fill) 2px 7px); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 700; white-space: nowrap; overflow: hidden; cursor: default; }
+  .c-gantt-lanes .refine span { padding: 1px 6px; border-radius: 4px; background: var(--ds-note-fill); }
+  .c-gantt-lanes .refine:hover, .c-gantt-lanes .refine:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+
+  .c-gantt-lanes .gate { position: absolute; top: 0; bottom: 0; width: 0; }
+  .c-gantt-lanes .gate i { position: absolute; top: 8px; left: -8px; width: 16px; height: 16px; border: var(--ds-stroke) solid var(--ds-highlight-line); border-radius: 3px; background: var(--ds-highlight-fill); transform: rotate(45deg); }
+  .c-gantt-lanes .gate b { position: absolute; top: 26px; left: 0; transform: translateX(-50%); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-ink); white-space: nowrap; }
+  .c-gantt-lanes .gate-line { position: absolute; top: 0; bottom: 0; width: 0; border-left: var(--ds-stroke) dashed var(--ds-highlight-line); pointer-events: none; opacity: 0.8; }
+  .c-gantt-lanes .gate-hit { position: absolute; top: 0; bottom: 0; width: 28px; margin-left: -14px; }
+  .c-gantt-lanes .gate-hit:focus-visible { outline: none; box-shadow: var(--ds-focus); border-radius: var(--ds-radius-sm); }
+
+  .c-gantt-lanes .today { position: absolute; top: 0; bottom: 0; left: calc(var(--lw) + (100% - var(--lw)) * var(--f)); width: 0; border-left: 2px solid var(--ds-action); pointer-events: none; z-index: 3; }
+  .c-gantt-lanes .today span { position: absolute; top: 9px; left: 0; transform: translateX(-50%); padding: 2px 8px; border-radius: var(--ds-radius-pill); background: var(--ds-action); color: var(--ds-on-action); font-size: var(--ds-text-xs); font-weight: 700; }
+
+  .c-gantt-lanes .detail { min-height: 1.6em; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-gantt-lanes .detail b { color: var(--ds-ink); }
+
+  .c-gantt-lanes .hist-block { margin-top: var(--ds-space-7); }
+  .c-gantt-lanes .hist-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-3) var(--ds-space-5); margin-bottom: var(--ds-space-4); }
+  .c-gantt-lanes h4 { margin: 0; font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-gantt-lanes .hist { position: relative; display: grid; grid-template-columns: var(--lw) minmax(0, 1fr); }
+  .c-gantt-lanes .bars { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); height: 150px; border-bottom: var(--ds-stroke) solid var(--ds-neutral-line); }
+  .c-gantt-lanes .pair { display: flex; align-items: flex-end; justify-content: center; gap: 3px; padding: 0 10%; }
+  .c-gantt-lanes .col { flex: 1 1 0; max-width: 22px; min-height: 2px; border-radius: 3px 3px 0 0; background: var(--ds-series-1); }
+  .c-gantt-lanes .col.is-spiky { background: var(--ds-series-2); }
+  .c-gantt-lanes .col.is-over { background: repeating-linear-gradient(135deg, var(--ds-danger-line) 0 3px, color-mix(in srgb, var(--ds-danger-line) 45%, var(--ds-surface)) 3px 6px); box-shadow: inset 0 0 0 1.5px var(--ds-danger-line); }
+  .c-gantt-lanes .cap { position: absolute; left: 0; right: 0; border-top: var(--ds-stroke) dashed var(--ds-danger-line); pointer-events: none; }
+  .c-gantt-lanes .cap span { position: absolute; right: 0; bottom: 3px; padding: 0 4px; background: var(--ds-surface); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-ink); }
+  .c-gantt-lanes .axis-l { display: flex; align-items: flex-start; padding: var(--ds-space-1) var(--ds-space-4) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-gantt-lanes .wk-under { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); padding-top: var(--ds-space-2); }
+  .c-gantt-lanes .wk-under span { text-align: center; font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-gantt-lanes .hist-legend { margin-top: var(--ds-space-4); }
+  .c-gantt-lanes .hist-legend .sw { border: 0; width: 12px; height: 12px; border-radius: 3px; background: var(--ds-series-1); }
+  .c-gantt-lanes .hist-legend .sw.s2 { background: var(--ds-series-2); }
+  .c-gantt-lanes .hist-legend .sw.s3 { background: repeating-linear-gradient(135deg, var(--ds-danger-line) 0 3px, color-mix(in srgb, var(--ds-danger-line) 45%, var(--ds-surface)) 3px 6px); box-shadow: inset 0 0 0 1.5px var(--ds-danger-line); }
+  .c-gantt-lanes .takeaway { margin: var(--ds-space-5) 0 0; padding: var(--ds-space-3) var(--ds-space-4); border: var(--ds-stroke) solid var(--ds-note-line); border-radius: var(--ds-radius-md); background: var(--ds-note-fill); font-size: var(--ds-text-sm); font-weight: 700; line-height: var(--ds-leading-snug); color: var(--ds-ink); }
+
+  @media (max-width: 560px) {
+    .c-gantt-lanes { --lw: 96px; padding: var(--ds-space-5) var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-gantt-lanes">
+  <figcaption class="head">
+    <div>
+      <h3>Twelve weeks to launch</h3>
+      <p class="hint">Who does what, when the gates fall, and where feedback overlaps the next stage.</p>
+    </div>
+    <ul class="legend">
+      <li><span class="sw"></span>Our team</li>
+      <li><span class="sw is-client"></span>Client team</li>
+      <li><span class="sw is-refine"></span>Refinement window</li>
+      <li><span class="sw is-gate"></span>Gate</li>
+    </ul>
+  </figcaption>
+
+  <div class="scroll" tabindex="0" role="region" aria-label="Plan chart, scrolls sideways on small screens">
+    <div class="inner">
+      <div class="plot"></div>
+      <p class="detail" role="status" aria-live="polite">Hover or focus a bar for details.</p>
+
+      <div class="hist-block">
+        <div class="hist-head">
+          <h4>Hours per week on the client team</h4>
+          <ul class="legend hist-legend">
+            <li><span class="sw"></span>Flat load</li>
+            <li><span class="sw s2"></span>Spiky load</li>
+            <li><span class="sw s3"></span>Over capacity</li>
+          </ul>
+        </div>
+        <div class="hist" role="img"></div>
+        <p class="takeaway"></p>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<script>
+(() => {
+  // Edit the plan here. Weeks are 1 to 12; a bar from 3 to 6 covers the whole of weeks 3, 4, 5 and 6.
+  const WEEKS = 12;
+  const TODAY = 5.4;
+  const OURS = [
+    { name: 'Discovery', from: 1, to: 2 },
+    { name: 'Design', from: 3, to: 6 },
+    { name: 'Build', from: 7, to: 10 },
+    { name: 'Launch', from: 11, to: 12 },
+  ];
+  const OURS_REFINE = [
+    { name: 'Refine scope', from: 2, to: 3 },
+    { name: 'Refine design', from: 6, to: 7 },
+    { name: 'Refine build', from: 10, to: 11 },
+  ];
+  const CLIENT = [
+    { name: 'Content audit', from: 1, to: 3 },
+    { name: 'Write and gather content', from: 4, to: 8 },
+    { name: 'Staff training', from: 9, to: 11 },
+    { name: 'Handover', from: 12, to: 12 },
+  ];
+  const CLIENT_REFINE = [
+    { name: 'Copy review', from: 5, to: 6 },
+    { name: 'Test and sign-off', from: 9, to: 10 },
+  ];
+  const GATES = [
+    { at: 2, name: 'Scope agreed' },
+    { at: 6, name: 'Design approved' },
+    { at: 10, name: 'Ready to ship' },
+  ];
+  const SPIKY = [4, 6, 28, 32, 8, 6, 30, 34, 6, 4, 24, 18];
+  const CAPACITY = 24;
+
+  const pctL = (from) => ((from - 1) / WEEKS) * 100;
+  const pctW = (from, to) => ((to - from + 1) / WEEKS) * 100;
+
+  document.querySelectorAll('.c-gantt-lanes').forEach((root) => {
+    const plot = root.querySelector('.plot');
+    const detail = root.querySelector('.detail');
+    const weeks = Array.from({ length: WEEKS }, (_, i) => i + 1);
+
+    const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
+    const label = (text, cls) => plot.appendChild(el('div', 'cell-l ' + (cls || ''), text));
+    const track = (cls) => plot.appendChild(el('div', 'cell-t ' + (cls || '')));
+    const say = (name, a, b, who) => {
+      detail.innerHTML = '<b></b> ';
+      detail.querySelector('b').textContent = name;
+      detail.append(document.createTextNode(' · ' + (a === b ? 'week ' + a : 'weeks ' + a + ' to ' + b) + ' · ' + who));
+    };
+    const clear = () => { detail.textContent = 'Hover or focus a bar for details.'; };
+    const wire = (n, name, a, b, who) => {
+      n.tabIndex = 0; n.setAttribute('aria-label', who + ': ' + name + ', ' + (a === b ? 'week ' + a : 'weeks ' + a + ' to ' + b));
+      n.addEventListener('mouseenter', () => say(name, a, b, who)); n.addEventListener('focus', () => say(name, a, b, who));
+      n.addEventListener('mouseleave', clear); n.addEventListener('blur', clear);
+    };
+
+    // week header
+    plot.appendChild(el('div', 'cell-l head-l', 'Week'));
+    const wk = el('div', 'wk'); weeks.forEach((w) => wk.appendChild(el('span', '', String(w)))); plot.appendChild(wk);
+
+    // gates row
+    label('Gates', 'h-gate is-lane');
+    const gt = track('h-gate');
+    GATES.forEach((g) => {
+      const n = el('div', 'gate'); n.style.left = (g.at / WEEKS * 100) + '%';
+      n.appendChild(el('i')); n.appendChild(el('b', '', g.name));
+      const hit = el('div', 'gate-hit'); hit.style.left = '0'; hit.style.position = 'absolute'; n.appendChild(hit);
+      wire(hit, g.name, g.at, g.at, 'Gate after week');
+      gt.appendChild(n);
+    });
+
+    const lane = (name, stages, refines, who, isClient, last) => {
+      label(name, 'h-bar is-lane'); const t = track('h-bar');
+      stages.forEach((s) => {
+        const b = el('div', 'bar' + (isClient ? ' is-client' : ''), s.name); b.style.left = 'calc(' + pctL(s.from) + '% + 3px)'; b.style.width = 'calc(' + pctW(s.from, s.to) + '% - 6px)';
+        wire(b, s.name, s.from, s.to, who); t.appendChild(b);
+      });
+      label('Refinement', 'h-ref is-sub' + (last ? ' last' : '')); const r = track('h-ref' + (last ? ' last' : ''));
+      refines.forEach((s) => {
+        const b = el('div', 'refine'); b.appendChild(el('span', '', s.name)); b.style.left = pctL(s.from) + '%'; b.style.width = pctW(s.from, s.to) + '%';
+        wire(b, s.name + ' (refinement window)', s.from, s.to, who); r.appendChild(b);
+      });
+    };
+    lane('Our team', OURS, OURS_REFINE, 'Our team', false, false);
+    lane('Client team', CLIENT, CLIENT_REFINE, 'Client team', true, true);
+
+    // gate lines across the lane rows, plus the today marker over the whole plot
+    plot.querySelectorAll('.cell-t.h-bar, .cell-t.h-ref').forEach((t) => {
+      GATES.forEach((g) => { const l = el('div', 'gate-line'); l.style.left = (g.at / WEEKS * 100) + '%'; t.appendChild(l); });
+    });
+    const today = el('div', 'today'); today.style.setProperty('--f', String((TODAY - 1) / WEEKS)); today.appendChild(el('span', '', 'Today'));
+    today.setAttribute('aria-hidden', 'true'); plot.appendChild(today);
+
+    // workload histogram
+    const total = SPIKY.reduce((a, b) => a + b, 0);
+    const flat = Math.round((total / WEEKS) * 10) / 10;
+    const max = Math.ceil(Math.max(...SPIKY, CAPACITY, flat) / 10) * 10;
+    const hist = root.querySelector('.hist');
+    const over = SPIKY.filter((v) => v > CAPACITY).length;
+    hist.setAttribute('aria-label', 'Weekly hours. Flat plan: ' + flat + ' hours every week. Spiky plan: ' + SPIKY.join(', ') + '. Capacity ' + CAPACITY + ' hours.');
+    hist.appendChild(el('div', 'axis-l', '0 to ' + max + ' hours'));
+    const area = el('div'); const bars = el('div', 'bars'); area.appendChild(bars);
+    weeks.forEach((w, i) => {
+      const pair = el('div', 'pair');
+      const a = el('div', 'col'); a.style.height = (flat / max * 100) + '%'; a.title = 'Week ' + w + ', flat: ' + flat + ' hours';
+      const s = el('div', 'col is-spiky' + (SPIKY[i] > CAPACITY ? ' is-over' : '')); s.style.height = (SPIKY[i] / max * 100) + '%'; s.title = 'Week ' + w + ', spiky: ' + SPIKY[i] + ' hours';
+      pair.append(a, s); bars.appendChild(pair);
+    });
+    const cap = el('div', 'cap'); cap.style.bottom = (CAPACITY / max * 100) + '%'; cap.appendChild(el('span', '', 'Capacity ' + CAPACITY + ' h')); bars.appendChild(cap);
+    const under = el('div', 'wk-under'); weeks.forEach((w) => under.appendChild(el('span', '', 'W' + w))); area.appendChild(under);
+    hist.appendChild(area);
+    root.querySelector('.takeaway').textContent = 'Same ' + total + ' hours in total. Spread flat it is ' + flat + ' a week and never reaches capacity; spiky it breaks capacity in ' + over + ' of ' + WEEKS + ' weeks.';
+  });
+})();
+</script>

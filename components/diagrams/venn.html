@@ -1,0 +1,118 @@
+<!--
+@title Venn diagram
+@description Three overlapping circles in semantic colours, with the place where all three overlap picked out in the highlight pair.
+@tags venn, overlap, criteria, sweet spot, intersection, diagram
+@preview fill
+@height 540
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-venn {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-venn .head { margin-bottom: var(--ds-space-5); }
+  .c-venn h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-venn .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-venn .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-venn svg { display: block; width: 100%; min-width: 440px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-venn .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-venn .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-venn .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-venn .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-venn .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-venn .ln.is-dashed { border-top-style: dashed; }
+  .c-venn .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-venn .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-venn .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-venn .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-venn .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-venn .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-venn .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-venn .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-venn svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-venn .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-venn .node.dash { stroke-dasharray: 6 5; }
+  .c-venn .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-venn .edge.dash { stroke-dasharray: 6 5; }
+  .c-venn .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-venn .mk-n { stroke: var(--ds-neutral-line); }
+  .c-venn .mk-i { stroke: var(--ds-info-line); }
+  .c-venn .mk-h { stroke: var(--ds-highlight-line); }
+  .c-venn .mk-d { stroke: var(--ds-danger-line); }
+  .c-venn .mk-g { stroke: var(--ds-note-line); }
+  .c-venn text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-venn .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-venn .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-venn .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-venn .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-venn .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-venn .e.k-h { fill: var(--ds-text); }
+  .c-venn .e.k-d { fill: var(--ds-danger-line); }
+  .c-venn .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-venn .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-venn { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-venn .frame { padding: var(--ds-space-3); }
+    .c-venn .scrollhint { display: block; }
+    .c-venn .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-venn">
+  <figcaption class="head">
+    <h3>What makes a project worth taking</h3>
+    <p class="hint">Any two out of three is a trade-off. The middle is the only clear yes.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="90 0 520 450" role="img" aria-label="Venn diagram of three circles: interesting, doable and paid. Where all three overlap is the project worth taking. Two overlaps are a hobby, a stretch or a grind.">
+<defs><marker id="venn-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="venn-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="venn-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="venn-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="venn-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker><clipPath id="venn-cb"><circle cx="280" cy="300" r="130"/></clipPath><clipPath id="venn-cc"><circle cx="420" cy="300" r="130"/></clipPath></defs>
+<g class="k-i"><circle cx="350" cy="180" r="130" style="fill:color-mix(in srgb, var(--s) 20%, transparent);stroke:var(--s);stroke-width:1.5"/></g>
+<g class="k-n"><circle cx="280" cy="300" r="130" style="fill:color-mix(in srgb, var(--s) 20%, transparent);stroke:var(--s);stroke-width:1.5"/></g>
+<g class="k-g"><circle cx="420" cy="300" r="130" style="fill:color-mix(in srgb, var(--s) 20%, transparent);stroke:var(--s);stroke-width:1.5"/></g>
+<g class="k-h"><g clip-path="url(#venn-cb)"><g clip-path="url(#venn-cc)"><circle cx="350" cy="180" r="130" style="fill:color-mix(in srgb, var(--s) 42%, transparent);stroke:none"/></g></g></g>
+<text class="t" x="350" y="112" text-anchor="middle" style="font-size:16px">Interesting</text>
+<text class="s" x="350" y="132" text-anchor="middle">you want to do it</text>
+<text class="t" x="232" y="358" text-anchor="middle" style="font-size:16px">Doable</text>
+<text class="s" x="232" y="378" text-anchor="middle">you can deliver it</text>
+<text class="t" x="468" y="358" text-anchor="middle" style="font-size:16px">Paid</text>
+<text class="s" x="468" y="378" text-anchor="middle">it covers its cost</text>
+<text class="mu" x="270" y="236" text-anchor="middle">Hobby</text>
+<text class="mu" x="430" y="236" text-anchor="middle">Stretch</text>
+<text class="mu" x="350" y="372" text-anchor="middle">Grind</text>
+<text class="t" x="350" y="267" text-anchor="middle" style="font-size:15px">Take it</text>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <ul class="legend">
+    <li class="k-i"><span class="sw"></span>Interesting</li>
+    <li class="k-n"><span class="sw"></span>Doable</li>
+    <li class="k-g"><span class="sw"></span>Paid</li>
+    <li class="k-h"><span class="sw"></span>All three: take the project</li>
+  </ul>
+</figure>

@@ -1,0 +1,120 @@
+<!--
+@title ER diagram
+@description Entities as field tables with keys and types, joined by one-to-many lines, with the aggregate root drawn in the highlight pair.
+@tags er, entity, relationship, data model, schema, database, diagram
+@preview fill
+@height 600
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-er-diagram {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-er-diagram .head { margin-bottom: var(--ds-space-5); }
+  .c-er-diagram h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-er-diagram .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-er-diagram .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-er-diagram svg { display: block; width: 100%; min-width: 700px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-er-diagram .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-er-diagram .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-er-diagram .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-er-diagram .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-er-diagram .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-er-diagram .ln.is-dashed { border-top-style: dashed; }
+  .c-er-diagram .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-er-diagram .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-er-diagram .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-er-diagram .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-er-diagram .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-er-diagram .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-er-diagram .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-er-diagram .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-er-diagram svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-er-diagram .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-er-diagram .node.dash { stroke-dasharray: 6 5; }
+  .c-er-diagram .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-er-diagram .edge.dash { stroke-dasharray: 6 5; }
+  .c-er-diagram .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-er-diagram .mk-n { stroke: var(--ds-neutral-line); }
+  .c-er-diagram .mk-i { stroke: var(--ds-info-line); }
+  .c-er-diagram .mk-h { stroke: var(--ds-highlight-line); }
+  .c-er-diagram .mk-d { stroke: var(--ds-danger-line); }
+  .c-er-diagram .mk-g { stroke: var(--ds-note-line); }
+  .c-er-diagram text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-er-diagram .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-er-diagram .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-er-diagram .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-er-diagram .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-er-diagram .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-er-diagram .e.k-h { fill: var(--ds-text); }
+  .c-er-diagram .e.k-d { fill: var(--ds-danger-line); }
+  .c-er-diagram .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-er-diagram .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-er-diagram { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-er-diagram .frame { padding: var(--ds-space-3); }
+    .c-er-diagram .scrollhint { display: block; }
+    .c-er-diagram .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-er-diagram">
+  <figcaption class="head">
+    <h3>Booking data model</h3>
+    <p class="hint">Four tables. A booking owns its payments and points at a customer and a room.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 880 424" role="img" aria-label="ER diagram: Customer makes many Bookings, each Booking is for one Room, and each Booking is paid by many Payments.">
+<defs><marker id="er-diagram-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="er-diagram-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="er-diagram-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="er-diagram-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="er-diagram-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<path class="edge k-n" d="M240 190 H320"/>
+<path class="edge k-n" d="M560 110 H640"/>
+<path class="edge k-n" d="M560 290 H640"/>
+<text class="e" x="256" y="178" text-anchor="middle">1</text>
+<text class="e" x="302" y="178" text-anchor="middle">N</text>
+<text class="e" x="574" y="98" text-anchor="middle">N</text>
+<text class="e" x="624" y="98" text-anchor="middle">1</text>
+<text class="e" x="574" y="278" text-anchor="middle">1</text>
+<text class="e" x="624" y="278" text-anchor="middle">N</text>
+<text class="e" x="280" y="212" text-anchor="middle">makes</text>
+<text class="e" x="600" y="132" text-anchor="middle">for</text>
+<text class="e" x="600" y="312" text-anchor="middle">paid by</text>
+<g class="k-n"><rect class="node" x="30" y="120" width="210" height="158" rx="8"/><path d="M30 164 V128 Q30 120 38 120 H232 Q240 120 240 128 V164 Z" style="fill:color-mix(in srgb, var(--s) 14%, transparent);stroke:none"/><line x1="30" y1="164" x2="240" y2="164" style="stroke:var(--s);stroke-opacity:0.5"/><text class="s" x="46" y="140" text-anchor="start">Reference</text><text class="t" x="46" y="156" text-anchor="start" style="font-size:15px">Customer</text><text class="m" x="46" y="188" text-anchor="start" style="fill:var(--ds-ink)">id</text><text class="m" x="224" y="188" text-anchor="end" style="fill-opacity:0.6">uuid pk</text><text class="m" x="46" y="214" text-anchor="start" style="fill:var(--ds-ink)">name</text><text class="m" x="224" y="214" text-anchor="end" style="fill-opacity:0.6">text</text><text class="m" x="46" y="240" text-anchor="start" style="fill:var(--ds-ink)">email</text><text class="m" x="224" y="240" text-anchor="end" style="fill-opacity:0.6">text</text><text class="m" x="46" y="266" text-anchor="start" style="fill:var(--ds-ink)">phone</text><text class="m" x="224" y="266" text-anchor="end" style="fill-opacity:0.6">text</text></g>
+<g class="k-h"><rect class="node" x="320" y="90" width="240" height="210" rx="8"/><path d="M320 134 V98 Q320 90 328 90 H552 Q560 90 560 98 V134 Z" style="fill:color-mix(in srgb, var(--s) 14%, transparent);stroke:none"/><line x1="320" y1="134" x2="560" y2="134" style="stroke:var(--s);stroke-opacity:0.5"/><text class="s" x="336" y="110" text-anchor="start">Aggregate root</text><text class="t" x="336" y="126" text-anchor="start" style="font-size:15px">Booking</text><text class="m" x="336" y="158" text-anchor="start" style="fill:var(--ds-ink)">id</text><text class="m" x="544" y="158" text-anchor="end" style="fill-opacity:0.6">uuid pk</text><text class="m" x="336" y="184" text-anchor="start" style="fill:var(--ds-ink)">customer_id</text><text class="m" x="544" y="184" text-anchor="end" style="fill-opacity:0.6">uuid fk</text><text class="m" x="336" y="210" text-anchor="start" style="fill:var(--ds-ink)">room_id</text><text class="m" x="544" y="210" text-anchor="end" style="fill-opacity:0.6">uuid fk</text><text class="m" x="336" y="236" text-anchor="start" style="fill:var(--ds-ink)">check_in</text><text class="m" x="544" y="236" text-anchor="end" style="fill-opacity:0.6">date</text><text class="m" x="336" y="262" text-anchor="start" style="fill:var(--ds-ink)">check_out</text><text class="m" x="544" y="262" text-anchor="end" style="fill-opacity:0.6">date</text><text class="m" x="336" y="288" text-anchor="start" style="fill:var(--ds-ink)">status</text><text class="m" x="544" y="288" text-anchor="end" style="fill-opacity:0.6">text</text></g>
+<g class="k-n"><rect class="node" x="640" y="30" width="210" height="158" rx="8"/><path d="M640 74 V38 Q640 30 648 30 H842 Q850 30 850 38 V74 Z" style="fill:color-mix(in srgb, var(--s) 14%, transparent);stroke:none"/><line x1="640" y1="74" x2="850" y2="74" style="stroke:var(--s);stroke-opacity:0.5"/><text class="s" x="656" y="50" text-anchor="start">Reference</text><text class="t" x="656" y="66" text-anchor="start" style="font-size:15px">Room</text><text class="m" x="656" y="98" text-anchor="start" style="fill:var(--ds-ink)">id</text><text class="m" x="834" y="98" text-anchor="end" style="fill-opacity:0.6">uuid pk</text><text class="m" x="656" y="124" text-anchor="start" style="fill:var(--ds-ink)">name</text><text class="m" x="834" y="124" text-anchor="end" style="fill-opacity:0.6">text</text><text class="m" x="656" y="150" text-anchor="start" style="fill:var(--ds-ink)">capacity</text><text class="m" x="834" y="150" text-anchor="end" style="fill-opacity:0.6">int</text><text class="m" x="656" y="176" text-anchor="start" style="fill:var(--ds-ink)">rate</text><text class="m" x="834" y="176" text-anchor="end" style="fill-opacity:0.6">money</text></g>
+<g class="k-i"><rect class="node" x="640" y="250" width="210" height="158" rx="8"/><path d="M640 294 V258 Q640 250 648 250 H842 Q850 250 850 258 V294 Z" style="fill:color-mix(in srgb, var(--s) 14%, transparent);stroke:none"/><line x1="640" y1="294" x2="850" y2="294" style="stroke:var(--s);stroke-opacity:0.5"/><text class="s" x="656" y="270" text-anchor="start">Dependent record</text><text class="t" x="656" y="286" text-anchor="start" style="font-size:15px">Payment</text><text class="m" x="656" y="318" text-anchor="start" style="fill:var(--ds-ink)">id</text><text class="m" x="834" y="318" text-anchor="end" style="fill-opacity:0.6">uuid pk</text><text class="m" x="656" y="344" text-anchor="start" style="fill:var(--ds-ink)">booking_id</text><text class="m" x="834" y="344" text-anchor="end" style="fill-opacity:0.6">uuid fk</text><text class="m" x="656" y="370" text-anchor="start" style="fill:var(--ds-ink)">amount</text><text class="m" x="834" y="370" text-anchor="end" style="fill-opacity:0.6">money</text><text class="m" x="656" y="396" text-anchor="start" style="fill:var(--ds-ink)">paid_at</text><text class="m" x="834" y="396" text-anchor="end" style="fill-opacity:0.6">timestamp</text></g>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <ul class="legend">
+    <li class="k-h"><span class="sw"></span>Aggregate root</li>
+    <li class="k-i"><span class="sw"></span>Dependent record</li>
+    <li class="k-n"><span class="sw"></span>Reference data</li>
+    <li><b>1</b> and <b>N</b> mark one side and the many side of a relationship</li>
+  </ul>
+</figure>

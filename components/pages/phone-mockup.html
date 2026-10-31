@@ -1,0 +1,258 @@
+<!--
+@title Phone mockup
+@description A phone frame whose app screen is built from token shapes and scrolls gently by itself, pausing on hover. Swap the feed markup for your own screen.
+@tags phone, mockup, device, mobile, app, scroll
+@preview center
+@height 700
+@replay true
+@added 2026-10-31
+@source 21st.dev Phone App Scroll | https://21st.dev/@21st/components/phone-scroll | inspired-by
+-->
+<style>
+  .c-phone-mockup,
+  .c-phone-mockup *,
+  .c-phone-mockup *::before,
+  .c-phone-mockup *::after { box-sizing: border-box; }
+  .c-phone-mockup {
+    --screen-h: 560px;
+    --dist: 0px;
+    --device: color-mix(in srgb, var(--ds-text) 90%, var(--ds-bg));
+    width: 292px;
+    margin: 0;
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-phone-mockup .device {
+    position: relative;
+    padding: 10px;
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: 46px;
+    background: var(--device);
+    box-shadow: var(--ds-shadow-lg);
+  }
+  .c-phone-mockup .island {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    z-index: 3;
+    width: 84px;
+    height: 24px;
+    transform: translateX(-50%);
+    border-radius: var(--ds-radius-pill);
+    background: var(--device);
+    box-shadow: 0 0 0 2px var(--device);
+  }
+  .c-phone-mockup .screen {
+    position: relative;
+    height: var(--screen-h);
+    overflow: hidden;
+    border-radius: 36px;
+    background: var(--ds-surface);
+  }
+  .c-phone-mockup .status {
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    padding: 6px 26px 0;
+    background: linear-gradient(var(--ds-surface) 70%, transparent);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    color: var(--ds-ink);
+  }
+  .c-phone-mockup .status .sys { display: flex; align-items: center; gap: 5px; }
+  .c-phone-mockup .status .sig { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
+  .c-phone-mockup .status .sig i { width: 3px; border-radius: 1px; background: var(--ds-ink); }
+  .c-phone-mockup .status .bat { width: 22px; height: 10px; border: var(--ds-hairline) solid var(--ds-ink); border-radius: 3px; padding: 1px; }
+  .c-phone-mockup .status .bat i { display: block; width: 72%; height: 100%; border-radius: 1px; background: var(--ds-ink); }
+  .c-phone-mockup .tabbar {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 64px;
+    padding-bottom: 8px;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    background: var(--ds-surface);
+  }
+  .c-phone-mockup .tabbar i { width: 22px; height: 22px; border-radius: var(--ds-radius-sm); border: var(--ds-stroke) solid var(--ds-muted); }
+  .c-phone-mockup .tabbar i.on { border-color: var(--ds-ink); background: var(--ds-ink); }
+  .c-phone-mockup .tabbar::after {
+    content: "";
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 96px;
+    height: 4px;
+    transform: translateX(-50%);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-ink);
+    opacity: 0.8;
+  }
+
+  /* the scrolling feed */
+  .c-phone-mockup .feed {
+    display: grid;
+    gap: var(--ds-space-5);
+    padding: 56px var(--ds-space-4) 88px;
+    will-change: transform;
+  }
+  .c-phone-mockup.is-running .feed {
+    animation: c-phone-mockup-scroll calc(var(--ds-dur-story) * 9) var(--ds-ease-in-out) 600ms infinite alternate;
+  }
+  .c-phone-mockup:hover .feed,
+  .c-phone-mockup:focus-within .feed { animation-play-state: paused; }
+  @keyframes c-phone-mockup-scroll {
+    from { transform: translateY(0); }
+    to { transform: translateY(calc(var(--dist) * -1)); }
+  }
+
+  .c-phone-mockup .hello { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-3); }
+  .c-phone-mockup .hello span { display: block; font-size: var(--ds-text-xs); color: var(--ds-muted); font-weight: 600; }
+  .c-phone-mockup .hello b { display: block; font-size: var(--ds-text-lg); color: var(--ds-ink); line-height: 1.2; }
+  .c-phone-mockup .avatar {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-info-fill);
+    border: var(--ds-hairline) solid var(--ds-info-line);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+  }
+  .c-phone-mockup .balance {
+    display: grid;
+    gap: var(--ds-space-2);
+    padding: var(--ds-space-4);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+  }
+  .c-phone-mockup .balance small { font-size: var(--ds-text-xs); font-weight: 600; opacity: 0.7; }
+  .c-phone-mockup .balance strong { font-family: var(--ds-font-display); font-size: var(--ds-text-2xl); font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; font-variant-numeric: tabular-nums; }
+  .c-phone-mockup .balance .row { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-3); }
+  .c-phone-mockup .delta { white-space: nowrap; padding: 2px var(--ds-space-2); border-radius: var(--ds-radius-pill); background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 700; }
+  .c-phone-mockup .balance svg { width: 92px; height: 32px; }
+  .c-phone-mockup .balance path { fill: none; stroke: var(--ds-on-action); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .c-phone-mockup .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--ds-space-2); text-align: center; }
+  .c-phone-mockup .actions div { display: grid; justify-items: center; gap: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-text); }
+  .c-phone-mockup .actions i { width: 44px; height: 44px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); border: var(--ds-hairline) solid var(--ds-line); }
+  .c-phone-mockup .actions div:nth-child(1) i { background: var(--ds-info-fill); border-color: var(--ds-info-line); }
+  .c-phone-mockup .actions div:nth-child(2) i { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-phone-mockup .actions div:nth-child(3) i { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-phone-mockup h3 { margin: 0; font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); }
+  .c-phone-mockup .block { display: grid; gap: var(--ds-space-3); }
+  .c-phone-mockup .chart { display: flex; align-items: flex-end; gap: var(--ds-space-2); height: 96px; padding: var(--ds-space-3); border-radius: var(--ds-radius-lg); background: var(--ds-panel); }
+  .c-phone-mockup .chart i { flex: 1; min-height: 6px; border-radius: var(--ds-radius-sm); background: var(--ds-series-1); }
+  .c-phone-mockup .chart i.hi { background: var(--ds-series-2); }
+  .c-phone-mockup .list { display: grid; gap: var(--ds-space-1); }
+  .c-phone-mockup .item { display: flex; align-items: center; gap: var(--ds-space-3); padding: var(--ds-space-2) 0; }
+  .c-phone-mockup .item .dot { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: var(--ds-radius-md); background: var(--ds-panel); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-ink); }
+  .c-phone-mockup .item .dot.a { background: var(--ds-info-fill); }
+  .c-phone-mockup .item .dot.b { background: var(--ds-highlight-fill); }
+  .c-phone-mockup .item .dot.c { background: var(--ds-note-fill); }
+  .c-phone-mockup .item .dot.d { background: var(--ds-danger-fill); }
+  .c-phone-mockup .item .t { flex: 1; min-width: 0; }
+  .c-phone-mockup .item .t b { display: block; font-size: var(--ds-text-sm); color: var(--ds-ink); line-height: 1.3; }
+  .c-phone-mockup .item .t span { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-phone-mockup .item .amt { font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-phone-mockup .item .amt.neg { color: var(--ds-danger-line); }
+  .c-phone-mockup .goal { display: grid; gap: var(--ds-space-2); padding: var(--ds-space-3) var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-phone-mockup .goal .top { display: flex; justify-content: space-between; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-phone-mockup .goal .top span { color: var(--ds-muted); font-weight: 600; }
+  .c-phone-mockup .goal .bar { height: 6px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); overflow: hidden; }
+  .c-phone-mockup .goal .bar i { display: block; height: 100%; border-radius: inherit; background: var(--ds-series-3); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .c-phone-mockup.is-running .feed { animation: none; }
+  }
+</style>
+
+<figure class="c-phone-mockup" aria-label="Phone showing a banking app that scrolls slowly">
+  <div class="device">
+    <span class="island" aria-hidden="true"></span>
+    <div class="screen">
+      <div class="status" aria-hidden="true">
+        <span>9:41</span>
+        <span class="sys"><span class="sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span><span class="bat"><i></i></span></span>
+      </div>
+
+      <div class="feed" aria-hidden="true">
+        <div class="hello">
+          <div><span>Good morning</span><b>Maja Lindqvist</b></div>
+          <span class="avatar">ML</span>
+        </div>
+
+        <div class="balance">
+          <small>Total balance</small>
+          <strong>$24,860</strong>
+          <div class="row">
+            <span class="delta">+4.2%</span>
+            <svg viewBox="0 0 92 32"><path d="M2 26 C12 24 16 14 26 16 S40 26 50 18 S66 6 76 10 S86 6 90 4"/></svg>
+          </div>
+        </div>
+
+        <div class="actions">
+          <div><i></i>Send</div>
+          <div><i></i>Request</div>
+          <div><i></i>Split</div>
+          <div><i></i>More</div>
+        </div>
+
+        <div class="block">
+          <h3>Spending this week</h3>
+          <div class="chart">
+            <i style="height:38%"></i><i style="height:62%"></i><i style="height:30%"></i><i class="hi" style="height:92%"></i><i style="height:54%"></i><i style="height:44%"></i><i style="height:70%"></i>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>Recent activity</h3>
+          <div class="list">
+            <div class="item"><span class="dot a">BR</span><span class="t"><b>Brightpath Coffee</b><span>Today, 08:12</span></span><span class="amt neg">-$6.40</span></div>
+            <div class="item"><span class="dot c">SA</span><span class="t"><b>Salary, Halcyon</b><span>Yesterday</span></span><span class="amt">+$4,200</span></div>
+            <div class="item"><span class="dot b">OA</span><span class="t"><b>Oakline Rail</b><span>Yesterday</span></span><span class="amt neg">-$38.00</span></div>
+            <div class="item"><span class="dot d">KE</span><span class="t"><b>Kestrel Energy</b><span>Mon</span></span><span class="amt neg">-$92.15</span></div>
+            <div class="item"><span class="dot a">FE</span><span class="t"><b>Ferro Studio</b><span>Mon</span></span><span class="amt neg">-$140.00</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>Savings goals</h3>
+          <div class="goal"><div class="top">Summer trip <span>72%</span></div><div class="bar"><i style="width:72%"></i></div></div>
+          <div class="goal"><div class="top">New laptop <span>41%</span></div><div class="bar"><i style="width:41%"></i></div></div>
+          <div class="goal"><div class="top">Emergency fund <span>88%</span></div><div class="bar"><i style="width:88%"></i></div></div>
+        </div>
+      </div>
+
+      <div class="tabbar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-phone-mockup').forEach((root) => {
+    const screen = root.querySelector('.screen');
+    const feed = root.querySelector('.feed');
+    const measure = () => root.style.setProperty('--dist', Math.max(0, feed.scrollHeight - screen.clientHeight) + 'px');
+    measure();
+    new ResizeObserver(measure).observe(feed);
+    if (reduced) return;
+    // runs only while on screen, and restarts from the top each time it scrolls into view
+    new IntersectionObserver((entries) => {
+      const on = entries[entries.length - 1].isIntersecting;
+      root.classList.toggle('is-running', on);
+    }, { threshold: 0.3 }).observe(root);
+  });
+})();
+</script>

@@ -1,0 +1,551 @@
+<!--
+@title Form wizard
+@description A multi-step quote request with a step rail, inline validation per step, a stepper and toggles, a date field, a live price summary and a review step. Autosaves to the browser and can be restarted.
+@tags form, wizard, steps, stepper, quote, calculator, validation, autosave
+@preview fill
+@height 640
+@added 2026-10-31
+-->
+<style>
+  .c-form-wizard {
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-form-wizard .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .c-form-wizard [hidden] { display: none !important; }
+  .c-form-wizard .top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-3) var(--ds-space-5); margin-bottom: var(--ds-space-5); }
+  .c-form-wizard h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-form-wizard .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-form-wizard .saved { display: flex; align-items: center; gap: var(--ds-space-3); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-form-wizard .link { padding: var(--ds-space-1) var(--ds-space-2); border: 0; border-radius: var(--ds-radius-sm); background: transparent; color: var(--ds-text); font-size: var(--ds-text-xs); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .c-form-wizard .link:hover { color: var(--ds-ink); }
+  .c-form-wizard .link:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+
+  .c-form-wizard .rail { display: flex; margin: 0 0 var(--ds-space-6); padding: 0; list-style: none; }
+  .c-form-wizard .rail li { position: relative; flex: 1 1 0; min-width: 0; }
+  .c-form-wizard .rail li:not(:last-child)::after { content: ""; position: absolute; top: 15px; left: calc(50% + 24px); right: calc(-50% + 24px); border-top: var(--ds-stroke) solid var(--ds-line); }
+  .c-form-wizard .rail li.is-done:not(:last-child)::after { border-top-color: var(--ds-neutral-line); }
+  .c-form-wizard .rail-btn { display: grid; justify-items: center; gap: var(--ds-space-2); width: 100%; padding: 0 var(--ds-space-1); border: 0; border-radius: var(--ds-radius-md); background: transparent; color: var(--ds-muted); font-size: var(--ds-text-xs); font-weight: 600; cursor: pointer; }
+  .c-form-wizard .rail-btn:disabled { cursor: default; }
+  .c-form-wizard .rail-btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-form-wizard .dot { position: relative; z-index: 1; display: grid; place-items: center; width: 31px; height: 31px; border: var(--ds-stroke) solid var(--ds-line); border-radius: 50%; background: var(--ds-surface); font-size: var(--ds-text-xs); font-variant-numeric: tabular-nums; transition: background var(--ds-dur-base) var(--ds-ease), border-color var(--ds-dur-base) var(--ds-ease); }
+  .c-form-wizard .dot svg { width: 13px; height: 13px; }
+  .c-form-wizard .dot .tick { display: none; }
+  .c-form-wizard li.is-done .dot { border-color: var(--ds-neutral-line); background: var(--ds-neutral-fill); color: var(--ds-ink); }
+  .c-form-wizard li.is-done .dot .n { display: none; }
+  .c-form-wizard li.is-done .dot .tick { display: block; }
+  .c-form-wizard li.is-done .rail-btn:not(:disabled):hover { color: var(--ds-ink); }
+  .c-form-wizard li.is-current .dot { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); color: var(--ds-ink); }
+  .c-form-wizard li.is-current .rail-btn { color: var(--ds-ink); }
+
+  .c-form-wizard .layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: var(--ds-space-6); align-items: start; }
+  .c-form-wizard .panel { padding: var(--ds-space-6); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-form-wizard .panel:focus { outline: none; }
+  .c-form-wizard .step-title { margin: 0 0 var(--ds-space-1); font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-form-wizard .step-sub { margin: 0 0 var(--ds-space-5); font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-form-wizard .fields { display: grid; gap: var(--ds-space-5); }
+  .c-form-wizard .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-4); }
+  .c-form-wizard fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+  .c-form-wizard .lab { display: block; margin-bottom: var(--ds-space-2); padding: 0; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-form-wizard .opt-tag { font-weight: 500; color: var(--ds-muted); }
+  .c-form-wizard .control { width: 100%; min-height: 44px; padding: 0 var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); color: var(--ds-ink); font-size: var(--ds-text-sm); }
+  .c-form-wizard textarea.control { min-height: 84px; padding: var(--ds-space-3) var(--ds-space-4); resize: vertical; line-height: var(--ds-leading-snug); }
+  .c-form-wizard .control:focus-visible { outline: none; border-color: var(--ds-info-line); box-shadow: var(--ds-focus); }
+  .c-form-wizard .control[aria-invalid="true"] { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-form-wizard .err { margin: var(--ds-space-2) 0 0; font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-ink); }
+  .c-form-wizard .err:empty { display: none; }
+  .c-form-wizard .err::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: var(--ds-danger-line); }
+  .c-form-wizard .help { margin: var(--ds-space-2) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+
+  .c-form-wizard .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--ds-space-3); }
+  .c-form-wizard .card { position: relative; display: block; cursor: pointer; }
+  .c-form-wizard .card input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .c-form-wizard .face { display: grid; gap: 2px; height: 100%; padding: var(--ds-space-3) var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); transition: border-color var(--ds-dur-fast) var(--ds-ease), background var(--ds-dur-fast) var(--ds-ease); }
+  .c-form-wizard .face b { font-size: var(--ds-text-sm); color: var(--ds-ink); }
+  .c-form-wizard .face small { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-form-wizard .card:hover .face { border-color: var(--ds-neutral-line); }
+  .c-form-wizard .card input:checked + .face { border-color: var(--ds-info-line); background: var(--ds-info-fill); box-shadow: inset 0 0 0 1px var(--ds-info-line); }
+  .c-form-wizard .card input:focus-visible + .face { box-shadow: var(--ds-focus); }
+  .c-form-wizard .cards[aria-invalid="true"] .face { border-color: var(--ds-danger-line); }
+
+  .c-form-wizard .stepper { display: inline-flex; align-items: center; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-surface); }
+  .c-form-wizard .stepper button { width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: var(--ds-ink); font-size: var(--ds-text-lg); line-height: 1; cursor: pointer; }
+  .c-form-wizard .stepper button:hover { background: var(--ds-panel); }
+  .c-form-wizard .stepper button:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-form-wizard .stepper input { width: 64px; min-height: 44px; border: 0; background: transparent; color: var(--ds-ink); font-size: var(--ds-text-md); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; -moz-appearance: textfield; appearance: textfield; }
+  .c-form-wizard .stepper input::-webkit-outer-spin-button,
+  .c-form-wizard .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .c-form-wizard .stepper input:focus-visible { outline: none; box-shadow: var(--ds-focus); border-radius: var(--ds-radius-sm); }
+  .c-form-wizard .stepper.is-bad { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+
+  .c-form-wizard .toggles { display: grid; gap: var(--ds-space-3); }
+  .c-form-wizard .toggle { display: flex; align-items: center; gap: var(--ds-space-4); width: 100%; padding: var(--ds-space-3) var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); text-align: left; cursor: pointer; }
+  .c-form-wizard .toggle:hover { border-color: var(--ds-neutral-line); }
+  .c-form-wizard .toggle:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-form-wizard .toggle .txt { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .c-form-wizard .toggle .txt b { font-size: var(--ds-text-sm); color: var(--ds-ink); }
+  .c-form-wizard .toggle .txt small { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-form-wizard .toggle .price { flex: none; font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-form-wizard .switch { position: relative; flex: none; width: 40px; height: 24px; border-radius: var(--ds-radius-pill); background: var(--ds-line); transition: background var(--ds-dur-base) var(--ds-ease); }
+  .c-form-wizard .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--ds-raised); box-shadow: var(--ds-shadow-sm); transition: transform var(--ds-dur-base) var(--ds-ease-spring); }
+  .c-form-wizard .toggle[aria-checked="true"] .switch { background: var(--ds-action); }
+  .c-form-wizard .toggle[aria-checked="true"] .switch::after { transform: translateX(16px); }
+  .c-form-wizard .toggle[aria-checked="true"] { border-color: var(--ds-info-line); background: var(--ds-info-fill); }
+
+  .c-form-wizard .review { display: grid; gap: var(--ds-space-4); margin: 0; }
+  .c-form-wizard .review-group { padding: var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); }
+  .c-form-wizard .review-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--ds-space-2); font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); }
+  .c-form-wizard .review dl { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: var(--ds-space-1) var(--ds-space-5); margin: 0; font-size: var(--ds-text-sm); }
+  .c-form-wizard .review dt { color: var(--ds-muted); }
+  .c-form-wizard .review dd { margin: 0; color: var(--ds-ink); overflow-wrap: anywhere; }
+
+  .c-form-wizard .nav { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-3); margin-top: var(--ds-space-6); padding-top: var(--ds-space-5); border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-form-wizard .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 var(--ds-space-5); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); color: var(--ds-ink); font-size: var(--ds-text-sm); font-weight: 600; cursor: pointer; }
+  .c-form-wizard .btn:hover { border-color: var(--ds-neutral-line); }
+  .c-form-wizard .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-form-wizard .btn.is-primary { border-color: var(--ds-action); background: var(--ds-action); color: var(--ds-on-action); }
+  .c-form-wizard .btn[hidden] { display: none; }
+  .c-form-wizard .nav .spacer { flex: 1; }
+
+  .c-form-wizard .summary { position: sticky; top: var(--ds-space-4); padding: var(--ds-space-5); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-form-wizard .summary h4 { margin: 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-form-wizard .sum-event { margin: var(--ds-space-1) 0 var(--ds-space-4); font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-form-wizard .lines { display: grid; gap: var(--ds-space-2); margin: 0 0 var(--ds-space-4); padding: 0 0 var(--ds-space-4); border-bottom: var(--ds-hairline) solid var(--ds-line); list-style: none; font-size: var(--ds-text-sm); }
+  .c-form-wizard .lines li { display: flex; justify-content: space-between; gap: var(--ds-space-3); }
+  .c-form-wizard .lines li span:last-child { font-variant-numeric: tabular-nums; color: var(--ds-ink); white-space: nowrap; }
+  .c-form-wizard .lines li.is-empty { color: var(--ds-muted); }
+  .c-form-wizard .total-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); }
+  .c-form-wizard .total-row span { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-text); }
+  .c-form-wizard .total { font-size: var(--ds-text-xl); font-weight: 800; letter-spacing: -0.02em; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-form-wizard .total.is-bump { animation: c-form-wizard-bump var(--ds-dur-base) var(--ds-ease); }
+  .c-form-wizard .per { margin: var(--ds-space-1) 0 0; text-align: right; font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-form-wizard .fine { margin: var(--ds-space-4) 0 0; padding: var(--ds-space-3); border-radius: var(--ds-radius-md); background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); font-size: var(--ds-text-xs); color: var(--ds-ink); }
+  @keyframes c-form-wizard-bump { 0% { transform: translateY(3px); opacity: 0.4; } 100% { transform: none; opacity: 1; } }
+
+  .c-form-wizard .done { display: grid; justify-items: start; gap: var(--ds-space-3); max-width: 520px; margin: var(--ds-space-7) auto; padding: var(--ds-space-6); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-form-wizard .done .badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 8px; border: var(--ds-hairline) solid var(--ds-note-line); border-radius: var(--ds-radius-pill); background: var(--ds-note-fill); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 700; }
+  .c-form-wizard .done .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ds-note-line); }
+  .c-form-wizard .done h4 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-form-wizard .done p { margin: 0; font-size: var(--ds-text-sm); }
+
+  @media (max-width: 820px) {
+    .c-form-wizard .layout { grid-template-columns: 1fr; }
+    .c-form-wizard .summary { position: static; }
+  }
+  @media (max-width: 560px) {
+    .c-form-wizard { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-form-wizard .panel { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-form-wizard .two { grid-template-columns: 1fr; }
+    .c-form-wizard .rail-btn .lab-t { display: none; }
+    .c-form-wizard li.is-current .rail-btn .lab-t { display: block; position: absolute; top: 38px; left: 0; right: 0; text-align: center; }
+    .c-form-wizard .rail li:not(:last-child)::after { left: calc(50% + 20px); right: calc(-50% + 20px); }
+    .c-form-wizard .rail { margin-bottom: var(--ds-space-8); }
+    .c-form-wizard .review dl { grid-template-columns: 1fr; }
+    .c-form-wizard .review dt { margin-top: var(--ds-space-2); }
+  }
+</style>
+
+<section class="c-form-wizard" aria-labelledby="c-form-wizard-title">
+  <div class="top">
+    <div>
+      <h3 id="c-form-wizard-title">Event catering quote</h3>
+      <p class="hint">Five short steps. The price on the right updates as you answer.</p>
+    </div>
+    <div class="saved"><span class="save-note" role="status" aria-live="polite">Draft saves as you go</span><button class="link" type="button" data-act="reset">Start over</button></div>
+  </div>
+
+  <ol class="rail" aria-label="Progress">
+    <li><button class="rail-btn" type="button" data-go="0"><span class="dot"><span class="n">1</span><svg class="tick" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.5 5 9.5 10 3"/></svg></span><span class="lab-t">Event</span></button></li>
+    <li><button class="rail-btn" type="button" data-go="1"><span class="dot"><span class="n">2</span><svg class="tick" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.5 5 9.5 10 3"/></svg></span><span class="lab-t">Menu</span></button></li>
+    <li><button class="rail-btn" type="button" data-go="2"><span class="dot"><span class="n">3</span><svg class="tick" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.5 5 9.5 10 3"/></svg></span><span class="lab-t">Extras</span></button></li>
+    <li><button class="rail-btn" type="button" data-go="3"><span class="dot"><span class="n">4</span><svg class="tick" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.5 5 9.5 10 3"/></svg></span><span class="lab-t">Contact</span></button></li>
+    <li><button class="rail-btn" type="button" data-go="4"><span class="dot"><span class="n">5</span><svg class="tick" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.5 5 9.5 10 3"/></svg></span><span class="lab-t">Review</span></button></li>
+  </ol>
+
+  <div class="layout">
+    <form class="panel" novalidate tabindex="-1">
+      <div class="step" data-step="0">
+        <h4 class="step-title">About the event</h4>
+        <p class="step-sub">What are we catering, when, and for how many?</p>
+        <div class="fields">
+          <fieldset>
+            <legend class="lab">Type of event</legend>
+            <div class="cards" role="radiogroup" data-group="type" aria-describedby="c-form-wizard-e-type">
+              <label class="card"><input type="radio" name="c-form-wizard-type" value="Wedding" data-f="type"><span class="face"><b>Wedding</b><small>Day or evening</small></span></label>
+              <label class="card"><input type="radio" name="c-form-wizard-type" value="Corporate" data-f="type"><span class="face"><b>Corporate</b><small>Lunch or launch</small></span></label>
+              <label class="card"><input type="radio" name="c-form-wizard-type" value="Birthday" data-f="type"><span class="face"><b>Birthday</b><small>Private party</small></span></label>
+              <label class="card"><input type="radio" name="c-form-wizard-type" value="Dinner party" data-f="type"><span class="face"><b>Dinner party</b><small>Seated, at home</small></span></label>
+            </div>
+            <p class="err" id="c-form-wizard-e-type" data-err="type"></p>
+          </fieldset>
+          <div class="two">
+            <div>
+              <label class="lab" for="c-form-wizard-date">Event date</label>
+              <input class="control" id="c-form-wizard-date" type="date" data-f="date" aria-describedby="c-form-wizard-e-date c-form-wizard-h-date">
+              <p class="help" id="c-form-wizard-h-date">We need at least 14 days notice.</p>
+              <p class="err" id="c-form-wizard-e-date" data-err="date"></p>
+            </div>
+            <div>
+              <label class="lab" for="c-form-wizard-guests">Guests</label>
+              <div class="stepper" data-stepper>
+                <button type="button" data-dir="-5" aria-label="Five fewer guests">&minus;</button>
+                <input id="c-form-wizard-guests" type="number" inputmode="numeric" min="10" max="300" data-f="guests" aria-describedby="c-form-wizard-e-guests c-form-wizard-h-guests">
+                <button type="button" data-dir="5" aria-label="Five more guests">+</button>
+              </div>
+              <p class="help" id="c-form-wizard-h-guests">Between 10 and 300.</p>
+              <p class="err" id="c-form-wizard-e-guests" data-err="guests"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-step="1" hidden>
+        <h4 class="step-title">Menu and drinks</h4>
+        <p class="step-sub">Pick a service style, then add anything your guests need.</p>
+        <div class="fields">
+          <fieldset>
+            <legend class="lab">Service style</legend>
+            <div class="cards" role="radiogroup" data-group="style" aria-describedby="c-form-wizard-e-style">
+              <label class="card"><input type="radio" name="c-form-wizard-style" value="canapes" data-f="style"><span class="face"><b>Canapes</b><small>&euro;29 per guest</small></span></label>
+              <label class="card"><input type="radio" name="c-form-wizard-style" value="buffet" data-f="style"><span class="face"><b>Buffet</b><small>&euro;38 per guest</small></span></label>
+              <label class="card"><input type="radio" name="c-form-wizard-style" value="plated" data-f="style"><span class="face"><b>Plated</b><small>&euro;62 per guest</small></span></label>
+            </div>
+            <p class="err" id="c-form-wizard-e-style" data-err="style"></p>
+          </fieldset>
+          <div class="toggles">
+            <button class="toggle" type="button" role="switch" aria-checked="false" data-f="vegan"><span class="txt"><b>Vegan menu for all</b><small>Plant-based versions of every dish</small></span><span class="price">+&euro;4 / guest</span><span class="switch" aria-hidden="true"></span></button>
+            <button class="toggle" type="button" role="switch" aria-checked="false" data-f="glutenFree"><span class="txt"><b>Gluten-free kitchen</b><small>Separate prep and labelled dishes</small></span><span class="price">+&euro;3 / guest</span><span class="switch" aria-hidden="true"></span></button>
+            <button class="toggle" type="button" role="switch" aria-checked="false" data-f="drinks"><span class="txt"><b>Drinks package</b><small>Welcome drink, wine, soft drinks, coffee</small></span><span class="price">+&euro;9 / guest</span><span class="switch" aria-hidden="true"></span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-step="2" hidden>
+        <h4 class="step-title">Service and extras</h4>
+        <p class="step-sub">All optional. Switch on what you would like us to take care of.</p>
+        <div class="fields">
+          <div class="toggles">
+            <button class="toggle" type="button" role="switch" aria-checked="false" data-f="staff"><span class="txt"><b>Serving staff</b><small>One server for every 25 guests</small></span><span class="price">&euro;180 each</span><span class="switch" aria-hidden="true"></span></button>
+            <button class="toggle" type="button" role="switch" aria-checked="false" data-f="equipment"><span class="txt"><b>Tableware and linen hire</b><small>Plates, glasses, cutlery, napkins</small></span><span class="price">&euro;240 flat</span><span class="switch" aria-hidden="true"></span></button>
+            <button class="toggle" type="button" role="switch" aria-checked="false" data-f="cleanup"><span class="txt"><b>Clean-up after the event</b><small>Kitchen, tables and waste removal</small></span><span class="price">&euro;150 flat</span><span class="switch" aria-hidden="true"></span></button>
+          </div>
+          <div>
+            <label class="lab" for="c-form-wizard-notes">Anything else we should know? <span class="opt-tag">(optional)</span></label>
+            <textarea class="control" id="c-form-wizard-notes" data-f="notes" placeholder="Allergies, venue access, a favourite dish"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-step="3" hidden>
+        <h4 class="step-title">Who should we reply to?</h4>
+        <p class="step-sub">We send the written quote within one working day.</p>
+        <div class="fields">
+          <div class="two">
+            <div>
+              <label class="lab" for="c-form-wizard-name">Full name</label>
+              <input class="control" id="c-form-wizard-name" type="text" autocomplete="name" data-f="name" aria-describedby="c-form-wizard-e-name">
+              <p class="err" id="c-form-wizard-e-name" data-err="name"></p>
+            </div>
+            <div>
+              <label class="lab" for="c-form-wizard-email">Email</label>
+              <input class="control" id="c-form-wizard-email" type="email" autocomplete="email" data-f="email" aria-describedby="c-form-wizard-e-email">
+              <p class="err" id="c-form-wizard-e-email" data-err="email"></p>
+            </div>
+          </div>
+          <div>
+            <label class="lab" for="c-form-wizard-phone">Phone <span class="opt-tag">(optional)</span></label>
+            <input class="control" id="c-form-wizard-phone" type="tel" autocomplete="tel" data-f="phone">
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-step="4" hidden>
+        <h4 class="step-title">Check your request</h4>
+        <p class="step-sub">Edit anything that looks off, then send it.</p>
+        <div class="review"></div>
+      </div>
+
+      <div class="nav">
+        <button class="btn" type="button" data-act="back">Back</button>
+        <span class="spacer"></span>
+        <button class="btn is-primary" type="button" data-act="next">Continue</button>
+        <button class="btn is-primary" type="button" data-act="send" hidden>Send request</button>
+      </div>
+    </form>
+
+    <aside class="summary" aria-label="Price summary">
+      <h4>Your quote</h4>
+      <p class="sum-event"></p>
+      <ul class="lines"></ul>
+      <div class="total-row"><span>Estimated total</span><strong class="total">&euro;0</strong></div>
+      <p class="per"></p>
+      <p class="fine">Prices exclude VAT. Parties of 100 or more get 8% off food.</p>
+    </aside>
+  </div>
+
+  <div class="done" hidden>
+    <span class="badge">Request sent</span>
+    <h4>Thank you, we have your request.</h4>
+    <p class="done-msg"></p>
+    <button class="btn" type="button" data-act="again">Start a new request</button>
+  </div>
+</section>
+
+<script>
+(() => {
+  // Prices are in euros. Edit RATES, ADDONS and EXTRAS to fit your own offer.
+  const RATES = { canapes: 29, buffet: 38, plated: 62 };
+  const STYLE_NAMES = { canapes: 'Canapes', buffet: 'Buffet', plated: 'Plated dinner' };
+  const ADDONS = { vegan: ['Vegan menu', 4], glutenFree: ['Gluten-free kitchen', 3], drinks: ['Drinks package', 9] };
+  const GUESTS_PER_SERVER = 25;
+  const SERVER_FEE = 180;
+  const FLAT = { equipment: ['Tableware and linen', 240], cleanup: ['Clean-up', 150] };
+  const NOTICE_DAYS = 14;
+  const BIG_PARTY = 100;
+  const BIG_PARTY_DISCOUNT = 0.08;
+  const MIN_GUESTS = 10;
+  const MAX_GUESTS = 300;
+
+  const eur = new Intl.NumberFormat('en', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  const blank = () => ({ step: 0, reached: 0, sent: false, ref: '', d: {
+    type: '', date: '', guests: 60, style: '', vegan: false, glutenFree: false, drinks: false,
+    staff: false, equipment: false, cleanup: false, notes: '', name: '', email: '', phone: '',
+  } });
+
+  document.querySelectorAll('.c-form-wizard').forEach((root, index) => {
+    const KEY = root.dataset.storageKey || 'ok:form-wizard:' + index;
+    const $ = (s) => root.querySelector(s);
+    const $$ = (s) => [...root.querySelectorAll(s)];
+    const steps = $$('.step');
+    const railItems = $$('.rail li');
+    const note = $('.save-note');
+    const panel = $('.panel');
+    const SAVING_OK = (() => { try { localStorage.setItem(KEY + ':t', '1'); localStorage.removeItem(KEY + ':t'); return true; } catch (e) { return false; } })();
+
+    let st = blank();
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (raw && raw.d) st = { ...blank(), ...raw, d: { ...blank().d, ...raw.d } };
+    } catch (e) { /* storage unavailable or corrupt: start blank */ }
+
+    const save = () => {
+      if (!SAVING_OK) { note.textContent = 'Autosave is off in this browser'; return; }
+      try { localStorage.setItem(KEY, JSON.stringify(st)); note.textContent = 'Draft saved'; } catch (e) { note.textContent = 'Autosave is off in this browser'; }
+    };
+
+    const minDate = () => { const t = new Date(); t.setHours(0, 0, 0, 0); t.setDate(t.getDate() + NOTICE_DAYS); return t; };
+    const iso = (dt) => dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+    const prettyDate = (v) => { const p = v.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); };
+    $('[data-f="date"]').min = iso(minDate());
+
+    function quote(d) {
+      const g = Math.max(0, Math.round(Number(d.guests)) || 0);
+      const lines = [];
+      let total = 0;
+      let food = 0;
+      if (d.style && RATES[d.style]) {
+        const v = RATES[d.style] * g; food += v; total += v;
+        lines.push([STYLE_NAMES[d.style] + ', ' + g + ' guests', v]);
+      }
+      Object.keys(ADDONS).forEach((k) => {
+        if (!d[k]) return;
+        const v = ADDONS[k][1] * g; total += v; if (k !== 'drinks') food += v;
+        lines.push([ADDONS[k][0], v]);
+      });
+      if (d.staff) {
+        const n = Math.max(1, Math.ceil(g / GUESTS_PER_SERVER)); const v = n * SERVER_FEE; total += v;
+        lines.push(['Serving staff, ' + n, v]);
+      }
+      Object.keys(FLAT).forEach((k) => { if (d[k]) { total += FLAT[k][1]; lines.push([FLAT[k][0], FLAT[k][1]]); } });
+      if (g >= BIG_PARTY && food > 0) {
+        const cut = Math.round(food * BIG_PARTY_DISCOUNT); total -= cut;
+        lines.push(['Large party discount', -cut]);
+      }
+      return { lines, total, g, perGuest: g ? total / g : 0 };
+    }
+
+    function paintSummary(bump) {
+      const d = st.d; const q = quote(d);
+      const bits = [d.type, d.date ? prettyDate(d.date) : '', q.g ? q.g + ' guests' : ''].filter(Boolean);
+      $('.sum-event').textContent = bits.length ? bits.join(' · ') : 'Tell us about your event';
+      const ul = $('.lines'); ul.innerHTML = '';
+      if (!q.lines.length) { const li = document.createElement('li'); li.className = 'is-empty'; li.innerHTML = '<span>Choose a service style to start</span><span></span>'; ul.appendChild(li); }
+      q.lines.forEach((l) => {
+        const li = document.createElement('li'); if (l[1] < 0) li.className = 'is-credit';
+        const a = document.createElement('span'); a.textContent = l[0];
+        const b = document.createElement('span'); b.textContent = (l[1] < 0 ? '-' : '') + eur.format(Math.abs(l[1]));
+        li.append(a, b); ul.appendChild(li);
+      });
+      const tot = $('.total'); const text = eur.format(q.total);
+      if (tot.textContent !== text && bump) { tot.classList.remove('is-bump'); void tot.offsetWidth; tot.classList.add('is-bump'); }
+      tot.textContent = text;
+      $('.per').textContent = q.total > 0 && q.g ? eur.format(Math.round(q.perGuest)) + ' per guest' : '';
+    }
+
+    const ERRORS = [
+      (d) => {
+        const e = {};
+        if (!d.type) e.type = 'Choose the type of event.';
+        if (!d.date) e.date = 'Pick the event date.';
+        else if (d.date < iso(minDate())) e.date = 'We need at least ' + NOTICE_DAYS + ' days notice. Pick ' + prettyDate(iso(minDate())) + ' or later.';
+        const g = Number(d.guests);
+        if (!Number.isInteger(g) || g < MIN_GUESTS || g > MAX_GUESTS) e.guests = 'Enter a number from ' + MIN_GUESTS + ' to ' + MAX_GUESTS + '.';
+        return e;
+      },
+      (d) => (d.style ? {} : { style: 'Choose a service style to price your menu.' }),
+      () => ({}),
+      (d) => {
+        const e = {};
+        if (!d.name.trim()) e.name = 'Tell us your name.';
+        if (!d.email.trim()) e.email = 'Enter an email address.';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email.trim())) e.email = 'That email address looks incomplete.';
+        return e;
+      },
+      () => ({}),
+    ];
+
+    function showErrors(i, errs) {
+      const scope = steps[i];
+      scope.querySelectorAll('[data-err]').forEach((p) => { p.textContent = errs[p.dataset.err] || ''; });
+      scope.querySelectorAll('[data-f]').forEach((el) => {
+        const bad = !!errs[el.dataset.f];
+        if (el.type === 'radio') { el.closest('[data-group]').setAttribute('aria-invalid', String(bad)); return; }
+        if (el.dataset.f === 'guests') { el.closest('.stepper').classList.toggle('is-bad', bad); }
+        if (el.matches('.control, [data-f="guests"]')) el.setAttribute('aria-invalid', String(bad));
+      });
+      const first = Object.keys(errs)[0];
+      if (first) {
+        const target = scope.querySelector('[data-f="' + first + '"]');
+        if (target) target.focus();
+      }
+    }
+
+    const stepOk = (i) => Object.keys(ERRORS[i](st.d)).length === 0;
+
+    function go(i, focus) {
+      st.step = Math.max(0, Math.min(steps.length - 1, i));
+      st.reached = Math.max(st.reached, st.step);
+      steps.forEach((s, n) => { s.hidden = n !== st.step; });
+      railItems.forEach((li, n) => {
+        li.classList.toggle('is-current', n === st.step);
+        li.classList.toggle('is-done', n !== st.step && n <= st.reached && stepOk(n));
+        const b = li.querySelector('.rail-btn');
+        b.disabled = n > st.reached;
+        if (n === st.step) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      });
+      $('[data-act="back"]').style.visibility = st.step === 0 ? 'hidden' : 'visible';
+      $('[data-act="next"]').hidden = st.step === steps.length - 1;
+      $('[data-act="send"]').hidden = st.step !== steps.length - 1;
+      $('[data-act="next"]').textContent = st.step === steps.length - 2 ? 'Review request' : 'Continue';
+      if (st.step === steps.length - 1) paintReview();
+      save();
+      if (focus) panel.focus({ preventScroll: true });
+    }
+
+    function paintReview() {
+      const d = st.d;
+      const yes = (v) => (v ? 'Yes' : 'No');
+      const groups = [
+        ['Event', 0, [['Type', d.type], ['Date', d.date ? prettyDate(d.date) : ''], ['Guests', String(d.guests)]]],
+        ['Menu', 1, [['Service', STYLE_NAMES[d.style] || ''], ['Vegan menu', yes(d.vegan)], ['Gluten-free', yes(d.glutenFree)], ['Drinks', yes(d.drinks)]]],
+        ['Extras', 2, [['Serving staff', yes(d.staff)], ['Tableware', yes(d.equipment)], ['Clean-up', yes(d.cleanup)], ['Notes', d.notes.trim() || 'None']]],
+        ['Contact', 3, [['Name', d.name], ['Email', d.email], ['Phone', d.phone.trim() || 'Not given']]],
+      ];
+      const wrap = $('.review'); wrap.innerHTML = '';
+      groups.forEach((g) => {
+        const box = document.createElement('div'); box.className = 'review-group';
+        const head = document.createElement('div'); head.className = 'review-head';
+        const t = document.createElement('span'); t.textContent = g[0];
+        const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'link'; edit.textContent = 'Edit';
+        edit.setAttribute('aria-label', 'Edit ' + g[0].toLowerCase());
+        edit.addEventListener('click', () => go(g[1], true));
+        head.append(t, edit);
+        const dl = document.createElement('dl');
+        g[2].forEach((r) => { const dt = document.createElement('dt'); dt.textContent = r[0]; const dd = document.createElement('dd'); dd.textContent = r[1]; dl.append(dt, dd); });
+        box.append(head, dl); wrap.appendChild(box);
+      });
+    }
+
+    function syncInputs() {
+      const d = st.d;
+      $$('[data-f]').forEach((el) => {
+        const k = el.dataset.f;
+        if (el.type === 'radio') el.checked = d[k] === el.value;
+        else if (el.getAttribute('role') === 'switch') el.setAttribute('aria-checked', String(!!d[k]));
+        else el.value = d[k];
+      });
+    }
+
+    function set(k, v) {
+      st.d[k] = v;
+      const errP = root.querySelector('[data-err="' + k + '"]');
+      if (errP && errP.textContent) {
+        errP.textContent = '';
+        $$('[data-f="' + k + '"]').forEach((el) => { if (el.type === 'radio') el.closest('[data-group]').setAttribute('aria-invalid', 'false'); else { el.setAttribute('aria-invalid', 'false'); const s = el.closest('.stepper'); if (s) s.classList.remove('is-bad'); } });
+      }
+      save(); paintSummary(true);
+    }
+
+    $$('[data-f]').forEach((el) => {
+      const k = el.dataset.f;
+      if (el.type === 'radio') el.addEventListener('change', () => set(k, el.value));
+      else if (el.getAttribute('role') === 'switch') el.addEventListener('click', () => { const on = el.getAttribute('aria-checked') !== 'true'; el.setAttribute('aria-checked', String(on)); set(k, on); });
+      else if (k === 'guests') el.addEventListener('input', () => set(k, el.value === '' ? '' : Number(el.value)));
+      else el.addEventListener('input', () => set(k, el.value));
+    });
+
+    $$('[data-dir]').forEach((b) => b.addEventListener('click', () => {
+      const cur = Number(st.d.guests) || MIN_GUESTS;
+      const next = Math.min(MAX_GUESTS, Math.max(MIN_GUESTS, cur + Number(b.dataset.dir)));
+      $('[data-f="guests"]').value = next; set('guests', next);
+    }));
+
+    $$('.rail-btn').forEach((b) => b.addEventListener('click', () => {
+      const to = Number(b.dataset.go);
+      if (to > st.step) {
+        for (let i = st.step; i < to; i += 1) { const e = ERRORS[i](st.d); if (Object.keys(e).length) { go(i); showErrors(i, e); return; } }
+      }
+      go(to, true);
+    }));
+
+    $('[data-act="back"]').addEventListener('click', () => go(st.step - 1, true));
+    $('[data-act="next"]').addEventListener('click', () => {
+      const e = ERRORS[st.step](st.d);
+      if (Object.keys(e).length) { showErrors(st.step, e); return; }
+      go(st.step + 1, true);
+    });
+    $('[data-act="send"]').addEventListener('click', () => {
+      for (let i = 0; i < ERRORS.length; i += 1) { const e = ERRORS[i](st.d); if (Object.keys(e).length) { go(i); showErrors(i, e); return; } }
+      // Replace this block with your own request, for example fetch('/api/quote', { method: 'POST', body: JSON.stringify(st.d) }).
+      st.sent = true; st.ref = 'CQ-' + String(Math.floor(1000 + Math.random() * 9000));
+      save(); paintDone();
+    });
+    $('[data-act="reset"]').addEventListener('click', () => {
+      st = blank();
+      try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
+      steps.forEach((s) => showErrors(steps.indexOf(s), {}));
+      syncInputs(); paintAll(); note.textContent = 'Draft cleared';
+    });
+    $('[data-act="again"]').addEventListener('click', () => $('[data-act="reset"]').click());
+
+    function paintDone() {
+      const shown = !st.sent;
+      $('.top').hidden = !shown; $('.rail').hidden = !shown; $('.layout').hidden = !shown; $('.done').hidden = shown;
+      if (st.sent) {
+        $('.done-msg').textContent = 'Reference ' + st.ref + '. We will write to ' + st.d.email + ' within one working day with a written quote for ' + eur.format(quote(st.d).total) + '.';
+        $('.done h4').setAttribute('tabindex', '-1'); $('.done h4').focus({ preventScroll: true });
+      }
+    }
+
+    function paintAll() { go(st.step); paintSummary(false); paintDone(); }
+
+    syncInputs();
+    paintAll();
+    if (!SAVING_OK) note.textContent = 'Autosave is off in this browser';
+    else if (st.reached > 0 || st.d.type) note.textContent = 'Draft restored';
+  });
+})();
+</script>

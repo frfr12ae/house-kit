@@ -102,11 +102,14 @@
   // Inside detail previews: report the content height so the frame can grow to fit.
   const REPORTER = '<script>(function(){var r=document.querySelector(".okp-root");if(!r||!window.ResizeObserver)return;var pad=document.body.classList.contains("okp--center")?64:0;function s(){parent.postMessage({okHeight:Math.ceil(Math.max(r.getBoundingClientRect().height,r.scrollHeight)+pad)},"*")}new ResizeObserver(s).observe(r);window.addEventListener("load",s);s()})()</script>';
 
+  // Inside centred thumbnails: zoom the component down until it fits the card.
+  const THUMB_FIT = '<script>(function(){var r=document.querySelector(".okp-root");if(!r)return;function fit(){r.style.zoom=1;var b=r.getBoundingClientRect();var z=Math.min(1,(innerHeight-48)/b.height,(innerWidth-48)/b.width);if(z<1)r.style.zoom=z}addEventListener("load",function(){fit();setTimeout(fit,400)});fit()})()</script>';
+
   function previewDoc(c, { reporter = false, theme = S.theme, thumb = false } = {}) {
     return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">`
       + `<style>${R.tokens}\n${R.base}\n${PREVIEW_CSS}</style><style id="ok-theme">${themeCss(theme)}</style><style>${c.css}</style></head>`
       + `<body class="okp okp--${c.preview}${thumb ? ' okp--thumb' : ''}"><div class="okp-root">${c.html}</div>`
-      + `${c.js ? `<script>${c.js}</script>` : ''}${reporter ? REPORTER : ''}</body></html>`;
+      + `${c.js ? `<script>${c.js}</script>` : ''}${reporter ? REPORTER : ''}${thumb && c.preview === 'center' ? THUMB_FIT : ''}</body></html>`;
   }
 
   function creditLine(c) {
@@ -142,7 +145,8 @@
   function resolveVars(text, theme = S.theme) {
     const decl = { ...parseVars(R.tokens), ...parseVars(themeCss(theme)) };
     const res = (t, depth = 0) => (depth > 6 ? t : t.replace(/var\((--ds-[\w-]+)(?:\s*,\s*([^()]*))?\)/g, (m, k, fb) => (k in decl ? res(decl[k], depth + 1) : fb || m)));
-    return res(text);
+    // flatten simple calc(8px * 1.5) into 12px for mail clients
+    return res(text).replace(/calc\(\s*([\d.]+)px\s*\*\s*([\d.]+)\s*\)/g, (_, a, b) => `${Math.round(a * b * 100) / 100}px`);
   }
   const isEmail = (c) => c.category === 'email';
 

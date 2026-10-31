@@ -1,0 +1,104 @@
+<!--
+@title Action title slide
+@description A consultant-style content slide: a kicker, a full-sentence title that states the conclusion, three supporting points, a takeaway bar at the foot, a source line and a page number. Scales with its container width.
+@tags slide, action title, consulting, takeaway, three points, source
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-action-title-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-action-title-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto;
+    padding: 4.6cqi 6cqi 3cqi;
+  }
+  .c-action-title-slide .kicker { margin: 0; font-size: 1.3cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-action-title-slide h1 {
+    margin: 1.2cqi 0 0;
+    max-width: 76cqi;
+    font-family: var(--ds-font-display);
+    font-size: 3.2cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.12;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-action-title-slide .points {
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3.4cqi;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .c-action-title-slide .point { padding-top: 1.6cqi; border-top: var(--ds-stroke) solid var(--ds-ink); }
+  .c-action-title-slide .num { display: block; margin: 0 0 0.9cqi; font-size: 1.2cqi; font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-action-title-slide h2 { margin: 0; font-size: 1.9cqi; font-weight: 700; line-height: 1.25; color: var(--ds-ink); }
+  .c-action-title-slide .point p { margin: 0.9cqi 0 0; font-size: 1.5cqi; line-height: 1.5; }
+  .c-action-title-slide .take {
+    display: flex;
+    align-items: baseline;
+    gap: 1.6cqi;
+    padding: 1.5cqi 2cqi;
+    background: var(--ds-highlight-fill);
+    box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line);
+    border-radius: calc(0.6cqi * var(--ds-radius-scale, 1));
+    font-size: 1.6cqi;
+    line-height: 1.35;
+    color: var(--ds-ink);
+  }
+  .c-action-title-slide .take b { flex: none; font-size: 1.2cqi; font-weight: 700; color: var(--ds-text); }
+  .c-action-title-slide .take span { font-weight: 600; }
+  .c-action-title-slide .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    margin-top: 1.6cqi;
+    font-size: 1.1cqi;
+    color: var(--ds-muted);
+  }
+  .c-action-title-slide .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+</style>
+
+<section class="c-action-title-slide" aria-label="Slide 7: closing the smallest depot cuts fixed cost">
+  <div class="inner">
+    <p class="kicker">Depot network review · Cost</p>
+    <h1>Closing the smallest depot cuts fixed cost by a fifth, provided routes are redrawn first</h1>
+    <ul class="points">
+      <li class="point">
+        <span class="num">01</span>
+        <h2>The saving is real</h2>
+        <p>Rent, utilities and supervision at the smallest site come to 19% of fixed cost, about €410k a year.</p>
+      </li>
+      <li class="point">
+        <span class="num">02</span>
+        <h2>Capacity is not the constraint</h2>
+        <p>The two remaining depots can absorb the stock without new racking, peaking at 88% of floor space.</p>
+      </li>
+      <li class="point">
+        <span class="num">03</span>
+        <h2>Routes are the constraint</h2>
+        <p>Without a redesign, the longest runs grow by 40 minutes and the last drop misses its window.</p>
+      </li>
+    </ul>
+    <div class="take"><b>Takeaway</b><span>Fund the six-week route study now; decide on the move in January.</span></div>
+    <div class="foot">
+      <span>Source: finance ledger FY2026, route simulation October 2026. Illustrative figures.</span>
+      <span class="page">7</span>
+    </div>
+  </div>
+</section>

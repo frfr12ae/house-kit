@@ -1,0 +1,143 @@
+<!--
+@title Waterfall
+@description A bridge from an opening total to a closing total, with each step floating at the running level in the positive or negative pair.
+@tags waterfall, bridge, variance, change, profit, chart, diagram
+@preview fill
+@height 520
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-waterfall {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-waterfall .head { margin-bottom: var(--ds-space-5); }
+  .c-waterfall h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-waterfall .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-waterfall .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-waterfall svg { display: block; width: 100%; min-width: 640px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-waterfall .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-waterfall .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-waterfall .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-waterfall .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-waterfall .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-waterfall .ln.is-dashed { border-top-style: dashed; }
+  .c-waterfall .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-waterfall .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-waterfall .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-waterfall .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-waterfall .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-waterfall .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-waterfall .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-waterfall .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-waterfall svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-waterfall .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-waterfall .node.dash { stroke-dasharray: 6 5; }
+  .c-waterfall .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-waterfall .edge.dash { stroke-dasharray: 6 5; }
+  .c-waterfall .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-waterfall .mk-n { stroke: var(--ds-neutral-line); }
+  .c-waterfall .mk-i { stroke: var(--ds-info-line); }
+  .c-waterfall .mk-h { stroke: var(--ds-highlight-line); }
+  .c-waterfall .mk-d { stroke: var(--ds-danger-line); }
+  .c-waterfall .mk-g { stroke: var(--ds-note-line); }
+  .c-waterfall text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-waterfall .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-waterfall .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-waterfall .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-waterfall .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-waterfall .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-waterfall .e.k-h { fill: var(--ds-text); }
+  .c-waterfall .e.k-d { fill: var(--ds-danger-line); }
+  .c-waterfall .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-waterfall .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-waterfall { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-waterfall .frame { padding: var(--ds-space-3); }
+    .c-waterfall .scrollhint { display: block; }
+    .c-waterfall .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-waterfall">
+  <figcaption class="head">
+    <h3>Cash balance, September to October</h3>
+    <p class="hint">Thousands of euros. What came in, what went out, and where it landed.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 860 400" role="img" aria-label="Waterfall chart: an opening balance of 80 thousand euros grows by retainers and projects, falls by contractors and software, and closes at 118 thousand euros.">
+<defs><marker id="waterfall-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="waterfall-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="waterfall-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="waterfall-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="waterfall-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<line class="guide" x1="96" y1="350" x2="820" y2="350"/>
+<text class="mu" x="86" y="354" text-anchor="end">0</text>
+<line class="guide" x1="96" y1="278" x2="820" y2="278" stroke-dasharray="2 5"/>
+<text class="mu" x="86" y="282" text-anchor="end">40</text>
+<line class="guide" x1="96" y1="206" x2="820" y2="206" stroke-dasharray="2 5"/>
+<text class="mu" x="86" y="210" text-anchor="end">80</text>
+<line class="guide" x1="96" y1="134" x2="820" y2="134" stroke-dasharray="2 5"/>
+<text class="mu" x="86" y="138" text-anchor="end">120</text>
+<line class="guide" x1="96" y1="62" x2="820" y2="62" stroke-dasharray="2 5"/>
+<text class="mu" x="86" y="66" text-anchor="end">160</text>
+<line class="guide" x1="196" y1="206" x2="244" y2="206" style="stroke:var(--ds-neutral-line)" stroke-dasharray="3 4"/>
+<line class="guide" x1="316" y1="125" x2="364" y2="125" style="stroke:var(--ds-neutral-line)" stroke-dasharray="3 4"/>
+<line class="guide" x1="436" y1="71" x2="484" y2="71" style="stroke:var(--ds-neutral-line)" stroke-dasharray="3 4"/>
+<line class="guide" x1="556" y1="121.4" x2="604" y2="121.4" style="stroke:var(--ds-neutral-line)" stroke-dasharray="3 4"/>
+<line class="guide" x1="676" y1="137.6" x2="724" y2="137.6" style="stroke:var(--ds-neutral-line)" stroke-dasharray="3 4"/>
+<g class="k-i"><rect class="node" x="124" y="206" width="72" height="144" rx="4"/>
+<text class="t" x="160" y="197" text-anchor="middle" style="font-size:15px">80</text>
+</g>
+<text class="t" x="160" y="378" text-anchor="middle">Opening balance</text>
+<g class="k-g"><rect class="node" x="244" y="125" width="72" height="81" rx="4"/>
+<text class="t" x="280" y="116" text-anchor="middle" style="font-size:15px">+45</text>
+</g>
+<text class="t" x="280" y="378" text-anchor="middle">Retainers</text>
+<g class="k-g"><rect class="node" x="364" y="71" width="72" height="54" rx="4"/>
+<text class="t" x="400" y="62" text-anchor="middle" style="font-size:15px">+30</text>
+</g>
+<text class="t" x="400" y="378" text-anchor="middle">Projects</text>
+<g class="k-d"><rect class="node" x="484" y="71" width="72" height="50.4" rx="4"/>
+<text class="t" x="520" y="62" text-anchor="middle" style="font-size:15px">-28</text>
+</g>
+<text class="t" x="520" y="378" text-anchor="middle">Contractors</text>
+<g class="k-d"><rect class="node" x="604" y="121.4" width="72" height="16.2" rx="4"/>
+<text class="t" x="640" y="112.4" text-anchor="middle" style="font-size:15px">-9</text>
+</g>
+<text class="t" x="640" y="378" text-anchor="middle">Software</text>
+<g class="k-i"><rect class="node" x="724" y="137.6" width="72" height="212.4" rx="4"/>
+<text class="t" x="760" y="128.6" text-anchor="middle" style="font-size:15px">118</text>
+</g>
+<text class="t" x="760" y="378" text-anchor="middle">Closing balance</text>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <p class="note">Contractors are the biggest swing: 28 of the 37 thousand that went out.</p>
+  <ul class="legend">
+    <li class="k-i"><span class="sw"></span>Balance</li>
+    <li class="k-g"><span class="sw"></span>Money in</li>
+    <li class="k-d"><span class="sw"></span>Money out</li>
+  </ul>
+</figure>

@@ -1,0 +1,146 @@
+<!--
+@title Branch and merge flow
+@description One input splits into four parallel steps that draw on one after another and merge into a single result. Plays when scrolled into view.
+@tags flow, branch, merge, parallel, workflow, animated, svg, scroll, diagram
+@preview fill
+@height 520
+@replay true
+@added 2026-10-31
+@source 21st.dev Branch and Merge Routing | https://21st.dev/@21st/components/lp-branch-merge-routing | inspired-by
+-->
+<style>
+  .c-branch-merge-flow {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-branch-merge-flow .head { margin-bottom: var(--ds-space-5); }
+  .c-branch-merge-flow h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-branch-merge-flow .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-branch-merge-flow .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-branch-merge-flow svg { display: block; width: 100%; min-width: 640px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-branch-merge-flow .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-branch-merge-flow .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-branch-merge-flow .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-branch-merge-flow .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-branch-merge-flow .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-branch-merge-flow .ln.is-dashed { border-top-style: dashed; }
+  .c-branch-merge-flow .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-branch-merge-flow .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-branch-merge-flow .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-branch-merge-flow .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-branch-merge-flow .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-branch-merge-flow .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-branch-merge-flow .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-branch-merge-flow .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-branch-merge-flow svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-branch-merge-flow .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-branch-merge-flow .node.dash { stroke-dasharray: 6 5; }
+  .c-branch-merge-flow .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-branch-merge-flow .edge.dash { stroke-dasharray: 6 5; }
+  .c-branch-merge-flow .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-branch-merge-flow .mk-n { stroke: var(--ds-neutral-line); }
+  .c-branch-merge-flow .mk-i { stroke: var(--ds-info-line); }
+  .c-branch-merge-flow .mk-h { stroke: var(--ds-highlight-line); }
+  .c-branch-merge-flow .mk-d { stroke: var(--ds-danger-line); }
+  .c-branch-merge-flow .mk-g { stroke: var(--ds-note-line); }
+  .c-branch-merge-flow text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-branch-merge-flow .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-branch-merge-flow .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-branch-merge-flow .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-branch-merge-flow .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-branch-merge-flow .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-branch-merge-flow .e.k-h { fill: var(--ds-text); }
+  .c-branch-merge-flow .e.k-d { fill: var(--ds-danger-line); }
+  .c-branch-merge-flow .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-branch-merge-flow .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  .c-branch-merge-flow .draw { stroke-dasharray: 1; stroke-dashoffset: 0; stroke-linecap: butt; }
+  .c-branch-merge-flow.is-armed .draw { stroke-dashoffset: 1; }
+  .c-branch-merge-flow.is-armed .pop, .c-branch-merge-flow.is-armed .head { opacity: 0; }
+  .c-branch-merge-flow.is-armed .pop { transform: translateY(6px); }
+  .c-branch-merge-flow.is-armed.is-in .draw { stroke-dashoffset: 0; transition: stroke-dashoffset var(--ds-dur-slow) var(--ds-ease-in-out) var(--d, 0ms); }
+  .c-branch-merge-flow.is-armed.is-in .pop { opacity: 1; transform: none; transition: opacity var(--ds-dur-base) var(--ds-ease) var(--d, 0ms), transform var(--ds-dur-slow) var(--ds-ease) var(--d, 0ms); }
+  .c-branch-merge-flow.is-armed.is-in .head { opacity: 1; transition: opacity var(--ds-dur-fast) var(--ds-ease) var(--d, 0ms); }
+  @media (max-width: 720px) {
+    .c-branch-merge-flow { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-branch-merge-flow .frame { padding: var(--ds-space-3); }
+    .c-branch-merge-flow .scrollhint { display: block; }
+    .c-branch-merge-flow .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-branch-merge-flow">
+  <figcaption class="head">
+    <h3>One request, four parallel steps</h3>
+    <p class="hint">The result waits for the slowest branch.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 860 420" role="img" aria-label="Animated flow diagram: a client request branches into four parallel steps, gathering sources, drafting copy, preparing visuals and a legal check, which merge into one approved package.">
+<g><path class="edge k-n draw" pathLength="1" d="M200 210 C270 210 270 60 340 60" style="--d:150ms"/>
+<path class="edge k-n head" d="M332 55 L340 60 L332 65" style="--d:650ms"/>
+<path class="edge k-i draw" pathLength="1" d="M530 60 C600 60 600 210 670 210" style="--d:850ms"/>
+<path class="edge k-i head" d="M662 205 L670 210 L662 215" style="--d:1350ms"/>
+<path class="edge k-n draw" pathLength="1" d="M200 210 C270 210 270 160 340 160" style="--d:260ms"/>
+<path class="edge k-n head" d="M332 155 L340 160 L332 165" style="--d:760ms"/>
+<path class="edge k-i draw" pathLength="1" d="M530 160 C600 160 600 210 670 210" style="--d:960ms"/>
+<path class="edge k-i head" d="M662 205 L670 210 L662 215" style="--d:1460ms"/>
+<path class="edge k-n draw" pathLength="1" d="M200 210 C270 210 270 260 340 260" style="--d:370ms"/>
+<path class="edge k-n head" d="M332 255 L340 260 L332 265" style="--d:870ms"/>
+<path class="edge k-i draw" pathLength="1" d="M530 260 C600 260 600 210 670 210" style="--d:1070ms"/>
+<path class="edge k-i head" d="M662 205 L670 210 L662 215" style="--d:1570ms"/>
+<path class="edge k-n draw" pathLength="1" d="M200 210 C270 210 270 360 340 360" style="--d:480ms"/>
+<path class="edge k-n head" d="M332 355 L340 360 L332 365" style="--d:980ms"/>
+<path class="edge k-i draw" pathLength="1" d="M530 360 C600 360 600 210 670 210" style="--d:1180ms"/>
+<path class="edge k-i head" d="M662 205 L670 210 L662 215" style="--d:1680ms"/>
+<g class="pop" style="--d:0ms"><g class="k-n"><rect class="node" x="30" y="174" width="170" height="72" rx="8"/><text class="t" x="115" y="207" text-anchor="middle">Client request</text><text class="s" x="115" y="225" text-anchor="middle">arrives once</text></g></g>
+<g class="pop" style="--d:600ms"><g class="k-i"><rect class="node" x="340" y="32" width="190" height="56" rx="8"/><text class="t" x="435" y="57" text-anchor="middle">Gather sources</text><text class="s" x="435" y="75" text-anchor="middle">interviews, documents</text></g></g>
+<g class="pop" style="--d:710ms"><g class="k-i"><rect class="node" x="340" y="132" width="190" height="56" rx="8"/><text class="t" x="435" y="157" text-anchor="middle">Draft copy</text><text class="s" x="435" y="175" text-anchor="middle">first full pass</text></g></g>
+<g class="pop" style="--d:820ms"><g class="k-i"><rect class="node" x="340" y="232" width="190" height="56" rx="8"/><text class="t" x="435" y="257" text-anchor="middle">Prepare visuals</text><text class="s" x="435" y="275" text-anchor="middle">charts and layout</text></g></g>
+<g class="pop" style="--d:930ms"><g class="k-i"><rect class="node" x="340" y="332" width="190" height="56" rx="8"/><text class="t" x="435" y="357" text-anchor="middle">Legal check</text><text class="s" x="435" y="375" text-anchor="middle">terms and claims</text></g></g>
+<g class="pop" style="--d:1630ms"><g class="k-h"><rect class="node" x="670" y="174" width="170" height="72" rx="8"/><text class="t" x="755" y="207" text-anchor="middle">Approved package</text><text class="s" x="755" y="225" text-anchor="middle">all four are done</text></g></g></g>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <ul class="legend">
+    <li class="k-n"><span class="sw"></span>Input</li>
+    <li class="k-i"><span class="sw"></span>Parallel step</li>
+    <li class="k-h"><span class="sw"></span>Merged result</li>
+  </ul>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-branch-merge-flow').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

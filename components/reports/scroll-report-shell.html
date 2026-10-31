@@ -1,0 +1,297 @@
+<!--
+@title Scroll report shell
+@description A long-form report that scrolls inside its own frame: a reading-progress bar, a section dot nav on the right edge that follows the reader and shows labels on hover or focus, blocks that fade in as they arrive, four short sections and an accordion of anticipated questions at the end.
+@tags report, long-form, scroll, progress, navigation, accordion, reveal, faq
+@preview fill
+@height 720
+@added 2026-10-31
+-->
+<style>
+  .c-scroll-report-shell {
+    --srs-h: 720px;
+    position: relative;
+    height: var(--srs-h);
+    max-height: 100dvh;
+    overflow: hidden;
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-scroll-report-shell .progress { position: absolute; z-index: 3; inset: 0 0 auto 0; height: 3px; background: color-mix(in srgb, var(--ds-line) 60%, transparent); }
+  .c-scroll-report-shell .progress i { display: block; height: 100%; background: var(--ds-action); transform: scaleX(0); transform-origin: left center; }
+  .c-scroll-report-shell .scroller {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ds-line) transparent;
+    position: relative;
+  }
+  .c-scroll-report-shell .scroller:focus-visible { box-shadow: inset var(--ds-focus); }
+  .c-scroll-report-shell .page { max-width: 720px; margin: 0 auto; padding: var(--ds-space-9) var(--ds-space-8) var(--ds-space-9) var(--ds-space-6); }
+
+  .c-scroll-report-shell .kicker { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-scroll-report-shell .cover h1 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-2xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-scroll-report-shell .lede { margin: var(--ds-space-4) 0 0; font-size: var(--ds-text-lg); line-height: var(--ds-leading-snug); max-width: 52ch; }
+  .c-scroll-report-shell .byline { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-6) 0 0; padding-top: var(--ds-space-4); border-top: var(--ds-hairline) solid var(--ds-line); font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-scroll-report-shell .byline b { color: var(--ds-ink); font-weight: 600; }
+  .c-scroll-report-shell .cue { margin: var(--ds-space-6) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+
+  .c-scroll-report-shell .sec { margin-top: var(--ds-space-9); scroll-margin-top: var(--ds-space-6); }
+  .c-scroll-report-shell .sec h2 { margin: 0; font-size: var(--ds-text-xl); font-weight: 700; letter-spacing: var(--ds-tracking-display); line-height: var(--ds-leading-tight); color: var(--ds-ink); text-wrap: balance; }
+  .c-scroll-report-shell :where(.sec) p { margin: var(--ds-space-4) 0 0; font-size: var(--ds-text-md); line-height: var(--ds-leading-body); max-width: 62ch; }
+
+  .c-scroll-report-shell .figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: var(--ds-space-6) 0 0; padding: 0; list-style: none; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-scroll-report-shell .figures li { padding: var(--ds-space-5); }
+  .c-scroll-report-shell .figures li + li { border-left: var(--ds-hairline) solid var(--ds-line); }
+  .c-scroll-report-shell .figures b { display: block; font-family: var(--ds-font-display); font-size: var(--ds-text-xl); font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-scroll-report-shell .figures span { display: block; margin-top: var(--ds-space-2); font-size: var(--ds-text-sm); color: var(--ds-muted); }
+
+  .c-scroll-report-shell .steps { display: grid; gap: var(--ds-space-3); margin: var(--ds-space-6) 0 0; padding: 0; list-style: none; counter-reset: srs; }
+  .c-scroll-report-shell .steps li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--ds-space-3); align-items: baseline; padding: var(--ds-space-4); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); }
+  .c-scroll-report-shell .steps li::before { counter-increment: srs; content: counter(srs); font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-scroll-report-shell .steps b { color: var(--ds-ink); }
+
+  .c-scroll-report-shell .note { margin: var(--ds-space-6) 0 0; padding: var(--ds-space-4) var(--ds-space-5); background: var(--ds-note-fill); border: var(--ds-stroke) solid var(--ds-note-line); border-radius: var(--ds-radius-md); font-size: var(--ds-text-sm); font-weight: 600; line-height: var(--ds-leading-snug); color: var(--ds-ink); max-width: 62ch; }
+  .c-scroll-report-shell .decision { margin: var(--ds-space-6) 0 0; padding: var(--ds-space-5); background: var(--ds-highlight-fill); box-shadow: inset 4px 0 0 var(--ds-highlight-line); border-radius: var(--ds-radius-md); max-width: 62ch; }
+  .c-scroll-report-shell .decision b { display: block; font-size: var(--ds-text-md); color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-scroll-report-shell .decision span { display: block; margin-top: var(--ds-space-1); font-size: var(--ds-text-sm); }
+
+  .c-scroll-report-shell .qa { margin: var(--ds-space-6) 0 0; padding: 0; list-style: none; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-scroll-report-shell .qa li { border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-scroll-report-shell .qa button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+    width: 100%;
+    padding: var(--ds-space-4) 0;
+    background: none;
+    border: 0;
+    border-radius: var(--ds-radius-sm);
+    font-size: var(--ds-text-md);
+    font-weight: 600;
+    color: var(--ds-ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .c-scroll-report-shell .qa button:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-scroll-report-shell .qa .plus { position: relative; flex: none; width: 14px; height: 14px; color: var(--ds-muted); }
+  .c-scroll-report-shell .qa .plus::before,
+  .c-scroll-report-shell .qa .plus::after { content: ""; position: absolute; left: 0; top: 6px; width: 14px; height: 2px; border-radius: 1px; background: currentColor; transition: transform var(--ds-dur-base) var(--ds-ease); }
+  .c-scroll-report-shell .qa .plus::after { transform: rotate(90deg); }
+  .c-scroll-report-shell .qa button[aria-expanded="true"] .plus::after { transform: rotate(0deg); }
+  .c-scroll-report-shell .qa .panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--ds-dur-base) var(--ds-ease); }
+  .c-scroll-report-shell .qa .panel.is-open { grid-template-rows: 1fr; }
+  .c-scroll-report-shell .qa .panel > div { overflow: hidden; visibility: hidden; transition: visibility 0s var(--ds-dur-base); }
+  .c-scroll-report-shell .qa .panel.is-open > div { visibility: visible; transition-delay: 0s; }
+  .c-scroll-report-shell .qa .panel p { margin: 0 0 var(--ds-space-4); font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); max-width: 58ch; }
+  .c-scroll-report-shell .end { margin: var(--ds-space-6) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+
+  .c-scroll-report-shell .rv { opacity: 1; transform: none; }
+  .c-scroll-report-shell.is-ready .rv { opacity: 0; transform: translateY(14px); transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease); transition-delay: var(--d, 0ms); }
+  .c-scroll-report-shell.is-ready .rv.is-in { opacity: 1; transform: none; }
+
+  .c-scroll-report-shell .dots { position: absolute; z-index: 3; right: var(--ds-space-3); top: 50%; transform: translateY(-50%); display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+  .c-scroll-report-shell .dots li { position: relative; }
+  .c-scroll-report-shell .dots button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; background: none; border: 0; border-radius: 50%; cursor: pointer; }
+  .c-scroll-report-shell .dots button:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-scroll-report-shell .dots button i { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in srgb, var(--ds-muted) 45%, transparent); transition: transform var(--ds-dur-fast) var(--ds-ease), background var(--ds-dur-fast) var(--ds-ease); }
+  .c-scroll-report-shell .dots button:hover i { background: var(--ds-muted); }
+  .c-scroll-report-shell .dots button[aria-current="true"] i { background: var(--ds-ink); transform: scale(1.5); }
+  .c-scroll-report-shell .dots .label {
+    position: absolute;
+    right: calc(100% + 4px);
+    top: 50%;
+    transform: translate(6px, -50%);
+    padding: 4px 10px;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-sm);
+    box-shadow: var(--ds-shadow-md);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-ink);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--ds-dur-fast) var(--ds-ease), transform var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-scroll-report-shell .dots button:hover + .label,
+  .c-scroll-report-shell .dots button:focus-visible + .label { opacity: 1; transform: translate(0, -50%); }
+
+  @container (max-width: 560px) {
+    .c-scroll-report-shell .page { padding: var(--ds-space-8) var(--ds-space-7) var(--ds-space-8) var(--ds-space-5); }
+    .c-scroll-report-shell .cover h1 { font-size: var(--ds-text-xl); }
+    .c-scroll-report-shell .sec { margin-top: var(--ds-space-8); }
+    .c-scroll-report-shell .sec h2 { font-size: var(--ds-text-lg); }
+    .c-scroll-report-shell .figures { grid-template-columns: 1fr; }
+    .c-scroll-report-shell .figures li + li { border-left: 0; border-top: var(--ds-hairline) solid var(--ds-line); }
+    .c-scroll-report-shell .dots { right: 2px; }
+    .c-scroll-report-shell .dots button { width: 24px; height: 24px; }
+  }
+</style>
+
+<article class="c-scroll-report-shell" aria-label="Depot consolidation review">
+  <div class="progress" aria-hidden="true"><i></i></div>
+  <nav aria-label="Report sections"><ol class="dots"></ol></nav>
+  <div class="scroller" tabindex="0" role="region" aria-label="Report, scrollable">
+    <div class="page">
+      <header class="cover" data-label="Summary">
+        <p class="kicker rv">Operations review · October 2026</p>
+        <h1 class="rv">Consolidating three depots into two saves money only if the routes change first</h1>
+        <p class="lede rv">A six-month look at cost, service and risk, written for the operations committee.</p>
+        <p class="byline rv"><span><b>Prepared for</b> Operations committee</span><span><b>Status</b> Draft for discussion</span></p>
+        <p class="cue rv">Scroll to read, or use the dots on the right.</p>
+      </header>
+
+      <section class="sec" id="srs-cost" data-label="Cost">
+        <p class="kicker rv">01 · Cost</p>
+        <h2 class="rv">Closing the smallest depot removes a fifth of fixed cost</h2>
+        <p class="rv">Rent, utilities and supervision at the smallest depot come to about 19% of the network's fixed cost. The stock it holds can move to the other two sites without new racking.</p>
+        <ul class="figures rv">
+          <li><b>19%</b><span>Of fixed cost at one site</span></li>
+          <li><b>€410k</b><span>Annual saving, gross</span></li>
+          <li><b>14 mo</b><span>Payback on the move</span></li>
+        </ul>
+      </section>
+
+      <section class="sec" id="srs-service" data-label="Service">
+        <p class="kicker rv">02 · Service</p>
+        <h2 class="rv">Delivery times slip by a day in the north unless routes are redrawn</h2>
+        <p class="rv">The closing depot serves 31 postcode areas. Without new routes, the longest runs grow by 40 minutes each way, which pushes the last drop past the promised window.</p>
+        <p class="note rv">Redrawing routes before the move, not after, keeps on-time delivery above 96%.</p>
+      </section>
+
+      <section class="sec" id="srs-risk" data-label="Risk">
+        <p class="kicker rv">03 · Risk</p>
+        <h2 class="rv">Three things could delay the move, and two are in our control</h2>
+        <ol class="steps rv">
+          <li><span><b>Lease exit date.</b> Fixed by the landlord; not negotiable before March.</span></li>
+          <li><span><b>Staff transfer.</b> Needs consultation to start by December.</span></li>
+          <li><span><b>Peak season.</b> A move in November would collide with the busiest weeks.</span></li>
+        </ol>
+      </section>
+
+      <section class="sec" id="srs-next" data-label="Decision">
+        <p class="kicker rv">04 · Decision</p>
+        <h2 class="rv">Approve the route redesign now and decide on the move in January</h2>
+        <p class="rv">The redesign has value whichever way the committee goes, and it removes the main service risk from the decision.</p>
+        <div class="decision rv"><b>Ask of the committee</b><span>Release budget for the route study, six weeks, then return with a go or no-go.</span></div>
+      </section>
+
+      <section class="sec" id="srs-questions" data-label="Questions">
+        <p class="kicker rv">Anticipated questions</p>
+        <h2 class="rv">What we expect to be asked</h2>
+        <ul class="qa rv">
+          <li>
+            <button type="button" aria-expanded="false"><span>Why not close a larger depot instead?</span><i class="plus" aria-hidden="true"></i></button>
+            <div class="panel"><div><p>The two larger sites carry the specialist cold storage. Closing either would mean rebuilding it elsewhere, which erases the saving for at least five years.</p></div></div>
+          </li>
+          <li>
+            <button type="button" aria-expanded="false"><span>What happens to the staff at the closing depot?</span><i class="plus" aria-hidden="true"></i></button>
+            <div class="panel"><div><p>Every role has a matching role at one of the two remaining sites. Transfers are offered first; redundancy is only considered for roles with no match.</p></div></div>
+          </li>
+          <li>
+            <button type="button" aria-expanded="false"><span>How sure are we about the €410k?</span><i class="plus" aria-hidden="true"></i></button>
+            <div class="panel"><div><p>Rent and utilities are contracted figures. Supervision cost is an estimate and the main source of uncertainty, roughly plus or minus €40k.</p></div></div>
+          </li>
+          <li>
+            <button type="button" aria-expanded="false"><span>Can we reverse the decision later?</span><i class="plus" aria-hidden="true"></i></button>
+            <div class="panel"><div><p>Not cheaply. Once the lease is exited the site is gone, which is why the route study comes first.</p></div></div>
+          </li>
+        </ul>
+        <p class="end rv">Figures are illustrative placeholders for this template.</p>
+      </section>
+    </div>
+  </div>
+</article>
+
+<script>
+(() => {
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  document.querySelectorAll('.c-scroll-report-shell').forEach((root) => {
+    const scroller = root.querySelector('.scroller');
+    const bar = root.querySelector('.progress i');
+    const dotList = root.querySelector('.dots');
+    const sections = [...root.querySelectorAll('[data-label]')];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Section dot nav, built from the data-label of each section.
+    dotList.innerHTML = sections.map((s, i) =>
+      '<li><button type="button" data-i="' + i + '" aria-label="' + esc(s.dataset.label) + '"><i></i></button><span class="label" aria-hidden="true">' + esc(s.dataset.label) + '</span></li>'
+    ).join('');
+    const dots = [...dotList.querySelectorAll('button')];
+
+    function place(el) {
+      return el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+    }
+
+    let current = -1;
+    function update() {
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scroller.scrollTop / max) : 0).toFixed(4) + ')';
+      const probe = scroller.scrollTop + scroller.clientHeight * 0.35;
+      let idx = 0;
+      sections.forEach((s, i) => { if (place(s) <= probe) idx = i; });
+      if (max > 0 && scroller.scrollTop >= max - 2) idx = sections.length - 1;
+      if (idx !== current) {
+        current = idx;
+        dots.forEach((d, i) => (i === idx ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
+      }
+    }
+
+    let queued = false;
+    scroller.addEventListener('scroll', () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; update(); });
+    }, { passive: true });
+    new ResizeObserver(update).observe(scroller);
+
+    dots.forEach((d) => d.addEventListener('click', () => {
+      const target = sections[Number(d.dataset.i)];
+      scroller.scrollTo({ top: Math.max(0, place(target) - 24), behavior: reduce.matches ? 'auto' : 'smooth' });
+    }));
+
+    // Scroll reveal. With reduced motion, or without IntersectionObserver, everything is simply shown.
+    const blocks = [...root.querySelectorAll('.rv')];
+    if (reduce.matches || !('IntersectionObserver' in window)) {
+      blocks.forEach((b) => b.classList.add('is-in'));
+    } else {
+      root.classList.add('is-ready');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        });
+      }, { root: scroller, threshold: 0.12 });
+      blocks.forEach((b, i) => { b.style.setProperty('--d', (i % 3) * 60 + 'ms'); io.observe(b); });
+    }
+
+    // Anticipated-questions accordion.
+    root.querySelectorAll('.qa button').forEach((btn) => {
+      const panel = btn.nextElementSibling;
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        panel.classList.toggle('is-open', !open);
+      });
+    });
+
+    update();
+  });
+})();
+</script>

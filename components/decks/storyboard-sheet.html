@@ -1,0 +1,235 @@
+<!--
+@title Storyboard sheet
+@description Contact sheet for a short video: numbered 16:9 frames drawn from simple token shapes, with the shot, the voiceover line and the duration under each, plus a runtime bar and total.
+@tags storyboard, video, shots, contact sheet, planning, voiceover
+@preview fill
+@height 760
+@added 2026-10-31
+-->
+<style>
+  .c-storyboard-sheet {
+    padding: var(--ds-space-7);
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-storyboard-sheet .head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--ds-space-4); margin-bottom: var(--ds-space-6); }
+  .c-storyboard-sheet .eyebrow { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-muted); margin-bottom: var(--ds-space-1); }
+  .c-storyboard-sheet h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    color: var(--ds-ink);
+  }
+  .c-storyboard-sheet .total {
+    padding: var(--ds-space-2) var(--ds-space-4);
+    border: var(--ds-stroke) solid var(--ds-highlight-line);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-highlight-fill);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    color: var(--ds-ink);
+  }
+  .c-storyboard-sheet .total b { font-variant-numeric: tabular-nums; }
+  .c-storyboard-sheet .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ds-space-6) var(--ds-space-5); margin: 0; padding: 0; list-style: none; }
+  .c-storyboard-sheet .shot { display: grid; gap: var(--ds-space-3); align-content: start; }
+
+  .c-storyboard-sheet .frame {
+    container-type: inline-size;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-raised);
+  }
+  .c-storyboard-sheet .num {
+    position: absolute;
+    left: 2.4cqi;
+    top: 2.4cqi;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 7cqi;
+    height: 7cqi;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: 3.6cqi;
+    font-weight: 800;
+  }
+  .c-storyboard-sheet .s { position: absolute; }
+  .c-storyboard-sheet .bar { height: 4cqi; border-radius: var(--ds-radius-pill); background: var(--ds-ink); }
+  .c-storyboard-sheet .bar.soft { background: var(--ds-line); height: 2.6cqi; }
+  .c-storyboard-sheet .box { border: var(--ds-stroke) solid var(--ds-info-line); background: var(--ds-info-fill); border-radius: 1.2cqi; }
+  .c-storyboard-sheet .box.key { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); }
+  .c-storyboard-sheet .box.bad { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-storyboard-sheet .box.good { border-color: var(--ds-note-line); background: var(--ds-note-fill); }
+  .c-storyboard-sheet .box.plain { border-color: var(--ds-neutral-line); background: var(--ds-neutral-fill); }
+  .c-storyboard-sheet .dot { width: 2cqi; height: 2cqi; border-radius: 50%; background: var(--ds-line); }
+  .c-storyboard-sheet .cursor { width: 4cqi; height: 5cqi; background: var(--ds-ink); clip-path: polygon(0 0, 100% 62%, 56% 68%, 78% 100%, 58% 100%, 38% 72%, 0 100%); }
+  .c-storyboard-sheet .divider { left: 50%; top: 0; bottom: 0; width: 0; border-left: var(--ds-stroke) dashed var(--ds-neutral-line); }
+
+  .c-storyboard-sheet .shot-name { font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-storyboard-sheet .vo { margin: 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); color: var(--ds-text); }
+  .c-storyboard-sheet .vo::before { content: "VO"; margin-right: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 800; color: var(--ds-muted); }
+  .c-storyboard-sheet .dur {
+    justify-self: start;
+    padding: 2px var(--ds-space-3);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--ds-muted);
+  }
+  .c-storyboard-sheet .runtime { display: flex; gap: 3px; margin-top: var(--ds-space-7); }
+  .c-storyboard-sheet .runtime span {
+    min-width: 0;
+    padding: var(--ds-space-1) 0;
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-info-fill);
+    border: var(--ds-hairline) solid var(--ds-info-line);
+    text-align: center;
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-storyboard-sheet .runtime-label { margin-top: var(--ds-space-2); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+
+  @media (max-width: 900px) { .c-storyboard-sheet .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) {
+    .c-storyboard-sheet { padding: var(--ds-space-5); }
+    .c-storyboard-sheet .grid { grid-template-columns: minmax(0, 1fr); }
+    .c-storyboard-sheet .runtime span { font-size: 0; }
+  }
+</style>
+
+<section class="c-storyboard-sheet">
+  <header class="head">
+    <div>
+      <div class="eyebrow">Storyboard, 6 shots, 16:9</div>
+      <h2>Meet Tidyup: the launch spot</h2>
+    </div>
+    <div class="total">Total runtime <b data-total>0:42</b></div>
+  </header>
+
+  <ol class="grid">
+    <li class="shot" data-sec="4">
+      <div class="frame" role="img" aria-label="Frame 1: title card with a headline bar and a sub line">
+        <span class="num">1</span>
+        <span class="s bar" style="left: 12cqi; top: 19cqi; width: 58cqi;"></span>
+        <span class="s bar" style="left: 12cqi; top: 26cqi; width: 40cqi;"></span>
+        <span class="s bar soft" style="left: 12cqi; top: 34cqi; width: 30cqi;"></span>
+        <span class="s box key" style="right: 9cqi; top: 9cqi; width: 8cqi; height: 8cqi;"></span>
+      </div>
+      <div class="shot-name">Title card on a plain ground</div>
+      <p class="vo">Your downloads folder has a problem.</p>
+      <span class="dur">0:04</span>
+    </li>
+
+    <li class="shot" data-sec="6">
+      <div class="frame" role="img" aria-label="Frame 2: a browser window showing a messy list of files and a cursor">
+        <span class="num">2</span>
+        <span class="s box plain" style="left: 14cqi; top: 12%; width: 72cqi; height: 76%; background: var(--ds-raised);"></span>
+        <span class="s dot" style="left: 17cqi; top: 16%;"></span>
+        <span class="s dot" style="left: 21cqi; top: 16%;"></span>
+        <span class="s dot" style="left: 25cqi; top: 16%;"></span>
+        <span class="s bar soft" style="left: 18cqi; top: 27%; width: 40cqi;"></span>
+        <span class="s bar soft" style="left: 18cqi; top: 36%; width: 54cqi;"></span>
+        <span class="s bar soft" style="left: 18cqi; top: 45%; width: 34cqi;"></span>
+        <span class="s bar soft" style="left: 18cqi; top: 54%; width: 48cqi;"></span>
+        <span class="s bar soft" style="left: 18cqi; top: 63%; width: 28cqi;"></span>
+        <span class="s cursor" style="left: 62cqi; top: 56%;"></span>
+      </div>
+      <div class="shot-name">Screen capture, the folder opens</div>
+      <p class="vo">Four hundred files, none of them named properly.</p>
+      <span class="dur">0:06</span>
+    </li>
+
+    <li class="shot" data-sec="8">
+      <div class="frame" role="img" aria-label="Frame 3: close up of a terminal line with one highlighted command">
+        <span class="num">3</span>
+        <span class="s box plain" style="left: 10cqi; top: 22%; width: 80cqi; height: 58%;"></span>
+        <span class="s box key" style="left: 15cqi; top: 33%; width: 46cqi; height: 20%;"></span>
+        <span class="s bar soft" style="left: 15cqi; top: 62%; width: 36cqi;"></span>
+        <span class="s bar soft" style="left: 15cqi; top: 70%; width: 24cqi;"></span>
+        <span class="s dot" style="left: 66cqi; top: 37%; background: var(--ds-note-line);"></span>
+      </div>
+      <div class="shot-name">Close up, one command is typed</div>
+      <p class="vo">One line. It shows you every change before it happens.</p>
+      <span class="dur">0:08</span>
+    </li>
+
+    <li class="shot" data-sec="10">
+      <div class="frame" role="img" aria-label="Frame 4: split screen, scattered boxes on the left and an ordered grid on the right">
+        <span class="num">4</span>
+        <span class="s divider"></span>
+        <span class="s box bad" style="left: 14cqi; top: 26%; width: 10cqi; height: 8cqi; transform: rotate(-8deg);"></span>
+        <span class="s box bad" style="left: 30cqi; top: 40%; width: 10cqi; height: 8cqi; transform: rotate(6deg);"></span>
+        <span class="s box bad" style="left: 12cqi; top: 56%; width: 10cqi; height: 8cqi; transform: rotate(10deg);"></span>
+        <span class="s box bad" style="left: 34cqi; top: 68%; width: 10cqi; height: 8cqi; transform: rotate(-5deg);"></span>
+        <span class="s box good" style="left: 58cqi; top: 28%; width: 10cqi; height: 8cqi;"></span>
+        <span class="s box good" style="left: 74cqi; top: 28%; width: 10cqi; height: 8cqi;"></span>
+        <span class="s box good" style="left: 58cqi; top: 44%; width: 10cqi; height: 8cqi;"></span>
+        <span class="s box good" style="left: 74cqi; top: 44%; width: 10cqi; height: 8cqi;"></span>
+        <span class="s box good" style="left: 58cqi; top: 60%; width: 10cqi; height: 8cqi;"></span>
+        <span class="s box good" style="left: 74cqi; top: 60%; width: 10cqi; height: 8cqi;"></span>
+      </div>
+      <div class="shot-name">Split screen, before and after</div>
+      <p class="vo">Messy on the left. Sorted by date, type and project on the right.</p>
+      <span class="dur">0:10</span>
+    </li>
+
+    <li class="shot" data-sec="8">
+      <div class="frame" role="img" aria-label="Frame 5: a bar chart with five rising bars and the last one highlighted">
+        <span class="num">5</span>
+        <span class="s" style="left: 12cqi; right: 12cqi; bottom: 14%; border-top: var(--ds-hairline) solid var(--ds-line);"></span>
+        <span class="s box" style="left: 16cqi; bottom: 14%; width: 9cqi; height: 14%;"></span>
+        <span class="s box" style="left: 29cqi; bottom: 14%; width: 9cqi; height: 22%;"></span>
+        <span class="s box" style="left: 42cqi; bottom: 14%; width: 9cqi; height: 30%;"></span>
+        <span class="s box" style="left: 55cqi; bottom: 14%; width: 9cqi; height: 38%;"></span>
+        <span class="s box key" style="left: 68cqi; bottom: 14%; width: 9cqi; height: 52%;"></span>
+      </div>
+      <div class="shot-name">Chart, hours saved per week</div>
+      <p class="vo">Teams in our beta got back three hours a week.</p>
+      <span class="dur">0:08</span>
+    </li>
+
+    <li class="shot" data-sec="6">
+      <div class="frame" role="img" aria-label="Frame 6: end card with a square logo mark and a button">
+        <span class="num">6</span>
+        <span class="s box key" style="left: 43cqi; top: 8cqi; width: 14cqi; height: 14cqi;"></span>
+        <span class="s bar" style="left: 36cqi; top: 27cqi; width: 28cqi;"></span>
+        <span class="s" style="left: 38cqi; top: 38cqi; width: 24cqi; height: 8cqi; border-radius: var(--ds-radius-pill); background: var(--ds-action);"></span>
+      </div>
+      <div class="shot-name">End card, logo and call to action</div>
+      <p class="vo">Tidyup. Free to try at example.com/tidyup.</p>
+      <span class="dur">0:06</span>
+    </li>
+  </ol>
+
+  <div class="runtime" aria-hidden="true">
+    <span style="flex: 4 1 0;">1</span>
+    <span style="flex: 6 1 0;">2</span>
+    <span style="flex: 8 1 0;">3</span>
+    <span style="flex: 10 1 0;">4</span>
+    <span style="flex: 8 1 0;">5</span>
+    <span style="flex: 6 1 0;">6</span>
+  </div>
+  <div class="runtime-label">Shot length to scale. Voiceover at about 2.5 words per second.</div>
+</section>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-storyboard-sheet').forEach((root) => {
+    const secs = [...root.querySelectorAll('[data-sec]')].map((el) => Number(el.dataset.sec));
+    const sum = secs.reduce((a, b) => a + b, 0);
+    const out = root.querySelector('[data-total]');
+    if (out && sum) out.textContent = `${Math.floor(sum / 60)}:${String(sum % 60).padStart(2, '0')}`;
+  });
+})();
+</script>

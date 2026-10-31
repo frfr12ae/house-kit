@@ -1,0 +1,94 @@
+<!--
+@title Carousel end
+@description 4:5 closing carousel slide with a follow call to action, a handle placeholder and save and share cues.
+@tags social, carousel, closing, cta, follow, save, share
+@preview center
+@height 740
+@added 2026-10-31
+-->
+<style>
+  .c-carousel-end {
+    container-type: inline-size;
+    position: relative;
+    width: min(540px, 100%);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-carousel-end .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 8cqi;
+  }
+  .c-carousel-end .top { display: flex; justify-content: space-between; align-items: center; }
+  .c-carousel-end .tag { font-size: 3.2cqi; font-weight: 700; color: var(--ds-muted); }
+  .c-carousel-end .count { font-size: 3.4cqi; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-carousel-end .count span { color: var(--ds-muted); }
+  .c-carousel-end .main { align-self: center; display: grid; gap: 6cqi; justify-items: start; }
+  .c-carousel-end h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 10.4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.05;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-carousel-end .sub { margin: 0; max-width: 80%; font-size: 4.4cqi; line-height: 1.4; }
+  .c-carousel-end .follow {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.4cqi;
+    padding: 2.6cqi 5cqi;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: 4.4cqi;
+    font-weight: 700;
+  }
+  .c-carousel-end .cues { display: grid; gap: 2.6cqi; }
+  .c-carousel-end .cue {
+    display: flex;
+    align-items: center;
+    gap: 3cqi;
+    padding: 2.8cqi 4cqi;
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-note-fill);
+    color: var(--ds-ink);
+    font-size: 3.6cqi;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .c-carousel-end .cue svg { flex: none; width: 5.6cqi; height: 5.6cqi; fill: none; stroke: currentColor; stroke-width: 0.5cqi; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+
+<article class="c-carousel-end" aria-label="Closing carousel slide">
+  <div class="inner">
+    <div class="top">
+      <span class="tag">That is the stack</span>
+      <span class="count">07<span>/07</span></span>
+    </div>
+    <div class="main">
+      <h2>One tool a week, no fluff.</h2>
+      <p class="sub">I test the apps so you do not have to. New slides every Tuesday.</p>
+      <span class="follow">Follow @yourhandle</span>
+    </div>
+    <div class="cues">
+      <span class="cue">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>
+        Save this for your next tool audit
+      </span>
+      <span class="cue">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"/></svg>
+        Send it to someone drowning in tabs
+      </span>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,138 @@
+<!--
+@title CLI install
+@description A terminal that types an install command, fills a progress bar and prints the success lines. Edit the command and lines in the markup.
+@tags terminal, cli, install, progress, npm, typing, developer
+@preview center
+@height 400
+@replay true
+@added 2026-10-31
+@source 21st.dev One Command Install | https://21st.dev/@21st/components/mg-code-install | inspired-by
+-->
+<style>
+  .c-cli-install,
+  .c-cli-install *,
+  .c-cli-install *::before,
+  .c-cli-install *::after { box-sizing: border-box; }
+  .c-cli-install {
+    width: min(680px, 100%);
+    margin: 0;
+    overflow: hidden;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-lg);
+    font-family: var(--ds-font-sans);
+  }
+  .c-cli-install .bar { display: flex; align-items: center; gap: var(--ds-space-2); padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-panel); border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-cli-install .bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--ds-line); }
+  .c-cli-install .bar span { margin-left: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-cli-install .body {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+    min-height: 292px;
+    padding: var(--ds-space-5) var(--ds-space-5) var(--ds-space-6);
+    font-family: var(--ds-font-mono);
+    font-size: var(--ds-text-sm);
+    line-height: 1.75;
+    color: var(--ds-text);
+    overflow-x: auto;
+  }
+  .c-cli-install .ln { white-space: pre; }
+  .c-cli-install .ps { color: var(--ds-muted); }
+  .c-cli-install .cmd { color: var(--ds-ink); font-weight: 600; }
+  .c-cli-install .out { color: var(--ds-muted); }
+  .c-cli-install .ok b { color: var(--ds-note-line); font-weight: 400; }
+  .c-cli-install .ok span { color: var(--ds-text); }
+  .c-cli-install .prog { display: flex; align-items: center; gap: var(--ds-space-3); white-space: nowrap; color: var(--ds-muted); }
+  .c-cli-install .track { flex: 1; max-width: 300px; height: 8px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); border: var(--ds-hairline) solid var(--ds-line); overflow: hidden; }
+  .c-cli-install .track i { display: block; width: 100%; height: 100%; border-radius: inherit; background: var(--ds-series-1); transform-origin: left; transform: scaleX(var(--p, 1)); }
+  .c-cli-install .pct { min-width: 4ch; text-align: right; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-cli-install .gap { height: 0.6em; }
+  .c-cli-install .cursor { display: inline-block; width: 0.6em; height: 1.15em; margin-left: 1px; vertical-align: text-bottom; background: var(--ds-ink); animation: c-cli-install-blink 1060ms steps(1) infinite; }
+  .c-cli-install .ln[hidden] { display: none; }
+  @keyframes c-cli-install-blink { 50% { opacity: 0; } }
+  @media (max-width: 560px) {
+    .c-cli-install .body { padding: var(--ds-space-4); font-size: var(--ds-text-xs); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-cli-install .cursor { animation: none; }
+  }
+</style>
+
+<figure class="c-cli-install" aria-label="Terminal installing a package with npm">
+  <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>northwind-app, zsh</span></div>
+  <div class="body">
+    <div class="ln" data-line="cmd"><span class="ps">$ </span><span class="cmd" data-type="npm install @northwind/charts">npm install @northwind/charts</span></div>
+    <div class="ln prog" data-line="prog"><span>Fetching</span><span class="track"><i></i></span><span class="pct">100%</span></div>
+    <div class="gap" data-line="gap"></div>
+    <div class="ln ok" data-line="out"><b>&#10003;</b> <span>Resolved 14 packages</span></div>
+    <div class="ln ok" data-line="out"><b>&#10003;</b> <span>Added @northwind/charts 2.4.0</span></div>
+    <div class="ln ok" data-line="out"><b>&#10003;</b> <span>Found 0 vulnerabilities in 2.1s</span></div>
+    <div class="gap" data-line="gap"></div>
+    <div class="ln out" data-line="out">Next: import { LineChart } from "@northwind/charts"</div>
+    <div class="ln" data-line="end"><span class="ps">$ </span><span class="cursor"></span></div>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = (t) => 1 - Math.pow(1 - t, 2);
+
+  document.querySelectorAll('.c-cli-install').forEach((root) => {
+    if (reduced) return; // the markup already holds the end state
+    const cs = getComputedStyle(root);
+    const base = parseFloat(cs.getPropertyValue('--ds-dur-base')) || 260;
+    const story = parseFloat(cs.getPropertyValue('--ds-dur-story')) || 1400;
+    const lines = [...root.querySelectorAll('[data-line]')];
+    const cmd = root.querySelector('[data-type]');
+    const prog = root.querySelector('[data-line="prog"]');
+    const track = prog.querySelector('.track i');
+    const pct = prog.querySelector('.pct');
+    const full = cmd.dataset.type;
+    const timers = [];
+    const after = (ms, fn) => timers.push(setTimeout(fn, ms));
+
+    const reset = () => {
+      lines.forEach((l) => { l.hidden = l.dataset.line !== 'cmd'; });
+      cmd.textContent = '';
+      track.style.setProperty('--p', 0);
+      pct.textContent = '0%';
+    };
+    const play = () => {
+      reset();
+      const perChar = base / 6;
+      let t = base;
+      for (let i = 1; i <= full.length; i++) { after(t + i * perChar, () => { cmd.textContent = full.slice(0, i); }); }
+      t += full.length * perChar + base * 2;
+      after(t, () => {
+        prog.hidden = false;
+        const begin = performance.now();
+        const tick = (now) => {
+          const p = Math.min(1, (now - begin) / (story * 2));
+          const v = ease(p);
+          track.style.setProperty('--p', v);
+          pct.textContent = Math.round(v * 100) + '%';
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+      t += story * 2 + base;
+      let after_ = 0;
+      lines.filter((l) => l.dataset.line !== 'cmd' && l.dataset.line !== 'prog').forEach((l) => {
+        after(t + after_, () => { l.hidden = false; });
+        if (l.dataset.line !== 'gap') after_ += base * 1.4;
+      });
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      play();
+    }, { threshold: 0.4 });
+    reset();
+    io.observe(root);
+  });
+})();
+</script>

@@ -23,12 +23,25 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Suggestion chips](components/ai/suggestion-chips.html) | ai | Original | Frederik | MIT |
 | [Thinking indicator](components/ai/thinking-indicator.html) | ai | Original | Frederik | MIT |
 | [Tool call cards](components/ai/tool-call-card.html) | ai | Original | Frederik | MIT |
+| [Dot grid](components/backgrounds/dot-grid.html) | backgrounds | Original | Frederik | MIT |
+| [Flowing gradient](components/backgrounds/flowing-gradient.html) | backgrounds | Inspired by [HyperFrames shader blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Godrays](components/backgrounds/godrays.html) | backgrounds | Inspired by [HyperFrames shader blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Grain overlay](components/backgrounds/grain-overlay.html) | backgrounds | Original | Frederik | MIT |
+| [Liquid metal](components/backgrounds/liquid-metal.html) | backgrounds | Inspired by [HyperFrames shader blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Marble](components/backgrounds/marble.html) | backgrounds | Inspired by [HyperFrames shader blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Mesh gradient](components/backgrounds/mesh-gradient.html) | backgrounds | Inspired by [HyperFrames shader blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Nebula](components/backgrounds/nebula.html) | backgrounds | Inspired by [HyperFrames shader blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Annotated price chart](components/dataviz/annotated-price-chart.html) | dataviz | Original | Frederik | MIT |
 | [Bar chart](components/dataviz/bar-chart.html) | dataviz | Original | Frederik | MIT |
+| [Dependency matrix](components/dataviz/dependency-matrix.html) | dataviz | Original | Frederik | MIT |
 | [Donut chart](components/dataviz/donut.html) | dataviz | Original | Frederik | MIT |
 | [Activity heatmap](components/dataviz/heatmap.html) | dataviz | Inspired by [GitHub contributions graph](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/viewing-contributions-on-your-profile) | Frederik | MIT |
 | [Line chart](components/dataviz/line-chart.html) | dataviz | Original | Frederik | MIT |
+| [Priority matrix](components/dataviz/priority-matrix.html) | dataviz | Original | Frederik | MIT |
 | [Progress bars](components/dataviz/progress-bars.html) | dataviz | Original | Frederik | MIT |
 | [Sparkline cards](components/dataviz/sparkline-cards.html) | dataviz | Original | Frederik | MIT |
+| [Unit chart](components/dataviz/unit-chart.html) | dataviz | Original | Frederik | MIT |
+| [Action title slide](components/decks/action-title-slide.html) | decks | Original | Frederik | MIT |
 | [Agenda slide](components/decks/agenda-slide.html) | decks | Original | Frederik | MIT |
 | [Big number slide](components/decks/big-number-slide.html) | decks | Original | Frederik | MIT |
 | [Chart slide](components/decks/chart-slide.html) | decks | Original | Frederik | MIT |
@@ -37,8 +50,29 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Deck shell](components/decks/deck-shell.html) | decks | Original | Frederik | MIT |
 | [Quote slide](components/decks/quote-slide.html) | decks | Original | Frederik | MIT |
 | [Section slide](components/decks/section-slide.html) | decks | Original | Frederik | MIT |
+| [Storyboard sheet](components/decks/storyboard-sheet.html) | decks | Original | Frederik | MIT |
 | [Title slide](components/decks/title-slide.html) | decks | Original | Frederik | MIT |
 | [Two column slide](components/decks/two-column-slide.html) | decks | Original | Frederik | MIT |
+| [Branch and merge flow](components/diagrams/branch-merge-flow.html) | diagrams | Inspired by [21st.dev Branch and Merge Routing](https://21st.dev/@21st/components/lp-branch-merge-routing) | Frederik | MIT |
+| [ER diagram](components/diagrams/er-diagram.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Fan-out flow](components/diagrams/fan-out-flow.html) | diagrams | Inspired by [21st.dev Parallel Task Fanout](https://21st.dev/@21st/components/lp-parallel-task-fanout) | Frederik | MIT |
+| [Flowchart](components/diagrams/flowchart.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Journey map](components/diagrams/journey-map.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Layer stack](components/diagrams/layer-stack.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Layered architecture](components/diagrams/layered-architecture.html) | diagrams | Original | Frederik | MIT |
+| [Pyramid](components/diagrams/pyramid.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Sankey](components/diagrams/sankey.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Sequence diagram](components/diagrams/sequence.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [State machine](components/diagrams/state-machine.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Swimlane](components/diagrams/swimlane.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Venn diagram](components/diagrams/venn.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Waterfall](components/diagrams/waterfall.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
+| [Newsletter](components/email/newsletter.html) | email | Original | Frederik | MIT |
+| [Notification](components/email/notification.html) | email | Original | Frederik | MIT |
+| [Quote offer](components/email/quote-offer.html) | email | Original | Frederik | MIT |
+| [Receipt](components/email/receipt.html) | email | Original | Frederik | MIT |
+| [Email signature](components/email/signature.html) | email | Original | Frederik | MIT |
+| [Before and after slider](components/interactive/before-after.html) | interactive | Inspired by [21st.dev VS Split](https://21st.dev/@21st/components/vs-split) | Frederik | MIT |
 | [Button set](components/interactive/button-set.html) | interactive | Inspired by [Material Design 3 common buttons](https://m3.material.io/components/buttons/overview) | Frederik | MIT |
 | [Command palette](components/interactive/command-palette.html) | interactive | Original | Frederik | MIT |
 | [Copy field](components/interactive/copy-field.html) | interactive | Original | Frederik | MIT |
@@ -51,28 +85,54 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Toggle switches](components/interactive/toggle-switch.html) | interactive | Original | Frederik | MIT |
 | [Tooltips](components/interactive/tooltip.html) | interactive | Original | Frederik | MIT |
 | [Bar grow](components/motion/bar-grow.html) | motion | Original | Frederik | MIT |
+| [Caption highlight](components/motion/caption-highlight.html) | motion | Original | Frederik | MIT |
+| [CLI install](components/motion/cli-install.html) | motion | Inspired by [21st.dev One Command Install](https://21st.dev/@21st/components/mg-code-install) | Frederik | MIT |
 | [Count-up numbers](components/motion/count-up.html) | motion | Original | Frederik | MIT |
+| [Hard-cut text](components/motion/hard-cut-text.html) | motion | Original | Frederik | MIT |
+| [Ink fill loader](components/motion/ink-fill-loader.html) | motion | Original | Frederik | MIT |
 | [Line draw](components/motion/line-draw.html) | motion | Original | Frederik | MIT |
 | [Lower third](components/motion/lower-third.html) | motion | Original | Frederik | MIT |
 | [Marquee ticker](components/motion/marquee.html) | motion | Original | Frederik | MIT |
 | [Progress rings](components/motion/progress-ring.html) | motion | Original | Frederik | MIT |
 | [Stagger cards](components/motion/stagger-cards.html) | motion | Original | Frederik | MIT |
+| [Table fill](components/motion/table-fill.html) | motion | Inspired by [21st.dev Table Fill](https://21st.dev/@21st/components/table-fill) | Frederik | MIT |
 | [Text reveal](components/motion/text-reveal.html) | motion | Original | Frederik | MIT |
 | [Typewriter terminal](components/motion/typewriter-terminal.html) | motion | Original | Frederik | MIT |
+| [Browser mockup](components/pages/browser-mockup.html) | pages | Inspired by [21st.dev Browser URL Load](https://21st.dev/@21st/components/mg-dev-browser) | Frederik | MIT |
 | [CTA band](components/pages/cta-band.html) | pages | Original | Frederik | MIT |
 | [FAQ accordion](components/pages/faq.html) | pages | Original | Frederik | MIT |
 | [Feature grid](components/pages/feature-grid.html) | pages | Original | Frederik | MIT |
 | [Footer](components/pages/footer.html) | pages | Original | Frederik | MIT |
 | [Hero](components/pages/hero.html) | pages | Original | Frederik | MIT |
 | [Navbar](components/pages/navbar.html) | pages | Original | Frederik | MIT |
+| [Phone mockup](components/pages/phone-mockup.html) | pages | Inspired by [21st.dev Phone App Scroll](https://21st.dev/@21st/components/phone-scroll) | Frederik | MIT |
 | [Pricing](components/pages/pricing.html) | pages | Original | Frederik | MIT |
+| [Tablet mockup](components/pages/tablet-mockup.html) | pages | Inspired by [21st.dev Tablet Stylus Markup](https://21st.dev/@21st/components/mg-dev-tablet) | Frederik | MIT |
 | [Testimonials](components/pages/testimonials.html) | pages | Original | Frederik | MIT |
 | [Annotated callout](components/reports/annotated-callout.html) | reports | Original | Frederik | MIT |
 | [Comparison cards](components/reports/comparison-cards.html) | reports | Original | Frederik | MIT |
 | [Data table](components/reports/data-table.html) | reports | Original | Frederik | MIT |
 | [Decision list](components/reports/decision-list.html) | reports | Original | Frederik | MIT |
+| [Direction board](components/reports/direction-board.html) | reports | Original | Frederik | MIT |
+| [Filterable timeline](components/reports/filterable-timeline.html) | reports | Original | Frederik | MIT |
+| [Funnel strip](components/reports/funnel-strip.html) | reports | Original | Frederik | MIT |
+| [Gantt lanes](components/reports/gantt-lanes.html) | reports | Original | Frederik | MIT |
+| [KPI tracker](components/reports/kpi-tracker.html) | reports | Original | Frederik | MIT |
+| [Pillar cards](components/reports/pillar-cards.html) | reports | Original | Frederik | MIT |
 | [Print page](components/reports/print-page.html) | reports | Original | Frederik | MIT |
 | [Pull quote](components/reports/pull-quote.html) | reports | Original | Frederik | MIT |
+| [Ranked picks](components/reports/ranked-picks.html) | reports | Original | Frederik | MIT |
 | [Report header](components/reports/report-header.html) | reports | Original | Frederik | MIT |
+| [Scroll report shell](components/reports/scroll-report-shell.html) | reports | Original | Frederik | MIT |
 | [Stat strip](components/reports/stat-strip.html) | reports | Original | Frederik | MIT |
 | [Timeline](components/reports/timeline.html) | reports | Original | Frederik | MIT |
+| [Annotation kit](components/social/annotation-kit.html) | social | Original | Frederik | MIT |
+| [Carousel cover](components/social/carousel-cover.html) | social | Original | Frederik | MIT |
+| [Carousel end](components/social/carousel-end.html) | social | Original | Frederik | MIT |
+| [Quote post](components/social/quote-post.html) | social | Original | Frederik | MIT |
+| [Stat post](components/social/stat-post.html) | social | Original | Frederik | MIT |
+| [Tool card slide](components/social/tool-card-slide.html) | social | Original | Frederik | MIT |
+| [Decision board](components/tools/decision-board.html) | tools | Original | Frederik | MIT |
+| [Form wizard](components/tools/form-wizard.html) | tools | Original | Frederik | MIT |
+| [Review comments](components/tools/review-comments.html) | tools | Original | Frederik | MIT |
+| [Scenario calculator](components/tools/scenario-calculator.html) | tools | Original | Frederik | MIT |

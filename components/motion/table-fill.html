@@ -1,0 +1,135 @@
+<!--
+@title Table fill
+@description A data table whose rows appear one by one while their numbers count up, ending on a highlighted total row. Edit the rows in the markup.
+@tags table, rows, count-up, data, stagger, animate
+@preview center
+@height 460
+@replay true
+@added 2026-10-31
+@source 21st.dev Table Fill | https://21st.dev/@21st/components/table-fill | inspired-by
+-->
+<style>
+  .c-table-fill,
+  .c-table-fill *,
+  .c-table-fill *::before,
+  .c-table-fill *::after { box-sizing: border-box; }
+  .c-table-fill {
+    width: min(720px, 100%);
+    margin: 0;
+    padding: var(--ds-space-5);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-surface);
+    box-shadow: var(--ds-shadow-md);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-table-fill .title { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); margin-bottom: var(--ds-space-4); }
+  .c-table-fill .title b { font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-table-fill .title span { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-table-fill .table { border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); overflow: hidden; background: var(--ds-raised); }
+  .c-table-fill .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.9fr);
+    align-items: center;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    color: var(--ds-ink);
+  }
+  .c-table-fill .row.head { border-top: 0; background: var(--ds-panel); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-table-fill .who { display: flex; align-items: center; gap: var(--ds-space-3); min-width: 0; }
+  .c-table-fill .who i { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: var(--ds-radius-sm); background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); font-style: normal; font-size: var(--ds-text-xs); font-weight: 700; }
+  .c-table-fill .who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .c-table-fill .score { display: flex; align-items: center; gap: var(--ds-space-3); font-variant-numeric: tabular-nums; }
+  .c-table-fill .score b { flex: none; min-width: 2.6em; font-weight: 700; }
+  .c-table-fill .meter { flex: 1; height: 6px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); overflow: hidden; }
+  .c-table-fill .meter i { display: block; width: calc(var(--v) * 10%); height: 100%; border-radius: inherit; background: var(--ds-series-1); transform-origin: left; }
+  .c-table-fill .pill { justify-self: start; padding: 2px var(--ds-space-3); border: var(--ds-hairline) solid; border-radius: var(--ds-radius-pill); font-size: var(--ds-text-xs); font-weight: 700; white-space: nowrap; }
+  .c-table-fill .pill.ok { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-table-fill .pill.wait { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-table-fill .value { text-align: right; font-variant-numeric: tabular-nums; }
+  .c-table-fill .row.total { background: var(--ds-highlight-fill); box-shadow: inset 3px 0 0 var(--ds-highlight-line); font-weight: 700; }
+  .c-table-fill .row.total .who i { background: var(--ds-highlight-line); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+
+  /* armed by script: rows wait, then settle in turn */
+  .c-table-fill.is-armed .row:not(.head) { opacity: 0; transform: translateY(10px); }
+  .c-table-fill.is-armed .row:not(.head) .meter i { transform: scaleX(0); }
+  .c-table-fill.is-armed.is-in .row:not(.head) {
+    opacity: 1;
+    transform: none;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+    transition-delay: calc(var(--i) * var(--step, 150ms));
+  }
+  .c-table-fill.is-armed.is-in .row:not(.head) .meter i {
+    transform: scaleX(1);
+    transition: transform calc(var(--ds-dur-story) * 0.9) var(--ds-ease);
+    transition-delay: calc(var(--i) * var(--step, 150ms));
+  }
+
+  @media (max-width: 560px) {
+    .c-table-fill { padding: var(--ds-space-3); }
+    .c-table-fill .row { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.9fr); padding: var(--ds-space-3); }
+    .c-table-fill .row > :nth-child(3) { display: none; }
+    .c-table-fill .meter { display: none; }
+    .c-table-fill .who i { display: none; }
+  }
+</style>
+
+<figure class="c-table-fill" aria-label="Table of design partners with fit score, status and deal value">
+  <div class="title"><b>Design partners</b><span>Q4 pipeline, in thousands</span></div>
+  <div class="table" role="table">
+    <div class="row head" role="row"><span role="columnheader">Company</span><span role="columnheader">Fit score</span><span role="columnheader">Status</span><span role="columnheader" class="value">Value</span></div>
+    <div class="row" role="row" style="--i:0"><span class="who" role="cell"><i>A</i><span>Alder &amp; Finch</span></span><span class="score" role="cell"><b data-to="5" data-suffix="/10">5/10</b><span class="meter"><i style="--v:5"></i></span></span><span class="pill wait" role="cell">In review</span><span class="value" role="cell" data-to="12.4" data-decimals="1" data-prefix="$" data-suffix="k">$12.4k</span></div>
+    <div class="row" role="row" style="--i:1"><span class="who" role="cell"><i>B</i><span>Brightpath</span></span><span class="score" role="cell"><b data-to="6" data-suffix="/10">6/10</b><span class="meter"><i style="--v:6"></i></span></span><span class="pill wait" role="cell">In review</span><span class="value" role="cell" data-to="18" data-decimals="1" data-prefix="$" data-suffix="k">$18.0k</span></div>
+    <div class="row" role="row" style="--i:2"><span class="who" role="cell"><i>K</i><span>Kestrel Studio</span></span><span class="score" role="cell"><b data-to="8" data-suffix="/10">8/10</b><span class="meter"><i style="--v:8"></i></span></span><span class="pill ok" role="cell">Qualified</span><span class="value" role="cell" data-to="26.5" data-decimals="1" data-prefix="$" data-suffix="k">$26.5k</span></div>
+    <div class="row" role="row" style="--i:3"><span class="who" role="cell"><i>O</i><span>Oakline</span></span><span class="score" role="cell"><b data-to="9" data-suffix="/10">9/10</b><span class="meter"><i style="--v:9"></i></span></span><span class="pill ok" role="cell">Qualified</span><span class="value" role="cell" data-to="31.2" data-decimals="1" data-prefix="$" data-suffix="k">$31.2k</span></div>
+    <div class="row" role="row" style="--i:4"><span class="who" role="cell"><i>F</i><span>Ferro</span></span><span class="score" role="cell"><b data-to="10" data-suffix="/10">10/10</b><span class="meter"><i style="--v:10"></i></span></span><span class="pill ok" role="cell">Qualified</span><span class="value" role="cell" data-to="42" data-decimals="1" data-prefix="$" data-suffix="k">$42.0k</span></div>
+    <div class="row total" role="row" style="--i:5"><span class="who" role="cell"><i>&Sigma;</i><span>Total pipeline</span></span><span class="score" role="cell"><b data-to="7.6" data-decimals="1" data-suffix="/10">7.6/10</b><span class="meter"><i style="--v:7.6"></i></span></span><span role="cell">3 qualified</span><span class="value" role="cell" data-to="130.1" data-decimals="1" data-prefix="$" data-suffix="k">$130.1k</span></div>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+
+  document.querySelectorAll('.c-table-fill').forEach((root) => {
+    if (reduced) return; // the markup already holds the end state
+    const story = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
+    const step = 150;
+    root.style.setProperty('--step', step + 'ms');
+    const counters = [...root.querySelectorAll('[data-to]')];
+    const fmt = (el, n) => {
+      const dec = parseInt(el.dataset.decimals || '0', 10);
+      return (el.dataset.prefix || '') + n.toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec }) + (el.dataset.suffix || '');
+    };
+    counters.forEach((el) => { el.textContent = fmt(el, 0); });
+    root.classList.add('is-armed');
+
+    const run = () => {
+      root.classList.add('is-in');
+      counters.forEach((el) => {
+        const row = Number(el.closest('.row').style.getPropertyValue('--i')) || 0;
+        const to = parseFloat(el.dataset.to);
+        const begin = performance.now() + row * step;
+        const tick = (now) => {
+          const t = Math.max(0, Math.min(1, (now - begin) / (story * 0.9)));
+          el.textContent = fmt(el, to * ease(t));
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(run));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

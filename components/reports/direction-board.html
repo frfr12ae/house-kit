@@ -1,0 +1,144 @@
+<!--
+@title Direction board
+@description Board comparing four design directions as tiles, each with a name, a type specimen in its own system font stack, a four-swatch palette and a one-line rationale. One tile is marked recommended.
+@tags design, directions, moodboard, typography, palette, brand, comparison
+@preview fill
+@height 820
+@added 2026-10-31
+-->
+<style>
+  .c-direction-board {
+    padding: var(--ds-space-7);
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-direction-board .head { display: grid; gap: var(--ds-space-1); margin-bottom: var(--ds-space-6); }
+  .c-direction-board .eyebrow { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-muted); }
+  .c-direction-board h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    color: var(--ds-ink);
+  }
+  .c-direction-board .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-5); margin: 0; padding: 0; list-style: none; }
+  .c-direction-board .tile {
+    display: grid;
+    gap: var(--ds-space-4);
+    align-content: start;
+    padding: var(--ds-space-5);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-raised);
+  }
+  .c-direction-board .tile.is-rec { border: var(--ds-stroke) solid var(--ds-highlight-line); background: var(--ds-highlight-fill); }
+  .c-direction-board .top { display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-3); }
+  .c-direction-board .name { font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-direction-board .name span { margin-right: var(--ds-space-2); color: var(--ds-muted); font-weight: 600; }
+  .c-direction-board .badge {
+    padding: 2px var(--ds-space-3);
+    border: var(--ds-hairline) solid var(--ds-highlight-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-raised);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    color: var(--ds-ink);
+  }
+  .c-direction-board .specimen {
+    display: grid;
+    gap: var(--ds-space-2);
+    align-content: center;
+    min-height: 168px;
+    padding: var(--ds-space-5);
+    border-radius: var(--ds-radius-md);
+    overflow: hidden;
+  }
+  .c-direction-board .word { font-size: 56px; line-height: 1; overflow-wrap: anywhere; }
+  .c-direction-board .line { font-size: var(--ds-text-sm); line-height: 1.4; opacity: 0.85; }
+  .c-direction-board .f-a { font-family: Georgia, "Iowan Old Style", "Times New Roman", serif; font-weight: 600; letter-spacing: -0.01em; }
+  .c-direction-board .f-b { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 800; letter-spacing: -0.05em; }
+  .c-direction-board .f-c { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-weight: 600; letter-spacing: -0.04em; }
+  .c-direction-board .f-d { font-family: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif; font-weight: 700; letter-spacing: -0.01em; }
+  .c-direction-board .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-2); }
+  .c-direction-board .sw { display: grid; gap: var(--ds-space-1); }
+  .c-direction-board .chip { height: 36px; border-radius: var(--ds-radius-sm); border: var(--ds-hairline) solid var(--ds-line); }
+  .c-direction-board .hex { font-family: var(--ds-font-mono); font-size: 11px; color: var(--ds-muted); }
+  .c-direction-board .why { margin: 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); color: var(--ds-text); }
+
+  @media (max-width: 720px) {
+    .c-direction-board { padding: var(--ds-space-5); }
+    .c-direction-board .grid { grid-template-columns: minmax(0, 1fr); }
+    .c-direction-board .word { font-size: 48px; }
+  }
+</style>
+
+<section class="c-direction-board">
+  <header class="head">
+    <div class="eyebrow">Brand exploration, round one</div>
+    <h2>Four directions for Tern, a bookkeeping app</h2>
+  </header>
+
+  <ul class="grid">
+    <li class="tile is-rec">
+      <div class="top"><span class="name"><span>A</span>Quiet Ledger</span><span class="badge">Recommended</span></div>
+      <div class="specimen f-a" style="background: #F3EFE6; color: #1D2B26;">
+        <div class="word">Tern</div>
+        <div class="line">Books that balance themselves.</div>
+      </div>
+      <div class="swatches" aria-label="Palette for Quiet Ledger">
+        <div class="sw"><div class="chip" style="background: #F3EFE6;"></div><span class="hex">#F3EFE6</span></div>
+        <div class="sw"><div class="chip" style="background: #1D2B26;"></div><span class="hex">#1D2B26</span></div>
+        <div class="sw"><div class="chip" style="background: #B5532F;"></div><span class="hex">#B5532F</span></div>
+        <div class="sw"><div class="chip" style="background: #D9C9A3;"></div><span class="hex">#D9C9A3</span></div>
+      </div>
+      <p class="why">Reads as trustworthy and calm, which is what a nervous first-time bookkeeper needs.</p>
+    </li>
+
+    <li class="tile">
+      <div class="top"><span class="name"><span>B</span>Signal Grid</span></div>
+      <div class="specimen f-b" style="background: #2F5BFF; color: #FFFFFF;">
+        <div class="word">Tern</div>
+        <div class="line">Books that balance themselves.</div>
+      </div>
+      <div class="swatches" aria-label="Palette for Signal Grid">
+        <div class="sw"><div class="chip" style="background: #2F5BFF;"></div><span class="hex">#2F5BFF</span></div>
+        <div class="sw"><div class="chip" style="background: #111111;"></div><span class="hex">#111111</span></div>
+        <div class="sw"><div class="chip" style="background: #F2F2F0;"></div><span class="hex">#F2F2F0</span></div>
+        <div class="sw"><div class="chip" style="background: #FFD23F;"></div><span class="hex">#FFD23F</span></div>
+      </div>
+      <p class="why">Loud and modern, strong on a crowded app store, weaker on trust.</p>
+    </li>
+
+    <li class="tile">
+      <div class="top"><span class="name"><span>C</span>Field Notes</span></div>
+      <div class="specimen f-c" style="background: #FBF7EC; color: #2B2B2B;">
+        <div class="word">Tern</div>
+        <div class="line">Books that balance themselves.</div>
+      </div>
+      <div class="swatches" aria-label="Palette for Field Notes">
+        <div class="sw"><div class="chip" style="background: #FBF7EC;"></div><span class="hex">#FBF7EC</span></div>
+        <div class="sw"><div class="chip" style="background: #2B2B2B;"></div><span class="hex">#2B2B2B</span></div>
+        <div class="sw"><div class="chip" style="background: #3E7C59;"></div><span class="hex">#3E7C59</span></div>
+        <div class="sw"><div class="chip" style="background: #E8B04B;"></div><span class="hex">#E8B04B</span></div>
+      </div>
+      <p class="why">Friendly and a little nerdy, suits developers but may feel odd to accountants.</p>
+    </li>
+
+    <li class="tile">
+      <div class="top"><span class="name"><span>D</span>Soft Harbor</span></div>
+      <div class="specimen f-d" style="background: #1F3B57; color: #E9F1F5;">
+        <div class="word">Tern</div>
+        <div class="line">Books that balance themselves.</div>
+      </div>
+      <div class="swatches" aria-label="Palette for Soft Harbor">
+        <div class="sw"><div class="chip" style="background: #1F3B57;"></div><span class="hex">#1F3B57</span></div>
+        <div class="sw"><div class="chip" style="background: #E9F1F5;"></div><span class="hex">#E9F1F5</span></div>
+        <div class="sw"><div class="chip" style="background: #F28C6F;"></div><span class="hex">#F28C6F</span></div>
+        <div class="sw"><div class="chip" style="background: #8FB8C9;"></div><span class="hex">#8FB8C9</span></div>
+      </div>
+      <p class="why">Approachable and rounded, safe but close to several existing finance apps.</p>
+    </li>
+  </ul>
+</section>

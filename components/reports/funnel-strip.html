@@ -1,0 +1,131 @@
+<!--
+@title Funnel strip
+@description A horizontal strip of funnel stages with counts, a bar scaled to the first stage, and the conversion between each pair. The biggest drop-off is marked. Edit STAGES at the top of the script.
+@tags funnel, conversion, pipeline, stages, sales, steps
+@preview fill
+@height 380
+@added 2026-10-31
+-->
+<style>
+  .c-funnel-strip {
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-funnel-strip .head { margin: 0 0 var(--ds-space-6); max-width: 60ch; }
+  .c-funnel-strip h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-funnel-strip .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-funnel-strip .strip {
+    display: flex;
+    align-items: stretch;
+    margin: 0;
+    padding: var(--ds-space-6) var(--ds-space-5);
+    list-style: none;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+  }
+  .c-funnel-strip .stage { flex: 1 1 0; min-width: 0; display: grid; align-content: start; gap: var(--ds-space-2); }
+  .c-funnel-strip .n {
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-funnel-strip .name { font-size: var(--ds-text-sm); color: var(--ds-text); font-weight: 600; line-height: var(--ds-leading-snug); }
+  .c-funnel-strip .share { font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-funnel-strip .bar { display: block; height: 6px; margin-top: var(--ds-space-2); border-radius: var(--ds-radius-pill); background: color-mix(in srgb, var(--ds-line) 80%, transparent); overflow: hidden; }
+  .c-funnel-strip .bar i { display: block; height: 100%; width: var(--w); border-radius: inherit; background: var(--ds-info-line); }
+  .c-funnel-strip .conv {
+    flex: 0 0 auto;
+    width: 108px;
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    gap: var(--ds-space-2);
+    padding-top: 2px;
+  }
+  .c-funnel-strip .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-neutral-fill);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .c-funnel-strip .conv svg { width: 28px; height: 10px; color: var(--ds-muted); }
+  .c-funnel-strip .conv.is-weak .chip { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-funnel-strip .conv.is-weak svg { color: var(--ds-highlight-line); }
+  .c-funnel-strip .flag { font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-ink); text-align: center; line-height: 1.2; }
+  .c-funnel-strip .total { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-funnel-strip .total b { color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  @container (max-width: 700px) {
+    .c-funnel-strip { padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-funnel-strip .strip { flex-direction: column; padding: var(--ds-space-5); }
+    .c-funnel-strip .stage { grid-template-columns: 1fr auto; column-gap: var(--ds-space-4); }
+    .c-funnel-strip .n { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+    .c-funnel-strip .bar { grid-column: 1 / -1; }
+    .c-funnel-strip .conv { width: auto; grid-auto-flow: column; justify-content: start; align-items: center; padding: var(--ds-space-3) 0; }
+    .c-funnel-strip .conv svg { transform: rotate(90deg); width: 18px; }
+    .c-funnel-strip .flag { text-align: left; }
+  }
+</style>
+
+<section class="c-funnel-strip" aria-label="Sales funnel, last quarter">
+  <div class="head">
+    <h3>From first visit to signed contract</h3>
+    <p class="hint">Last quarter. Each bar is scaled to the first stage; the chips show the step conversion.</p>
+  </div>
+  <ol class="strip"></ol>
+  <p class="total"></p>
+</section>
+
+<script>
+(() => {
+  // Replace with your own stages, in order.
+  const STAGES = [
+    { name: 'Visited pricing page', count: 12400 },
+    { name: 'Started a trial', count: 3720 },
+    { name: 'Reached first result', count: 1860 },
+    { name: 'Booked a call', count: 744 },
+    { name: 'Signed', count: 298 },
+  ];
+  const fmt = (n) => n.toLocaleString('en-US');
+  const pct = (v) => (v >= 10 ? Math.round(v) : Math.round(v * 10) / 10) + '%';
+  const ARROW = '<svg viewBox="0 0 28 10" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h25M21 1l5 4-5 4"/></svg>';
+
+  document.querySelectorAll('.c-funnel-strip').forEach((root) => {
+    const strip = root.querySelector('.strip');
+    const first = STAGES[0].count;
+    const rates = STAGES.slice(1).map((s, i) => (s.count / STAGES[i].count) * 100);
+    const weakest = rates.indexOf(Math.min(...rates));
+    let html = '';
+    STAGES.forEach((s, i) => {
+      if (i > 0) {
+        const weak = i - 1 === weakest;
+        html += '<li class="conv' + (weak ? ' is-weak' : '') + '"><span class="chip">' + pct(rates[i - 1]) + '</span>' + ARROW +
+          (weak ? '<span class="flag">Biggest drop</span>' : '') + '<span class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">' + pct(rates[i - 1]) + ' of the previous stage continue</span></li>';
+      }
+      html += '<li class="stage"><span class="name">' + s.name + '</span><span class="n">' + fmt(s.count) + '</span>' +
+        '<span class="share">' + (i === 0 ? 'Start of funnel' : pct((s.count / first) * 100) + ' of start') + '</span>' +
+        '<span class="bar" aria-hidden="true"><i style="--w:' + Math.max(2, (s.count / first) * 100).toFixed(1) + '%"></i></span></li>';
+    });
+    strip.innerHTML = html;
+    const last = STAGES[STAGES.length - 1].count;
+    root.querySelector('.total').innerHTML = '<span>End to end <b>' + pct((last / first) * 100) + '</b></span><span>Weakest step <b>' +
+      STAGES[weakest].name + ' to ' + STAGES[weakest + 1].name + '</b></span>';
+  });
+})();
+</script>

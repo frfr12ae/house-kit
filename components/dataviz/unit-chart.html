@@ -1,0 +1,126 @@
+<!--
+@title Unit chart
+@description One dot per person, grouped by status, above bars showing where the process spends its time. A four-meaning legend (content, neutral, constraint, notice) maps to the semantic colour pairs and each meaning also has its own dot shape. Edit GROUPS and STEPS at the top of the script.
+@tags unit chart, dots, people, seats, status, process, pictogram, legend
+@preview fill
+@height 660
+@added 2026-10-31
+-->
+<style>
+  .c-unit-chart {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-unit-chart .head { margin: 0 0 var(--ds-space-6); max-width: 62ch; }
+  .c-unit-chart h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-unit-chart .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-unit-chart .panel { padding: var(--ds-space-6) var(--ds-space-6); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-unit-chart .panel + .panel { margin-top: var(--ds-space-4); }
+  .c-unit-chart .label { margin: 0 0 var(--ds-space-5); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-unit-chart .groups { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-6); margin: 0; padding: 0; list-style: none; }
+  .c-unit-chart .group { display: grid; align-content: start; gap: var(--ds-space-4); }
+  .c-unit-chart .top { display: flex; align-items: baseline; gap: var(--ds-space-2); padding-bottom: var(--ds-space-3); border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-unit-chart .top b { font-family: var(--ds-font-display); font-size: var(--ds-text-xl); font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-unit-chart .top span { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-text); line-height: var(--ds-leading-snug); }
+  .c-unit-chart .units { display: flex; flex-wrap: wrap; gap: 9px; max-width: 154px; }
+  .c-unit-chart .u { flex: none; width: 16px; height: 16px; border-radius: 50%; box-sizing: border-box; }
+  .c-unit-chart .m-content { background: var(--ds-info-line); }
+  .c-unit-chart .m-neutral { background: var(--ds-neutral-fill); border: var(--ds-stroke) solid var(--ds-neutral-line); }
+  .c-unit-chart .m-constraint { background: var(--ds-danger-line); border-radius: 3px; }
+  .c-unit-chart .m-notice { background: var(--ds-highlight-fill); border: var(--ds-stroke) solid var(--ds-highlight-line); position: relative; }
+  .c-unit-chart .m-notice::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--ds-highlight-line); }
+  .c-unit-chart .steps { display: grid; gap: var(--ds-space-3); margin: 0; padding: 0; list-style: none; }
+  .c-unit-chart .step { display: grid; grid-template-columns: 170px minmax(0, 1fr) 44px; align-items: center; gap: var(--ds-space-4); }
+  .c-unit-chart .step .dy { font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); text-align: right; font-variant-numeric: tabular-nums; }
+  .c-unit-chart .step .nm { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-unit-chart .lane { position: relative; height: 22px; border-radius: var(--ds-radius-sm); background: color-mix(in srgb, var(--ds-line) 45%, transparent); }
+  .c-unit-chart .bar { position: absolute; top: 0; bottom: 0; left: var(--s); width: var(--w); border-radius: var(--ds-radius-sm); }
+  .c-unit-chart .bar.m-content { background: var(--ds-info-fill); border: var(--ds-stroke) solid var(--ds-info-line); }
+  .c-unit-chart .bar.m-neutral { background: var(--ds-neutral-fill); border: var(--ds-stroke) solid var(--ds-neutral-line); }
+  .c-unit-chart .bar.m-constraint { background: var(--ds-danger-fill); border: var(--ds-stroke) solid var(--ds-danger-line); border-radius: var(--ds-radius-sm); }
+  .c-unit-chart .bar.m-notice { background: var(--ds-highlight-fill); border: var(--ds-stroke) solid var(--ds-highlight-line); }
+  .c-unit-chart .bar.m-notice::after { display: none; }
+  .c-unit-chart .total { margin: var(--ds-space-4) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-unit-chart .total b { color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-unit-chart .legend { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-4) var(--ds-space-5); margin: var(--ds-space-6) 0 0; padding: 0; list-style: none; }
+  .c-unit-chart .legend li { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 2px var(--ds-space-3); font-size: var(--ds-text-xs); color: var(--ds-muted); line-height: var(--ds-leading-snug); }
+  .c-unit-chart .legend .u { margin-top: 1px; grid-row: span 2; }
+  .c-unit-chart .legend b { font-size: var(--ds-text-sm); color: var(--ds-ink); }
+  @container (max-width: 760px) {
+    .c-unit-chart { padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-unit-chart .panel { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-unit-chart .groups { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-6) var(--ds-space-5); }
+    .c-unit-chart .step { grid-template-columns: minmax(0, 1fr) auto; gap: var(--ds-space-2) var(--ds-space-3); }
+    .c-unit-chart .step .lane { grid-column: 1 / -1; grid-row: 2; }
+    .c-unit-chart .legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+
+<figure class="c-unit-chart">
+  <figcaption class="head">
+    <h3>Where the 48 new support agents stand</h3>
+    <p class="hint">Each dot is one person. Below, the onboarding steps they pass through and how long each takes.</p>
+  </figcaption>
+  <div class="panel">
+    <p class="label">People by status</p>
+    <ul class="groups"></ul>
+  </div>
+  <div class="panel">
+    <p class="label">Working days per onboarding step</p>
+    <ol class="steps"></ol>
+    <p class="total"></p>
+  </div>
+  <ul class="legend" aria-label="Legend"></ul>
+</figure>
+
+<script>
+(() => {
+  // Replace with your own. "kind" is one of content, neutral, constraint, notice.
+  const GROUPS = [
+    { kind: 'content', name: 'Productive', count: 22 },
+    { kind: 'notice', name: 'In ramp-up', count: 11 },
+    { kind: 'neutral', name: 'Not started', count: 9 },
+    { kind: 'constraint', name: 'Blocked on access', count: 6 },
+  ];
+  const STEPS = [
+    { kind: 'constraint', name: 'Request system access', days: 6 },
+    { kind: 'content', name: 'Classroom training', days: 3 },
+    { kind: 'content', name: 'Shadowing', days: 8 },
+    { kind: 'notice', name: 'Supervised tickets', days: 10 },
+    { kind: 'neutral', name: 'Sign-off', days: 2 },
+  ];
+  const MEANING = {
+    content: ['Content', 'Work is flowing as planned'],
+    neutral: ['Neutral', 'Waiting, given or not yet started'],
+    constraint: ['Constraint', 'Something is blocking progress'],
+    notice: ['Notice', 'Needs a regular check'],
+  };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  document.querySelectorAll('.c-unit-chart').forEach((root) => {
+    root.querySelector('.groups').innerHTML = GROUPS.map((g) =>
+      '<li class="group" aria-label="' + esc(g.name) + ': ' + g.count + ' people"><div class="top"><b>' + g.count + '</b><span>' + esc(g.name) + '</span></div>' +
+      '<div class="units" aria-hidden="true">' + ('<i class="u m-' + g.kind + '"></i>').repeat(g.count) + '</div></li>'
+    ).join('');
+
+    const total = STEPS.reduce((a, s) => a + s.days, 0);
+    let start = 0;
+    root.querySelector('.steps').innerHTML = STEPS.map((s) => {
+      const html = '<li class="step"><span class="nm">' + esc(s.name) + '</span><div class="lane"><span class="bar m-' + s.kind +
+        '" style="--s:' + ((start / total) * 100).toFixed(2) + '%;--w:' + ((s.days / total) * 100).toFixed(2) + '%"></span></div><span class="dy">' + s.days + ' d</span></li>';
+      start += s.days;
+      return html;
+    }).join('');
+    const longest = STEPS.reduce((a, s) => (s.days > a.days ? s : a), STEPS[0]);
+    root.querySelector('.total').innerHTML = 'End to end <b>' + total + ' working days</b>. Longest step: <b>' + esc(longest.name.toLowerCase()) + '</b>, ' + longest.days + ' days.';
+
+    root.querySelector('.legend').innerHTML = Object.keys(MEANING).map((k) =>
+      '<li><i class="u m-' + k + '"></i><b>' + MEANING[k][0] + '</b><span>' + MEANING[k][1] + '</span></li>').join('');
+  });
+})();
+</script>

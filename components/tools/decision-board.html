@@ -1,0 +1,266 @@
+<!--
+@title Decision board
+@description Open decisions grouped by theme, each with context, options, Approve, Reject or Needs new options, and a note. A progress summary counts what is decided and one button copies the whole state as plain text.
+@tags decisions, approval, review, board, sign-off, checklist, copy
+@preview fill
+@height 640
+@added 2026-10-31
+-->
+<style>
+  .c-decision-board {
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-decision-board .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .c-decision-board .summary { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-6); margin-bottom: var(--ds-space-6); padding: var(--ds-space-5) var(--ds-space-6); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-decision-board .count { display: grid; gap: 2px; }
+  .c-decision-board .count strong { font-size: var(--ds-text-2xl); line-height: var(--ds-leading-tight); font-weight: 800; letter-spacing: -0.03em; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-decision-board .count span { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-decision-board .meter { display: grid; gap: var(--ds-space-3); min-width: 0; }
+  .c-decision-board h3 { margin: 0; font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-decision-board .bar { display: flex; height: 10px; overflow: hidden; border-radius: var(--ds-radius-pill); background: var(--ds-panel); }
+  .c-decision-board .bar i { display: block; height: 100%; transition: width var(--ds-dur-base) var(--ds-ease); }
+  .c-decision-board .bar .b-approved { background: var(--ds-note-line); }
+  .c-decision-board .bar .b-rejected { background: var(--ds-danger-line); }
+  .c-decision-board .bar .b-revisit { background: var(--ds-highlight-line); }
+  .c-decision-board .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-1) var(--ds-space-5); margin: 0; padding: 0; list-style: none; font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-decision-board .legend li { display: inline-flex; align-items: center; gap: 6px; }
+  .c-decision-board .legend i { width: 8px; height: 8px; border-radius: 50%; }
+  .c-decision-board .legend .l-approved { background: var(--ds-note-line); }
+  .c-decision-board .legend .l-rejected { background: var(--ds-danger-line); }
+  .c-decision-board .legend .l-revisit { background: var(--ds-highlight-line); }
+  .c-decision-board .legend .l-open { background: var(--ds-line); }
+  .c-decision-board .actions { display: grid; justify-items: end; gap: var(--ds-space-2); }
+  .c-decision-board .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 var(--ds-space-5); border: var(--ds-hairline) solid var(--ds-action); border-radius: var(--ds-radius-pill); background: var(--ds-action); color: var(--ds-on-action); font-size: var(--ds-text-sm); font-weight: 600; cursor: pointer; }
+  .c-decision-board .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-decision-board .link { padding: var(--ds-space-1) var(--ds-space-2); border: 0; border-radius: var(--ds-radius-sm); background: transparent; color: var(--ds-text); font-size: var(--ds-text-xs); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .c-decision-board .link:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+
+  .c-decision-board .theme { margin-bottom: var(--ds-space-6); }
+  .c-decision-board .theme:last-of-type { margin-bottom: 0; }
+  .c-decision-board .theme-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-4); margin-bottom: var(--ds-space-3); padding: 0 var(--ds-space-1); }
+  .c-decision-board .theme-head h4 { margin: 0; font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); }
+  .c-decision-board .theme-head span { font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-decision-board .list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: var(--ds-space-4); margin: 0; padding: 0; list-style: none; }
+
+  .c-decision-board .item { display: flex; flex-direction: column; padding: var(--ds-space-5); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-left: 4px solid var(--ds-line); border-radius: var(--ds-radius-lg); transition: border-color var(--ds-dur-base) var(--ds-ease); }
+  .c-decision-board .item[data-status="approved"] { border-left-color: var(--ds-note-line); }
+  .c-decision-board .item[data-status="rejected"] { border-left-color: var(--ds-danger-line); }
+  .c-decision-board .item[data-status="revisit"] { border-left-color: var(--ds-highlight-line); }
+  .c-decision-board .item-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--ds-space-4); margin-bottom: var(--ds-space-2); }
+  .c-decision-board .item h5 { margin: 0; font-size: var(--ds-text-md); color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-decision-board .pill { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 8px; border: var(--ds-hairline) solid var(--ds-neutral-line); border-radius: var(--ds-radius-pill); background: var(--ds-neutral-fill); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 700; }
+  .c-decision-board .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ds-neutral-line); }
+  .c-decision-board .item[data-status="approved"] .pill { border-color: var(--ds-note-line); background: var(--ds-note-fill); }
+  .c-decision-board .item[data-status="approved"] .pill::before { background: var(--ds-note-line); }
+  .c-decision-board .item[data-status="rejected"] .pill { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-decision-board .item[data-status="rejected"] .pill::before { background: var(--ds-danger-line); }
+  .c-decision-board .item[data-status="revisit"] .pill { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); }
+  .c-decision-board .item[data-status="revisit"] .pill::before { background: var(--ds-highlight-line); }
+  .c-decision-board .context { margin: 0 0 var(--ds-space-4); font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); }
+  .c-decision-board .options { display: grid; gap: var(--ds-space-1); margin: 0 0 var(--ds-space-4); padding: 0; list-style: none; font-size: var(--ds-text-sm); }
+  .c-decision-board .options li { display: flex; align-items: baseline; gap: var(--ds-space-3); padding: 6px var(--ds-space-3); border-radius: var(--ds-radius-md); background: var(--ds-surface); color: var(--ds-text); }
+  .c-decision-board .options li.is-proposed { background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); color: var(--ds-ink); }
+  .c-decision-board .options .tag { flex: none; margin-left: auto; font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-ink); }
+  .c-decision-board .options .key { flex: none; width: 18px; font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-decision-board .controls { margin-top: auto; display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--ds-space-4); }
+  .c-decision-board .choices { display: inline-flex; flex-wrap: wrap; gap: var(--ds-space-2); }
+  .c-decision-board .choice { min-height: 38px; padding: 0 var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); color: var(--ds-ink); font-size: var(--ds-text-sm); font-weight: 600; cursor: pointer; transition: background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease); }
+  .c-decision-board .choice:hover { border-color: var(--ds-neutral-line); }
+  .c-decision-board .choice:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-decision-board .choice[aria-pressed="true"][data-s="approved"] { border-color: var(--ds-note-line); background: var(--ds-note-fill); }
+  .c-decision-board .choice[aria-pressed="true"][data-s="rejected"] { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-decision-board .choice[aria-pressed="true"][data-s="revisit"] { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); }
+  .c-decision-board .note { flex: 1 1 100%; min-width: 0; }
+  .c-decision-board .note textarea { display: block; width: 100%; min-height: 38px; padding: 8px var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); color: var(--ds-ink); font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); resize: vertical; }
+  .c-decision-board .note textarea:focus-visible { outline: none; border-color: var(--ds-info-line); box-shadow: var(--ds-focus); }
+
+  .c-decision-board .fallback { margin-top: var(--ds-space-5); padding: var(--ds-space-4); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-decision-board .fallback p { margin: 0 0 var(--ds-space-2); font-size: var(--ds-text-sm); }
+  .c-decision-board .fallback textarea { display: block; width: 100%; min-height: 160px; padding: var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); color: var(--ds-ink); font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); }
+  .c-decision-board [hidden] { display: none !important; }
+
+  @media (max-width: 760px) {
+    .c-decision-board .summary { grid-template-columns: 1fr; gap: var(--ds-space-4); }
+    .c-decision-board .actions { justify-items: start; grid-auto-flow: column; justify-content: space-between; align-items: center; }
+  }
+  @media (max-width: 560px) {
+    .c-decision-board { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-decision-board .summary { padding: var(--ds-space-4); }
+    .c-decision-board .item { padding: var(--ds-space-4); }
+    .c-decision-board .choices { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+    .c-decision-board .choice[data-s="revisit"] { grid-column: 1 / -1; }
+  }
+</style>
+
+<section class="c-decision-board" aria-labelledby="c-decision-board-title">
+  <div class="summary">
+    <div class="count" role="status" aria-live="polite"><strong data-n></strong><span>decisions made</span></div>
+    <div class="meter">
+      <h3 id="c-decision-board-title">Team plan launch: open decisions</h3>
+      <div class="bar" aria-hidden="true"><i class="b-approved"></i><i class="b-rejected"></i><i class="b-revisit"></i></div>
+      <ul class="legend">
+        <li><i class="l-approved"></i><span data-c="approved"></span></li>
+        <li><i class="l-rejected"></i><span data-c="rejected"></span></li>
+        <li><i class="l-revisit"></i><span data-c="revisit"></span></li>
+        <li><i class="l-open"></i><span data-c="open"></span></li>
+      </ul>
+    </div>
+    <div class="actions">
+      <button class="btn" type="button" data-act="copy">Copy as text</button>
+      <button class="link" type="button" data-act="reset">Clear all answers</button>
+    </div>
+  </div>
+
+  <div class="themes"></div>
+
+  <div class="fallback" hidden>
+    <p>Your browser blocked copying. Select the text below and copy it by hand.</p>
+    <textarea readonly aria-label="Decision summary as plain text"></textarea>
+  </div>
+  <p class="sr" role="status" aria-live="polite" data-live></p>
+</section>
+
+<script>
+(() => {
+  // Replace TITLE and DECISIONS with your own. "proposed: true" marks the option Approve refers to.
+  const TITLE = 'Team plan launch';
+  const DECISIONS = [
+    { id: 'annual', theme: 'Pricing', title: 'Offer an annual billing discount', context: 'Most trials convert on monthly billing. An annual option improves cash flow, but a visible discount can make the monthly price feel inflated.',
+      options: [['15% off when billed yearly', true], ['Two months free on yearly', false], ['No annual plan at launch', false]] },
+    { id: 'free', theme: 'Pricing', title: 'Free tier limits', context: 'Support tickets show that free users hit the 50 note cap during their first week, before they have seen the value of search and sharing.',
+      options: [['Raise the cap to 200 notes', true], ['Keep 50 notes, add a storage cap', false], ['Full access for 30 days, then limits', false]] },
+    { id: 'date', theme: 'Rollout', title: 'Launch date', context: 'Beta feedback is positive, but two sync bugs on older Android phones are still open. The announcement is booked for 3 March.',
+      options: [['Hold 3 March, fix the bugs in the final week', true], ['Move the launch back two weeks', false], ['Launch in stages, one region at a time', false]] },
+    { id: 'early', theme: 'Rollout', title: 'Early access for the waiting list', context: 'About 2,400 people signed up before launch. Letting them in first rewards them, and also spreads the first-day support load.',
+      options: [['48 hours of early access, then open to everyone', true], ['Open to everyone at once', false]] },
+    { id: 'hours', theme: 'Support', title: 'Support hours at launch', context: 'Two people cover support. Evenings account for roughly a third of tickets, mostly password and invite problems.',
+      options: [['Email only, 24 hour response', true], ['Add live chat from 9 to 17', false], ['Community forum first, email second', false]] },
+    { id: 'import', theme: 'Support', title: 'Help with moving from other apps', context: 'Teams switching from other note tools ask about importing years of material. A guided move is slow, a self-serve importer scales.',
+      options: [['Self-serve importer with a how-to guide', true], ['Hands-on migration for teams over 20 seats', false]] },
+  ];
+  const STATUS = { open: 'Open', approved: 'Approved', rejected: 'Rejected', revisit: 'Needs new options' };
+
+  document.querySelectorAll('.c-decision-board').forEach((root, index) => {
+    const KEY = root.dataset.storageKey || 'ok:decision-board:' + index;
+    const $ = (s) => root.querySelector(s);
+    const live = $('[data-live]');
+    const fallback = $('.fallback');
+    let state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable: keep working in memory */ } };
+    const get = (id) => state[id] || { status: 'open', note: '' };
+    const pick = (id) => { if (!state[id]) state[id] = { status: 'open', note: '' }; return state[id]; };
+
+    const themes = [];
+    DECISIONS.forEach((d) => { let t = themes.find((x) => x.name === d.theme); if (!t) { t = { name: d.theme, items: [] }; themes.push(t); } t.items.push(d); });
+
+    const host = $('.themes');
+    const itemEls = {};
+    themes.forEach((t, ti) => {
+      const sec = document.createElement('section'); sec.className = 'theme'; sec.setAttribute('aria-labelledby', 'c-decision-board-t' + ti);
+      const head = document.createElement('div'); head.className = 'theme-head';
+      head.innerHTML = '<h4 id="c-decision-board-t' + ti + '"></h4><span data-theme-count></span>';
+      head.querySelector('h4').textContent = t.name; sec.appendChild(head);
+      const ul = document.createElement('ul'); ul.className = 'list';
+      t.items.forEach((d) => {
+        const li = document.createElement('li'); li.className = 'item'; li.dataset.id = d.id;
+        const hid = 'c-decision-board-h-' + d.id;
+        li.innerHTML = '<div class="item-head"><h5 id="' + hid + '"></h5><span class="pill"></span></div><p class="context"></p><ul class="options" aria-label="Options"></ul>' +
+          '<div class="controls"><div class="choices" role="group" aria-label="Your decision"><button class="choice" type="button" data-s="approved" aria-pressed="false">Approve</button><button class="choice" type="button" data-s="rejected" aria-pressed="false">Reject</button><button class="choice" type="button" data-s="revisit" aria-pressed="false">Needs new options</button></div>' +
+          '<label class="note"><span class="sr">Note for this decision</span><textarea rows="1" placeholder="Add a note (optional)"></textarea></label></div>';
+        li.querySelector('h5').textContent = d.title;
+        li.querySelector('.context').textContent = d.context;
+        const ol = li.querySelector('.options');
+        d.options.forEach((o, i) => {
+          const o1 = document.createElement('li'); if (o[1]) o1.className = 'is-proposed';
+          const k = document.createElement('span'); k.className = 'key'; k.textContent = String.fromCharCode(65 + i);
+          const tx = document.createElement('span'); tx.textContent = o[0];
+          o1.append(k, tx);
+          if (o[1]) { const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = 'Proposed'; o1.appendChild(tag); }
+          ol.appendChild(o1);
+        });
+        li.querySelector('.choices').setAttribute('aria-labelledby', hid);
+        li.querySelectorAll('.choice').forEach((b) => b.addEventListener('click', () => {
+          const s = pick(d.id); s.status = s.status === b.dataset.s ? 'open' : b.dataset.s; save(); paint();
+          live.textContent = d.title + ': ' + STATUS[s.status];
+        }));
+        const ta = li.querySelector('textarea');
+        ta.addEventListener('input', () => { pick(d.id).note = ta.value; save(); });
+        ta.value = get(d.id).note;
+        itemEls[d.id] = li; ul.appendChild(li);
+      });
+      sec.appendChild(ul); host.appendChild(sec);
+    });
+
+    function counts() {
+      const c = { open: 0, approved: 0, rejected: 0, revisit: 0 };
+      DECISIONS.forEach((d) => { c[get(d.id).status] += 1; });
+      return c;
+    }
+
+    function paint() {
+      const total = DECISIONS.length; const c = counts(); const decided = c.approved + c.rejected;
+      $('[data-n]').textContent = decided + ' of ' + total;
+      $('[data-c="approved"]').textContent = c.approved + ' approved';
+      $('[data-c="rejected"]').textContent = c.rejected + ' rejected';
+      $('[data-c="revisit"]').textContent = c.revisit + ' need new options';
+      $('[data-c="open"]').textContent = c.open + ' still open';
+      ['approved', 'rejected', 'revisit'].forEach((k) => { $('.b-' + k).style.width = (c[k] / total * 100) + '%'; });
+      DECISIONS.forEach((d) => {
+        const s = get(d.id).status; const li = itemEls[d.id];
+        li.dataset.status = s; li.querySelector('.pill').textContent = STATUS[s];
+        li.querySelectorAll('.choice').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.s === s)));
+      });
+      root.querySelectorAll('.theme').forEach((sec, i) => {
+        const items = themes[i].items; const done = items.filter((d) => ['approved', 'rejected'].includes(get(d.id).status)).length;
+        sec.querySelector('[data-theme-count]').textContent = done + ' of ' + items.length + ' decided';
+      });
+    }
+
+    function toText() {
+      const total = DECISIONS.length; const c = counts();
+      const out = [TITLE + ': ' + (c.approved + c.rejected) + ' of ' + total + ' decided (' + c.approved + ' approved, ' + c.rejected + ' rejected, ' + c.revisit + ' need new options, ' + c.open + ' open)', ''];
+      themes.forEach((t) => {
+        out.push(t.name.toUpperCase());
+        t.items.forEach((d) => {
+          const s = get(d.id); const prop = d.options.find((o) => o[1]);
+          out.push('- ' + d.title + ': ' + STATUS[s.status].toUpperCase() + (s.status === 'approved' && prop ? ' (' + prop[0] + ')' : ''));
+          if (s.note.trim()) out.push('  Note: ' + s.note.trim().replace(/\s*\n\s*/g, ' '));
+        });
+        out.push('');
+      });
+      return out.join('\n').trim() + '\n';
+    }
+
+    $('[data-act="copy"]').addEventListener('click', async () => {
+      const text = toText();
+      let ok = false;
+      try { await navigator.clipboard.writeText(text); ok = true; } catch (e) { ok = false; }
+      if (!ok) {
+        try {
+          const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+          document.body.appendChild(t); t.select(); ok = document.execCommand('copy'); t.remove();
+        } catch (e) { ok = false; }
+      }
+      const btn = $('[data-act="copy"]');
+      if (ok) {
+        fallback.hidden = true; btn.textContent = 'Copied'; live.textContent = 'Summary copied to the clipboard';
+        setTimeout(() => { btn.textContent = 'Copy as text'; }, 1800);
+      } else {
+        fallback.hidden = false; const ta = fallback.querySelector('textarea'); ta.value = text; ta.focus(); ta.select(); live.textContent = 'Copy was blocked. The text is shown below.';
+      }
+    });
+    $('[data-act="reset"]').addEventListener('click', () => {
+      state = {}; save();
+      root.querySelectorAll('.note textarea').forEach((t) => { t.value = ''; });
+      fallback.hidden = true; paint(); live.textContent = 'All answers cleared';
+    });
+
+    paint();
+  });
+})();
+</script>

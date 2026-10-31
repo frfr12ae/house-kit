@@ -1,6 +1,6 @@
 # Output Kit
 
-Copy-paste templates for decks, reports, page sections, motion graphics, data viz and AI interfaces. Every component sits on one token design system, so a single theme file reskins the whole kit to any brand.
+Copy-paste templates for decks, reports, page sections, email, social posts, motion graphics, data viz, diagrams, forms and AI interfaces. Every component sits on one token design system, so a single theme file reskins the whole kit to any brand.
 
 **Nothing to install.** Plain HTML, CSS and JavaScript. No package manager, no build step, no network calls, no web fonts. It works offline on a locked-down machine.
 
@@ -29,7 +29,9 @@ design-system/
   themes/house.css         default theme; copy it to make a brand theme
   themes/nordic.css        demo brand theme
   themes/midnight.css      demo dark brand theme
-components/<category>/     one self-contained .html file per component
+  themes/ink.css, studio-dark.css   more demo brand themes
+components/<category>/     one self-contained .html file per component (12 categories)
+LICENSES/                  upstream licenses for adapted code
 navigator/                 navigator code + registry.js (generated)
 scripts/build.mjs          regenerates registry.js and CREDITS.md, lints components
 kit.json                   name, author and categories

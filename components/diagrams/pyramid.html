@@ -1,0 +1,131 @@
+<!--
+@title Pyramid
+@description Stacked trapezoids whose width shows how often each layer happens, with the rare apex in the highlight pair and counts at the right.
+@tags pyramid, hierarchy, layers, cadence, funnel, diagram
+@preview fill
+@height 520
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-pyramid {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-pyramid .head { margin-bottom: var(--ds-space-5); }
+  .c-pyramid h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-pyramid .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-pyramid .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-pyramid svg { display: block; width: 100%; min-width: 640px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-pyramid .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-pyramid .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-pyramid .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-pyramid .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-pyramid .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-pyramid .ln.is-dashed { border-top-style: dashed; }
+  .c-pyramid .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-pyramid .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-pyramid .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-pyramid .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-pyramid .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-pyramid .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-pyramid .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-pyramid .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-pyramid svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-pyramid .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-pyramid .node.dash { stroke-dasharray: 6 5; }
+  .c-pyramid .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-pyramid .edge.dash { stroke-dasharray: 6 5; }
+  .c-pyramid .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-pyramid .mk-n { stroke: var(--ds-neutral-line); }
+  .c-pyramid .mk-i { stroke: var(--ds-info-line); }
+  .c-pyramid .mk-h { stroke: var(--ds-highlight-line); }
+  .c-pyramid .mk-d { stroke: var(--ds-danger-line); }
+  .c-pyramid .mk-g { stroke: var(--ds-note-line); }
+  .c-pyramid text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-pyramid .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-pyramid .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-pyramid .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-pyramid .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-pyramid .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-pyramid .e.k-h { fill: var(--ds-text); }
+  .c-pyramid .e.k-d { fill: var(--ds-danger-line); }
+  .c-pyramid .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-pyramid .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-pyramid { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-pyramid .frame { padding: var(--ds-space-3); }
+    .c-pyramid .scrollhint { display: block; }
+    .c-pyramid .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-pyramid">
+  <figcaption class="head">
+    <h3>How a team spends its meeting time</h3>
+    <p class="hint">Four rhythms, from the daily base to the quarterly apex.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 840 400" role="img" aria-label="Pyramid of four meeting rhythms: daily check-in at the base, then sprint review, roadmap planning and a quarterly strategy review at the apex.">
+<defs><marker id="pyramid-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="pyramid-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="pyramid-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="pyramid-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="pyramid-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<line class="axis" x1="52" y1="372" x2="52" y2="48"/>
+<path class="edge k-n" d="M46 56 L52 46 L58 56"/>
+<text class="mu" transform="rotate(-90 28 210)" x="28" y="210" text-anchor="middle">Rarer, higher leverage</text>
+<g class="k-h"><polygon class="node" points="348.5,42 451.5,42 511,122 289,122" stroke-linejoin="round"/>
+<text class="t" x="400" y="80" text-anchor="middle">Strategy review</text>
+<text class="s" x="400" y="98" text-anchor="middle">quarterly</text>
+</g>
+<line class="guide" x1="491.2" y1="82" x2="728" y2="82"/>
+<text class="s" x="738" y="87" text-anchor="start">4 a year</text>
+<g class="k-n"><polygon class="node" points="286,126 514,126 573.5,206 226.5,206" stroke-linejoin="round"/>
+<text class="t" x="400" y="164" text-anchor="middle">Roadmap planning</text>
+<text class="s" x="400" y="182" text-anchor="middle">monthly</text>
+</g>
+<line class="guide" x1="553.8" y1="166" x2="728" y2="166"/>
+<text class="s" x="738" y="171" text-anchor="start">12 a year</text>
+<g class="k-n"><polygon class="node" points="223.5,210 576.5,210 636,290 164,290" stroke-linejoin="round"/>
+<text class="t" x="400" y="248" text-anchor="middle">Sprint review</text>
+<text class="s" x="400" y="266" text-anchor="middle">every two weeks</text>
+</g>
+<line class="guide" x1="616.2" y1="250" x2="728" y2="250"/>
+<text class="s" x="738" y="255" text-anchor="start">26 a year</text>
+<g class="k-n"><polygon class="node" points="161,294 639,294 698.5,374 101.5,374" stroke-linejoin="round"/>
+<text class="t" x="400" y="332" text-anchor="middle">Daily check-in</text>
+<text class="s" x="400" y="350" text-anchor="middle">every working day</text>
+</g>
+<line class="guide" x1="678.8" y1="334" x2="728" y2="334"/>
+<text class="s" x="738" y="339" text-anchor="start">230 a year</text>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <p class="note">The base funds the apex. Skip the daily work and the quarterly review has nothing to decide.</p>
+  <ul class="legend">
+    <li class="k-h"><span class="sw"></span>Apex: rarest and highest leverage</li>
+    <li class="k-n"><span class="sw"></span>Supporting layer</li>
+    <li>Width is honest: a narrower layer happens less often</li>
+  </ul>
+</figure>

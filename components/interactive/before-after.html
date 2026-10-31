@@ -1,0 +1,239 @@
+<!--
+@title Before and after slider
+@description A comparison slider with a draggable handle that also works from the keyboard. Both panes are built from token shapes: a cluttered report on the left, a clean one on the right.
+@tags compare, before after, slider, split, comparison, drag, keyboard
+@preview fill
+@height 480
+@added 2026-10-31
+@source 21st.dev VS Split | https://21st.dev/@21st/components/vs-split | inspired-by
+-->
+<style>
+  .c-before-after,
+  .c-before-after *,
+  .c-before-after *::before,
+  .c-before-after *::after { box-sizing: border-box; }
+  .c-before-after {
+    display: grid;
+    justify-items: center;
+    padding: var(--ds-space-7) var(--ds-space-5);
+    background: var(--ds-bg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-before-after .frame {
+    --pos: 50;
+    position: relative;
+    width: min(860px, 100%);
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-surface);
+    box-shadow: var(--ds-shadow-md);
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    container-type: inline-size;
+  }
+  .c-before-after .pane { position: absolute; inset: 0; padding: var(--ds-space-5); display: grid; align-content: start; gap: var(--ds-space-3); }
+  .c-before-after .pane.after { padding-left: 46%; background: var(--ds-surface); clip-path: inset(0 0 0 calc(var(--pos) * 1%)); }
+  .c-before-after .pane.before { background: var(--ds-panel); }
+  .c-before-after .chip {
+    position: absolute;
+    top: var(--ds-space-4);
+    z-index: 3;
+    padding: 3px var(--ds-space-3);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    pointer-events: none;
+  }
+  .c-before-after .chip.l { left: var(--ds-space-4); }
+  .c-before-after .chip.r { right: var(--ds-space-4); }
+
+  /* shared shapes */
+  .c-before-after .bar { height: 8px; border-radius: var(--ds-radius-pill); background: var(--ds-line); }
+  .c-before-after .t { font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-ink); }
+  .c-before-after .m { font-size: 10px; font-weight: 600; color: var(--ds-muted); }
+
+  /* before: too many things, all the same size */
+  .c-before-after .busy-head { display: flex; gap: var(--ds-space-2); margin-top: 28px; }
+  .c-before-after .busy-head i { flex: 1; height: 18px; border-radius: 4px; background: var(--ds-neutral-fill); border: var(--ds-hairline) solid var(--ds-neutral-line); }
+  .c-before-after .busy-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--ds-space-2); }
+  .c-before-after .busy-grid div { display: grid; gap: 3px; padding: 6px; border-radius: 4px; border: var(--ds-hairline) solid; }
+  .c-before-after .busy-grid div:nth-child(5n+1) { background: var(--ds-info-fill); border-color: var(--ds-info-line); }
+  .c-before-after .busy-grid div:nth-child(5n+2) { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-before-after .busy-grid div:nth-child(5n+3) { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-before-after .busy-grid div:nth-child(5n+4) { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-before-after .busy-grid div:nth-child(5n) { background: var(--ds-neutral-fill); border-color: var(--ds-neutral-line); }
+  .c-before-after .busy-grid b { font-size: 11px; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-before-after .busy-mid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--ds-space-2); }
+  .c-before-after .busy-mid .mini { display: flex; align-items: flex-end; gap: 3px; height: 54px; padding: 6px; border: var(--ds-hairline) solid var(--ds-line); border-radius: 4px; background: var(--ds-raised); }
+  .c-before-after .busy-mid .mini i { flex: 1; border-radius: 2px 2px 0 0; }
+  .c-before-after .busy-mid .mini:nth-child(1) i { background: var(--ds-series-1); }
+  .c-before-after .busy-mid .mini:nth-child(2) i { background: var(--ds-series-2); }
+  .c-before-after .busy-mid .mini:nth-child(3) i { background: var(--ds-series-5); }
+  .c-before-after .busy-rows { display: grid; gap: 4px; }
+  .c-before-after .busy-rows .bar:nth-child(odd) { background: var(--ds-neutral-line); opacity: 0.5; }
+
+  /* after: one number, one chart, one sentence */
+  .c-before-after .clean { display: grid; gap: var(--ds-space-5); margin-top: 30px; padding: 0 var(--ds-space-3); }
+  .c-before-after .clean .big { font-family: var(--ds-font-display); font-size: clamp(32px, 8cqi, 68px); font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; color: var(--ds-ink); }
+  .c-before-after .clean .big small { margin-left: var(--ds-space-3); padding: 2px var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-note-line); border-radius: var(--ds-radius-pill); background: var(--ds-note-fill); font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); font-weight: 700; letter-spacing: 0; vertical-align: middle; }
+  .c-before-after .clean p { margin: 0; max-width: 24em; font-size: clamp(13px, 2.4cqi, 18px); line-height: var(--ds-leading-snug); color: var(--ds-text); }
+  .c-before-after .clean .line { height: 22cqi; max-height: 150px; border-radius: var(--ds-radius-lg); background: var(--ds-panel); padding: var(--ds-space-3); }
+  .c-before-after .clean .line svg { width: 100%; height: 100%; }
+  .c-before-after .clean .line path.a { fill: none; stroke: var(--ds-series-1); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .c-before-after .clean .line path.b { fill: var(--ds-series-1); opacity: 0.16; }
+
+  /* handle */
+  .c-before-after .handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--pos) * 1%);
+    z-index: 4;
+    width: 44px;
+    margin-left: -22px;
+    display: grid;
+    place-items: center;
+    cursor: ew-resize;
+    outline: none;
+  }
+  .c-before-after .handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: var(--ds-ink); }
+  .c-before-after .knob {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-ink);
+    color: var(--ds-bg);
+    box-shadow: var(--ds-shadow-md);
+    transition: transform var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-before-after .knob svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .c-before-after .handle:hover .knob { transform: scale(1.08); }
+  .c-before-after .handle:focus-visible .knob { box-shadow: var(--ds-focus), var(--ds-shadow-md); }
+  .c-before-after .frame.is-drag .knob { transform: scale(0.94); }
+  .c-before-after .frame.is-sweeping .handle,
+  .c-before-after .frame.is-sweeping .pane.after { transition: left var(--ds-dur-slow) var(--ds-ease-in-out), clip-path var(--ds-dur-slow) var(--ds-ease-in-out); }
+
+  @media (max-width: 520px) {
+    .c-before-after { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-before-after .pane { padding: var(--ds-space-3); }
+    .c-before-after .pane.after { padding-left: 44%; }
+    .c-before-after .clean { padding: 0; }
+    .c-before-after .clean .big small { display: none; }
+    .c-before-after .frame { aspect-ratio: 4 / 5; }
+    .c-before-after .busy-grid { grid-template-columns: repeat(3, 1fr); }
+    .c-before-after .busy-grid div:nth-child(n+7) { display: none; }
+  }
+</style>
+
+<div class="c-before-after">
+  <div class="frame" data-pos="50">
+    <div class="pane before" aria-hidden="true">
+      <div class="busy-head"><i></i><i></i><i></i><i></i></div>
+      <div class="busy-grid">
+        <div><span class="m">Rev</span><b>1,204,331</b><span class="bar"></span></div>
+        <div><span class="m">COGS</span><b>412,980</b><span class="bar"></span></div>
+        <div><span class="m">Opex</span><b>288,114</b><span class="bar"></span></div>
+        <div><span class="m">Var</span><b>-4.17%</b><span class="bar"></span></div>
+        <div><span class="m">FX</span><b>0.9132</b><span class="bar"></span></div>
+        <div><span class="m">Hdc</span><b>118</b><span class="bar"></span></div>
+        <div><span class="m">DSO</span><b>41.8</b><span class="bar"></span></div>
+        <div><span class="m">Accr</span><b>93,220</b><span class="bar"></span></div>
+        <div><span class="m">Adj</span><b>-12,004</b><span class="bar"></span></div>
+        <div><span class="m">Tax</span><b>66,500</b><span class="bar"></span></div>
+      </div>
+      <div class="busy-mid">
+        <div class="mini"><i style="height:40%"></i><i style="height:70%"></i><i style="height:55%"></i><i style="height:90%"></i><i style="height:35%"></i></div>
+        <div class="mini"><i style="height:80%"></i><i style="height:45%"></i><i style="height:60%"></i><i style="height:30%"></i><i style="height:75%"></i></div>
+        <div class="mini"><i style="height:25%"></i><i style="height:95%"></i><i style="height:50%"></i><i style="height:65%"></i><i style="height:42%"></i></div>
+      </div>
+      <div class="busy-rows"><span class="bar"></span><span class="bar" style="width:86%"></span><span class="bar" style="width:92%"></span><span class="bar" style="width:70%"></span></div>
+    </div>
+
+    <div class="pane after" aria-hidden="true">
+      <div class="clean">
+        <div class="big">+12.4%<small>on plan</small></div>
+        <p>Revenue is ahead of plan, and margin held. One decision needed this week: approve the Q4 hiring budget.</p>
+        <div class="line">
+          <svg viewBox="0 0 300 80" preserveAspectRatio="none"><path class="b" d="M0,66 C30,62 50,52 80,50 S130,40 160,32 S230,24 300,8 L300,80 L0,80 Z"/><path class="a" d="M0,66 C30,62 50,52 80,50 S130,40 160,32 S230,24 300,8"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <span class="chip l" aria-hidden="true">Before</span>
+    <span class="chip r" aria-hidden="true">After</span>
+
+    <div class="handle" role="slider" tabindex="0" aria-label="Comparison position, before on the left and after on the right" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent before">
+      <span class="knob" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M7 5l-5 5 5 5M13 5l5 5-5 5"/></svg></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-before-after').forEach((root) => {
+    const frame = root.querySelector('.frame');
+    const handle = root.querySelector('.handle');
+    let pos = 50;
+
+    const set = (v) => {
+      pos = Math.max(0, Math.min(100, v));
+      frame.style.setProperty('--pos', pos);
+      handle.setAttribute('aria-valuenow', Math.round(pos));
+      handle.setAttribute('aria-valuetext', Math.round(pos) + ' percent before');
+    };
+    const fromPointer = (e) => {
+      const r = frame.getBoundingClientRect();
+      set(((e.clientX - r.left) / r.width) * 100);
+    };
+
+    frame.addEventListener('pointerdown', (e) => {
+      frame.classList.remove('is-sweeping');
+      frame.classList.add('is-drag');
+      frame.setPointerCapture(e.pointerId);
+      fromPointer(e);
+      handle.focus({ preventScroll: true });
+    });
+    frame.addEventListener('pointermove', (e) => { if (frame.classList.contains('is-drag')) fromPointer(e); });
+    const end = (e) => {
+      frame.classList.remove('is-drag');
+      if (frame.hasPointerCapture(e.pointerId)) frame.releasePointerCapture(e.pointerId);
+    };
+    frame.addEventListener('pointerup', end);
+    frame.addEventListener('pointercancel', end);
+
+    handle.addEventListener('keydown', (e) => {
+      const big = e.shiftKey ? 10 : 2;
+      const keys = { ArrowLeft: -big, ArrowDown: -big, ArrowRight: big, ArrowUp: big, PageDown: -10, PageUp: 10 };
+      if (e.key in keys) { e.preventDefault(); frame.classList.remove('is-sweeping'); set(pos + keys[e.key]); }
+      else if (e.key === 'Home') { e.preventDefault(); set(0); }
+      else if (e.key === 'End') { e.preventDefault(); set(100); }
+    });
+
+    set(50);
+    if (reduced) return;
+    // a short hint sweep the first time it scrolls into view
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      const slow = (parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-slow')) || 600) + 80;
+      frame.classList.add('is-sweeping');
+      set(34);
+      setTimeout(() => { if (frame.classList.contains('is-sweeping')) set(66); }, slow + 200);
+      setTimeout(() => { if (frame.classList.contains('is-sweeping')) set(50); }, slow * 2 + 400);
+      setTimeout(() => frame.classList.remove('is-sweeping'), slow * 3 + 600);
+    }, { threshold: 0.5 });
+    io.observe(frame);
+  });
+})();
+</script>

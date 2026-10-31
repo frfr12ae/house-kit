@@ -1,0 +1,170 @@
+<!--
+@title Annotation kit
+@description A sheet of reusable hand-drawn SVG marks: circle, underline, arrow, bracket, highlighter, stamp and scribble note. Each mark is a self-contained inline element that draws on when it scrolls into view.
+@tags social, annotation, hand-drawn, svg, circle, underline, arrow, stamp, marker
+@preview center
+@height 740
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-annotation-kit {
+    container-type: inline-size;
+    position: relative;
+    width: min(540px, 100%);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-annotation-kit .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 4cqi;
+    padding: 6cqi;
+  }
+  .c-annotation-kit .head { display: flex; justify-content: space-between; align-items: baseline; }
+  .c-annotation-kit .title { font-size: 4.4cqi; font-weight: 800; color: var(--ds-ink); }
+  .c-annotation-kit .hint { font-size: 2.8cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-annotation-kit .grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, 1fr); gap: 2.6cqi; min-height: 0; }
+  .c-annotation-kit .cell {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 0;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-raised);
+  }
+  .c-annotation-kit .stage { display: grid; place-items: center; padding: 2cqi 3cqi; min-height: 0; }
+  .c-annotation-kit .label { padding: 1.4cqi 3cqi 2cqi; font-size: 2.8cqi; font-weight: 700; color: var(--ds-muted); }
+  .c-annotation-kit .cell.note {
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    background: var(--ds-note-fill);
+    padding: 2.6cqi 3cqi;
+    grid-template-rows: none;
+    align-content: center;
+    font-size: 2.8cqi;
+    line-height: 1.4;
+    font-weight: 700;
+    color: var(--ds-ink);
+  }
+
+  .c-annotation-kit .sample { font-size: 6.2cqi; font-weight: 800; color: var(--ds-ink); letter-spacing: -0.01em; line-height: 1.1; }
+  .c-annotation-kit .w { position: relative; display: inline-block; white-space: nowrap; }
+  .c-annotation-kit .mk {
+    position: absolute;
+    max-width: none;
+    overflow: visible;
+    fill: none;
+    stroke: var(--ds-highlight-line);
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .c-annotation-kit .circle { left: -3.4cqi; top: -2.4cqi; width: calc(100% + 6.8cqi); height: calc(100% + 4.8cqi); }
+  .c-annotation-kit .underline { left: -1%; bottom: -1.9cqi; width: 102%; height: 2.4cqi; stroke-width: 3; }
+  .c-annotation-kit .arrow { stroke: var(--ds-note-line); position: static; display: block; width: 17cqi; height: 8cqi; margin-top: 0.4cqi; margin-left: 12cqi; stroke-width: 4.5; }
+  .c-annotation-kit .bracket { stroke: var(--ds-note-line); stroke-width: 5; left: calc(100% + 1.4cqi); top: 0; width: 3cqi; height: 100%; }
+  .c-annotation-kit .stack { display: block; line-height: 1.12; }
+  .c-annotation-kit .hl-wrap { position: relative; display: inline-block; padding: 0 1.2cqi; white-space: nowrap; }
+  .c-annotation-kit .hl-wrap .sample { position: relative; z-index: 1; }
+  .c-annotation-kit .marker { left: 0; top: 0; z-index: 0; width: 100%; height: 100%; stroke: var(--ds-highlight-line); stroke-opacity: 0.5; stroke-width: 12; stroke-linecap: butt; }
+  .c-annotation-kit .stamp { position: static; display: block; width: 24cqi; height: 9cqi; transform: rotate(-7deg); stroke: var(--ds-note-line); stroke-width: 2.6; }
+  .c-annotation-kit .stamp .face { fill: var(--ds-note-fill); stroke: none; }
+  .c-annotation-kit .stamp text { fill: var(--ds-ink); stroke: none; font-family: var(--ds-font-sans); font-size: 15px; font-weight: 800; letter-spacing: 0.12em; }
+  .c-annotation-kit .scribble { position: relative; display: inline-flex; align-items: flex-start; gap: 1.2cqi; font-family: var(--ds-font-hand); font-size: 5.6cqi; line-height: 1; color: var(--ds-ink); transform: rotate(-3deg); white-space: nowrap; }
+  .c-annotation-kit .scribble .mk { position: static; display: block; stroke: var(--ds-note-line); width: 7cqi; height: 6cqi; margin-top: 1.4cqi; stroke-width: 2.2; }
+
+  /* draw-on: the hidden state carries no transition, so arming never animates; only the move to .is-in does */
+  .c-annotation-kit.is-armed .mk path { stroke-dasharray: 1 2; stroke-dashoffset: 1; }
+  .c-annotation-kit.is-armed .stamp { opacity: 0; transform: rotate(-7deg) scale(1.5); }
+  .c-annotation-kit.is-armed .scribble > span { opacity: 0; }
+  .c-annotation-kit.is-armed.is-in .mk path {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 900ms var(--ds-ease-in-out);
+    transition-delay: calc(var(--i, 0) * 200ms + 150ms);
+  }
+  .c-annotation-kit.is-armed.is-in .stamp {
+    opacity: 1;
+    transform: rotate(-7deg) scale(1);
+    transition: opacity var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease-spring);
+    transition-delay: calc(var(--i, 0) * 200ms + 150ms);
+  }
+  .c-annotation-kit.is-armed.is-in .scribble > span {
+    opacity: 1;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease);
+    transition-delay: calc(var(--i, 0) * 200ms + 500ms);
+  }
+</style>
+
+<article class="c-annotation-kit" aria-label="Annotation kit sheet">
+  <div class="inner">
+    <div class="head">
+      <span class="title">Annotation kit</span>
+      <span class="hint">Copy any mark with its wrapper</span>
+    </div>
+    <div class="grid">
+
+      <div class="cell" style="--i: 0">
+        <div class="stage"><span class="w sample">Worth it<svg class="mk circle" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M14 22 C 8 8, 40 3, 68 5 C 94 7, 99 27, 70 35 C 44 41, 6 38, 4 24 C 3 13, 22 6, 38 5"/></svg></span></div>
+        <div class="label">Hand circle</div>
+      </div>
+
+      <div class="cell" style="--i: 1">
+        <div class="stage"><span class="w sample">Key idea<svg class="mk underline" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 7 C 18 3, 34 10, 52 6 S 82 3, 98 6 M 14 11 C 36 9, 62 11, 84 9"/></svg></span></div>
+        <div class="label">Underline</div>
+      </div>
+
+      <div class="cell" style="--i: 2">
+        <div class="stage"><span class="sample" style="display: block; text-align: left;">Look here<svg class="mk arrow" viewBox="0 0 100 50" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M4 6 C 30 4, 70 10, 88 40 M 74 36 L 89 43 L 92 26"/></svg></span></div>
+        <div class="label">Arrow</div>
+      </div>
+
+      <div class="cell" style="--i: 3">
+        <div class="stage"><span class="w"><span class="sample stack">Step one<br>Step two</span><svg class="mk bracket" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M4 3 C 14 4, 16 8, 16 22 L 16 38 C 16 46, 18 49, 20 50 C 18 51, 16 54, 16 62 L 16 78 C 16 92, 14 96, 4 97"/></svg></span></div>
+        <div class="label">Bracket</div>
+      </div>
+
+      <div class="cell" style="--i: 4">
+        <div class="stage"><span class="hl-wrap"><svg class="mk marker" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 11 C 24 8, 60 13, 98 9"/></svg><span class="sample">Highlight</span></span></div>
+        <div class="label">Highlighter</div>
+      </div>
+
+      <div class="cell" style="--i: 5">
+        <div class="stage"><svg class="mk stamp" viewBox="0 0 100 36" aria-hidden="true"><rect class="face" x="2" y="2" width="96" height="32" rx="4"/><path pathLength="1" d="M6 2 L 94 2 Q 98 2 98 6 L 98 30 Q 98 34 94 34 L 6 34 Q 2 34 2 30 L 2 6 Q 2 2 6 2 Z"/><text x="50" y="23" text-anchor="middle">WORTH IT</text></svg></div>
+        <div class="label">Stamp</div>
+      </div>
+
+      <div class="cell" style="--i: 6">
+        <div class="stage"><span class="scribble"><svg class="mk" viewBox="0 0 24 20" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M20 3 C 10 3, 4 9, 4 17 M 1 13 L 4 18 L 8 14"/></svg><span>read this bit!</span></span></div>
+        <div class="label">Scribble note</div>
+      </div>
+
+      <div class="cell note">
+        Wrap the text in a relative inline-block, drop the svg inside, set a stroke colour.
+      </div>
+
+    </div>
+  </div>
+</article>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-annotation-kit').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

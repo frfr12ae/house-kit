@@ -1,0 +1,131 @@
+<!--
+@title Layer stack
+@description Horizontal bands stacked by level of abstraction, each with a code, a name and what it contains, with one focal layer highlighted.
+@tags layers, stack, architecture, abstraction, levels, diagram
+@preview fill
+@height 480
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-layer-stack {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-layer-stack .head { margin-bottom: var(--ds-space-5); }
+  .c-layer-stack h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-layer-stack .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-layer-stack .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-layer-stack svg { display: block; width: 100%; min-width: 640px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-layer-stack .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-layer-stack .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-layer-stack .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-layer-stack .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-layer-stack .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-layer-stack .ln.is-dashed { border-top-style: dashed; }
+  .c-layer-stack .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-layer-stack .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-layer-stack .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-layer-stack .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-layer-stack .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-layer-stack .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-layer-stack .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-layer-stack .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-layer-stack svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-layer-stack .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-layer-stack .node.dash { stroke-dasharray: 6 5; }
+  .c-layer-stack .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-layer-stack .edge.dash { stroke-dasharray: 6 5; }
+  .c-layer-stack .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-layer-stack .mk-n { stroke: var(--ds-neutral-line); }
+  .c-layer-stack .mk-i { stroke: var(--ds-info-line); }
+  .c-layer-stack .mk-h { stroke: var(--ds-highlight-line); }
+  .c-layer-stack .mk-d { stroke: var(--ds-danger-line); }
+  .c-layer-stack .mk-g { stroke: var(--ds-note-line); }
+  .c-layer-stack text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-layer-stack .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-layer-stack .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-layer-stack .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-layer-stack .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-layer-stack .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-layer-stack .e.k-h { fill: var(--ds-text); }
+  .c-layer-stack .e.k-d { fill: var(--ds-danger-line); }
+  .c-layer-stack .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-layer-stack .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-layer-stack { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-layer-stack .frame { padding: var(--ds-space-3); }
+    .c-layer-stack .scrollhint { display: block; }
+    .c-layer-stack .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-layer-stack">
+  <figcaption class="head">
+    <h3>The layers of a small web product</h3>
+    <p class="hint">Five levels, from what people touch to what keeps it running.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 840 372" role="img" aria-label="Layer stack of a web product, from interface at the top to infrastructure at the bottom, with application logic highlighted as the focal layer.">
+<defs><marker id="layer-stack-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="layer-stack-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="layer-stack-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="layer-stack-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="layer-stack-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<line class="axis" x1="52" y1="340" x2="52" y2="40"/>
+<path class="edge k-n" d="M46 48 L52 38 L58 48"/>
+<text class="mu" transform="rotate(-90 28 190)" x="28" y="190" text-anchor="middle">Closer to the user</text>
+<g class="k-n"><rect class="node" x="96" y="24" width="704" height="60" rx="8"/>
+<text class="mu" x="118" y="59" text-anchor="start">L5</text>
+<text class="t" x="176" y="60" text-anchor="start" style="font-size:16px">Interface</text>
+<text class="s" x="780" y="59" text-anchor="end" style="font-size:13.5px">screens, forms, chat</text>
+</g>
+<g class="k-h"><rect class="node" x="96" y="92" width="704" height="60" rx="8"/>
+<text class="mu" x="118" y="127" text-anchor="start">L4</text>
+<text class="t" x="176" y="128" text-anchor="start" style="font-size:16px">Application logic</text>
+<text class="s" x="780" y="127" text-anchor="end" style="font-size:13.5px">rules, workflows, permissions</text>
+</g>
+<g class="k-n"><rect class="node" x="96" y="160" width="704" height="60" rx="8"/>
+<text class="mu" x="118" y="195" text-anchor="start">L3</text>
+<text class="t" x="176" y="196" text-anchor="start" style="font-size:16px">Platform services</text>
+<text class="s" x="780" y="195" text-anchor="end" style="font-size:13.5px">sign in, search, queues</text>
+</g>
+<g class="k-n"><rect class="node" x="96" y="228" width="704" height="60" rx="8"/>
+<text class="mu" x="118" y="263" text-anchor="start">L2</text>
+<text class="t" x="176" y="264" text-anchor="start" style="font-size:16px">Data</text>
+<text class="s" x="780" y="263" text-anchor="end" style="font-size:13.5px">database, files, backups</text>
+</g>
+<g class="k-n"><rect class="node" x="96" y="296" width="704" height="60" rx="8"/>
+<text class="mu" x="118" y="331" text-anchor="start">L1</text>
+<text class="t" x="176" y="332" text-anchor="start" style="font-size:16px">Infrastructure</text>
+<text class="s" x="780" y="331" text-anchor="end" style="font-size:13.5px">servers, network, DNS</text>
+</g>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <p class="note">Application logic is where this product differs from every other. The rest can be rented.</p>
+  <ul class="legend">
+    <li class="k-h"><span class="sw"></span>The focal layer</li>
+    <li class="k-n"><span class="sw"></span>Supporting layer</li>
+  </ul>
+</figure>

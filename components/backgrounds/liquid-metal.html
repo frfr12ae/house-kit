@@ -1,0 +1,283 @@
+<!--
+@title Liquid metal
+@description A full-width sheet of slow, rippling chrome shaded from your theme ink and ground, rendered in WebGL with a CSS fallback and a still frame for reduced motion.
+@tags background, metal, chrome, liquid, webgl, shader
+@preview fill
+@height 420
+@added 2026-10-31
+@source HyperFrames shader blocks by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-liquid-metal,
+  .c-liquid-metal *,
+  .c-liquid-metal *::before,
+  .c-liquid-metal *::after { box-sizing: border-box; }
+  .c-liquid-metal {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 420px;
+    overflow: hidden;
+    background: var(--ds-bg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-liquid-metal .fallback { position: absolute; inset: 0; z-index: -3; background: linear-gradient(105deg, color-mix(in srgb, var(--ds-ink) 14%, var(--ds-bg)) 0%, var(--ds-bg) 30%, color-mix(in srgb, var(--ds-ink) 8%, var(--ds-bg)) 55%, var(--ds-raised) 72%, color-mix(in srgb, var(--ds-ink) 14%, var(--ds-bg)) 100%); }
+  .c-liquid-metal .canvas {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease);
+  }
+  .c-liquid-metal.is-live .canvas { opacity: 1; }
+  .c-liquid-metal .probe { position: absolute; width: 0; height: 0; visibility: hidden; pointer-events: none; }
+  .c-liquid-metal .scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse 52% 60% at 50% 50%, color-mix(in srgb, var(--ds-bg) 62%, transparent), transparent 100%);
+    pointer-events: none;
+  }
+  .c-liquid-metal .content {
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-4);
+    max-width: 720px;
+    padding: var(--ds-space-8) var(--ds-space-5);
+    text-align: center;
+  }
+  .c-liquid-metal .eyebrow {
+    padding: var(--ds-space-1) var(--ds-space-3);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: color-mix(in srgb, var(--ds-surface) 70%, transparent);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-text);
+  }
+  .c-liquid-metal h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: clamp(32px, 6vw, var(--ds-text-3xl));
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-liquid-metal .sub { margin: 0; max-width: 34em; font-size: var(--ds-text-lg); line-height: var(--ds-leading-snug); color: var(--ds-text); text-wrap: pretty; }
+  .c-liquid-metal .btn {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    margin-top: var(--ds-space-2);
+    padding: 0 var(--ds-space-6);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-md);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .c-liquid-metal .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  @media (max-width: 560px) {
+    .c-liquid-metal .sub { font-size: var(--ds-text-md); }
+  }
+</style>
+
+<section class="c-liquid-metal">
+  <div class="fallback" aria-hidden="true"></div>
+  <canvas class="canvas" aria-hidden="true"></canvas>
+  <span class="probe" aria-hidden="true"></span>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="content">
+    <span class="eyebrow">Hardware, rethought</span>
+    <h2>Built to look like it was poured</h2>
+    <p class="sub">Reflective ripples move across the surface in slow motion. Tune the strength in one line.</p>
+    <a class="btn" href="#">Meet the series</a>
+  </div>
+</section>
+
+<script>
+(() => {
+  // Colours are read from these tokens, so the background follows any theme.
+  const TOKENS = ["--ds-bg","--ds-ink","--ds-raised","--ds-info-line","--ds-highlight-line"];
+  const RES = 0.5;
+  const STILL_TIME = 4;
+  const VERT = 'attribute vec2 p; void main() { gl_Position = vec4(p, 0.0, 1.0); }';
+  const FRAG = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+uniform vec2 uRes;
+uniform float uTime;
+uniform vec3 uC[5];
+uniform float uAmt;
+
+float h21(vec2 p) { return fract(sin(dot(p, vec2(41.37, 289.91))) * 9371.3); }
+float vn(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(h21(i), h21(i + vec2(1.0, 0.0)), f.x), mix(h21(i + vec2(0.0, 1.0)), h21(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+float fbm(vec2 p) {
+  float a = 0.5, s = 0.0;
+  for (int i = 0; i < 5; i++) { s += a * vn(p); p = p * 2.03 + vec2(11.7, 5.3); a *= 0.5; }
+  return s;
+}
+float fbmL(vec2 p) {
+  float a = 0.5, s = 0.0;
+  for (int i = 0; i < 3; i++) { s += a * vn(p); p = p * 2.03 + vec2(11.7, 5.3); a *= 0.5; }
+  return s;
+}
+
+float hgt(vec2 p, float t) {
+  vec2 q = p + 0.6 * vec2(fbmL(p * 0.9 + t), fbmL(p * 0.9 - t + 4.0));
+  return fbmL(q * 1.1 + t * 0.6);
+}
+void main() {
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / sqrt(uRes.x * uRes.y);
+  float t = uTime * 0.07;
+  vec2 p = uv * 1.5;
+  vec2 e = vec2(0.02, 0.0);
+  float hx = hgt(p - e.xy, t) - hgt(p + e.xy, t);
+  float hy = hgt(p - e.yx, t) - hgt(p + e.yx, t);
+  vec3 n = normalize(vec3(hx, hy, 0.06));
+  vec3 rf = reflect(vec3(0.0, 0.0, -1.0), n);
+  float env = rf.y * 0.5 + 0.5;
+  float band = 0.5 + 0.5 * sin(env * 7.0 + rf.x * 3.0);
+  band = smoothstep(0.12, 0.88, band);
+  float spec = pow(max(dot(n, normalize(vec3(-0.4, 0.6, 0.7))), 0.0), 26.0);
+  vec3 col = mix(uC[0], uC[1], band * 0.3);
+  col = mix(col, uC[3], (1.0 - band) * 0.10);
+  col = mix(col, uC[4], smoothstep(0.7, 1.0, band) * 0.08);
+  col = mix(col, uC[2], spec * 0.5);
+  gl_FragColor = vec4(mix(uC[0], col, uAmt), 1.0);
+}
+`;
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const swatch = document.createElement('canvas');
+  swatch.width = swatch.height = 1;
+  const sctx = swatch.getContext('2d', { willReadFrequently: true });
+
+  // Resolve any CSS colour (hex, rgb, oklch, color-mix) to sRGB floats through a 1px canvas.
+  function readColours(probe) {
+    const out = [];
+    for (const name of TOKENS) {
+      probe.style.color = 'var(' + name + ')';
+      sctx.clearRect(0, 0, 1, 1);
+      sctx.fillStyle = '#000';
+      sctx.fillStyle = getComputedStyle(probe).color;
+      sctx.fillRect(0, 0, 1, 1);
+      const d = sctx.getImageData(0, 0, 1, 1).data;
+      out.push(d[0] / 255, d[1] / 255, d[2] / 255);
+    }
+    return out;
+  }
+
+  function shader(gl, type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+  }
+
+  function init(root) {
+    const canvas = root.querySelector('.canvas');
+    const probe = root.querySelector('.probe');
+    const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
+    if (!gl) return;
+    const vs = shader(gl, gl.VERTEX_SHADER, VERT);
+    const fs = shader(gl, gl.FRAGMENT_SHADER, FRAG);
+    if (!vs || !fs) return;
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const uRes = gl.getUniformLocation(prog, 'uRes');
+    const uTime = gl.getUniformLocation(prog, 'uTime');
+    const uC = gl.getUniformLocation(prog, 'uC');
+    const uAmt = gl.getUniformLocation(prog, 'uAmt');
+
+    let t = reduced ? STILL_TIME : 0;
+    let last = 0;
+    let raf = 0;
+    let visible = false;
+    let key = '';
+
+    const draw = () => {
+      gl.uniform1f(uTime, t);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+    const size = () => {
+      const r = root.getBoundingClientRect();
+      const s = Math.min(window.devicePixelRatio || 1, 1.5) * RES;
+      const w = Math.max(2, Math.round(r.width * s));
+      const h = Math.max(2, Math.round(r.height * s));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        gl.viewport(0, 0, w, h);
+        gl.uniform2f(uRes, w, h);
+        draw();
+      }
+    };
+    const refresh = () => {
+      if (!root.isConnected) { clearInterval(timer); return; }
+      const c = readColours(probe);
+      const k = c.join();
+      if (k === key) return;
+      key = k;
+      gl.uniform3fv(uC, new Float32Array(c));
+      // Dark grounds get a gentler tint so light text keeps its contrast.
+      gl.uniform1f(uAmt, 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] < 0.4 ? 0.6 : 1.0);
+      draw();
+    };
+    const tick = (now) => {
+      raf = 0;
+      if (!visible || document.hidden) return;
+      t += Math.min(0.1, (now - last) / 1000);
+      last = now;
+      draw();
+      raf = requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (reduced || raf || !visible || document.hidden) return;
+      last = performance.now();
+      raf = requestAnimationFrame(tick);
+    };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
+
+    canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); stop(); root.classList.remove('is-live'); });
+
+    const timer = setInterval(refresh, 2000);
+    refresh();
+    size();
+    root.classList.add('is-live');
+
+    new ResizeObserver(size).observe(root);
+    new IntersectionObserver((entries) => {
+      visible = entries[entries.length - 1].isIntersecting;
+      if (visible) start(); else stop();
+    }).observe(root);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+  }
+
+  document.querySelectorAll('.c-liquid-metal').forEach(init);
+})();
+</script>

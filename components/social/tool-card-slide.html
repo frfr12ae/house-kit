@@ -1,0 +1,158 @@
+<!--
+@title Tool card slide
+@description 4:5 carousel slide recommending one tool or repo: name, one-line pitch, three bullets, a repo stats row, a rotated stamp and a hand-drawn circle with a scribbled note around one fact.
+@tags social, carousel, tool, repo, recommendation, stamp, hand-drawn, annotation
+@preview center
+@height 740
+@added 2026-10-31
+-->
+<style>
+  .c-tool-card-slide {
+    container-type: inline-size;
+    position: relative;
+    width: min(540px, 100%);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-tool-card-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    padding: 8cqi;
+  }
+  .c-tool-card-slide .top { display: flex; justify-content: space-between; align-items: center; }
+  .c-tool-card-slide .tag { font-size: 3.2cqi; font-weight: 700; color: var(--ds-muted); }
+  .c-tool-card-slide .count { font-size: 3.4cqi; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-tool-card-slide .count span { color: var(--ds-muted); }
+  .c-tool-card-slide .head { display: grid; gap: 2.6cqi; justify-items: start; margin-top: 5cqi; }
+  .c-tool-card-slide h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 11.4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+  }
+  .c-tool-card-slide .repo {
+    padding: 1.2cqi 3cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-raised);
+    font-family: var(--ds-font-mono);
+    font-size: 3cqi;
+    color: var(--ds-muted);
+  }
+  .c-tool-card-slide .stage { position: relative; align-self: center; margin-top: 4cqi; }
+  .c-tool-card-slide .card {
+    padding: 5cqi 5cqi 9cqi;
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-raised);
+  }
+  .c-tool-card-slide .what { margin: 0; max-width: 94%; font-size: 4.7cqi; line-height: 1.28; font-weight: 700; color: var(--ds-ink); text-wrap: balance; }
+  .c-tool-card-slide ul { list-style: none; margin: 3.6cqi 0 0; padding: 0; display: grid; gap: 2cqi; }
+  .c-tool-card-slide li { display: grid; grid-template-columns: 3.6cqi 1fr; gap: 2.6cqi; align-items: start; font-size: 3.5cqi; line-height: 1.3; }
+  .c-tool-card-slide li svg { width: 3.6cqi; height: 3.6cqi; margin-top: 0.3cqi; fill: none; stroke: var(--ds-note-line); stroke-width: 0.7cqi; stroke-linecap: round; stroke-linejoin: round; }
+  .c-tool-card-slide .facts {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.6cqi 3cqi;
+    margin-top: 4.4cqi;
+    padding-top: 3.6cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-family: var(--ds-font-mono);
+    font-size: 3.1cqi;
+    color: var(--ds-text);
+  }
+  .c-tool-card-slide .sep { color: var(--ds-muted); }
+  .c-tool-card-slide .circled { position: relative; display: inline-block; padding: 0 1.4cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-tool-card-slide .circle {
+    position: absolute;
+    left: -2.4cqi;
+    top: -2.6cqi;
+    width: calc(100% + 4.8cqi);
+    height: calc(100% + 5.2cqi);
+    max-width: none;
+    overflow: visible;
+    fill: none;
+    stroke: var(--ds-highlight-line);
+    stroke-width: 0.8cqi;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .c-tool-card-slide .circle path { vector-effect: non-scaling-stroke; }
+  .c-tool-card-slide .scribble {
+    position: absolute;
+    right: 1cqi;
+    top: calc(100% + 1.4cqi);
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2cqi;
+    font-family: var(--ds-font-hand);
+    font-size: 4.6cqi;
+    line-height: 1;
+    color: var(--ds-ink);
+    white-space: nowrap;
+    transform: rotate(-3deg);
+  }
+  .c-tool-card-slide .scribble svg { width: 6cqi; height: 5cqi; margin-top: -3.4cqi; fill: none; stroke: var(--ds-highlight-line); stroke-width: 0.6cqi; stroke-linecap: round; stroke-linejoin: round; }
+  .c-tool-card-slide .scribble svg path { vector-effect: non-scaling-stroke; }
+  .c-tool-card-slide .stamp {
+    position: absolute;
+    top: -4.6cqi;
+    right: -1.4cqi;
+    transform: rotate(-7deg);
+    padding: 1.6cqi 3.6cqi;
+    border: 0.7cqi solid var(--ds-note-line);
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-note-fill);
+    color: var(--ds-ink);
+    font-size: 4.2cqi;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .c-tool-card-slide .chrome { display: flex; justify-content: space-between; margin-top: 3cqi; font-size: 3cqi; font-weight: 600; color: var(--ds-muted); }
+</style>
+
+<article class="c-tool-card-slide" aria-label="Tool recommendation slide">
+  <div class="inner">
+    <div class="top">
+      <span class="tag">Tool of the week</span>
+      <span class="count">03<span>/07</span></span>
+    </div>
+    <div class="head">
+      <h2>tidyup</h2>
+      <span class="repo">github.com/example/tidyup</span>
+    </div>
+    <div class="stage">
+      <div class="stamp">Worth it</div>
+      <div class="card">
+        <p class="what">Renames and sorts a messy downloads folder in one command.</p>
+        <ul>
+          <li><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6.5l3 3 6-7"/></svg><span>Previews every change first</span></li>
+          <li><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6.5l3 3 6-7"/></svg><span>Undo the last run with one flag</span></li>
+          <li><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6.5l3 3 6-7"/></svg><span>Rules live in one plain-text file</span></li>
+        </ul>
+        <div class="facts">
+          <span>&#9733; 12.4k</span><span class="sep">&middot;</span>
+          <span>640 forks</span><span class="sep">&middot;</span>
+          <span class="circled">2.1 MB<svg class="circle" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path d="M14 22 C 8 8, 40 3, 68 5 C 94 7, 99 27, 70 35 C 44 41, 6 38, 4 24 C 3 13, 22 6, 38 5"/></svg></span>
+          <span class="scribble" aria-hidden="true">
+            <svg viewBox="0 0 24 20"><path d="M20 18 C 10 18, 4 12, 4 3 M1 7 L4 2 L8 6"/></svg>
+            tiny install!
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="chrome"><span>Free and open source</span><span>@yourhandle</span></div>
+  </div>
+</article>

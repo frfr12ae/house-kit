@@ -1,0 +1,151 @@
+<!--
+@title Tablet mockup
+@description A landscape tablet frame holding a reading app: chapter list, a page of text with a marker highlight that sweeps in, and a progress bar. Built from token shapes.
+@tags tablet, mockup, device, reading, ipad, app
+@preview center
+@height 560
+@replay true
+@added 2026-10-31
+@source 21st.dev Tablet Stylus Markup | https://21st.dev/@21st/components/mg-dev-tablet | inspired-by
+-->
+<style>
+  .c-tablet-mockup,
+  .c-tablet-mockup *,
+  .c-tablet-mockup *::before,
+  .c-tablet-mockup *::after { box-sizing: border-box; }
+  .c-tablet-mockup {
+    --device: color-mix(in srgb, var(--ds-text) 90%, var(--ds-bg));
+    width: min(760px, 100%);
+    margin: 0;
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-tablet-mockup .device {
+    position: relative;
+    padding: 14px;
+    border: var(--ds-stroke) solid var(--ds-line);
+    border-radius: 30px;
+    background: var(--device);
+    box-shadow: var(--ds-shadow-lg);
+  }
+  .c-tablet-mockup .cam {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    width: 5px;
+    height: 5px;
+    margin-top: -2px;
+    border-radius: 50%;
+    background: var(--ds-surface);
+    opacity: 0.35;
+  }
+  .c-tablet-mockup .screen {
+    display: grid;
+    grid-template-columns: minmax(150px, 30%) minmax(0, 1fr);
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 18px;
+    background: var(--ds-surface);
+  }
+  .c-tablet-mockup .side {
+    display: grid;
+    align-content: start;
+    gap: var(--ds-space-1);
+    padding: var(--ds-space-5) var(--ds-space-3);
+    border-right: var(--ds-hairline) solid var(--ds-line);
+    background: var(--ds-panel);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-muted);
+  }
+  .c-tablet-mockup .side b { margin: 0 var(--ds-space-2) var(--ds-space-3); font-size: var(--ds-text-sm); color: var(--ds-ink); }
+  .c-tablet-mockup .side span { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-2); padding: var(--ds-space-2); border-radius: var(--ds-radius-sm); }
+  .c-tablet-mockup .side span em { font-style: normal; font-variant-numeric: tabular-nums; }
+  .c-tablet-mockup .side span.on { background: var(--ds-surface); color: var(--ds-ink); box-shadow: var(--ds-shadow-sm); }
+  .c-tablet-mockup .page { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-width: 0; }
+  .c-tablet-mockup .tools { display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-3) var(--ds-space-5); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-tablet-mockup .tools .icons { display: flex; gap: var(--ds-space-2); }
+  .c-tablet-mockup .tools .icons i { display: grid; place-items: center; width: 26px; height: 26px; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-sm); font-style: normal; font-weight: 700; color: var(--ds-ink); }
+  .c-tablet-mockup .text { padding: var(--ds-space-2) clamp(20px, 7cqi, 56px) var(--ds-space-4); overflow: hidden; }
+  .c-tablet-mockup .kicker { font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-tablet-mockup h3 { margin: var(--ds-space-1) 0 var(--ds-space-4); font-family: var(--ds-font-display); font-size: clamp(20px, 3.4cqi, 28px); font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); }
+  .c-tablet-mockup p { margin: 0 0 var(--ds-space-3); font-family: var(--ds-font-serif); font-size: clamp(12px, 2cqi, 16px); line-height: 1.7; color: var(--ds-text); }
+  .c-tablet-mockup mark {
+    padding: 1px 0;
+    background: linear-gradient(color-mix(in srgb, var(--ds-highlight-line) 38%, transparent), color-mix(in srgb, var(--ds-highlight-line) 38%, transparent)) no-repeat 0 0 / 100% 100%;
+    box-shadow: inset 0 -2px 0 var(--ds-highlight-line);
+    color: var(--ds-ink);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .c-tablet-mockup .foot { display: grid; gap: var(--ds-space-2); padding: var(--ds-space-2) clamp(20px, 7cqi, 56px) var(--ds-space-4); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-tablet-mockup .foot .row { display: flex; justify-content: space-between; }
+  .c-tablet-mockup .track { height: 4px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); overflow: hidden; }
+  .c-tablet-mockup .track i { display: block; width: 19%; height: 100%; border-radius: inherit; background: var(--ds-series-1); transform-origin: left; }
+
+  .c-tablet-mockup.is-armed mark { background-size: 0% 100%; box-shadow: none; }
+  .c-tablet-mockup.is-armed .track i { transform: scaleX(0); }
+  .c-tablet-mockup.is-armed.is-in mark {
+    background-size: 100% 100%;
+    box-shadow: inset 0 -2px 0 var(--ds-highlight-line);
+    transition: background-size var(--ds-dur-slow) var(--ds-ease-in-out) calc(var(--ds-dur-story) * 0.8), box-shadow var(--ds-dur-base) var(--ds-ease) calc(var(--ds-dur-story) * 0.8 + var(--ds-dur-slow));
+  }
+  .c-tablet-mockup.is-armed.is-in .track i { transform: scaleX(1); transition: transform var(--ds-dur-story) var(--ds-ease); }
+
+  @container (max-width: 520px) {
+    .c-tablet-mockup .screen { grid-template-columns: 1fr; aspect-ratio: auto; }
+    .c-tablet-mockup .side { display: none; }
+  }
+</style>
+
+<figure class="c-tablet-mockup" aria-label="Tablet showing a reading app">
+  <div class="device">
+    <span class="cam" aria-hidden="true"></span>
+    <div class="screen">
+      <div class="side" aria-hidden="true">
+        <b>The Harbour Year</b>
+        <span>1. First light <em>12</em></span>
+        <span class="on">2. The long walk <em>42</em></span>
+        <span>3. Salt and rope <em>71</em></span>
+        <span>4. Winter nets <em>103</em></span>
+        <span>5. The thaw <em>148</em></span>
+        <span>6. Open water <em>190</em></span>
+      </div>
+      <div class="page">
+        <div class="tools" aria-hidden="true">
+          <span>Chapter 2 of 6</span>
+          <span class="icons"><i>Aa</i><i>&#9825;</i><i>&#9776;</i></span>
+        </div>
+        <div class="text">
+          <div class="kicker">Chapter 2</div>
+          <h3>The long walk to the harbour</h3>
+          <p>By the time the fog lifted, Ines had already counted the boats twice. Eleven were still tied up along the wall, their paint blistered by a summer nobody remembered fondly.</p>
+          <p><mark>The harbour did not care about being looked at.</mark> It woke slowly, the way it always had, with the sound of a winch somewhere and a radio left on in an empty cabin.</p>
+          <p>Somewhere past the net sheds the gulls had started up, quarrelling over a crate of something she could not see and did not want to.</p>
+          <p>She walked the length of the quay with her hands in her pockets, listening for the one engine she knew by heart.</p>
+        </div>
+        <div class="foot" aria-hidden="true">
+          <div class="track"><i></i></div>
+          <div class="row"><span>Page 42 of 218</span><span>19% read</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-tablet-mockup').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

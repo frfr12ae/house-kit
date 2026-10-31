@@ -1,0 +1,250 @@
+<!--
+@title Layered architecture
+@description Three bands, signals in, a system of record and surfaces out, with numbered flows and a toggle that morphs one central record into federated domain records.
+@tags architecture, layers, data, hub and spoke, federated, topology, toggle, animated, diagram
+@preview fill
+@height 640
+@added 2026-10-31
+-->
+<style>
+  .c-layered-architecture {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-layered-architecture .head { margin-bottom: var(--ds-space-5); }
+  .c-layered-architecture h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-layered-architecture .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-layered-architecture .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-layered-architecture svg { display: block; width: 100%; min-width: 720px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-layered-architecture .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-layered-architecture .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-layered-architecture .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-layered-architecture .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-layered-architecture .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-layered-architecture .ln.is-dashed { border-top-style: dashed; }
+  .c-layered-architecture .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-layered-architecture .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-layered-architecture .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-layered-architecture .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-layered-architecture .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-layered-architecture .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-layered-architecture .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-layered-architecture .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-layered-architecture svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-layered-architecture .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-layered-architecture .node.dash { stroke-dasharray: 6 5; }
+  .c-layered-architecture .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-layered-architecture .edge.dash { stroke-dasharray: 6 5; }
+  .c-layered-architecture .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-layered-architecture .mk-n { stroke: var(--ds-neutral-line); }
+  .c-layered-architecture .mk-i { stroke: var(--ds-info-line); }
+  .c-layered-architecture .mk-h { stroke: var(--ds-highlight-line); }
+  .c-layered-architecture .mk-d { stroke: var(--ds-danger-line); }
+  .c-layered-architecture .mk-g { stroke: var(--ds-note-line); }
+  .c-layered-architecture text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-layered-architecture .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-layered-architecture .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-layered-architecture .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-layered-architecture .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-layered-architecture .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-layered-architecture .e.k-h { fill: var(--ds-text); }
+  .c-layered-architecture .e.k-d { fill: var(--ds-danger-line); }
+  .c-layered-architecture .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-layered-architecture .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  .c-layered-architecture .toggle { display: inline-flex; max-width: 100%; margin-bottom: var(--ds-space-4); padding: var(--ds-space-1); background: var(--ds-panel); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); }
+  .c-layered-architecture .opt { height: 36px; padding: 0 var(--ds-space-5); border: 0; border-radius: var(--ds-radius-pill); background: transparent; color: var(--ds-text); font-size: var(--ds-text-sm); font-weight: 600; cursor: pointer; transition: background var(--ds-dur-base) var(--ds-ease), color var(--ds-dur-base) var(--ds-ease); }
+  .c-layered-architecture .opt:hover { color: var(--ds-ink); }
+  .c-layered-architecture .opt[aria-pressed="true"] { background: var(--ds-action); color: var(--ds-on-action); }
+  .c-layered-architecture .opt:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-layered-architecture .caption { min-height: 3.2em; margin: var(--ds-space-4) 0 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); color: var(--ds-text); }
+  .c-layered-architecture .band { fill: var(--ds-surface); stroke: var(--ds-line); stroke-width: 1; }
+  .c-layered-architecture .badge { fill: var(--ds-action); }
+  .c-layered-architecture .badge-n { fill: var(--ds-on-action); font-size: 13px; font-weight: 700; }
+  .c-layered-architecture .link { stroke: var(--ds-neutral-line); stroke-width: 2; stroke-dasharray: 4 4; stroke-linecap: round; }
+  @media (max-width: 720px) {
+    .c-layered-architecture { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-layered-architecture .frame { padding: var(--ds-space-3); }
+    .c-layered-architecture .scrollhint { display: block; }
+    .c-layered-architecture .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-layered-architecture">
+  <figcaption class="head">
+    <h3>From signals to surfaces</h3>
+    <p class="hint">Switch the topology to see how the middle band changes while the edges stay the same.</p>
+  </figcaption>
+  <div class="toggle" role="group" aria-label="Topology">
+    <button type="button" class="opt" data-mode="hub" aria-pressed="true">Hub and spoke</button>
+    <button type="button" class="opt" data-mode="fed" aria-pressed="false">Federated</button>
+  </div>
+  <div class="frame">
+    <svg viewBox="0 0 940 492" role="img" aria-label="Layered architecture diagram. Four signal sources feed a system of record, which serves four surfaces. A toggle switches the record between one central hub and three federated domain records.">
+<defs><marker id="layered-architecture-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="layered-architecture-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="layered-architecture-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="layered-architecture-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="layered-architecture-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<rect class="band" x="210" y="16" width="710" height="96" rx="12"/>
+<circle class="badge" cx="28" cy="64" r="13"/>
+<text class="badge-n" x="28" y="69" text-anchor="middle">1</text>
+<text class="t" x="52" y="61" text-anchor="start" style="font-size:15px">Signals in</text>
+<text class="s" x="52" y="80" text-anchor="start">captured as events</text>
+<rect class="band" x="210" y="182" width="710" height="128" rx="12"/>
+<circle class="badge" cx="28" cy="246" r="13"/>
+<text class="badge-n" x="28" y="251" text-anchor="middle">2</text>
+<text class="t" x="52" y="243" text-anchor="start" style="font-size:15px">System of record</text>
+<rect class="band" x="210" y="380" width="710" height="96" rx="12"/>
+<circle class="badge" cx="28" cy="428" r="13"/>
+<text class="badge-n" x="28" y="433" text-anchor="middle">3</text>
+<text class="t" x="52" y="425" text-anchor="start" style="font-size:15px">Surfaces out</text>
+<text class="s" x="52" y="444" text-anchor="start">served on request</text>
+<text class="s sub-hub" x="52" y="262" text-anchor="start">one governed record</text>
+<text class="s sub-fed" x="52" y="262" text-anchor="start">three records, one index</text>
+<path class="edge k-n flow-in" data-i="0" marker-end="url(#layered-architecture-an)"/>
+<path class="edge k-n flow-in" data-i="1" marker-end="url(#layered-architecture-an)"/>
+<path class="edge k-n flow-in" data-i="2" marker-end="url(#layered-architecture-an)"/>
+<path class="edge k-n flow-in" data-i="3" marker-end="url(#layered-architecture-an)"/>
+<path class="edge k-i flow-out" data-j="0" marker-end="url(#layered-architecture-ai)"/>
+<path class="edge k-i flow-out" data-j="1" marker-end="url(#layered-architecture-ai)"/>
+<path class="edge k-i flow-out" data-j="2" marker-end="url(#layered-architecture-ai)"/>
+<path class="edge k-i flow-out" data-j="3" marker-end="url(#layered-architecture-ai)"/>
+<line class="link" data-k="0" y1="246" y2="246"/>
+<line class="link" data-k="1" y1="246" y2="246"/>
+<g class="k-n"><rect class="node" x="252" y="40" width="140" height="48" rx="8"/><text class="t" x="322" y="61" text-anchor="middle">Inbox</text><text class="s" x="322" y="79" text-anchor="middle">email</text></g>
+<g class="k-n"><rect class="node" x="414" y="40" width="140" height="48" rx="8"/><text class="t" x="484" y="61" text-anchor="middle">Web forms</text><text class="s" x="484" y="79" text-anchor="middle">enquiries</text></g>
+<g class="k-n"><rect class="node" x="576" y="40" width="140" height="48" rx="8"/><text class="t" x="646" y="61" text-anchor="middle">Calendar</text><text class="s" x="646" y="79" text-anchor="middle">meetings</text></g>
+<g class="k-n"><rect class="node" x="738" y="40" width="140" height="48" rx="8"/><text class="t" x="808" y="61" text-anchor="middle">Spreadsheets</text><text class="s" x="808" y="79" text-anchor="middle">budgets</text></g>
+<g class="k-i"><rect class="node" x="252" y="404" width="140" height="48" rx="8"/><text class="t" x="322" y="425" text-anchor="middle">Client portal</text><text class="s" x="322" y="443" text-anchor="middle">read only</text></g>
+<g class="k-i"><rect class="node" x="414" y="404" width="140" height="48" rx="8"/><text class="t" x="484" y="425" text-anchor="middle">Status report</text><text class="s" x="484" y="443" text-anchor="middle">weekly</text></g>
+<g class="k-i"><rect class="node" x="576" y="404" width="140" height="48" rx="8"/><text class="t" x="646" y="425" text-anchor="middle">Alerts</text><text class="s" x="646" y="443" text-anchor="middle">on change</text></g>
+<g class="k-i"><rect class="node" x="738" y="404" width="140" height="48" rx="8"/><text class="t" x="808" y="425" text-anchor="middle">Budget view</text><text class="s" x="808" y="443" text-anchor="middle">monthly</text></g>
+<g class="k-h store" data-k="0"><rect class="node" y="212" height="68" rx="10"/><text class="t fed-t" y="243" text-anchor="middle">Customers</text><text class="s fed-s" y="261" text-anchor="middle">owns its data</text></g>
+<g class="k-h store" data-k="1"><rect class="node" y="212" height="68" rx="10"/><text class="t fed-t" y="243" text-anchor="middle">Projects</text><text class="s fed-s" y="261" text-anchor="middle">owns its data</text><text class="t hub-t" y="243" text-anchor="middle">One system of record</text><text class="s hub-s" y="261" text-anchor="middle">every signal lands here</text></g>
+<g class="k-h store" data-k="2"><rect class="node" y="212" height="68" rx="10"/><text class="t fed-t" y="243" text-anchor="middle">Finance</text><text class="s fed-s" y="261" text-anchor="middle">owns its data</text></g>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <p class="caption" role="status" aria-live="polite"></p>
+  <ul class="legend">
+    <li class="k-n"><span class="sw"></span>Signal source</li>
+    <li class="k-h"><span class="sw"></span>System of record</li>
+    <li class="k-i"><span class="sw"></span>Surface</li>
+    <li class="k-n"><span class="ln"></span>Signal in</li>
+    <li class="k-i"><span class="ln"></span>Served out</li>
+    <li class="k-n"><span class="ln is-dashed"></span>Shared index</li>
+  </ul>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Which store each signal lands in, and which store feeds each surface (federated mode).
+  const IN_MAP = [0, 0, 1, 2];
+  const OUT_MAP = [0, 1, 1, 2];
+  const CAPTIONS = {
+    hub: 'Hub and spoke: every signal lands in one record and every surface reads from it. Easy to govern and easy to join, but one place to fail and one team in the queue.',
+    fed: 'Federated: each domain keeps its own record and serves its own surfaces, linked by a shared index. Local ownership and fewer bottlenecks, but cross-domain questions take more work.',
+  };
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const clamp = (v) => Math.min(1, Math.max(0, v));
+
+  document.querySelectorAll('.c-layered-architecture').forEach((root) => {
+    const HUB_X = 252, HUB_W = 626, FED_W = 190, FED_X = [252, 470, 688];
+    const CHIP_X = [0, 1, 2, 3].map((i) => 252 + i * 162 + 70);
+    const inPaths = [...root.querySelectorAll('.flow-in')];
+    const outPaths = [...root.querySelectorAll('.flow-out')];
+    const stores = [...root.querySelectorAll('.store')];
+    const links = [...root.querySelectorAll('.link')];
+    const subHub = root.querySelector('.sub-hub');
+    const subFed = root.querySelector('.sub-fed');
+    const caption = root.querySelector('.caption');
+    const buttons = [...root.querySelectorAll('.opt')];
+
+    // attach point along a store for flow number idx among the flows that share it
+    const fedX = (map, i) => {
+      const k = map[i];
+      const peers = map.filter((m) => m === k);
+      const idx = map.slice(0, i).filter((m) => m === k).length;
+      return FED_X[k] + FED_W * (idx + 1) / (peers.length + 1);
+    };
+
+    function draw(e) {
+      const sides = clamp((e - 0.2) / 0.6);
+      const geo = [
+        { x: HUB_X, w: lerp(36, FED_W, e), o: sides },
+        { x: lerp(HUB_X, FED_X[1], e), w: lerp(HUB_W, FED_W, e), o: 1 },
+        { x: lerp(HUB_X + HUB_W - 36, FED_X[2], e), w: lerp(36, FED_W, e), o: sides },
+      ];
+      stores.forEach((g, k) => {
+        const r = g.querySelector('rect');
+        r.setAttribute('x', geo[k].x.toFixed(1));
+        r.setAttribute('width', geo[k].w.toFixed(1));
+        g.style.opacity = geo[k].o.toFixed(3);
+        const cx = (geo[k].x + geo[k].w / 2).toFixed(1);
+        g.querySelectorAll('text').forEach((t) => t.setAttribute('x', cx));
+        g.querySelectorAll('.fed-t, .fed-s').forEach((t) => { t.style.opacity = clamp((e - 0.55) / 0.45); });
+        g.querySelectorAll('.hub-t, .hub-s').forEach((t) => { t.style.opacity = clamp(1 - e / 0.45); });
+      });
+      links.forEach((ln, k) => {
+        ln.setAttribute('x1', (geo[k].x + geo[k].w).toFixed(1));
+        ln.setAttribute('x2', geo[k + 1].x.toFixed(1));
+        ln.style.opacity = clamp((e - 0.6) / 0.4).toFixed(3);
+      });
+      inPaths.forEach((p, i) => {
+        const hub = HUB_X + HUB_W * (i + 0.5) / 4;
+        const ax = lerp(hub, fedX(IN_MAP, i), e);
+        p.setAttribute('d', 'M' + CHIP_X[i] + ' 88 C' + CHIP_X[i] + ' 150 ' + ax.toFixed(1) + ' 150 ' + ax.toFixed(1) + ' 211');
+      });
+      outPaths.forEach((p, j) => {
+        const hub = HUB_X + HUB_W * (j + 0.5) / 4;
+        const bx = lerp(hub, fedX(OUT_MAP, j), e);
+        p.setAttribute('d', 'M' + bx.toFixed(1) + ' 281 C' + bx.toFixed(1) + ' 343 ' + CHIP_X[j] + ' 343 ' + CHIP_X[j] + ' 403');
+      });
+      subHub.style.opacity = clamp(1 - e / 0.5);
+      subFed.style.opacity = clamp((e - 0.5) / 0.5);
+    }
+
+    let e = 0, raf = 0;
+    const dur = (parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400) * 0.55;
+    function go(target) {
+      cancelAnimationFrame(raf);
+      if (reduced || !dur) { e = target; draw(e); return; }
+      const from = e, t0 = performance.now();
+      const step = (now) => {
+        const p = clamp((now - t0) / dur);
+        e = lerp(from, target, ease(p));
+        draw(e);
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    }
+    function setMode(mode, animate) {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+      caption.textContent = CAPTIONS[mode];
+      if (animate) go(mode === 'fed' ? 1 : 0); else { e = mode === 'fed' ? 1 : 0; draw(e); }
+    }
+    buttons.forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode, true)));
+    setMode('hub', false);
+  });
+})();
+</script>

@@ -1,0 +1,126 @@
+<!--
+@title State machine
+@description States as boxes and transitions as labelled arrows, with a start dot, an end ring, a pause loop and a backward move.
+@tags state, lifecycle, transitions, status, machine, diagram
+@preview fill
+@height 560
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-state-machine {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-state-machine .head { margin-bottom: var(--ds-space-5); }
+  .c-state-machine h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-state-machine .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-state-machine .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-state-machine svg { display: block; width: 100%; min-width: 700px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-state-machine .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-state-machine .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-state-machine .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-state-machine .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-state-machine .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-state-machine .ln.is-dashed { border-top-style: dashed; }
+  .c-state-machine .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-state-machine .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-state-machine .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-state-machine .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-state-machine .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-state-machine .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-state-machine .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-state-machine .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-state-machine svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-state-machine .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-state-machine .node.dash { stroke-dasharray: 6 5; }
+  .c-state-machine .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-state-machine .edge.dash { stroke-dasharray: 6 5; }
+  .c-state-machine .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-state-machine .mk-n { stroke: var(--ds-neutral-line); }
+  .c-state-machine .mk-i { stroke: var(--ds-info-line); }
+  .c-state-machine .mk-h { stroke: var(--ds-highlight-line); }
+  .c-state-machine .mk-d { stroke: var(--ds-danger-line); }
+  .c-state-machine .mk-g { stroke: var(--ds-note-line); }
+  .c-state-machine text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-state-machine .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-state-machine .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-state-machine .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-state-machine .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-state-machine .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-state-machine .e.k-h { fill: var(--ds-text); }
+  .c-state-machine .e.k-d { fill: var(--ds-danger-line); }
+  .c-state-machine .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-state-machine .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-state-machine { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-state-machine .frame { padding: var(--ds-space-3); }
+    .c-state-machine .scrollhint { display: block; }
+    .c-state-machine .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-state-machine">
+  <figcaption class="head">
+    <h3>Support ticket lifecycle</h3>
+    <p class="hint">Five states. The only way back is the customer reopening a resolved ticket.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 930 344" role="img" aria-label="State machine: a ticket moves from Open to In progress to Resolved to Closed, can pause in Waiting on the customer, and can be reopened from Resolved.">
+<defs><marker id="state-machine-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="state-machine-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="state-machine-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="state-machine-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="state-machine-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<path class="edge k-n" d="M36 190 H70" marker-end="url(#state-machine-an)"/>
+<path class="edge k-n" d="M200 190 H290" marker-end="url(#state-machine-an)"/>
+<path class="edge k-h" d="M420 190 H510" marker-end="url(#state-machine-ah)"/>
+<path class="edge k-n" d="M640 190 H730" marker-end="url(#state-machine-an)"/>
+<path class="edge k-n" d="M860 190 H884" marker-end="url(#state-machine-an)"/>
+<path class="edge k-i" d="M330 158 V104" marker-end="url(#state-machine-ai)"/>
+<path class="edge k-i" d="M380 104 V158" marker-end="url(#state-machine-ai)"/>
+<path class="edge k-d dash" d="M575 222 C575 330 135 330 135 222" marker-end="url(#state-machine-ad)"/>
+<text class="e" x="245" y="180" text-anchor="middle">Assign</text>
+<text class="e" x="465" y="180" text-anchor="middle">Fix shipped</text>
+<text class="e" x="685" y="180" text-anchor="middle">After 7 days</text>
+<text class="e" x="322" y="136" text-anchor="end">Needs info</text>
+<text class="e" x="388" y="136" text-anchor="start">Reply</text>
+<text class="e k-d" x="355" y="326" text-anchor="middle">Customer reopens</text>
+<circle cx="30" cy="190" r="6" style="fill:var(--ds-neutral-line)"/>
+<circle cx="896" cy="190" r="9" style="fill:none;stroke:var(--ds-neutral-line);stroke-width:1.5"/><circle cx="896" cy="190" r="5" style="fill:var(--ds-neutral-line)"/>
+<g class="k-n"><rect class="node" x="70" y="158" width="130" height="64" rx="8"/><text class="t" x="135" y="187" text-anchor="middle">Open</text><text class="s" x="135" y="205" text-anchor="middle">waiting for an agent</text></g>
+<g class="k-n"><rect class="node" x="290" y="158" width="130" height="64" rx="8"/><text class="t" x="355" y="187" text-anchor="middle">In progress</text><text class="s" x="355" y="205" text-anchor="middle">an agent is on it</text></g>
+<g class="k-h"><rect class="node" x="510" y="158" width="130" height="64" rx="8"/><text class="t" x="575" y="187" text-anchor="middle">Resolved</text><text class="s" x="575" y="205" text-anchor="middle">fix confirmed</text></g>
+<g class="k-n"><rect class="node" x="730" y="158" width="130" height="64" rx="8"/><text class="t" x="795" y="187" text-anchor="middle">Closed</text><text class="s" x="795" y="205" text-anchor="middle">no more changes</text></g>
+<g class="k-i"><rect class="node" x="290" y="40" width="130" height="64" rx="8"/><text class="t" x="355" y="69" text-anchor="middle">Waiting</text><text class="s" x="355" y="87" text-anchor="middle">on the customer</text></g>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <ul class="legend">
+    <li class="k-n"><span class="sw"></span>State</li>
+    <li class="k-i"><span class="sw"></span>Paused state</li>
+    <li class="k-h"><span class="sw"></span>The state that counts as done</li>
+    <li class="k-n"><span class="ln"></span>Transition</li>
+    <li class="k-d"><span class="ln is-dashed"></span>Backward move</li>
+  </ul>
+</figure>

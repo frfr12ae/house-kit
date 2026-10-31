@@ -1,0 +1,127 @@
+<!--
+@title Ranked picks
+@description A ranked list of recommendations, each with a rank, a title, one line on why, and a score bar. The top pick is the only row that is highlighted. Edit the list items to change the ranking.
+@tags ranking, recommendations, priorities, score, list, shortlist
+@preview fill
+@height 560
+@added 2026-10-31
+-->
+<style>
+  .c-ranked-picks {
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-ranked-picks .head { margin: 0 0 var(--ds-space-6); max-width: 60ch; }
+  .c-ranked-picks h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-ranked-picks .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-ranked-picks .list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    overflow: hidden;
+  }
+  .c-ranked-picks .pick {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) 168px;
+    align-items: center;
+    gap: var(--ds-space-5);
+    padding: var(--ds-space-5) var(--ds-space-6) var(--ds-space-5) var(--ds-space-5);
+    border-top: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-ranked-picks .pick:first-child { border-top: 0; }
+  .c-ranked-picks .pick.is-top { background: var(--ds-highlight-fill); box-shadow: inset 4px 0 0 var(--ds-highlight-line); }
+  .c-ranked-picks .rank {
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-muted);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .c-ranked-picks .is-top .rank { color: var(--ds-ink); }
+  .c-ranked-picks .title { margin: 0; font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-ranked-picks .why { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); max-width: 56ch; }
+  .c-ranked-picks .meta { margin: var(--ds-space-2) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-ranked-picks .score { display: grid; gap: var(--ds-space-2); justify-items: end; }
+  .c-ranked-picks .score b {
+    font-size: var(--ds-text-lg);
+    font-weight: 700;
+    color: var(--ds-ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .c-ranked-picks .score small { margin-left: 4px; font-size: var(--ds-text-xs); font-weight: 400; color: var(--ds-muted); }
+  .c-ranked-picks .bar { display: block; width: 100%; height: 6px; border-radius: var(--ds-radius-pill); background: color-mix(in srgb, var(--ds-line) 80%, transparent); overflow: hidden; }
+  .c-ranked-picks .bar i { display: block; width: var(--w); height: 100%; border-radius: inherit; background: var(--ds-info-line); }
+  .c-ranked-picks .is-top .bar i { background: var(--ds-highlight-line); }
+  @container (max-width: 560px) {
+    .c-ranked-picks { padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-ranked-picks .pick { grid-template-columns: 32px minmax(0, 1fr); gap: var(--ds-space-3) var(--ds-space-4); padding: var(--ds-space-4); }
+    .c-ranked-picks .score { grid-column: 2; justify-items: start; grid-template-columns: auto 1fr; align-items: center; gap: var(--ds-space-3); }
+    .c-ranked-picks .rank { font-size: var(--ds-text-lg); }
+  }
+</style>
+
+<section class="c-ranked-picks" aria-label="Ranked recommendations">
+  <div class="head">
+    <h3>Five moves, ranked by return on effort</h3>
+    <p class="hint">Score is impact divided by effort, scaled to 10. Start at the top.</p>
+  </div>
+  <ol class="list">
+    <li class="pick is-top">
+      <span class="rank" aria-label="Rank 1">1</span>
+      <div>
+        <h4 class="title">Merge the two intake forms</h4>
+        <p class="why">Customers fill in the same details twice today. One form removes the most common cause of follow-up emails.</p>
+        <p class="meta">Effort 2 of 10 · Impact 8 of 10</p>
+      </div>
+      <div class="score"><b>9.1<small>/ 10</small></b><span class="bar" aria-hidden="true"><i style="--w: 91%"></i></span></div>
+    </li>
+    <li class="pick">
+      <span class="rank" aria-label="Rank 2">2</span>
+      <div>
+        <h4 class="title">Auto-assign by postcode</h4>
+        <p class="why">Routing rules already exist on paper. Encoding them saves roughly a day of triage a week.</p>
+        <p class="meta">Effort 3 of 10 · Impact 7 of 10</p>
+      </div>
+      <div class="score"><b>8.2<small>/ 10</small></b><span class="bar" aria-hidden="true"><i style="--w: 82%"></i></span></div>
+    </li>
+    <li class="pick">
+      <span class="rank" aria-label="Rank 3">3</span>
+      <div>
+        <h4 class="title">Weekly queue review</h4>
+        <p class="why">A 20 minute standing check catches stuck requests before customers chase them.</p>
+        <p class="meta">Effort 1 of 10 · Impact 5 of 10</p>
+      </div>
+      <div class="score"><b>7.4<small>/ 10</small></b><span class="bar" aria-hidden="true"><i style="--w: 74%"></i></span></div>
+    </li>
+    <li class="pick">
+      <span class="rank" aria-label="Rank 4">4</span>
+      <div>
+        <h4 class="title">Self-service status page</h4>
+        <p class="why">Cuts status enquiries, but needs the tracking data from the first two moves to be reliable.</p>
+        <p class="meta">Effort 6 of 10 · Impact 7 of 10</p>
+      </div>
+      <div class="score"><b>6.0<small>/ 10</small></b><span class="bar" aria-hidden="true"><i style="--w: 60%"></i></span></div>
+    </li>
+    <li class="pick">
+      <span class="rank" aria-label="Rank 5">5</span>
+      <div>
+        <h4 class="title">Replace the ticketing tool</h4>
+        <p class="why">Large gain on paper, but a long migration. Revisit once the process above is stable.</p>
+        <p class="meta">Effort 9 of 10 · Impact 8 of 10</p>
+      </div>
+      <div class="score"><b>4.3<small>/ 10</small></b><span class="bar" aria-hidden="true"><i style="--w: 43%"></i></span></div>
+    </li>
+  </ol>
+</section>

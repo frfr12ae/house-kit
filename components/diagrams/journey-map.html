@@ -1,0 +1,151 @@
+<!--
+@title Journey map
+@description Stages across the top, a feeling curve over a good to poor scale, then rows for what the person does, where, and what gets in the way.
+@tags journey, customer, experience, touchpoints, pain points, stages, diagram
+@preview fill
+@height 640
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-journey-map {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-journey-map .head { margin-bottom: var(--ds-space-5); }
+  .c-journey-map h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-journey-map .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-journey-map .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-journey-map svg { display: block; width: 100%; min-width: 760px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-journey-map .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-journey-map .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-journey-map .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-journey-map .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-journey-map .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-journey-map .ln.is-dashed { border-top-style: dashed; }
+  .c-journey-map .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-journey-map .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-journey-map .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-journey-map .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-journey-map .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-journey-map .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-journey-map .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-journey-map .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-journey-map svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-journey-map .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-journey-map .node.dash { stroke-dasharray: 6 5; }
+  .c-journey-map .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-journey-map .edge.dash { stroke-dasharray: 6 5; }
+  .c-journey-map .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-journey-map .mk-n { stroke: var(--ds-neutral-line); }
+  .c-journey-map .mk-i { stroke: var(--ds-info-line); }
+  .c-journey-map .mk-h { stroke: var(--ds-highlight-line); }
+  .c-journey-map .mk-d { stroke: var(--ds-danger-line); }
+  .c-journey-map .mk-g { stroke: var(--ds-note-line); }
+  .c-journey-map text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-journey-map .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-journey-map .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-journey-map .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-journey-map .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-journey-map .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-journey-map .e.k-h { fill: var(--ds-text); }
+  .c-journey-map .e.k-d { fill: var(--ds-danger-line); }
+  .c-journey-map .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-journey-map .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-journey-map { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-journey-map .frame { padding: var(--ds-space-3); }
+    .c-journey-map .scrollhint { display: block; }
+    .c-journey-map .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-journey-map">
+  <figcaption class="head">
+    <h3>A weekend stay, start to finish</h3>
+    <p class="hint">How a guest feels at each stage, and what is happening when it dips.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 920 480" role="img" aria-label="Journey map of a hotel guest over five stages. Feeling is good at booking and during the stay, and lowest on arrival because of a twenty minute queue.">
+<defs><marker id="journey-map-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="journey-map-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="journey-map-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="journey-map-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="journey-map-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<line class="guide" x1="100" y1="124" x2="900" y2="124" stroke-dasharray="2 5"/>
+<text class="mu" x="88" y="128" text-anchor="end">Good</text>
+<line class="guide" x1="100" y1="170" x2="900" y2="170" stroke-dasharray="2 5"/>
+<text class="mu" x="88" y="174" text-anchor="end">Okay</text>
+<line class="guide" x1="100" y1="216" x2="900" y2="216" stroke-dasharray="2 5"/>
+<text class="mu" x="88" y="220" text-anchor="end">Poor</text>
+<line class="guide" x1="0" y1="256" x2="920" y2="256"/>
+<line class="guide" x1="0" y1="334" x2="920" y2="334"/>
+<line class="guide" x1="0" y1="404" x2="920" y2="404"/>
+<line class="guide" x1="180" y1="80" x2="180" y2="244" stroke-dasharray="2 5"/>
+<line class="guide" x1="340" y1="80" x2="340" y2="244" stroke-dasharray="2 5"/>
+<line class="guide" x1="500" y1="80" x2="500" y2="244" stroke-dasharray="2 5"/>
+<line class="guide" x1="660" y1="80" x2="660" y2="244" stroke-dasharray="2 5"/>
+<line class="guide" x1="820" y1="80" x2="820" y2="244" stroke-dasharray="2 5"/>
+<g class="k-n"><rect class="node" x="110" y="14" width="140" height="44" rx="22"/><text class="t" x="180" y="41" text-anchor="middle">1  Discover</text></g>
+<g class="k-n"><rect class="node" x="270" y="14" width="140" height="44" rx="22"/><text class="t" x="340" y="41" text-anchor="middle">2  Book</text></g>
+<g class="k-n"><rect class="node" x="430" y="14" width="140" height="44" rx="22"/><text class="t" x="500" y="41" text-anchor="middle">3  Arrive</text></g>
+<g class="k-n"><rect class="node" x="590" y="14" width="140" height="44" rx="22"/><text class="t" x="660" y="41" text-anchor="middle">4  Stay</text></g>
+<g class="k-n"><rect class="node" x="750" y="14" width="140" height="44" rx="22"/><text class="t" x="820" y="41" text-anchor="middle">5  Leave</text></g>
+<path class="edge k-i" style="stroke-width:2.5" d="M180 152 C206.7 148 286.7 117.7 340 128 C393.3 138.3 446.7 215.7 500 214 C553.3 212.3 606.7 127 660 118 C713.3 109 793.3 153 820 160"/>
+<g class="k-i"><circle cx="180" cy="152" r="5.5" style="fill:var(--ds-raised);stroke:var(--s);stroke-width:2"/></g>
+<g class="k-i"><circle cx="340" cy="128" r="5.5" style="fill:var(--ds-raised);stroke:var(--s);stroke-width:2"/></g>
+<g class="k-d"><circle cx="500" cy="214" r="11" style="fill:var(--f);stroke:var(--s);stroke-width:1.5"/><circle cx="500" cy="214" r="5" style="fill:var(--s)"/></g>
+<g class="k-i"><circle cx="660" cy="118" r="5.5" style="fill:var(--ds-raised);stroke:var(--s);stroke-width:2"/></g>
+<g class="k-i"><circle cx="820" cy="160" r="5.5" style="fill:var(--ds-raised);stroke:var(--s);stroke-width:2"/></g>
+<text class="mu" x="88" y="290" text-anchor="end">Doing</text>
+<text class="mu" x="88" y="372" text-anchor="end">Where</text>
+<text class="mu" x="88" y="440" text-anchor="end">Friction</text>
+<text class="t" x="180" y="284" text-anchor="middle">Compares rooms</text>
+<text class="t" x="180" y="303" text-anchor="middle">on the website</text>
+<text class="t" x="340" y="284" text-anchor="middle">Picks dates</text>
+<text class="t" x="340" y="303" text-anchor="middle">and pays</text>
+<text class="t" x="500" y="284" text-anchor="middle">Looks for the</text>
+<text class="t" x="500" y="303" text-anchor="middle">front desk</text>
+<text class="t" x="660" y="284" text-anchor="middle">Uses the garden</text>
+<text class="t" x="660" y="303" text-anchor="middle">and the spa</text>
+<text class="t" x="820" y="284" text-anchor="middle">Checks out</text>
+<text class="t" x="820" y="303" text-anchor="middle">in the app</text>
+<g class="k-i"><rect class="node" x="114" y="348" width="132" height="36" rx="18"/><text class="t" x="180" y="371" text-anchor="middle">Website</text></g>
+<g class="k-i"><rect class="node" x="274" y="348" width="132" height="36" rx="18"/><text class="t" x="340" y="371" text-anchor="middle">Booking form</text></g>
+<g class="k-i"><rect class="node" x="434" y="348" width="132" height="36" rx="18"/><text class="t" x="500" y="371" text-anchor="middle">Front desk</text></g>
+<g class="k-i"><rect class="node" x="594" y="348" width="132" height="36" rx="18"/><text class="t" x="660" y="371" text-anchor="middle">Garden, spa</text></g>
+<g class="k-i"><rect class="node" x="754" y="348" width="132" height="36" rx="18"/><text class="t" x="820" y="371" text-anchor="middle">Mobile app</text></g>
+<g class="k-d"><rect class="node dash" x="272" y="420" width="136" height="36" rx="18"/><text class="t" x="340" y="443" text-anchor="middle">Price shown late</text></g>
+<g class="k-d"><rect class="node dash" x="432" y="420" width="136" height="36" rx="18"/><text class="t" x="500" y="443" text-anchor="middle">20 minute queue</text></g>
+<g class="k-d"><rect class="node dash" x="752" y="420" width="136" height="36" rx="18"/><text class="t" x="820" y="443" text-anchor="middle">Receipt by post</text></g>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <p class="note">The lowest point is arrival. Fixing the queue matters more than the booking page.</p>
+  <ul class="legend">
+    <li class="k-n"><span class="sw"></span>Stage</li>
+    <li class="k-i"><span class="ln"></span>Feeling over time</li>
+    <li class="k-i"><span class="sw"></span>Touchpoint</li>
+    <li class="k-d"><span class="sw"></span>Friction, lowest point ringed</li>
+  </ul>
+</figure>

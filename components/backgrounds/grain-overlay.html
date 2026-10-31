@@ -1,0 +1,93 @@
+<!--
+@title Grain overlay
+@description Film grain that sits on top of any section: add one empty div as the last child of a positioned block. Pure CSS with an inline SVG noise tile, no images.
+@tags background, grain, noise, film, texture, overlay
+@preview fill
+@height 420
+@added 2026-10-31
+-->
+<style>
+  .c-grain-overlay,
+  .c-grain-overlay *,
+  .c-grain-overlay *::before,
+  .c-grain-overlay *::after { box-sizing: border-box; }
+  .c-grain-overlay {
+    /* tune the look here */
+    --grain-opacity: 0.5;
+    --grain-size: 180px;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 420px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 90% at 18% 20%, color-mix(in srgb, var(--ds-highlight-line) 55%, transparent), transparent 70%),
+      radial-gradient(ellipse 70% 90% at 85% 85%, color-mix(in srgb, var(--ds-info-line) 60%, transparent), transparent 70%),
+      var(--ds-bg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-grain-overlay .content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-4);
+    max-width: 720px;
+    padding: var(--ds-space-8) var(--ds-space-5);
+    text-align: center;
+  }
+  .c-grain-overlay .eyebrow {
+    padding: var(--ds-space-1) var(--ds-space-3);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: color-mix(in srgb, var(--ds-surface) 70%, transparent);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+  }
+  .c-grain-overlay h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: clamp(32px, 6vw, var(--ds-text-3xl));
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-grain-overlay .sub { margin: 0; max-width: 32em; font-size: var(--ds-text-lg); line-height: var(--ds-leading-snug); color: var(--ds-text); text-wrap: pretty; }
+
+  /* the overlay itself: copy this block and the .grain element */
+  .c-grain-overlay .grain {
+    position: absolute;
+    inset: -50%;
+    z-index: 2;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.6' intercept='-0.8'/%3E%3CfeFuncG type='linear' slope='2.6' intercept='-0.8'/%3E%3CfeFuncB type='linear' slope='2.6' intercept='-0.8'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: var(--grain-size) var(--grain-size);
+    animation: c-grain-overlay-shift calc(var(--ds-dur-story) * 0.6) steps(1) infinite;
+  }
+  @keyframes c-grain-overlay-shift {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-3%, 2%); }
+    40% { transform: translate(2%, -4%); }
+    60% { transform: translate(-4%, -2%); }
+    80% { transform: translate(3%, 3%); }
+    100% { transform: translate(0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-grain-overlay .grain { animation: none; }
+  }
+</style>
+
+<section class="c-grain-overlay">
+  <div class="content">
+    <span class="eyebrow">Autumn edition</span>
+    <h2>A little texture goes a long way</h2>
+    <p class="sub">Flat colour looks digital. A layer of grain on top makes gradients feel printed and keeps banding out of the dark areas.</p>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+</section>

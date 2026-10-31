@@ -1,0 +1,131 @@
+<!--
+@title Sequence diagram
+@description Actors across the top, time flowing down, with lifelines, activation bars, a self-call, returns, an async message and a failure.
+@tags sequence, messages, api, lifelines, request, response, diagram
+@preview fill
+@height 600
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-sequence {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-sequence .head { margin-bottom: var(--ds-space-5); }
+  .c-sequence h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-sequence .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-sequence .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-sequence svg { display: block; width: 100%; min-width: 656px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-sequence .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-sequence .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-sequence .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-sequence .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-sequence .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-sequence .ln.is-dashed { border-top-style: dashed; }
+  .c-sequence .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-sequence .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-sequence .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-sequence .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-sequence .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-sequence .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-sequence .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-sequence .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-sequence svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-sequence .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-sequence .node.dash { stroke-dasharray: 6 5; }
+  .c-sequence .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-sequence .edge.dash { stroke-dasharray: 6 5; }
+  .c-sequence .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-sequence .mk-n { stroke: var(--ds-neutral-line); }
+  .c-sequence .mk-i { stroke: var(--ds-info-line); }
+  .c-sequence .mk-h { stroke: var(--ds-highlight-line); }
+  .c-sequence .mk-d { stroke: var(--ds-danger-line); }
+  .c-sequence .mk-g { stroke: var(--ds-note-line); }
+  .c-sequence text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-sequence .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-sequence .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-sequence .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-sequence .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-sequence .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-sequence .e.k-h { fill: var(--ds-text); }
+  .c-sequence .e.k-d { fill: var(--ds-danger-line); }
+  .c-sequence .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-sequence .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-sequence { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-sequence .frame { padding: var(--ds-space-3); }
+    .c-sequence .scrollhint { display: block; }
+    .c-sequence .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-sequence">
+  <figcaption class="head">
+    <h3>Booking a table</h3>
+    <p class="hint">One request from the guest, one confirmation back, and a receipt that may bounce.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 820 452" role="img" aria-label="Sequence diagram: a guest requests a table through the web app, the booking service checks availability and confirms, and a receipt email is queued but bounces.">
+<defs><marker id="sequence-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="sequence-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="sequence-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="sequence-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="sequence-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<line class="guide" x1="110" y1="72" x2="110" y2="436" stroke-dasharray="3 4"/>
+<line class="guide" x1="300" y1="72" x2="300" y2="436" stroke-dasharray="3 4"/>
+<line class="guide" x1="510" y1="72" x2="510" y2="436" stroke-dasharray="3 4"/>
+<line class="guide" x1="710" y1="72" x2="710" y2="436" stroke-dasharray="3 4"/>
+<g class="k-n"><rect class="node" x="295" y="120" width="10" height="292" rx="2"/></g>
+<g class="k-n"><rect class="node" x="505" y="164" width="10" height="104" rx="2"/></g>
+<g class="k-n"><rect class="node" x="705" y="360" width="10" height="52" rx="2"/></g>
+<path class="edge k-n" d="M110 120 H295" marker-end="url(#sequence-an)"/>
+<path class="edge k-n" d="M305 164 H505" marker-end="url(#sequence-an)"/>
+<path class="edge k-n" d="M515 198 H562 V236 H520" marker-end="url(#sequence-an)"/>
+<path class="edge k-n dash" d="M505 268 H305" marker-end="url(#sequence-an)"/>
+<path class="edge k-h" d="M295 312 H110" marker-end="url(#sequence-ah)"/>
+<path class="edge k-n dash" d="M305 360 H705" marker-end="url(#sequence-an)"/>
+<path class="edge k-d dash" d="M705 412 H305" marker-end="url(#sequence-ad)"/>
+<text class="e" x="202" y="110" text-anchor="middle">Request a table</text>
+<text class="e m" x="405" y="154" text-anchor="middle">POST /reservations</text>
+<text class="e" x="574" y="222" text-anchor="start">Check availability</text>
+<text class="e m" x="405" y="258" text-anchor="middle">201 Created</text>
+<text class="e" x="202" y="302" text-anchor="middle">Show confirmation</text>
+<text class="e" x="610" y="350" text-anchor="middle">Queue receipt email</text>
+<text class="e k-d" x="610" y="402" text-anchor="middle">Bounced, retry in 5 min</text>
+<g class="k-n"><rect class="node" x="35" y="16" width="150" height="56" rx="8"/><text class="t" x="110" y="41" text-anchor="middle">Guest</text><text class="s" x="110" y="59" text-anchor="middle">browser</text></g>
+<g class="k-i"><rect class="node" x="225" y="16" width="150" height="56" rx="8"/><text class="t" x="300" y="41" text-anchor="middle">Web app</text><text class="s" x="300" y="59" text-anchor="middle">booking page</text></g>
+<g class="k-h"><rect class="node" x="435" y="16" width="150" height="56" rx="8"/><text class="t" x="510" y="41" text-anchor="middle">Booking service</text><text class="s" x="510" y="59" text-anchor="middle">owns the table</text></g>
+<g class="k-n"><rect class="node dash" x="635" y="16" width="150" height="56" rx="8"/><text class="t" x="710" y="41" text-anchor="middle">Mailer</text><text class="s" x="710" y="59" text-anchor="middle">async queue</text></g>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <ul class="legend">
+    <li class="k-h"><span class="sw"></span>Focal actor</li>
+    <li class="k-n"><span class="sw"></span>Other actor, activation bar</li>
+    <li class="k-n"><span class="ln"></span>Request</li>
+    <li class="k-n"><span class="ln is-dashed"></span>Return or async</li>
+    <li class="k-h"><span class="ln"></span>Primary response</li>
+    <li class="k-d"><span class="ln is-dashed"></span>Failure</li>
+  </ul>
+</figure>

@@ -1,0 +1,341 @@
+<!--
+@title Review comments
+@description Pin feedback to any element of a page. Turn on comment mode, click what needs changing, write the note, then export every comment as markdown grouped by section. Scoped to one review area, or the whole document on request.
+@tags review, feedback, comments, annotate, markdown, export, qa
+@preview fill
+@height 560
+@added 2026-10-31
+-->
+<style>
+  .c-review-comments {
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-review-comments .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .c-review-comments [hidden] { display: none !important; }
+  .c-review-comments .bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-3) var(--ds-space-5); margin-bottom: var(--ds-space-5); padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-review-comments .mode { display: inline-flex; align-items: center; gap: var(--ds-space-3); padding: var(--ds-space-1) var(--ds-space-2) var(--ds-space-1) var(--ds-space-1); border: 0; border-radius: var(--ds-radius-pill); background: transparent; color: var(--ds-ink); font-size: var(--ds-text-sm); font-weight: 700; cursor: pointer; }
+  .c-review-comments .mode:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-review-comments .switch { position: relative; flex: none; width: 40px; height: 24px; border-radius: var(--ds-radius-pill); background: var(--ds-line); transition: background var(--ds-dur-base) var(--ds-ease); }
+  .c-review-comments .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--ds-raised); box-shadow: var(--ds-shadow-sm); transition: transform var(--ds-dur-base) var(--ds-ease-spring); }
+  .c-review-comments .mode[aria-checked="true"] .switch { background: var(--ds-action); }
+  .c-review-comments .mode[aria-checked="true"] .switch::after { transform: translateX(16px); }
+  .c-review-comments .hint { flex: 1 1 220px; margin: 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-review-comments .count { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 8px; border: var(--ds-hairline) solid var(--ds-highlight-line); border-radius: var(--ds-radius-pill); background: var(--ds-highlight-fill); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  .c-review-comments .layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: var(--ds-space-5); align-items: start; }
+
+  .c-review-comments [data-review-area] { position: relative; min-width: 0; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-review-comments [data-review-area].is-armed, .c-review-comments [data-review-area].is-armed * { cursor: crosshair; }
+
+  .c-review-comments .site-nav { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-4); padding: var(--ds-space-4) var(--ds-space-5); border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: var(--ds-text-sm); }
+  .c-review-comments .site-nav b { color: var(--ds-ink); }
+  .c-review-comments .site-nav ul { display: flex; gap: var(--ds-space-5); margin: 0; padding: 0; list-style: none; }
+  .c-review-comments .site-nav a { color: var(--ds-text); text-decoration: none; }
+  .c-review-comments .intro { padding: var(--ds-space-7) var(--ds-space-5) var(--ds-space-6); }
+  .c-review-comments .intro h2 { margin: 0 0 var(--ds-space-3); max-width: 18em; font-size: var(--ds-text-xl); letter-spacing: -0.02em; }
+  .c-review-comments .intro p { margin: 0 0 var(--ds-space-5); max-width: 34em; font-size: var(--ds-text-md); }
+  .c-review-comments .cta { display: inline-block; padding: var(--ds-space-3) var(--ds-space-5); border-radius: var(--ds-radius-pill); background: var(--ds-action); color: var(--ds-on-action); font-size: var(--ds-text-sm); font-weight: 600; text-decoration: none; }
+  .c-review-comments .plans { padding: var(--ds-space-5); border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-review-comments .plans h3 { margin: 0 0 var(--ds-space-4); font-size: var(--ds-text-md); }
+  .c-review-comments .plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ds-space-3); }
+  .c-review-comments .plan { padding: var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); font-size: var(--ds-text-sm); }
+  .c-review-comments .plan h4 { margin: 0 0 2px; font-size: var(--ds-text-sm); }
+  .c-review-comments .plan p { margin: 0; color: var(--ds-muted); }
+  .c-review-comments .plan strong { display: block; margin-top: var(--ds-space-2); font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-review-comments .site-foot { padding: var(--ds-space-4) var(--ds-space-5); border-top: var(--ds-hairline) solid var(--ds-line); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+
+  .c-review-comments .layer { position: absolute; top: 0; left: 0; width: 0; height: 0; z-index: 20; }
+  .c-review-comments .box { position: absolute; border: 2px solid var(--ds-info-line); border-radius: var(--ds-radius-sm); background: color-mix(in srgb, var(--ds-info-line) 14%, transparent); pointer-events: none; }
+  .c-review-comments .pin { position: absolute; display: grid; place-items: center; width: 26px; height: 26px; margin: -13px 0 0 -13px; padding: 0; border: 2px solid var(--ds-raised); border-radius: 50%; background: var(--ds-highlight-line); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 800; font-variant-numeric: tabular-nums; box-shadow: var(--ds-shadow-md); cursor: pointer; }
+  .c-review-comments .pin:focus-visible { outline: none; box-shadow: var(--ds-focus), var(--ds-shadow-md); }
+  .c-review-comments .pin.is-flash { animation: c-review-comments-flash var(--ds-dur-slow) var(--ds-ease) 2; }
+  @keyframes c-review-comments-flash { 50% { transform: scale(1.35); } }
+  .c-review-comments .pop { position: absolute; width: 264px; padding: var(--ds-space-4); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); box-shadow: var(--ds-shadow-lg); color: var(--ds-text); }
+  .c-review-comments .pop .target { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-xs); color: var(--ds-muted); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .c-review-comments .pop textarea { display: block; width: 100%; min-height: 84px; padding: var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); color: var(--ds-ink); font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); resize: vertical; }
+  .c-review-comments .pop textarea:focus-visible { outline: none; border-color: var(--ds-info-line); box-shadow: var(--ds-focus); }
+  .c-review-comments .pop .row { display: flex; align-items: center; gap: var(--ds-space-2); margin-top: var(--ds-space-3); }
+  .c-review-comments .pop .row .grow { flex: 1; }
+
+  .c-review-comments .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 var(--ds-space-4); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); color: var(--ds-ink); font-size: var(--ds-text-sm); font-weight: 600; cursor: pointer; }
+  .c-review-comments .btn:hover:not(:disabled) { border-color: var(--ds-neutral-line); }
+  .c-review-comments .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .c-review-comments .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-review-comments .btn.is-primary { border-color: var(--ds-action); background: var(--ds-action); color: var(--ds-on-action); }
+  .c-review-comments .btn.is-danger { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-review-comments .link { padding: var(--ds-space-1) var(--ds-space-2); border: 0; border-radius: var(--ds-radius-sm); background: transparent; color: var(--ds-text); font-size: var(--ds-text-xs); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .c-review-comments .link:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+
+  .c-review-comments .side { padding: var(--ds-space-4); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-review-comments .side h3 { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-sm); color: var(--ds-ink); }
+  .c-review-comments .list { display: grid; gap: var(--ds-space-2); max-height: 300px; margin: 0 0 var(--ds-space-4); padding: 0; list-style: none; overflow: auto; }
+  .c-review-comments .list .empty { padding: var(--ds-space-4); border: var(--ds-hairline) dashed var(--ds-line); border-radius: var(--ds-radius-md); font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-review-comments .entry { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: var(--ds-space-3); width: 100%; padding: var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-surface); text-align: left; cursor: pointer; }
+  .c-review-comments .entry:hover { border-color: var(--ds-neutral-line); }
+  .c-review-comments .entry:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-review-comments .entry i { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ds-highlight-fill); border: var(--ds-hairline) solid var(--ds-highlight-line); font-style: normal; font-size: var(--ds-text-xs); font-weight: 800; color: var(--ds-ink); }
+  .c-review-comments .entry small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-review-comments .entry span { display: block; font-size: var(--ds-text-sm); color: var(--ds-ink); line-height: var(--ds-leading-snug); overflow-wrap: anywhere; }
+  .c-review-comments .side .btns { display: flex; flex-wrap: wrap; gap: var(--ds-space-2); }
+  .c-review-comments .status { min-height: 1.4em; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+
+  @media (max-width: 860px) {
+    .c-review-comments .layout { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .c-review-comments { padding: var(--ds-space-5) var(--ds-space-4); }
+    .c-review-comments .site-nav ul { display: none; }
+    .c-review-comments .plan-grid { grid-template-columns: 1fr; }
+    .c-review-comments .intro { padding: var(--ds-space-6) var(--ds-space-4); }
+  }
+</style>
+
+<section class="c-review-comments" aria-label="Review comments" data-review-scope="area">
+  <div class="bar" data-rc-ui>
+    <button class="mode" type="button" role="switch" aria-checked="false"><span class="switch" aria-hidden="true"></span>Comment mode</button>
+    <p class="hint">Off: the page behaves normally. On: click anything in the page to pin a note to it.</p>
+    <span class="count"><span data-count>0</span> comments</span>
+  </div>
+
+  <div class="layout">
+    <div data-review-area>
+      <header class="site-nav" data-review-section="Navigation"><b>Northlight Books</b><ul><li><a href="#c-review-comments-plans">Plans</a></li><li><a href="#c-review-comments-plans">Customers</a></li><li><a href="#c-review-comments-plans">Contact</a></li></ul></header>
+      <section class="intro" data-review-section="Hero">
+        <h2>Calm bookkeeping for studios of one to ten</h2>
+        <p>Send invoices, match payments and see what is left each month without learning accounting first.</p>
+        <a class="cta" href="#c-review-comments-plans">Start a free month</a>
+      </section>
+      <section class="plans" id="c-review-comments-plans" data-review-section="Plans">
+        <h3>Pick a plan</h3>
+        <div class="plan-grid">
+          <article class="plan"><h4>Solo</h4><p>One person, unlimited invoices</p><strong>&euro;12 a month</strong></article>
+          <article class="plan"><h4>Studio</h4><p>Up to five people and a shared inbox</p><strong>&euro;29 a month</strong></article>
+          <article class="plan"><h4>Collective</h4><p>Ten people, bank sync, a yearly review</p><strong>&euro;59 a month</strong></article>
+        </div>
+      </section>
+      <footer class="site-foot" data-review-section="Footer">Northlight Books is a fictional product used for this demo.</footer>
+    </div>
+
+    <aside class="side" data-rc-ui aria-label="Comments">
+      <h3>Comments</h3>
+      <ol class="list"></ol>
+      <div class="btns">
+        <button class="btn is-primary" type="button" data-act="export">Export markdown</button>
+        <button class="btn" type="button" data-act="copy">Copy</button>
+        <button class="btn" type="button" data-act="clear">Clear</button>
+      </div>
+      <p class="status" role="status" aria-live="polite"></p>
+    </aside>
+  </div>
+</section>
+
+<script>
+(() => {
+  // Scope: the widget works inside the nearest [data-review-area]. Set data-review-scope="document" on the
+  // root to review the whole page instead (then the pin layer is attached to the body).
+  const TITLE = 'Review comments';
+  const UI = '[data-rc-ui], .layer, .pop';
+
+  document.querySelectorAll('.c-review-comments').forEach((root, index) => {
+    const docScope = root.dataset.reviewScope === 'document';
+    const host = docScope ? document.body : (root.closest('[data-review-area]') || root.querySelector('[data-review-area]'));
+    if (!host) return;
+    const KEY = root.dataset.storageKey || 'ok:review-comments:' + index;
+    const $ = (s) => root.querySelector(s);
+    const mode = $('.mode');
+    const list = $('.list');
+    const status = $('.status');
+    const countEl = $('[data-count]');
+
+    const layer = document.createElement('div'); layer.className = 'layer';
+    const box = document.createElement('div'); box.className = 'box'; box.hidden = true;
+    layer.appendChild(box);
+    if (!docScope && getComputedStyle(host).position === 'static') host.style.position = 'relative';
+    (docScope ? root : host).appendChild(layer);
+
+    let comments = [];
+    try { comments = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { comments = []; }
+    if (!Array.isArray(comments)) comments = [];
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(comments)); } catch (e) { /* storage unavailable: keep working in memory */ } };
+    const say = (m) => { status.textContent = m; };
+    const uid = () => Math.random().toString(36).slice(2, 8);
+    let on = false;
+    let pop = null;
+    let armedClear = false;
+
+    // The layer sits at the top left of its containing block, so its own rect is the origin for every pin.
+    const origin = () => { const r = layer.getBoundingClientRect(); return { x: r.left, y: r.top }; };
+
+    function selectorFor(el) {
+      if (el === host) return '';
+      const parts = [];
+      let n = el;
+      while (n && n !== host && n.nodeType === 1) {
+        let part = n.tagName.toLowerCase();
+        const p = n.parentElement;
+        if (p) { const sibs = [...p.children].filter((c) => c.tagName === n.tagName); if (sibs.length > 1) part += ':nth-of-type(' + (sibs.indexOf(n) + 1) + ')'; }
+        parts.unshift(part); n = p;
+      }
+      return parts.join(' > ');
+    }
+    const resolve = (sel) => { if (!sel) return host; try { return host.querySelector(':scope > ' + sel); } catch (e) { return null; } };
+    const excerpt = (el) => {
+      if (el.tagName === 'IMG') return '[image] ' + (el.getAttribute('alt') || el.getAttribute('src') || '');
+      const t = (el.innerText || el.textContent || '').trim().replace(/\s+/g, ' ');
+      return t.slice(0, 120) || '<' + el.tagName.toLowerCase() + '>';
+    };
+    function sectionOf(el) {
+      const s = el.closest('[data-review-section]') || el.closest('section, article, header, footer, nav');
+      if (!s || (!docScope && !host.contains(s)) || s === root) return 'General';
+      if (s.dataset.reviewSection) return s.dataset.reviewSection;
+      const h = s.querySelector('h1, h2, h3, h4');
+      return h ? h.textContent.trim().slice(0, 60) : s.tagName.toLowerCase();
+    }
+
+    function renderPins() {
+      layer.querySelectorAll('.pin').forEach((p) => p.remove());
+      const o = origin();
+      comments.forEach((c, i) => {
+        const el = resolve(c.sel); if (!el) return;
+        const r = el.getBoundingClientRect(); if (!r.width && !r.height) return;
+        const pin = document.createElement('button');
+        pin.type = 'button'; pin.className = 'pin'; pin.textContent = String(i + 1); pin.dataset.id = c.id;
+        pin.setAttribute('aria-label', 'Comment ' + (i + 1) + ': ' + c.text.slice(0, 60));
+        pin.style.left = (r.left + r.width * c.fx - o.x) + 'px'; pin.style.top = (r.top + r.height * c.fy - o.y) + 'px';
+        pin.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openPop({ existing: c }); });
+        layer.appendChild(pin);
+      });
+    }
+
+    function renderList() {
+      list.innerHTML = '';
+      if (!comments.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'Nothing yet. Turn on comment mode and click part of the page.'; list.appendChild(li); }
+      comments.forEach((c, i) => {
+        const li = document.createElement('li');
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'entry';
+        b.innerHTML = '<i></i><div><small></small><span></span></div>';
+        b.querySelector('i').textContent = String(i + 1); b.querySelector('small').textContent = c.section + ': ' + c.excerpt; b.querySelector('span').textContent = c.text;
+        b.addEventListener('click', () => {
+          const pin = layer.querySelector('.pin[data-id="' + c.id + '"]');
+          if (pin) { pin.scrollIntoView({ block: 'center', behavior: 'smooth' }); pin.classList.remove('is-flash'); void pin.offsetWidth; pin.classList.add('is-flash'); }
+          openPop({ existing: c });
+        });
+        li.appendChild(b); list.appendChild(li);
+      });
+      countEl.textContent = String(comments.length);
+      $('[data-act="export"]').disabled = !comments.length; $('[data-act="copy"]').disabled = !comments.length; $('[data-act="clear"]').disabled = !comments.length;
+    }
+    const paint = () => { renderPins(); renderList(); };
+
+    function closePop() { if (pop) { pop.remove(); pop = null; } }
+
+    function openPop(opts) {
+      closePop();
+      const ex = opts.existing;
+      const el = ex ? resolve(ex.sel) : opts.target;
+      if (!el) return;
+      const o = origin();
+      const r = el.getBoundingClientRect();
+      const px = ex ? r.left + r.width * ex.fx : opts.cx;
+      const py = ex ? r.top + r.height * ex.fy : opts.cy;
+      pop = document.createElement('div'); pop.className = 'pop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', ex ? 'Edit comment' : 'New comment');
+      pop.innerHTML = '<p class="target"></p><textarea placeholder="What should change here?" aria-label="Comment"></textarea><div class="row"><button type="button" class="link" data-del hidden>Delete</button><span class="grow"></span><button type="button" class="btn" data-cancel>Cancel</button><button type="button" class="btn is-primary" data-save>Save</button></div>';
+      pop.querySelector('.target').textContent = excerpt(el);
+      const ta = pop.querySelector('textarea'); ta.value = ex ? ex.text : '';
+      const hostW = (layer.offsetParent || document.documentElement).clientWidth;
+      pop.style.left = Math.max(8, Math.min(px - o.x + 14, hostW - 264 - 8)) + 'px';
+      pop.style.top = Math.max(8, py - o.y + 14) + 'px';
+      layer.appendChild(pop);
+      pop.style.pointerEvents = 'auto';
+      const done = () => { const t = ta.value.trim(); if (!t) { if (ex) remove(ex.id); closePop(); return; } if (ex) { ex.text = t; } else { comments.push({ id: uid(), sel: selectorFor(el), fx: opts.fx, fy: opts.fy, text: t, excerpt: excerpt(el), section: sectionOf(el), at: new Date().toISOString(), exported: false }); } save(); paint(); closePop(); say(ex ? 'Comment updated.' : 'Comment added.'); };
+      pop.querySelector('[data-save]').addEventListener('click', done);
+      pop.querySelector('[data-cancel]').addEventListener('click', closePop);
+      const del = pop.querySelector('[data-del]'); if (ex) { del.hidden = false; del.addEventListener('click', () => { remove(ex.id); closePop(); }); }
+      pop.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); closePop(); } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); done(); } });
+      ta.focus();
+    }
+    function remove(id) { comments = comments.filter((c) => c.id !== id); save(); paint(); say('Comment deleted.'); }
+
+    function setMode(v) {
+      on = v; mode.setAttribute('aria-checked', String(on)); host.classList.toggle('is-armed', on); box.hidden = true;
+      if (!on) closePop();
+      say(on ? 'Comment mode is on. Click an element, or focus one and press Enter.' : '');
+    }
+    mode.addEventListener('click', () => setMode(!on));
+
+    host.addEventListener('mousemove', (e) => {
+      if (!on) return;
+      if (e.target.closest(UI)) { box.hidden = true; return; }
+      const el = e.target; if (el === host) { box.hidden = true; return; }
+      const r = el.getBoundingClientRect(); const o = origin();
+      box.hidden = false; box.style.left = (r.left - o.x) + 'px'; box.style.top = (r.top - o.y) + 'px'; box.style.width = r.width + 'px'; box.style.height = r.height + 'px';
+    });
+    host.addEventListener('mouseleave', () => { box.hidden = true; });
+
+    host.addEventListener('click', (e) => {
+      if (!on || e.target.closest(UI) || e.target === host) return;
+      e.preventDefault(); e.stopPropagation();
+      const el = e.target; const r = el.getBoundingClientRect();
+      openPop({ target: el, cx: e.clientX, cy: e.clientY, fx: r.width ? (e.clientX - r.left) / r.width : 0.5, fy: r.height ? (e.clientY - r.top) / r.height : 0.5 });
+    }, true);
+
+    host.addEventListener('keydown', (e) => {
+      if (!on || e.key !== 'Enter' || e.target.closest(UI) || e.target === host) return;
+      e.preventDefault(); e.stopPropagation();
+      const r = e.target.getBoundingClientRect();
+      openPop({ target: e.target, cx: r.left + r.width / 2, cy: r.top + r.height / 2, fx: 0.5, fy: 0.5 });
+    }, true);
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && pop) closePop(); });
+    window.addEventListener('resize', renderPins);
+    if (window.ResizeObserver) new ResizeObserver(renderPins).observe(host);
+
+    function toMarkdown() {
+      const groups = [];
+      comments.forEach((c, i) => { let g = groups.find((x) => x.name === c.section); if (!g) { g = { name: c.section, items: [] }; groups.push(g); } g.items.push([i + 1, c]); });
+      const out = ['# ' + TITLE, '', 'Exported ' + new Date().toISOString().slice(0, 10) + '. ' + comments.length + ' comment' + (comments.length === 1 ? '' : 's') + '.', ''];
+      groups.forEach((g) => {
+        out.push('## ' + g.name, '');
+        g.items.forEach(([n, c]) => {
+          out.push('### ' + n + '. ' + c.excerpt.slice(0, 70), '', c.text, '', '- Element: `' + (c.sel || 'area') + '`', '- Added: ' + c.at.slice(0, 16).replace('T', ' '), '');
+        });
+      });
+      return out.join('\n').trim() + '\n';
+    }
+    const markExported = () => { comments.forEach((c) => { c.exported = true; }); save(); };
+
+    $('[data-act="export"]').addEventListener('click', () => {
+      try {
+        const url = URL.createObjectURL(new Blob([toMarkdown()], { type: 'text/markdown' }));
+        const a = document.createElement('a'); a.href = url; a.download = 'review-comments-' + new Date().toISOString().slice(0, 10) + '.md';
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+        markExported(); say('Exported ' + comments.length + ' comments as markdown.');
+      } catch (e) { say('Download is blocked here. Use Copy instead.'); }
+    });
+    $('[data-act="copy"]').addEventListener('click', async () => {
+      let ok = false; const text = toMarkdown();
+      try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {
+        try { const t = document.createElement('textarea'); t.value = text; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); ok = document.execCommand('copy'); t.remove(); } catch (e2) { ok = false; }
+      }
+      if (ok) { markExported(); say('Markdown copied to the clipboard.'); } else say('Copy was blocked by the browser.');
+    });
+    $('[data-act="clear"]').addEventListener('click', (e) => {
+      const b = e.currentTarget; const pending = comments.filter((c) => !c.exported).length;
+      if (!armedClear) {
+        armedClear = true; b.textContent = 'Confirm clear'; b.classList.add('is-danger');
+        say(pending ? pending + ' comment' + (pending === 1 ? ' has' : 's have') + ' not been exported. Click again to delete all.' : 'All comments are exported. Click again to delete them.');
+        setTimeout(() => { armedClear = false; b.textContent = 'Clear'; b.classList.remove('is-danger'); }, 4000); return;
+      }
+      armedClear = false; b.textContent = 'Clear'; b.classList.remove('is-danger');
+      comments = []; save(); paint(); say('All comments cleared.');
+    });
+
+    paint();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderPins);
+  });
+})();
+</script>

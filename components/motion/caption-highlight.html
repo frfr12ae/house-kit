@@ -1,0 +1,165 @@
+<!--
+@title Caption highlight
+@description A video caption overlay: words land in time with the speech and the key word gets a marker bar that sweeps in behind it. Shown on a placeholder frame built from tokens.
+@tags caption, subtitle, video, highlight, marker, words, overlay
+@preview center
+@height 460
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-caption-highlight,
+  .c-caption-highlight *,
+  .c-caption-highlight *::before,
+  .c-caption-highlight *::after { box-sizing: border-box; }
+  .c-caption-highlight {
+    position: relative;
+    width: min(900px, 100%);
+    aspect-ratio: 16 / 9;
+    margin: 0;
+    overflow: hidden;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    container-type: inline-size;
+    background: linear-gradient(160deg, var(--ds-info-fill), var(--ds-panel) 62%, var(--ds-highlight-fill));
+    font-family: var(--ds-font-sans);
+    color: var(--ds-ink);
+  }
+  /* placeholder footage: a window light and a seated figure, from plain shapes */
+  .c-caption-highlight .win { position: absolute; top: 9cqi; right: 9cqi; width: 22cqi; height: 16cqi; border-radius: var(--ds-radius-md); background: color-mix(in srgb, var(--ds-raised) 70%, transparent); border: var(--ds-hairline) solid var(--ds-line); }
+  .c-caption-highlight .win::before, .c-caption-highlight .win::after { content: ""; position: absolute; background: var(--ds-line); }
+  .c-caption-highlight .win::before { left: 50%; top: 0; bottom: 0; width: 1px; }
+  .c-caption-highlight .win::after { top: 50%; left: 0; right: 0; height: 1px; }
+  .c-caption-highlight .desk { position: absolute; left: 0; right: 0; bottom: 0; height: 22cqi; background: color-mix(in srgb, var(--ds-text) 14%, var(--ds-panel)); }
+  .c-caption-highlight .person { position: absolute; left: 50%; bottom: 21cqi; width: 19cqi; height: 23cqi; transform: translateX(-50%); }
+  .c-caption-highlight .person .head { position: absolute; left: 50%; top: 0; width: 7.5cqi; height: 7.5cqi; transform: translateX(-50%); border-radius: 50%; background: color-mix(in srgb, var(--ds-text) 38%, var(--ds-panel)); }
+  .c-caption-highlight .person .body { position: absolute; left: 0; right: 0; bottom: 0; height: 14cqi; border-radius: 9cqi 9cqi 0 0; background: color-mix(in srgb, var(--ds-text) 52%, var(--ds-panel)); }
+  .c-caption-highlight .rec { position: absolute; top: 3cqi; left: 3cqi; display: flex; align-items: center; gap: 1cqi; padding: 0.7cqi 1.6cqi; border-radius: var(--ds-radius-pill); background: color-mix(in srgb, var(--ds-surface) 80%, transparent); font-size: 1.5cqi; font-weight: 700; }
+  .c-caption-highlight .rec i { width: 1.2cqi; height: 1.2cqi; border-radius: 50%; background: var(--ds-danger-line); }
+  .c-caption-highlight .rec time { font-variant-numeric: tabular-nums; color: var(--ds-text); }
+  .c-caption-highlight .scrub { position: absolute; left: 3cqi; right: 3cqi; bottom: 2.4cqi; height: 0.5cqi; border-radius: var(--ds-radius-pill); background: color-mix(in srgb, var(--ds-ink) 14%, transparent); overflow: hidden; }
+  .c-caption-highlight .scrub i { display: block; width: 100%; height: 100%; background: var(--ds-ink); transform-origin: left; transform: scaleX(var(--p, 0.82)); }
+
+  .c-caption-highlight .caption {
+    position: absolute;
+    left: 6cqi;
+    right: 6cqi;
+    bottom: 8cqi;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4cqi 1.6cqi;
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 5.4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    text-align: center;
+  }
+  .c-caption-highlight .w {
+    position: relative;
+    isolation: isolate;
+    display: inline-block;
+    transition: opacity var(--ds-dur-fast) var(--ds-ease), transform var(--ds-dur-base) var(--ds-ease-spring);
+  }
+  .c-caption-highlight .w.is-off { opacity: 0; transform: translateY(0.9cqi) scale(0.94); }
+  .c-caption-highlight .w.key::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: -0.8cqi;
+    right: -0.8cqi;
+    bottom: 0.1cqi;
+    height: 56%;
+    border-radius: 0.4cqi;
+    background: var(--ds-highlight-line);
+    transform: skewX(-8deg) scaleX(1);
+    transform-origin: left center;
+    transition: transform var(--ds-dur-slow) var(--ds-ease-in-out);
+  }
+  .c-caption-highlight .w.key.is-off::before { transform: skewX(-8deg) scaleX(0); }
+  .c-caption-highlight .caption.is-clear .w { opacity: 0; transition: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .c-caption-highlight .w, .c-caption-highlight .w.key::before { transition: none; }
+  }
+</style>
+
+<figure class="c-caption-highlight" aria-label="Video frame with a word-by-word caption">
+  <div class="win" aria-hidden="true"></div>
+  <div class="desk" aria-hidden="true"></div>
+  <div class="person" aria-hidden="true"><span class="head"></span><span class="body"></span></div>
+  <div class="rec" aria-hidden="true"><i></i><time>00:07:12</time></div>
+  <p class="caption" aria-live="off"></p>
+  <div class="scrub" aria-hidden="true"><i></i></div>
+</figure>
+
+<script>
+(() => {
+  // Each caption is a list of words; the word marked with * gets the marker bar.
+  const CAPTIONS = [
+    'Most reports hide the number that *matters',
+    'So we put it *first',
+  ];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-caption-highlight').forEach((root) => {
+    const box = root.querySelector('.caption');
+    const time = root.querySelector('time');
+    const scrub = root.querySelector('.scrub i');
+    const cs = getComputedStyle(root);
+    const base = parseFloat(cs.getPropertyValue('--ds-dur-base')) || 260;
+    const slow = parseFloat(cs.getPropertyValue('--ds-dur-slow')) || 600;
+    const story = parseFloat(cs.getPropertyValue('--ds-dur-story')) || 1400;
+    const timers = [];
+    const after = (ms, fn) => timers.push(setTimeout(fn, ms));
+
+    const build = (text) => {
+      box.textContent = '';
+      return text.split(' ').map((raw) => {
+        const el = document.createElement('span');
+        el.className = 'w';
+        if (raw.startsWith('*')) el.classList.add('key');
+        el.textContent = raw.replace('*', '');
+        box.appendChild(el);
+        return el;
+      });
+    };
+    const clock = (p) => {
+      const s = 432 + Math.round(p * 5);
+      time.textContent = '00:' + String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+      scrub.style.setProperty('--p', 0.8 + p * 0.1);
+    };
+
+    // end state: the last caption, fully shown
+    build(CAPTIONS[CAPTIONS.length - 1]);
+    clock(1);
+    if (reduced) return;
+
+    const play = () => {
+      let t = 0;
+      CAPTIONS.forEach((text, c) => {
+        after(t, () => {
+          const words = build(text);
+          words.forEach((w) => w.classList.add('is-off'));
+          clock(c / CAPTIONS.length);
+          words.forEach((w, i) => {
+            const key = w.classList.contains('key');
+            after(base * 0.7 * (i + 1) + (key ? slow * 0.4 : 0), () => w.classList.remove('is-off'));
+          });
+        });
+        t += base * 0.7 * (text.split(' ').length + 1) + slow * 0.4 + story * 1.6;
+      });
+      after(t, () => clock(1));
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      play();
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

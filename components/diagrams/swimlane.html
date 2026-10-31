@@ -1,0 +1,133 @@
+<!--
+@title Swimlane
+@description A process split into horizontal lanes by owner, so every handoff between people or systems is a visible line crossing a lane edge.
+@tags swimlane, process, handoff, roles, workflow, diagram
+@preview fill
+@height 560
+@added 2026-10-31
+@source diagram-design by Cathryn Lavery | https://github.com/cathrynlavery/diagram-design | adapted-from
+@license MIT
+-->
+<!-- Adapted from diagram-design (MIT, Copyright (c) 2025 Cathryn Lavery). See LICENSES/diagram-design-MIT.txt. -->
+<style>
+  .c-swimlane {
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-swimlane .head { margin-bottom: var(--ds-space-5); }
+  .c-swimlane h3 { margin: 0; font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-swimlane .hint { margin: var(--ds-space-1) 0 0; font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-swimlane .frame {
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-lg);
+    overflow-x: auto;
+  }
+  .c-swimlane svg { display: block; width: 100%; min-width: 640px; max-width: 1040px; height: auto; margin: 0 auto; overflow: visible; }
+  .c-swimlane .scrollhint { display: none; margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-swimlane .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-5); margin: var(--ds-space-5) 0 0; padding: 0; list-style: none; font-size: var(--ds-text-sm); color: var(--ds-text); }
+  .c-swimlane .legend li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  .c-swimlane .sw { width: 18px; height: 12px; border-radius: 3px; border: var(--ds-stroke) solid var(--s); background: var(--f); }
+  .c-swimlane .ln { width: 24px; height: 0; border-top: var(--ds-stroke) solid var(--s); }
+  .c-swimlane .ln.is-dashed { border-top-style: dashed; }
+  .c-swimlane .note {
+    position: relative;
+    max-width: 440px;
+    margin: var(--ds-space-6) 0 0 var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+  }
+  .c-swimlane .note::before { content: ""; position: absolute; left: 28px; bottom: 100%; height: 20px; border-left: var(--ds-stroke) solid var(--ds-note-line); }
+  .c-swimlane .note::after { content: ""; position: absolute; left: 24.5px; bottom: calc(100% + 16px); width: 7px; height: 7px; border-top: var(--ds-stroke) solid var(--ds-note-line); border-left: var(--ds-stroke) solid var(--ds-note-line); transform: rotate(45deg); }
+  .c-swimlane .k-n { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-swimlane .k-i { --f: var(--ds-info-fill); --s: var(--ds-info-line); }
+  .c-swimlane .k-h { --f: var(--ds-highlight-fill); --s: var(--ds-highlight-line); }
+  .c-swimlane .k-d { --f: var(--ds-danger-fill); --s: var(--ds-danger-line); }
+  .c-swimlane .k-g { --f: var(--ds-note-fill); --s: var(--ds-note-line); }
+  .c-swimlane svg { --f: var(--ds-neutral-fill); --s: var(--ds-neutral-line); }
+  .c-swimlane .node { fill: var(--f); stroke: var(--s); stroke-width: var(--ds-stroke); }
+  .c-swimlane .node.dash { stroke-dasharray: 6 5; }
+  .c-swimlane .edge { fill: none; stroke: var(--s); stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-swimlane .edge.dash { stroke-dasharray: 6 5; }
+  .c-swimlane .mk { fill: none; stroke-width: var(--ds-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  .c-swimlane .mk-n { stroke: var(--ds-neutral-line); }
+  .c-swimlane .mk-i { stroke: var(--ds-info-line); }
+  .c-swimlane .mk-h { stroke: var(--ds-highlight-line); }
+  .c-swimlane .mk-d { stroke: var(--ds-danger-line); }
+  .c-swimlane .mk-g { stroke: var(--ds-note-line); }
+  .c-swimlane text { font-family: var(--ds-font-sans); font-size: 14px; fill: var(--ds-text); }
+  .c-swimlane .t { font-weight: 600; fill: var(--ds-ink); }
+  .c-swimlane .s { font-size: 12.5px; fill: var(--ds-text); fill-opacity: 0.72; }
+  .c-swimlane .mu { font-size: 12.5px; font-weight: 600; fill: var(--ds-muted); }
+  .c-swimlane .m { font-family: var(--ds-font-mono); font-size: 12px; }
+  .c-swimlane .e { font-size: 12.5px; font-weight: 600; fill: var(--ds-text); paint-order: stroke; stroke: var(--ds-raised); stroke-width: 6px; stroke-linejoin: round; }
+  .c-swimlane .e.k-h { fill: var(--ds-text); }
+  .c-swimlane .e.k-d { fill: var(--ds-danger-line); }
+  .c-swimlane .guide { stroke: var(--ds-line); stroke-width: 1; fill: none; }
+  .c-swimlane .axis { stroke: var(--ds-neutral-line); stroke-opacity: 0.6; stroke-width: 1; fill: none; }
+  @media (max-width: 720px) {
+    .c-swimlane { padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-5); }
+    .c-swimlane .frame { padding: var(--ds-space-3); }
+    .c-swimlane .scrollhint { display: block; }
+    .c-swimlane .note { margin-left: var(--ds-space-4); }
+  }
+</style>
+
+<figure class="c-swimlane">
+  <figcaption class="head">
+    <h3>Handling a refund request</h3>
+    <p class="hint">Four owners, six steps. Each arrow that crosses a lane is a handoff.</p>
+  </figcaption>
+  <div class="frame">
+    <svg viewBox="0 0 820 384" role="img" aria-label="Swimlane diagram: a customer requests a refund, support reviews it and either declines or approves, finance issues the refund, and the system sends a receipt back to the customer.">
+<defs><marker id="swimlane-an" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-n" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="swimlane-ai" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-i" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="swimlane-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-h" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="swimlane-ad" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-d" d="M2 1.5 L8.5 5 L2 8.5"/></marker><marker id="swimlane-ag" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk mk-g" d="M2 1.5 L8.5 5 L2 8.5"/></marker></defs>
+<rect x="0" y="0" width="820" height="96" style="fill:var(--ds-surface)"/>
+<line class="guide" x1="0" y1="96" x2="820" y2="96"/>
+<text class="mu" x="18" y="53" text-anchor="start">Customer</text>
+<line class="guide" x1="0" y1="192" x2="820" y2="192"/>
+<text class="mu" x="18" y="149" text-anchor="start">Support</text>
+<rect x="0" y="192" width="820" height="96" style="fill:var(--ds-surface)"/>
+<line class="guide" x1="0" y1="288" x2="820" y2="288"/>
+<text class="mu" x="18" y="245" text-anchor="start">Finance</text>
+<line class="guide" x1="0" y1="384" x2="820" y2="384"/>
+<text class="mu" x="18" y="341" text-anchor="start">System</text>
+<line class="guide" x1="130" y1="0" x2="130" y2="384"/>
+<path class="edge k-n" d="M198 72 V144 H316" marker-end="url(#swimlane-an)"/>
+<path class="edge k-h" d="M374 168 V240 H492" marker-end="url(#swimlane-ah)"/>
+<path class="edge k-d" d="M432 144 H492" marker-end="url(#swimlane-ad)"/>
+<path class="edge k-h" d="M550 264 V336 H668" marker-end="url(#swimlane-ah)"/>
+<path class="edge k-d dash" d="M608 144 H680 V72" marker-end="url(#swimlane-ad)"/>
+<path class="edge k-n" d="M760 312 V72" marker-end="url(#swimlane-an)"/>
+<text class="e" x="384" y="210" text-anchor="start">Eligible</text>
+<text class="e" x="462" y="136" text-anchor="middle">No</text>
+<text class="e k-d" x="672" y="112" text-anchor="end">Reply</text>
+<text class="e" x="764" y="190" text-anchor="start">Receipt</text>
+<g class="k-n"><rect class="node" x="140" y="24" width="116" height="48" rx="8"/><text class="t" x="198" y="53" text-anchor="middle">Request refund</text></g>
+<g class="k-n"><rect class="node" x="316" y="120" width="116" height="48" rx="8"/><text class="t" x="374" y="149" text-anchor="middle">Review request</text></g>
+<g class="k-d"><rect class="node" x="492" y="120" width="116" height="48" rx="8"/><text class="t" x="550" y="149" text-anchor="middle">Decline</text></g>
+<g class="k-h"><rect class="node" x="492" y="216" width="116" height="48" rx="8"/><text class="t" x="550" y="245" text-anchor="middle">Issue refund</text></g>
+<g class="k-n"><rect class="node" x="668" y="312" width="116" height="48" rx="8"/><text class="t" x="726" y="341" text-anchor="middle">Send receipt</text></g>
+<g class="k-i"><rect class="node" x="668" y="24" width="116" height="48" rx="8"/><text class="t" x="726" y="53" text-anchor="middle">Get answer</text></g>
+    </svg>
+  </div>
+  <p class="scrollhint">Scroll sideways to see the whole diagram.</p>
+  <ul class="legend">
+    <li class="k-n"><span class="sw"></span>Step</li>
+    <li class="k-h"><span class="sw"></span>The step that moves money</li>
+    <li class="k-d"><span class="sw"></span>Rejection</li>
+    <li class="k-i"><span class="sw"></span>Result the customer sees</li>
+    <li class="k-n"><span class="ln"></span>Handoff</li>
+    <li class="k-d"><span class="ln is-dashed"></span>Rejection path</li>
+  </ul>
+</figure>
