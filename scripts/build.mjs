@@ -110,6 +110,9 @@ for (const cat of readdirSync(join(ROOT, 'components')).sort()) {
     const root = `.c-${slug}`;
     if (!new RegExp(`class="[^"]*\\bc-${slug}\\b`).test(parts.html)) fail(file, `root element needs class "c-${slug}"`);
     if (parts.css) lintCssScope(parts.css, root, file);
+    for (const m of (parts.css + parts.html).matchAll(/(--ds-[a-z0-9-]+)\s*:/g)) {
+      if (!declared.includes(m[1])) fail(file, `${m[1]} is not a design-system token; name component-local variables without the --ds- prefix`);
+    }
     if (parts.js && !/^\(\s*(\(\)\s*=>|function)/.test(parts.js)) warn(file, 'wrap the script in an IIFE so it leaves no globals');
     if (/#[0-9a-fA-F]{3,8}\b|rgba?\(/.test(parts.css.replace(/\/\*[\s\S]*?\*\//g, ''))) warn(file, 'hardcoded colour in CSS; use a --ds-* token');
     // A name ending in "-" is built at runtime ('--ds-series-' + i): expand it to every token with that prefix.

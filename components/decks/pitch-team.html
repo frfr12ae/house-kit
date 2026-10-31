@@ -1,0 +1,85 @@
+<!--
+@title Pitch team
+@group Pitch
+@description Seed pitch team slide: four founders and leads, each with an initials avatar, role and one credential line.
+@tags pitch, startup, team, founders, credentials, slide
+@preview slide
+@added 2026-10-31
+@source Y Combinator seed deck guidance | https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck | inspired-by
+-->
+<style>
+  .c-pitch-team, .c-pitch-team *, .c-pitch-team *::before, .c-pitch-team *::after { box-sizing: border-box; }
+  .c-pitch-team {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-pitch-team .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 6cqi;
+  }
+  .c-pitch-team .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6cqi;
+    font-size: 1.5cqi;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--ds-ink);
+  }
+  .c-pitch-team .brand svg { width: 1.7cqi; height: 1.7cqi; fill: none; stroke: var(--ds-ink); stroke-width: 2; stroke-linecap: round; }
+  .c-pitch-team .brand svg .strike { stroke: var(--ds-highlight-line); }
+  .c-pitch-team .num {
+    position: absolute;
+    right: 6cqi;
+    bottom: 2.6cqi;
+    font-size: 1cqi;
+    line-height: 1;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-pitch-team h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 4.6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.06;
+    color: var(--ds-ink);
+  }
+  .c-pitch-team .kicker { font-size: 1.5cqi; font-weight: 700; color: var(--ds-muted); }
+
+  .c-pitch-team .main { display: grid; align-content: space-between; padding-top: 4cqi; }
+  .c-pitch-team h2 { max-width: 62cqi; }
+  .c-pitch-team .people { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.6cqi; }
+  .c-pitch-team .p { display: grid; gap: 0.5cqi; align-content: start; }
+  .c-pitch-team .av { display: grid; place-items: center; width: 6.6cqi; height: 6.6cqi; margin-bottom: 1.4cqi; border: var(--ds-hairline) solid var(--ds-line); border-radius: 50%; background: var(--ds-panel); font-size: 2.2cqi; font-weight: 800; letter-spacing: -0.01em; color: var(--ds-ink); }
+  .c-pitch-team .p b { font-size: 2.1cqi; font-weight: 800; line-height: 1.15; color: var(--ds-ink); }
+  .c-pitch-team .role { font-size: 1.5cqi; font-weight: 700; color: var(--ds-muted); }
+  .c-pitch-team .p p { margin: 0.9cqi 0 0; padding-top: 1.1cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.5cqi; line-height: 1.42; color: var(--ds-text); }
+</style>
+
+<section class="c-pitch-team" aria-label="Team slide">
+  <div class="inner">
+    <div class="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3v14M8 3v14M12 3v14M16 3v14"/><path class="strike" d="M1.5 15.5L18.5 4.5"/></svg>Tallyhouse</div>
+    <div class="main">
+      <h2>We have run the books, and we have built the software.</h2>
+      <div class="people">
+        <div class="p"><div class="av" aria-hidden="true">MV</div><b>Maren Voss</b><span class="role">CEO</span><p>Ran finance operations for a 40-person design agency for six years.</p></div>
+        <div class="p"><div class="av" aria-hidden="true">IO</div><b>Idris Okafor</b><span class="role">CTO</span><p>Built the ledger behind a payments startup that moved $3B.</p></div>
+        <div class="p"><div class="av" aria-hidden="true">PR</div><b>Priya Raman</b><span class="role">Head of Product</span><p>Shipped invoicing used by 200,000 freelancers at Penwick.</p></div>
+        <div class="p"><div class="av" aria-hidden="true">TE</div><b>Tomas Eklund</b><span class="role">Head of Growth</span><p>Grew a creative-tools community from zero to 90,000 members.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="num" aria-hidden="true">10</div>
+</section>

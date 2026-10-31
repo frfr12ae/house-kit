@@ -1,0 +1,94 @@
+<!--
+@title Gantt roadmap
+@group Exhibits
+@description A four-quarter roadmap with workstream rows, labelled phase bars, milestone diamonds with names and a today line.
+@tags slide, gantt, roadmap, timeline, milestones, phases, plan, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-gantt-roadmap {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-gantt-roadmap .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-gantt-roadmap .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-gantt-roadmap .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-gantt-roadmap .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-gantt-roadmap .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-gantt-roadmap .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-gantt-roadmap h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-gantt-roadmap .exhibit { min-height: 0; }
+  .c-gantt-roadmap .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-gantt-roadmap svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-gantt-roadmap svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-gantt-roadmap .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-gantt-roadmap .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-gantt-roadmap .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-gantt-roadmap .sm { font-size: 12px; }
+  .c-gantt-roadmap .md { font-size: 13px; }
+  .c-gantt-roadmap .lg { font-size: 14px; }
+  .c-gantt-roadmap .b { font-weight: 700; }
+  .c-gantt-roadmap .sb { font-weight: 600; }
+  .c-gantt-roadmap .ink { fill: var(--ds-ink); }
+  .c-gantt-roadmap .mu { fill: var(--ds-muted); }
+  .c-gantt-roadmap .mid { text-anchor: middle; }
+  .c-gantt-roadmap .end { text-anchor: end; }
+  .c-gantt-roadmap .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-gantt-roadmap .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-gantt-roadmap .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+</style>
+
+<section class="c-gantt-roadmap" aria-label="Slide 14: four quarter roadmap with six workstreams">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Transformation plan · Roadmap</p>
+        <ul class="tracker" aria-label="Where this slide sits in the deck"><li>Diagnosis</li><li>Options</li><li class="is-on" aria-current="step">Roadmap</li></ul>
+      </div>
+      <h2>The roadmap front-loads route optimisation and tracking so savings start in Q2 2027, before the larger depot investment lands</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="Roadmap from Q4 2026 to Q3 2027 with six workstreams, phase bars for design, build, pilot and roll-out, six milestones and a today line at 31 October 2026."><rect x="200" y="16" width="170" height="20" style="fill:var(--ds-panel)"/><text class="md b ink mid" x="285" y="30.5">Q4 2026</text><rect x="370" y="16" width="170" height="20" style="fill:var(--ds-surface)"/><text class="md b ink mid" x="455" y="30.5">Q1 2027</text><rect x="540" y="16" width="170" height="20" style="fill:var(--ds-panel)"/><text class="md b ink mid" x="625" y="30.5">Q2 2027</text><rect x="710" y="16" width="170" height="20" style="fill:var(--ds-surface)"/><text class="md b ink mid" x="795" y="30.5">Q3 2027</text><text class="tick mid" x="228.3" y="48" style="font-size:11px">Oct</text><text class="tick mid" x="285" y="48" style="font-size:11px">Nov</text><text class="tick mid" x="341.7" y="48" style="font-size:11px">Dec</text><text class="tick mid" x="398.3" y="48" style="font-size:11px">Jan</text><text class="tick mid" x="455" y="48" style="font-size:11px">Feb</text><text class="tick mid" x="511.7" y="48" style="font-size:11px">Mar</text><text class="tick mid" x="568.3" y="48" style="font-size:11px">Apr</text><text class="tick mid" x="625" y="48" style="font-size:11px">May</text><text class="tick mid" x="681.7" y="48" style="font-size:11px">Jun</text><text class="tick mid" x="738.3" y="48" style="font-size:11px">Jul</text><text class="tick mid" x="795" y="48" style="font-size:11px">Aug</text><text class="tick mid" x="851.7" y="48" style="font-size:11px">Sep</text><line x1="200" x2="200" y1="16" y2="312" style="stroke:var(--ds-line);stroke-width:1.2"/><line x1="256.7" x2="256.7" y1="52" y2="312" style="stroke:var(--ds-line);stroke-width:0.6"/><line x1="313.3" x2="313.3" y1="52" y2="312" style="stroke:var(--ds-line);stroke-width:0.6"/><line x1="370" x2="370" y1="16" y2="312" style="stroke:var(--ds-line);stroke-width:1.2"/><line x1="426.7" x2="426.7" y1="52" y2="312" style="stroke:var(--ds-line);stroke-width:0.6"/><line x1="483.3" x2="483.3" y1="52" y2="312" style="stroke:var(--ds-line);stroke-width:0.6"/><line x1="540" x2="540" y1="16" y2="312" style="stroke:var(--ds-line);stroke-width:1.2"/><line x1="596.7" x2="596.7" y1="52" y2="312" style="stroke:var(--ds-line);stroke-width:0.6"/><line x1="653.3" x2="653.3" y1="52" y2="312" style="stroke:var(--ds-line);stroke-width:0.6"/><line x1="710" x2="710" y1="16" y2="312" style="stroke:var(--ds-line);stroke-width:1.2"/><line x1="766.7" x2="766.7" y1="52" y2="312" style="stroke:var(--ds-line);stroke-width:0.6"/><line x1="823.3" x2="823.3" y1="52" y2="312" style="stroke:var(--ds-line);stroke-width:0.6"/><line x1="880" x2="880" y1="16" y2="312" style="stroke:var(--ds-line);stroke-width:1.2"/><line class="axis" x1="0" x2="880" y1="52" y2="52"/><line class="grid" x1="0" x2="880" y1="97" y2="97"/><text class="md b ink" x="0" y="73">Route optimisation</text><text class="sm mu" x="0" y="88">Operations</text><rect x="201" y="60" width="54.7" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-neutral-line) 40%, var(--ds-surface))"/><text class="sm sb ink mid" x="228.3" y="74">Design</text><rect x="257.7" y="60" width="168" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="341.7" y="74">Build</text><rect x="427.7" y="60" width="111.3" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface))"/><text class="sm sb ink mid" x="483.3" y="74">Pilot</text><rect x="541" y="60" width="168" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-note-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="625" y="74">Roll-out</text><polygon points="540,82 546,88 540,94 534,88" style="fill:var(--ds-ink);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb" x="551" y="92">Pilot go or no-go</text><line class="grid" x1="0" x2="880" y1="140" y2="140"/><text class="md b ink" x="0" y="116">Depot automation</text><text class="sm mu" x="0" y="131">Facilities</text><rect x="201" y="103" width="54.7" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-neutral-line) 40%, var(--ds-surface))"/><text class="sm sb ink mid" x="228.3" y="117">Design</text><rect x="257.7" y="103" width="338" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="426.7" y="117">Build</text><rect x="597.7" y="103" width="111.3" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface))"/><text class="sm sb ink mid" x="653.3" y="117">Pilot</text><rect x="711" y="103" width="168" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-note-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="795" y="117">Roll-out</text><polygon points="710,125 716,131 710,137 704,131" style="fill:var(--ds-ink);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb" x="721" y="135">Pilot sign-off</text><line class="grid" x1="0" x2="880" y1="183" y2="183"/><text class="md b ink" x="0" y="159">Fleet electrification</text><text class="sm mu" x="0" y="174">Fleet</text><rect x="257.7" y="146" width="111.3" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-neutral-line) 40%, var(--ds-surface))"/><text class="sm sb ink mid" x="313.3" y="160">Design</text><rect x="371" y="146" width="168" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="455" y="160">Build</text><rect x="541" y="146" width="338" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-note-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="710" y="160">Roll-out</text><polygon points="370,168 376,174 370,180 364,174" style="fill:var(--ds-ink);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb" x="381" y="178">Fleet plan approved</text><line class="grid" x1="0" x2="880" y1="226" y2="226"/><text class="md b ink" x="0" y="202">Tracking portal</text><text class="sm mu" x="0" y="217">Customer service</text><rect x="201" y="189" width="224.7" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="313.3" y="203">Build</text><rect x="427.7" y="189" width="54.7" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface))"/><text class="sm sb ink mid" x="455" y="203">Pilot</text><rect x="484.3" y="189" width="111.3" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-note-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="540" y="203">Roll-out</text><polygon points="483.3,211 489.3,217 483.3,223 477.3,217" style="fill:var(--ds-ink);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb" x="494.3" y="221">Customer launch</text><line class="grid" x1="0" x2="880" y1="269" y2="269"/><text class="md b ink" x="0" y="245">Driver app</text><text class="sm mu" x="0" y="260">Operations</text><rect x="201" y="232" width="54.7" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-neutral-line) 40%, var(--ds-surface))"/><text class="sm sb ink mid" x="228.3" y="246">Design</text><rect x="257.7" y="232" width="224.7" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="370" y="246">Build</text><rect x="484.3" y="232" width="111.3" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface))"/><text class="sm sb ink mid" x="540" y="246">Pilot</text><rect x="597.7" y="232" width="111.3" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-note-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="653.3" y="246">Roll-out</text><polygon points="596.7,254 602.7,260 596.7,266 590.7,260" style="fill:var(--ds-ink);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb" x="607.7" y="264">App store release</text><line class="grid" x1="0" x2="880" y1="312" y2="312"/><text class="md b ink" x="0" y="288">Data platform</text><text class="sm mu" x="0" y="303">IT</text><rect x="201" y="275" width="338" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="370" y="289">Build</text><rect x="541" y="275" width="111.3" height="20" rx="3" style="fill:color-mix(in srgb, var(--ds-note-line) 46%, var(--ds-surface))"/><text class="sm sb ink mid" x="596.7" y="289">Roll-out</text><polygon points="653.3,297 659.3,303 653.3,309 647.3,303" style="fill:var(--ds-ink);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb" x="664.3" y="307">Single data source live</text><line x1="256.7" x2="256.7" y1="12" y2="312" style="stroke:var(--ds-danger-line);stroke-width:2"/><rect x="231.7" y="0" width="50" height="14" rx="7" style="fill:var(--ds-danger-line)"/><text class="mid b" x="256.7" y="10.5" style="font-size:10px;fill:var(--ds-surface)">Today</text></svg>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: programme office plan v3, 31 October 2026. Illustrative dates.</span>
+      <span class="page">14</span>
+    </div>
+  </div>
+</section>

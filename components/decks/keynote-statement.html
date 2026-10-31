@@ -1,0 +1,126 @@
+<!--
+@title Keynote statement
+@group Keynote
+@description One sentence of three to six words, centred and huge, with a single word in an accent gradient and a glowing horizon below.
+@tags keynote, statement, headline, one idea, apple event
+@preview slide
+@replay true
+@added 2026-10-31
+@source Apple keynote presentation style | https://www.apple.com/apple-events/ | inspired-by
+-->
+<style>
+  .c-keynote-statement, .c-keynote-statement *, .c-keynote-statement *::before, .c-keynote-statement *::after { box-sizing: border-box; }
+.c-keynote-statement {
+  --k-bg: var(--ds-ink);
+  --k-fg: var(--ds-bg);
+  --k-dim: color-mix(in srgb, var(--ds-bg) 60%, var(--ds-ink));
+  --k-soft: color-mix(in srgb, var(--ds-bg) 82%, var(--ds-ink));
+  --k-line: color-mix(in srgb, var(--ds-bg) 16%, transparent);
+  --k-card: color-mix(in srgb, var(--ds-bg) 7%, var(--ds-ink));
+  --k-card-2: color-mix(in srgb, var(--ds-bg) 12%, var(--ds-ink));
+  --k-blue: var(--ds-info-line);
+  --k-amber: var(--ds-highlight-line);
+  --k-green: var(--ds-note-line);
+  --k-t1: color-mix(in srgb, var(--ds-info-line) 80%, var(--ds-bg));
+  --k-t2: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-bg));
+  --k-t3: color-mix(in srgb, var(--ds-note-line) 80%, var(--ds-bg));
+  --k-s1: color-mix(in srgb, var(--ds-info-line) 66%, var(--ds-bg));
+  --k-s2: color-mix(in srgb, var(--ds-highlight-line) 66%, var(--ds-bg));
+  --k-s3: color-mix(in srgb, var(--ds-note-line) 66%, var(--ds-bg));
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-family: var(--ds-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.c-keynote-statement .sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 50% 118%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 94% -8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 2% 30%, color-mix(in srgb, var(--k-green) 8%, transparent), transparent 70%);
+}
+.c-keynote-statement .pad { position: absolute; inset: 0; padding: 5.5cqi 7cqi; }
+.c-keynote-statement .eyebrow { margin: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--k-dim); }
+.c-keynote-statement .display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: 1.02;
+  color: var(--k-fg);
+}
+.c-keynote-statement .grad {
+  display: inline-block;
+  padding: 0 0.04em 0.1em 0;
+  margin: 0 -0.04em -0.1em 0;
+  background: linear-gradient(100deg, var(--k-t1) 0%, var(--k-t3) 52%, var(--k-t2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.c-keynote-statement.is-armed .rv { opacity: 0; transform: translateY(1.8cqi); }
+.c-keynote-statement.is-armed.is-in .rv {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+  .c-keynote-statement .sky {
+    background:
+      radial-gradient(34% 36% at 58% 54%, color-mix(in srgb, var(--k-green) 14%, transparent), transparent 72%),
+      radial-gradient(40% 40% at 36% 42%, color-mix(in srgb, var(--k-blue) 16%, transparent), transparent 72%),
+      radial-gradient(40% 40% at 74% 40%, color-mix(in srgb, var(--k-amber) 12%, transparent), transparent 72%);
+  }
+  .c-keynote-statement .horizon {
+    position: absolute;
+    left: -36cqi;
+    right: -36cqi;
+    top: 50cqi;
+    height: 100cqi;
+    border-radius: 50%;
+    border-top: 0.12cqi solid color-mix(in srgb, var(--k-t1) 85%, transparent);
+    background:
+      radial-gradient(52% 36% at 50% 0%, color-mix(in srgb, var(--k-blue) 34%, transparent), transparent 72%),
+      var(--k-bg);
+    box-shadow: 0 -1.2cqi 7cqi color-mix(in srgb, var(--k-blue) 40%, transparent), 0 -0.3cqi 1.6cqi color-mix(in srgb, var(--k-t1) 40%, transparent);
+  }
+  .c-keynote-statement .brand { position: absolute; left: 7cqi; top: 5.5cqi; display: flex; align-items: center; gap: 1cqi; font-size: 1.8cqi; font-weight: 700; }
+  .c-keynote-statement .brand .mark { position: relative; width: 2.3cqi; height: 2.3cqi; border-radius: 50%; border: 0.24cqi solid var(--k-fg); }
+  .c-keynote-statement .brand .mark::after { content: ""; position: absolute; right: -0.55cqi; top: -0.2cqi; width: 0.7cqi; height: 0.7cqi; border-radius: 50%; background: var(--k-amber); }
+  .c-keynote-statement .center { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 7cqi 5cqi; text-align: center; }
+  .c-keynote-statement h2 { font-size: 9.6cqi; line-height: 1.02; white-space: nowrap; }
+  .c-keynote-statement h2 .grad { filter: drop-shadow(0 0 3.4cqi color-mix(in srgb, var(--k-blue) 55%, transparent)); }
+</style>
+
+<section class="c-keynote-statement" aria-label="Everything moves together">
+  <div class="sky"></div>
+  <div class="horizon" aria-hidden="true"></div>
+  <div class="brand"><span class="mark"></span>Orbit 2</div>
+  <div class="center">
+    <h2 class="display rv" style="--d:0">Everything moves<br><span class="grad">together.</span></h2>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-keynote-statement').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

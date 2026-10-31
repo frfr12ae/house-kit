@@ -1,0 +1,134 @@
+<!--
+@title Discussion prompt
+@group Workshop
+@description One big question to discuss, three thinking prompts to get people started and a "talk to your neighbour" chip with the time box.
+@tags slide, workshop, discussion, question, prompt, pair talk
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-discussion-prompt {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-discussion-prompt .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 5.5cqi 7cqi 5cqi;
+  }
+  .c-discussion-prompt .top { display: flex; justify-content: space-between; align-items: center; }
+  .c-discussion-prompt .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-discussion-prompt .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqi;
+    padding: 0.8cqi 1.8cqi 0.8cqi 1.2cqi;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-highlight-fill);
+    border: var(--ds-stroke) solid var(--ds-highlight-line);
+    font-size: 1.55cqi;
+    font-weight: 700;
+    color: var(--ds-ink);
+  }
+  .c-discussion-prompt .chip svg { width: 2.6cqi; height: 2.6cqi; }
+  .c-discussion-prompt .chip svg circle { fill: none; stroke: var(--ds-ink); stroke-width: 1.8; }
+  .c-discussion-prompt .chip em { font-style: normal; font-weight: 500; color: var(--ds-text); }
+  .c-discussion-prompt .q {
+    align-self: center;
+    position: relative;
+    padding-left: 3.2cqi;
+    max-width: 78cqi;
+  }
+  .c-discussion-prompt .q::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5cqi;
+    bottom: 0.5cqi;
+    width: 0.7cqi;
+    border-radius: 99px;
+    background: var(--ds-highlight-line);
+  }
+  .c-discussion-prompt h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 6.2cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.04;
+    text-wrap: balance;
+    color: var(--ds-ink);
+  }
+  .c-discussion-prompt .think {
+    display: grid;
+    grid-template-columns: auto repeat(3, minmax(0, 1fr));
+    column-gap: 2.2cqi;
+    align-items: stretch;
+    padding-top: 2.2cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-discussion-prompt .think .lab {
+    align-self: center;
+    max-width: 8cqi;
+    font-size: 1.3cqi;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    color: var(--ds-muted);
+  }
+  .c-discussion-prompt .p {
+    display: grid;
+    grid-template-columns: 3cqi 1fr;
+    column-gap: 1.2cqi;
+    align-items: start;
+    padding: 1.6cqi 1.8cqi;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: calc(1cqi * var(--ds-radius-scale, 1));
+    font-size: 1.65cqi;
+    line-height: 1.38;
+    color: var(--ds-ink);
+    font-weight: 600;
+  }
+  .c-discussion-prompt .p b {
+    display: grid;
+    place-items: center;
+    width: 3cqi;
+    height: 3cqi;
+    border-radius: 50%;
+    background: var(--ds-info-fill);
+    border: var(--ds-hairline) solid var(--ds-info-line);
+    font-size: 1.4cqi;
+    color: var(--ds-ink);
+  }
+</style>
+
+<section class="c-discussion-prompt">
+  <div class="inner">
+    <div class="top">
+      <div class="eyebrow">Discussion 3</div>
+      <div class="chip">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="12" r="6"/><circle cx="15.5" cy="12" r="6"/></svg>
+        Talk to your neighbour <em>5 min</em>
+      </div>
+    </div>
+    <div class="q">
+      <h2>What would we stop doing if we could only run three projects?</h2>
+    </div>
+    <div class="think">
+      <span class="lab">Think about</span>
+      <div class="p"><b>1</b>Which project would you miss least if it vanished tomorrow?</div>
+      <div class="p"><b>2</b>What are we keeping alive only because we started it?</div>
+      <div class="p"><b>3</b>Who would notice first, and what would they say?</div>
+    </div>
+  </div>
+</section>

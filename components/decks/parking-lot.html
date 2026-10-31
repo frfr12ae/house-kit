@@ -1,0 +1,117 @@
+<!--
+@title Parking lot
+@group Workshop
+@description A wall of ten parked questions on slightly rotated sticky notes in note, highlight and info tints, with a hand-lettered label and the table each came from.
+@tags slide, workshop, parking lot, sticky notes, questions, backlog, wall
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-parking-lot {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-panel);
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--ds-ink) 14%, transparent) 0.12cqi, transparent 0.17cqi);
+    background-size: 2.2cqi 2.2cqi;
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-parking-lot .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 5cqi 6cqi 4cqi;
+  }
+  .c-parking-lot .head { display: flex; justify-content: space-between; align-items: end; }
+  .c-parking-lot h2 {
+    margin: 0;
+    display: inline-block;
+    padding: 0.4cqi 2.4cqi 0.8cqi;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: calc(0.6cqi * var(--ds-radius-scale, 1));
+    box-shadow: var(--ds-shadow-sm);
+    transform: rotate(-1.5deg);
+    font-family: var(--ds-font-hand);
+    font-size: 5.2cqi;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.15;
+    color: var(--ds-ink);
+  }
+  .c-parking-lot .head p { margin: 0; max-width: 30cqi; font-size: 1.5cqi; line-height: 1.45; text-align: right; color: var(--ds-text); }
+  .c-parking-lot .wall {
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2.6cqi 2.2cqi;
+    padding-top: 2cqi;
+  }
+  .c-parking-lot .note {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 0.8cqi;
+    aspect-ratio: 1 / 0.95;
+    padding: 2.2cqi 1.5cqi 1.1cqi;
+    background: var(--n-fill);
+    border: var(--ds-hairline) solid var(--n-line);
+    border-bottom-right-radius: calc(2.2cqi * var(--ds-radius-scale, 1));
+    box-shadow: var(--ds-shadow-md);
+    transform: translateY(var(--dy, 0)) rotate(var(--r, 0deg));
+  }
+  .c-parking-lot .note::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -1cqi;
+    width: 5.4cqi;
+    height: 2cqi;
+    margin-left: -2.7cqi;
+    background: color-mix(in srgb, var(--n-line) 55%, transparent);
+    transform: rotate(var(--tr, -2deg));
+  }
+  .c-parking-lot .note p {
+    margin: 0;
+    font-family: var(--ds-font-hand);
+    font-size: 1.95cqi;
+    font-weight: 700;
+    line-height: 1.22;
+    color: var(--ds-ink);
+  }
+  .c-parking-lot .note small {
+    font-size: 1.05cqi;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-muted);
+  }
+  .c-parking-lot .g { --n-fill: var(--ds-note-fill); --n-line: var(--ds-note-line); }
+  .c-parking-lot .y { --n-fill: var(--ds-highlight-fill); --n-line: var(--ds-highlight-line); }
+  .c-parking-lot .b { --n-fill: var(--ds-info-fill); --n-line: var(--ds-info-line); }
+</style>
+
+<section class="c-parking-lot">
+  <div class="inner">
+    <div class="head">
+      <h2>Parking lot</h2>
+      <p>Good questions for later. We will answer them in the last ten minutes or by email.</p>
+    </div>
+    <div class="wall">
+      <div class="note y" style="--r: -2.4deg; --dy: 0.4cqi; --tr: 3deg"><p>Who owns the stop list once it exists?</p><small>Table 2</small></div>
+      <div class="note g" style="--r: 1.6deg; --dy: -0.8cqi; --tr: -4deg"><p>Can we pilot this with one team first?</p><small>Table 5</small></div>
+      <div class="note b" style="--r: -1deg; --dy: 0.8cqi; --tr: 2deg"><p>What does it cost to restart a stopped project?</p><small>Table 1</small></div>
+      <div class="note y" style="--r: 2.8deg; --dy: -0.2cqi; --tr: -2deg"><p>How do we handle client-funded work?</p><small>Table 4</small></div>
+      <div class="note g" style="--r: -1.8deg; --dy: 0.6cqi; --tr: 4deg"><p>Is there a template for the review?</p><small>Table 3</small></div>
+      <div class="note b" style="--r: 1.2deg; --dy: -0.4cqi; --tr: -3deg"><p>What counts as a project, exactly?</p><small>Table 6</small></div>
+      <div class="note y" style="--r: -2.8deg; --dy: 0.2cqi; --tr: 2deg"><p>How do we say no without losing trust?</p><small>Table 2</small></div>
+      <div class="note g" style="--r: 2deg; --dy: -0.6cqi; --tr: -4deg"><p>Who sets the cap, and how often?</p><small>Table 4</small></div>
+      <div class="note b" style="--r: -1.4deg; --dy: 0.7cqi; --tr: 3deg"><p>Can a stopped project come back later?</p><small>Table 5</small></div>
+      <div class="note y" style="--r: 1.9deg; --dy: -0.3cqi; --tr: -2deg"><p>What is the first signal we are overloaded?</p><small>Table 1</small></div>
+    </div>
+  </div>
+</section>

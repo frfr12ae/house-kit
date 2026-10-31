@@ -1,0 +1,1175 @@
+<!--
+@title Full deck: workshop
+@group Full decks
+@description A nine-slide half-day workshop deck on AI ways of working: cover, objectives, agenda, an exercise with a working countdown timer, a discussion prompt, breakout groups, poll results, key takeaways and Q and A, with facilitator notes.
+@tags deck, workshop, facilitation, agenda, timer, countdown, poll, breakout, full deck
+@preview fill
+@height 640
+@added 2026-10-31
+-->
+<style>
+  .c-full-workshop {
+    position: relative;
+    display: grid;
+    gap: var(--ds-space-4);
+    padding: var(--ds-space-4);
+    background: var(--ds-panel);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    outline: none;
+  }
+  .c-full-workshop:focus-visible { box-shadow: var(--ds-focus); }
+  .c-full-workshop [hidden] { display: none !important; }
+
+  .c-full-workshop .stage {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-md);
+    touch-action: pan-y;
+  }
+  .c-full-workshop .slide {
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease-in-out), visibility 0s linear var(--ds-dur-slow);
+  }
+  .c-full-workshop .slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease-in-out), visibility 0s;
+  }
+  .c-full-workshop .slide > * { width: 100%; }
+  .c-full-workshop .slide > .notes { display: none; }
+
+  .c-full-workshop .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0.3cqi;
+    min-height: 3px;
+    background: color-mix(in srgb, var(--ds-line) 70%, transparent);
+    pointer-events: none;
+    z-index: 3;
+  }
+  .c-full-workshop .progress i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--ds-action);
+    transition: width var(--ds-dur-slow) var(--ds-ease);
+  }
+
+  /* overview grid: the real slides, cloned and scaled by container units */
+  .c-full-workshop .overview {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: max-content;
+    align-content: start;
+    gap: 1.6cqi;
+    padding: 2.4cqi;
+    overflow: auto;
+    background: var(--ds-panel);
+  }
+  .c-full-workshop .thumb {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+    transition: transform var(--ds-dur-fast) var(--ds-ease), box-shadow var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-full-workshop .thumb::before { content: ""; display: block; padding-top: 56.25%; }
+  .c-full-workshop .thumb:hover { transform: translateY(-2px); box-shadow: var(--ds-shadow-md); }
+  .c-full-workshop .thumb:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-full-workshop .thumb[aria-current="true"] { border-color: var(--ds-highlight-line); box-shadow: 0 0 0 2px var(--ds-highlight-line); }
+  /* each thumbnail holds a full-size 1280 x 720 slide scaled by JS, so type never hits a minimum font size */
+  .c-full-workshop .thumb .slide {
+    inset: auto;
+    top: 0;
+    left: 0;
+    width: 1280px;
+    height: 720px;
+    transform-origin: 0 0;
+    transform: scale(var(--s, 0.2));
+    opacity: 1;
+    visibility: visible;
+    transition: none;
+    pointer-events: none;
+    user-select: none;
+  }
+  .c-full-workshop .thumb > .num {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    z-index: 1;
+    min-width: 20px;
+    padding: 1px 6px;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* keyboard help */
+  .c-full-workshop .help {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    display: grid;
+    place-items: center;
+    padding: var(--ds-space-4);
+    overflow: auto;
+    background: color-mix(in srgb, var(--ds-ink) 38%, transparent);
+  }
+  .c-full-workshop .help-card {
+    width: min(100%, 520px);
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-lg);
+    color: var(--ds-text);
+  }
+  .c-full-workshop .help-card h2 { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-lg); font-weight: 700; color: var(--ds-ink); }
+  .c-full-workshop .help-card dl { display: grid; grid-template-columns: auto 1fr; gap: var(--ds-space-2) var(--ds-space-4); margin: 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); }
+  .c-full-workshop .help-card dt { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .c-full-workshop .help-card dd { margin: 0; align-self: center; }
+  .c-full-workshop .help-card kbd {
+    display: inline-block;
+    min-width: 24px;
+    padding: 1px 7px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-bottom-width: 2px;
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-surface);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    text-align: center;
+    color: var(--ds-ink);
+  }
+  .c-full-workshop .help-card .close { margin-top: var(--ds-space-4); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+
+  .c-full-workshop .toast {
+    position: absolute;
+    left: 50%;
+    bottom: 3cqi;
+    z-index: 7;
+    max-width: 86%;
+    padding: var(--ds-space-2) var(--ds-space-4);
+    transform: translateX(-50%);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* speaker notes under the stage */
+  .c-full-workshop .notes-panel {
+    padding: var(--ds-space-4) var(--ds-space-5);
+    max-height: 220px;
+    overflow: auto;
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+  }
+  .c-full-workshop .notes-panel h3 { margin: 0 0 var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted); }
+  .c-full-workshop .notes-body { font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); color: var(--ds-text); }
+  .c-full-workshop .notes-body p { margin: 0 0 var(--ds-space-2); }
+  .c-full-workshop .notes-body p:last-child { margin-bottom: 0; }
+  .c-full-workshop .notes-body .none { color: var(--ds-muted); }
+
+  .c-full-workshop .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ds-space-3);
+  }
+  .c-full-workshop .count {
+    min-width: 64px;
+    text-align: center;
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    color: var(--ds-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-full-workshop .spacer { flex: 1; }
+  .c-full-workshop .hint { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-full-workshop .btn {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-raised);
+    color: var(--ds-ink);
+    cursor: pointer;
+    transition: border-color var(--ds-dur-fast) var(--ds-ease), background var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-full-workshop .btn:hover:not(:disabled) { border-color: var(--ds-muted); }
+  .c-full-workshop .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-full-workshop .btn:disabled { color: var(--ds-muted); background: var(--ds-panel); cursor: not-allowed; opacity: 0.6; }
+  .c-full-workshop .btn[aria-pressed="true"] { background: var(--ds-action); border-color: var(--ds-action); color: var(--ds-on-action); }
+  .c-full-workshop .btn svg { width: 16px; height: 16px; }
+
+  @media (max-width: 720px) { .c-full-workshop .hint { display: none; } }
+  @media (max-width: 520px) {
+    .c-full-workshop { padding: var(--ds-space-3); gap: var(--ds-space-3); }
+    .c-full-workshop .bar { gap: 6px; }
+    .c-full-workshop .btn { width: 32px; height: 32px; }
+    .c-full-workshop .count { min-width: 52px; }
+    .c-full-workshop [data-act="presenter"] { display: none; }
+    .c-full-workshop .overview { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3cqi; padding: 3cqi; }
+  }
+
+  .c-full-workshop:fullscreen {
+    grid-template-rows: minmax(0, 1fr) auto;
+    place-items: center;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    gap: var(--ds-space-3);
+    border-radius: 0;
+    background: var(--ds-bg);
+  }
+  .c-full-workshop:fullscreen .stage {
+    width: min(100%, calc((100vh - 72px) * 16 / 9));
+    border-radius: 0;
+  }
+  .c-full-workshop:fullscreen .notes-panel { display: none; }
+  .c-full-workshop:fullscreen .bar { opacity: 0.55; transition: opacity var(--ds-dur-base) var(--ds-ease); }
+  .c-full-workshop:fullscreen .bar:hover, .c-full-workshop:fullscreen .bar:focus-within { opacity: 1; }
+
+  /* Print and PDF: one slide per landscape 16:9 page, chrome hidden.
+     The @page line sets the paper to 1280 x 720 px; delete it if the page
+     that hosts this deck also prints other content. */
+  @page { size: 1280px 720px; margin: 0; }
+  @media print {
+    .c-full-workshop, .c-full-workshop * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .c-full-workshop { display: block; padding: 0; background: none; border-radius: 0; }
+    .c-full-workshop .bar, .c-full-workshop .notes-panel, .c-full-workshop .overview, .c-full-workshop .help,
+    .c-full-workshop .toast, .c-full-workshop .progress { display: none !important; }
+    .c-full-workshop .stage { aspect-ratio: auto; overflow: visible; background: none; border-radius: 0; box-shadow: none; }
+    .c-full-workshop .slide {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      opacity: 1;
+      visibility: visible;
+      transition: none;
+      break-inside: avoid;
+    }
+    .c-full-workshop .slide + .slide { break-before: page; }
+  }
+
+  .c-full-workshop .sl {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    container-type: inline-size;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-full-workshop .wk { position: absolute; inset: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); padding: 4.6cqi 6.5cqi 5cqi; }
+  .c-full-workshop .hd { display: flex; justify-content: space-between; align-items: center; gap: 2cqi; font-size: 1.3cqi; font-weight: 700; color: var(--ds-muted); }
+  .c-full-workshop .hd .lbl { display: inline-flex; align-items: center; gap: 0.9cqi; }
+  .c-full-workshop .hd .lbl i { width: 1cqi; height: 1cqi; border-radius: 0.25cqi; background: var(--ds-highlight-line); }
+  .c-full-workshop .hd .at { padding: 0.4cqi 1.2cqi; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); font-size: 1.15cqi; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-full-workshop .mn { display: grid; align-content: center; gap: 3.2cqi; min-height: 0; }
+  .c-full-workshop .t { margin: 0; max-width: 78cqi; font-family: var(--ds-font-display); font-size: 4.6cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1.06; color: var(--ds-ink); text-wrap: balance; }
+  .c-full-workshop .t.sm { font-size: 3.8cqi; }
+  .c-full-workshop .lead { margin: 0; max-width: 58cqi; font-size: 2cqi; line-height: 1.45; }
+
+  /* cover */
+  .c-full-workshop .cvw { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; gap: 4cqi; padding: 6cqi 7cqi 5cqi; }
+  .c-full-workshop .cvw .eyebrow { margin: 0 0 2cqi; font-size: 1.6cqi; font-weight: 700; color: var(--ds-muted); }
+  .c-full-workshop .cvw h1 { margin: 0; font-family: var(--ds-font-display); font-size: 7cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; color: var(--ds-ink); }
+  .c-full-workshop .cvw .sub { margin: 2.4cqi 0 0; max-width: 40cqi; font-size: 2cqi; line-height: 1.45; }
+  .c-full-workshop .cvw .meta { grid-column: 1 / -1; align-self: end; display: flex; justify-content: space-between; padding-top: 1.6cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.3cqi; color: var(--ds-muted); }
+  .c-full-workshop .cvw .meta b { color: var(--ds-text); font-weight: 600; }
+  .c-full-workshop .cvw .stack { display: grid; gap: 1.6cqi; justify-items: start; }
+  .c-full-workshop .cvw .stack span { padding: 1.5cqi 3cqi; border: var(--ds-stroke) solid var(--ds-neutral-line); border-radius: var(--ds-radius-pill); background: var(--ds-neutral-fill); font-size: 2.6cqi; font-weight: 800; letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); }
+  .c-full-workshop .cvw .stack span:nth-child(1) { border-color: var(--ds-info-line); background: var(--ds-info-fill); margin-left: 0; }
+  .c-full-workshop .cvw .stack span:nth-child(2) { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); margin-left: 6cqi; }
+  .c-full-workshop .cvw .stack span:nth-child(3) { margin-left: 12cqi; }
+  .c-full-workshop .cvw .stack .cap { margin: 1.2cqi 0 0 0; padding: 0; border: 0; background: none; border-radius: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0; color: var(--ds-muted); }
+
+  /* objectives */
+  .c-full-workshop .obj { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.4cqi; margin: 0; padding: 0; list-style: none; }
+  .c-full-workshop .obj li { display: grid; align-content: start; gap: 1.2cqi; padding: 2.4cqi; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); background: var(--ds-raised); box-shadow: var(--ds-shadow-sm); }
+  .c-full-workshop .obj i { display: grid; place-items: center; width: 3.6cqi; height: 3.6cqi; border-radius: 50%; border: var(--ds-stroke) solid var(--ds-highlight-line); background: var(--ds-highlight-fill); font-style: normal; font-size: 1.7cqi; font-weight: 800; color: var(--ds-ink); }
+  .c-full-workshop .obj b { margin-top: 0.6cqi; font-size: 2cqi; font-weight: 800; line-height: 1.2; letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); }
+  .c-full-workshop .obj span { font-size: 1.5cqi; line-height: 1.5; }
+
+  /* agenda */
+  .c-full-workshop .ag { display: grid; margin: 0; padding: 0; list-style: none; }
+  .c-full-workshop .ag li { display: grid; grid-template-columns: 6cqi minmax(0, 1fr) 24cqi 9cqi; align-items: center; gap: 2cqi; padding: 0.95cqi 0; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.6cqi; }
+  .c-full-workshop .ag li:last-child { border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-full-workshop .ag time { font-weight: 800; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-full-workshop .ag .nm { font-weight: 600; color: var(--ds-ink); }
+  .c-full-workshop .ag .len { height: 1.5cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); overflow: hidden; }
+  .c-full-workshop .ag .len i { display: block; height: 100%; border-radius: var(--ds-radius-pill); background: var(--ds-info-line); }
+  .c-full-workshop .ag .ex .len i { background: var(--ds-highlight-line); }
+  .c-full-workshop .ag .br .len i { background: var(--ds-neutral-line); }
+  .c-full-workshop .ag .min { font-size: 1.3cqi; font-weight: 600; color: var(--ds-muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .c-full-workshop .ag .br { color: var(--ds-muted); }
+  .c-full-workshop .ag .br .nm { color: var(--ds-muted); }
+  .c-full-workshop .endl { display: flex; justify-content: flex-end; margin-top: 1.2cqi; font-size: 1.3cqi; font-weight: 600; color: var(--ds-muted); }
+
+  /* exercise with countdown */
+  .c-full-workshop .exr { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 5cqi; align-items: center; }
+  .c-full-workshop .steps { display: grid; gap: 1.6cqi; margin: 0; padding: 0; list-style: none; }
+  .c-full-workshop .steps li { display: grid; grid-template-columns: 3.2cqi minmax(0, 1fr); gap: 1.6cqi; align-items: start; font-size: 1.7cqi; line-height: 1.4; }
+  .c-full-workshop .steps i { display: grid; place-items: center; width: 3.2cqi; height: 3.2cqi; border-radius: 50%; background: var(--ds-ink); color: var(--ds-surface); font-style: normal; font-size: 1.4cqi; font-weight: 800; }
+  .c-full-workshop .steps b { color: var(--ds-ink); }
+  .c-full-workshop .tags { display: flex; gap: 0.8cqi; margin-top: 0.4cqi; }
+  .c-full-workshop .tag { padding: 0.3cqi 1cqi; border: var(--ds-hairline) solid var(--ds-neutral-line); border-radius: var(--ds-radius-pill); background: var(--ds-neutral-fill); font-size: 1.1cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-full-workshop .tag.a { border-color: var(--ds-info-line); background: var(--ds-info-fill); }
+  .c-full-workshop .tag.s { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); }
+  .c-full-workshop .cd { display: grid; justify-items: center; gap: 1.8cqi; padding: 3.2cqi 2.4cqi 3cqi; border: var(--ds-stroke) solid var(--ds-highlight-line); border-radius: var(--ds-radius-xl); background: var(--ds-highlight-fill); }
+  .c-full-workshop .cd.is-done { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-full-workshop .cd-state { font-size: 1.4cqi; font-weight: 700; color: var(--ds-muted); }
+  .c-full-workshop .cd-time { font-family: var(--ds-font-display); font-size: 11cqi; font-weight: var(--ds-weight-display); letter-spacing: -0.03em; line-height: 1; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-full-workshop .cd-track { width: 100%; height: 0.9cqi; border-radius: var(--ds-radius-pill); background: color-mix(in srgb, var(--ds-ink) 10%, transparent); overflow: hidden; }
+  .c-full-workshop .cd-fill { display: block; height: 100%; width: 100%; background: var(--ds-ink); transition: width 0.4s linear; }
+  .c-full-workshop .cd-row { display: flex; gap: 1cqi; }
+  .c-full-workshop .cdb { padding: 0.9cqi 2.4cqi; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); font-size: 1.5cqi; font-weight: 700; color: var(--ds-ink); cursor: pointer; }
+  .c-full-workshop .cdb.go { border-color: var(--ds-action); background: var(--ds-action); color: var(--ds-on-action); }
+  .c-full-workshop .cdb:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-full-workshop .cdb:hover { border-color: var(--ds-muted); }
+
+  /* discussion prompt */
+  .c-full-workshop .dq { display: grid; gap: 3.2cqi; justify-items: start; }
+  .c-full-workshop .dq .q { margin: 0; max-width: 76cqi; font-family: var(--ds-font-display); font-size: 5.4cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1.06; color: var(--ds-ink); text-wrap: balance; }
+  .c-full-workshop .dq .q em { font-style: normal; box-shadow: inset 0 -0.45cqi 0 var(--ds-highlight-line); }
+  .c-full-workshop .dq .ps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2cqi; width: 100%; margin: 0; padding: 0; list-style: none; }
+  .c-full-workshop .dq .ps li { padding: 1.6cqi 1.8cqi; border-left: 0.35cqi solid var(--ds-info-line); background: var(--ds-info-fill); border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0; font-size: 1.5cqi; line-height: 1.4; color: var(--ds-ink); }
+  .c-full-workshop .dq .how { margin: 0; font-size: 1.4cqi; font-weight: 700; color: var(--ds-muted); }
+
+  /* breakout groups */
+  .c-full-workshop .grs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.8cqi; margin: 0; padding: 0; list-style: none; }
+  .c-full-workshop .grs li { display: grid; align-content: start; gap: 1cqi; padding: 2cqi; border: var(--ds-hairline) solid var(--ds-line); border-top: 0.4cqi solid var(--c); border-radius: 0 0 var(--ds-radius-lg) var(--ds-radius-lg); background: var(--ds-raised); }
+  .c-full-workshop .grs .lt { display: grid; place-items: center; width: 3.4cqi; height: 3.4cqi; border-radius: 50%; background: var(--c); font-size: 1.7cqi; font-weight: 800; color: var(--ds-ink); }
+  .c-full-workshop .grs b { font-size: 1.9cqi; font-weight: 800; line-height: 1.2; letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); }
+  .c-full-workshop .grs span { font-size: 1.3cqi; line-height: 1.4; }
+  .c-full-workshop .grs .who { margin-top: 0.8cqi; padding-top: 1cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.15cqi; color: var(--ds-muted); }
+  .c-full-workshop .grs .who b { font-size: 1.15cqi; letter-spacing: 0; font-weight: 700; color: var(--ds-text); }
+  .c-full-workshop .brief { margin: 0; max-width: 70cqi; font-size: 1.7cqi; line-height: 1.45; }
+  .c-full-workshop .brief b { color: var(--ds-ink); }
+
+  /* poll results */
+  .c-full-workshop .pl { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 5cqi; align-items: center; }
+  .c-full-workshop .pr { display: grid; gap: 1.8cqi; margin: 0; padding: 0; list-style: none; }
+  .c-full-workshop .pr li { display: grid; grid-template-columns: 14cqi minmax(0, 1fr) 3.4cqi; align-items: center; gap: 1.6cqi; font-size: 1.6cqi; font-weight: 600; color: var(--ds-ink); }
+  .c-full-workshop .pr .tr { height: 3.4cqi; border-radius: var(--ds-radius-md); background: var(--ds-panel); overflow: hidden; }
+  .c-full-workshop .pr .tr i { display: block; height: 100%; border-radius: var(--ds-radius-md); background: var(--ds-info-line); }
+  .c-full-workshop .pr li.top .tr i { background: var(--ds-highlight-line); }
+  .c-full-workshop .pr b { text-align: right; font-size: 2cqi; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .c-full-workshop .pl .n { margin: 1.6cqi 0 0; font-size: 1.2cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-full-workshop .ins { display: grid; gap: 1.8cqi; }
+  .c-full-workshop .ins div { padding: 1.8cqi 2cqi; border-radius: var(--ds-radius-lg); background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); }
+  .c-full-workshop .ins div.gap { background: var(--ds-neutral-fill); border-color: var(--ds-neutral-line); }
+  .c-full-workshop .ins b { display: block; font-family: var(--ds-font-display); font-size: 4.4cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-full-workshop .ins span { display: block; margin-top: 0.6cqi; font-size: 1.4cqi; line-height: 1.35; }
+
+  /* takeaways */
+  .c-full-workshop .tk { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+  .c-full-workshop .tk li { display: grid; grid-template-columns: 7cqi minmax(0, 1fr); align-items: baseline; gap: 2cqi; padding: 1.2cqi 0; border-top: var(--ds-stroke) solid var(--ds-ink); }
+  .c-full-workshop .tk li:last-child { border-bottom: var(--ds-stroke) solid var(--ds-ink); }
+  .c-full-workshop .tk .no { font-family: var(--ds-font-display); font-size: 3.8cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; color: var(--ds-highlight-line); }
+  .c-full-workshop .tk b { display: block; font-size: 2.3cqi; font-weight: 800; line-height: 1.15; letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); }
+  .c-full-workshop .tk span.d { display: block; margin-top: 0.6cqi; font-size: 1.5cqi; line-height: 1.4; }
+  .c-full-workshop .next { display: flex; align-items: baseline; gap: 1.6cqi; padding: 1.4cqi 2cqi; background: var(--ds-highlight-fill); box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line); border-radius: var(--ds-radius-md); font-size: 1.6cqi; color: var(--ds-ink); }
+  .c-full-workshop .next b { flex: none; font-size: 1.2cqi; font-weight: 700; color: var(--ds-text); }
+  .c-full-workshop .next span { font-weight: 600; }
+
+  /* Q and A */
+  .c-full-workshop .qa { position: absolute; inset: 0; display: grid; align-content: center; justify-items: start; gap: 2.6cqi; padding: 6cqi 7cqi; }
+  .c-full-workshop .qa h2 { margin: 0; font-family: var(--ds-font-display); font-size: 12cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 0.98; color: var(--ds-ink); }
+  .c-full-workshop .qa h2 span { color: var(--ds-highlight-line); }
+  .c-full-workshop .qa .ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2cqi; max-width: 70cqi; margin: 1.6cqi 0 0; padding: 0; list-style: none; }
+  .c-full-workshop .qa .ways li { padding: 1.6cqi 2cqi; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); background: var(--ds-raised); font-size: 1.6cqi; line-height: 1.4; }
+  .c-full-workshop .qa .ways b { display: block; margin-bottom: 0.4cqi; font-size: 1.7cqi; color: var(--ds-ink); }
+  .c-full-workshop .qa .after { position: absolute; left: 7cqi; right: 7cqi; bottom: 5cqi; display: flex; justify-content: space-between; padding-top: 1.6cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.3cqi; color: var(--ds-muted); }
+  .c-full-workshop .qa .after b { color: var(--ds-text); font-weight: 600; }
+</style>
+
+<section class="c-full-workshop" tabindex="0" role="region" aria-roledescription="presentation" aria-label="Full deck: workshop" data-deeplink>
+  <div class="stage">
+    <div class="slide is-active">
+      <div class="sl">
+        <div class="cvw">
+          <div>
+            <p class="eyebrow">Half-day workshop</p>
+            <h1>AI ways of working</h1>
+            <p class="sub">How the client services team decides what to automate, what to assist and what to keep human.</p>
+          </div>
+          <div class="stack" aria-hidden="true">
+            <span>Automate</span><span>Assist</span><span>Keep human</span>
+            <p class="cap">The three bins we use all morning</p>
+          </div>
+          <div class="meta"><span><b>Thursday 5 November 2026</b>, 09:00 to 12:00, room Linden</span><span>Facilitators: Nadia Brandt and Jonas Eskil</span></div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Welcome people as they sit down. Say the three words on the right out loud: automate, assist, keep human. Everything today hangs on them.</p>
+        <p>Check that everyone has paper and a laptop. Names and the room are fictional.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="wk">
+        <div class="hd"><span class="lbl"><i></i>AI ways of working</span><span class="at">09:00 · Welcome</span></div>
+        <div class="mn">
+          <h2 class="t">By noon you will have three things you did not have this morning.</h2>
+          <ol class="obj">
+            <li><i>1</i><b>A sorted week</b><span>Your own recurring tasks, marked automate, assist or keep human.</span></li>
+            <li><i>2</i><b>One workflow tried end to end</b><span>With a prompt you wrote yourself and a human check you chose.</span></li>
+            <li><i>3</i><b>Three team rules</b><span>Written together, for using AI on client work from Monday.</span></li>
+          </ol>
+        </div>
+      </div></div>
+      <aside class="notes">
+        <p>Read the three outcomes, then ask: is anything missing? Write any additions on the flip chart and return to them at the end.</p>
+        <p>Set the tone: this is a working session, not a demo. Laptops stay open.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="wk">
+        <div class="hd"><span class="lbl"><i></i>AI ways of working</span><span class="at">3 hours</span></div>
+        <div class="mn">
+          <h2 class="t sm">Three hours, hands-on in the middle.</h2>
+          <div>
+            <ul class="ag">
+              <li><time>09:00</time><span class="nm">Welcome and objectives</span><span class="len"><i style="width: 40%"></i></span><span class="min">20 min</span></li>
+              <li class="ex"><time>09:20</time><span class="nm">Exercise: sort your week</span><span class="len"><i style="width: 50%"></i></span><span class="min">25 min</span></li>
+              <li><time>09:45</time><span class="nm">Discussion: where AI does not belong</span><span class="len"><i style="width: 50%"></i></span><span class="min">25 min</span></li>
+              <li class="br"><time>10:10</time><span class="nm">Break</span><span class="len"><i style="width: 30%"></i></span><span class="min">15 min</span></li>
+              <li class="ex"><time>10:25</time><span class="nm">Breakout groups: build a workflow</span><span class="len"><i style="width: 100%"></i></span><span class="min">50 min</span></li>
+              <li><time>11:15</time><span class="nm">Poll and debrief</span><span class="len"><i style="width: 60%"></i></span><span class="min">30 min</span></li>
+              <li><time>11:45</time><span class="nm">Takeaways and Q&amp;A</span><span class="len"><i style="width: 30%"></i></span><span class="min">15 min</span></li>
+            </ul>
+            <div class="endl">Finish at 12:00</div>
+          </div>
+        </div>
+      </div></div>
+      <aside class="notes">
+        <p>Show where the hands-on time sits: the exercise and the breakout, shaded in amber. The talking parts are short on purpose.</p>
+        <p>The break is at 10:10 sharp. Durations add up to 180 minutes.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="wk">
+        <div class="hd"><span class="lbl"><i></i>AI ways of working</span><span class="at">09:20 · Exercise</span></div>
+        <div class="mn">
+          <div class="exr">
+            <div>
+              <h2 class="t" style="margin-bottom: 2.6cqi">Sort your week.</h2>
+              <ol class="steps">
+                <li><i>1</i><span><b>List five tasks you repeat every week.</b> Use one sticky note per task.</span></li>
+                <li><i>2</i><span><b>Put each in one bin.</b>
+                  <span class="tags"><span class="tag a">Automate</span><span class="tag s">Assist</span><span class="tag">Keep human</span></span></span></li>
+                <li><i>3</i><span><b>Circle one to try this week.</b> Say why in one sentence.</span></li>
+              </ol>
+            </div>
+            <div class="cd" data-seconds="900" role="timer" aria-label="Exercise countdown">
+              <span class="cd-state">Ready, 15 minutes</span>
+              <span class="cd-time">15:00</span>
+              <span class="cd-track"><i class="cd-fill"></i></span>
+              <div class="cd-row">
+                <button class="cdb go" type="button" data-cd="go">Start</button>
+                <button class="cdb" type="button" data-cd="reset">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <aside class="notes">
+        <p>Start the timer yourself, then walk the room. Fifteen minutes is enough for five tasks if people do not over-think the bins.</p>
+        <p>When the timer reaches zero it turns red. Give a one-minute warning at 01:00 out loud.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="wk">
+        <div class="hd"><span class="lbl"><i></i>AI ways of working</span><span class="at">09:45 · Discussion</span></div>
+        <div class="mn">
+          <div class="dq">
+            <h2 class="q">Where would you <em>not</em> let AI near a client deliverable, and why?</h2>
+            <ul class="ps">
+              <li>Think of the last thing a client was unhappy about.</li>
+              <li>What would you need to see before you trusted the output?</li>
+              <li>Who signs off, and what do they check?</li>
+            </ul>
+            <p class="how">In pairs for 5 minutes, then one example per table.</p>
+          </div>
+        </div>
+      </div></div>
+      <aside class="notes">
+        <p>Ask the question once and stay quiet. The first answer is usually "anything with numbers", so push for the reason behind it.</p>
+        <p>Capture each table's example on the flip chart under two headings: never, and only with a human check.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="wk">
+        <div class="hd"><span class="lbl"><i></i>AI ways of working</span><span class="at">10:25 · Breakout groups</span></div>
+        <div class="mn">
+          <h2 class="t">Four groups, one workflow each.</h2>
+          <p class="brief"><b>Your task:</b> design the workflow in five steps and mark every point where a person checks the work. Be ready to show it in 3 minutes.</p>
+          <ul class="grs">
+            <li style="--c: var(--ds-info-line)"><span class="lt">A</span><b>Client reporting</b><span>Monthly numbers and the commentary that goes with them.</span><span class="who"><b>Nadia</b> · table 1</span></li>
+            <li style="--c: var(--ds-highlight-line)"><span class="lt">B</span><b>Proposal drafting</b><span>From a first call to a draft the partner can edit.</span><span class="who"><b>Jonas</b> · table 2</span></li>
+            <li style="--c: var(--ds-note-line)"><span class="lt">C</span><b>Meeting follow-ups</b><span>Notes, actions and the email that goes out the same day.</span><span class="who"><b>Priya</b> · table 3</span></li>
+            <li style="--c: var(--ds-neutral-line)"><span class="lt">D</span><b>Research and monitoring</b><span>Market scans and the weekly brief for each account.</span><span class="who"><b>Mateo</b> · table 4</span></li>
+          </ul>
+        </div>
+      </div></div>
+      <aside class="notes">
+        <p>Assign people to groups by counting off, not by choosing, so that each table mixes seniority. Each table has a facilitator who is also a participant.</p>
+        <p>Remind groups that the five steps must include at least one human check. Fifty minutes, including three minutes to prepare the show-back.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="wk">
+        <div class="hd"><span class="lbl"><i></i>AI ways of working</span><span class="at">11:15 · Poll results</span></div>
+        <div class="mn">
+          <h2 class="t">How confident are you using AI on client work today?</h2>
+          <div class="pl">
+            <div>
+              <ul class="pr">
+                <li><span>Not at all</span><span class="tr"><i style="width: 33.3%"></i></span><b>3</b></li>
+                <li><span>A little</span><span class="tr"><i style="width: 77.8%"></i></span><b>7</b></li>
+                <li class="top"><span>Fairly</span><span class="tr"><i style="width: 100%"></i></span><b>9</b></li>
+                <li><span>Very</span><span class="tr"><i style="width: 55.6%"></i></span><b>5</b></li>
+              </ul>
+              <p class="n">24 responses, collected at 11:10.</p>
+            </div>
+            <div class="ins">
+              <div><b>14 of 24</b><span>are fairly or very confident already.</span></div>
+              <div class="gap"><b>10 of 24</b><span>are not there yet, and are the ones to pair up this week.</span></div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <aside class="notes">
+        <p>Show the result before anyone comments. Then ask the two ends of the scale what they heard in the breakouts that surprised them.</p>
+        <p>Pair every person who answered "not at all" or "a little" with someone who answered "fairly" or "very". Illustrative data: 3, 7, 9 and 5 responses.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="wk">
+        <div class="hd"><span class="lbl"><i></i>AI ways of working</span><span class="at">11:45 · Takeaways</span></div>
+        <div class="mn">
+          <h2 class="t sm">Three things to take back on Monday.</h2>
+          <ol class="tk">
+            <li><span class="no">1</span><div><b>Sort the task before you pick the tool.</b><span class="d">Automate, assist or keep human: the bin decides how much checking it needs.</span></div></li>
+            <li><span class="no">2</span><div><b>Keep a person wherever a client sees the output.</b><span class="d">Name who checks it, and what they check, before the first run.</span></div></li>
+            <li><span class="no">3</span><div><b>Share the prompt that worked.</b><span class="d">A good prompt is team knowledge. Put it where the next person will find it.</span></div></li>
+          </ol>
+          <div class="next"><b>This week</b><span>Try the one task you circled this morning, and bring the result to Friday stand-up.</span></div>
+        </div>
+      </div></div>
+      <aside class="notes">
+        <p>Read the three bold lines only. Ask each person to write down which one they will act on first.</p>
+        <p>Link back to the outcomes on slide two and tick them off with the group.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl">
+        <div class="qa">
+          <h2>Questions<span>?</span></h2>
+          <ul class="ways">
+            <li><b>Ask now</b>Raise a hand, and we will take them in order.</li>
+            <li><b>Ask later</b>Put a note on the parking-lot board by the door.</li>
+          </ul>
+          <div class="after"><span><b>After today:</b> notes and the one-page checklist by Friday 6 November</span><span>ai-workshop@example.test</span></div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Leave ten minutes. If the room is quiet, start with the question you heard most in the breakouts and answer it yourself.</p>
+        <p>The contact address is a placeholder on a reserved test domain.</p>
+      </aside>
+    </div>
+    <div class="progress" aria-hidden="true"><i></i></div>
+    <div class="overview" role="group" aria-label="Slide overview" hidden></div>
+    <div class="help" role="dialog" aria-label="Keyboard shortcuts" hidden>
+      <div class="help-card">
+        <h2>Keyboard shortcuts</h2>
+        <dl>
+          <dt><kbd>&larr;</kbd><kbd>&rarr;</kbd></dt><dd>Previous and next slide (also Page Up, Page Down, Space)</dd>
+          <dt><kbd>Home</kbd><kbd>End</kbd></dt><dd>First and last slide</dd>
+          <dt><kbd>O</kbd></dt><dd>Overview grid, arrows to move, Enter to jump</dd>
+          <dt><kbd>N</kbd></dt><dd>Show or hide speaker notes</dd>
+          <dt><kbd>P</kbd></dt><dd>Open the presenter window</dd>
+          <dt><kbd>F</kbd></dt><dd>Fullscreen</dd>
+          <dt><kbd>?</kbd></dt><dd>This help</dd>
+          <dt><kbd>Esc</kbd></dt><dd>Close overview or help</dd>
+          <dt>Swipe</dt><dd>Left and right on a touch screen</dd>
+        </dl>
+        <p class="close">Press ? or Esc to close. The print button saves one slide per page.</p>
+      </div>
+    </div>
+    <div class="toast" role="status" aria-live="polite" hidden></div>
+  </div>
+
+  <div class="notes-panel" hidden>
+    <h3>Speaker notes</h3>
+    <div class="notes-body"></div>
+  </div>
+
+  <div class="bar">
+    <button class="btn" type="button" data-act="prev" aria-label="Previous slide">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+    </button>
+    <span class="count" aria-live="polite">1 / 9</span>
+    <button class="btn" type="button" data-act="next" aria-label="Next slide">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg>
+    </button>
+    <span class="spacer"></span>
+    <span class="hint">Arrow keys to move, ? for shortcuts</span>
+    <button class="btn" type="button" data-act="overview" aria-pressed="false" aria-label="Slide overview" title="Overview (O)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="notes" aria-pressed="false" aria-label="Speaker notes" title="Speaker notes (N)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3.5h10M3 7h10M3 10.5h6"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="presenter" aria-label="Open presenter window" title="Presenter window (P)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2.5" width="12" height="8" rx="1.4"/><path d="M6 13.5h4M8 10.5v3"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="print" aria-label="Print or save as PDF" title="Print or save as PDF">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6V2.5h7V6M4.5 11.5h-2V6h11v5.5h-2M4.5 9h7v4.5h-7z"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="help" aria-label="Keyboard shortcuts" title="Shortcuts (?)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M6.2 6.3a1.9 1.9 0 0 1 3.7.6c0 1.2-1.9 1.4-1.9 2.6M8 11.6v.1"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="fs" aria-label="Toggle fullscreen" title="Fullscreen (F)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+(() => {
+  const ROOT_CLASS = 'c-full-workshop';
+  const isEditable = (el) => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+
+  /* Runs inside the presenter window. It is serialised with toString(), so it
+     must not touch anything outside its own body. */
+  function presenterMain(cfg) {
+    const q = (s) => document.querySelector(s);
+    const paneCur = q('[data-pane="cur"]');
+    const paneNext = q('[data-pane="next"]');
+    const notesEl = q('[data-notes]');
+    const posEl = q('[data-pos]');
+    const clockEl = q('[data-clock]');
+    const pauseBtn = q('[data-t="pause"]');
+    let index = cfg.start || 0;
+    let bc = null;
+    let acc = 0;
+    let since = Date.now();
+    let running = true;
+
+    try { if (typeof BroadcastChannel === 'function') bc = new BroadcastChannel(cfg.channel); } catch (e) { bc = null; }
+    const post = (m) => {
+      m.deck = cfg.channel;
+      try { if (bc) bc.postMessage(m); } catch (e) { /* channel closed */ }
+      try { if (window.opener) window.opener.postMessage({ okDeck: m }, '*'); } catch (e) { /* opener gone */ }
+    };
+    const clamp = (n) => Math.max(0, Math.min(cfg.total - 1, n));
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+
+    function render() {
+      paneCur.innerHTML = '<div class="stage">' + cfg.slides[index] + '</div>';
+      paneNext.innerHTML = index + 1 < cfg.total
+        ? '<div class="stage">' + cfg.slides[index + 1] + '</div>'
+        : '<div class="pv-end">End of deck</div>';
+      notesEl.innerHTML = cfg.notes[index] || '<p class="pv-none">No notes for this slide.</p>';
+      posEl.textContent = 'Slide ' + (index + 1) + ' of ' + cfg.total;
+    }
+    function tick() {
+      const ms = acc + (running ? Date.now() - since : 0);
+      const s = Math.floor(ms / 1000);
+      const h = Math.floor(s / 3600);
+      clockEl.textContent = (h ? h + ':' + pad(Math.floor(s / 60) % 60) : Math.floor(s / 60)) + ':' + pad(s % 60);
+    }
+    function move(n) {
+      n = clamp(n);
+      if (n === index) return;
+      index = n;
+      render();
+      post({ t: 'goto', i: index });
+    }
+    function receive(m) {
+      if (!m || m.deck !== cfg.channel) return;
+      if (m.t === 'go' && m.i !== index) { index = clamp(m.i); render(); }
+    }
+
+    if (bc) bc.onmessage = (e) => receive(e.data);
+    window.addEventListener('message', (e) => { if (e.data && e.data.okDeck) receive(e.data.okDeck); });
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      const k = e.key;
+      if (k === 'ArrowRight' || k === 'PageDown' || k === ' ') move(index + 1);
+      else if (k === 'ArrowLeft' || k === 'PageUp') move(index - 1);
+      else if (k === 'Home') move(0);
+      else if (k === 'End') move(cfg.total - 1);
+      else return;
+      e.preventDefault();
+    });
+    document.addEventListener('click', (e) => {
+      const nav = e.target.closest('[data-nav]');
+      if (nav) { move(index + Number(nav.getAttribute('data-nav'))); return; }
+      const t = e.target.closest('[data-t]');
+      if (!t) return;
+      if (t.getAttribute('data-t') === 'pause') {
+        if (running) { acc += Date.now() - since; running = false; } else { since = Date.now(); running = true; }
+        pauseBtn.textContent = running ? 'Pause' : 'Resume';
+      } else {
+        acc = 0; since = Date.now();
+      }
+      tick();
+    });
+
+    render();
+    tick();
+    setInterval(tick, 500);
+    post({ t: 'hello' });
+  }
+
+  const PRESENTER_CSS = (rc) => [
+    'html,body{margin:0;height:100%;}',
+    'body{background:var(--ds-bg);color:var(--ds-text);font-family:var(--ds-font-sans);}',
+    '.pv{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);grid-template-rows:auto auto 1fr;gap:16px;min-height:100%;padding:16px;box-sizing:border-box;}',
+    '.pv-top{grid-column:1 / -1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}',
+    '.pv-top b{font-size:15px;color:var(--ds-ink);}',
+    '.pv-pos{font-size:14px;color:var(--ds-muted);}',
+    '.pv-clock{margin-left:auto;font-size:34px;font-weight:700;color:var(--ds-ink);font-variant-numeric:tabular-nums;}',
+    '.pv button{font:inherit;font-size:13px;font-weight:600;padding:6px 14px;border:1px solid var(--ds-line);border-radius:999px;background:var(--ds-raised);color:var(--ds-ink);cursor:pointer;}',
+    '.pv button:focus-visible{outline:none;box-shadow:var(--ds-focus);}',
+    '.pv-lab{margin:0 0 6px;font-size:12px;font-weight:700;color:var(--ds-muted);}',
+    '.pv .' + rc + '{display:block;padding:0;background:none;border-radius:0;}',
+    '.pv-end{display:grid;place-items:center;aspect-ratio:16 / 9;border:1px dashed var(--ds-line);border-radius:12px;color:var(--ds-muted);font-size:14px;}',
+    '.pv-side{display:grid;align-content:start;gap:12px;}',
+    '.pv-nav{display:flex;gap:8px;}',
+    '.pv-notes{grid-column:1 / -1;padding:16px 20px;background:var(--ds-surface);border:1px solid var(--ds-line);border-radius:12px;font-size:21px;line-height:1.5;overflow:auto;}',
+    '.pv-notes p{margin:0 0 10px;}',
+    '.pv-none{color:var(--ds-muted);}'
+  ].join('\n');
+
+  const allRoots = Array.from(document.querySelectorAll('.' + ROOT_CLASS));
+  allRoots.forEach((root, rootIndex) => {
+    const deeplink = root.hasAttribute('data-deeplink');
+    const stage = root.querySelector('.stage');
+    const slides = Array.from(stage.querySelectorAll(':scope > .slide'));
+    const count = root.querySelector('.count');
+    const fill = root.querySelector('.progress i');
+    const prev = root.querySelector('[data-act="prev"]');
+    const next = root.querySelector('[data-act="next"]');
+    const fs = root.querySelector('[data-act="fs"]');
+    const ovBtn = root.querySelector('[data-act="overview"]');
+    const notesBtn = root.querySelector('[data-act="notes"]');
+    const presBtn = root.querySelector('[data-act="presenter"]');
+    const printBtn = root.querySelector('[data-act="print"]');
+    const helpBtn = root.querySelector('[data-act="help"]');
+    const ov = root.querySelector('.overview');
+    const help = root.querySelector('.help');
+    const toast = root.querySelector('.toast');
+    const notesPanel = root.querySelector('.notes-panel');
+    const notesBody = root.querySelector('.notes-body');
+    const deckKey = 'ok-deck:' + location.pathname + ':' + ROOT_CLASS + ':' + rootIndex;
+    let index = 0;
+    let pw = null;
+    let bc = null;
+    let toastTimer = 0;
+
+    try { if (typeof BroadcastChannel === 'function') bc = new BroadcastChannel(deckKey); } catch (e) { bc = null; }
+
+    function say(msg) {
+      toast.textContent = msg;
+      toast.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toast.hidden = true; }, 5000);
+    }
+
+    function hashIndex() {
+      const m = /^#slide-(\d+)$/.exec(location.hash);
+      return m ? Math.max(0, Math.min(slides.length - 1, Number(m[1]) - 1)) : null;
+    }
+    function writeHash() {
+      const h = '#slide-' + (index + 1);
+      if (location.hash === h) return;
+      /* replaceState keeps Back working; it throws in sandboxed frames, where the hash is skipped on purpose */
+      try { history.replaceState(history.state, '', h); } catch (e) { /* sandboxed frame: leave the URL alone */ }
+    }
+
+    function noteHtml(k) {
+      const a = slides[k].querySelector(':scope > .notes');
+      return a ? a.innerHTML.trim() : '';
+    }
+    function syncNotes() {
+      if (notesPanel.hidden) return;
+      notesBody.innerHTML = noteHtml(index) || '<p class="none">No notes for this slide.</p>';
+    }
+    function broadcast() {
+      if (!pw || pw.closed) return;
+      const m = { deck: deckKey, t: 'go', i: index };
+      try { if (bc) bc.postMessage(m); } catch (e) { /* channel closed */ }
+      try { pw.postMessage({ okDeck: m }, '*'); } catch (e) { /* window gone */ }
+    }
+    function markOverview() {
+      Array.from(ov.children).forEach((t, k) => t.setAttribute('aria-current', k === index ? 'true' : 'false'));
+    }
+
+    function go(n, silent) {
+      index = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, k) => {
+        const on = k === index;
+        s.classList.toggle('is-active', on);
+        s.setAttribute('aria-hidden', on ? 'false' : 'true');
+        s.inert = !on;
+      });
+      count.textContent = (index + 1) + ' / ' + slides.length;
+      fill.style.width = ((index + 1) / slides.length * 100) + '%';
+      prev.disabled = index === 0;
+      next.disabled = index === slides.length - 1;
+      syncNotes();
+      markOverview();
+      if (deeplink && !silent) writeHash();
+      broadcast();
+    }
+
+    /* overview */
+    function buildOverview() {
+      ov.textContent = '';
+      slides.forEach((s, k) => {
+        const clone = s.cloneNode(true);
+        clone.querySelectorAll('.notes').forEach((n) => n.remove());
+        clone.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+        clone.classList.remove('is-active');
+        clone.setAttribute('aria-hidden', 'true');
+        clone.inert = true;
+        const t = document.createElement('div');
+        t.className = 'thumb';
+        t.setAttribute('role', 'button');
+        t.tabIndex = 0;
+        t.setAttribute('aria-label', 'Go to slide ' + (k + 1));
+        const num = document.createElement('span');
+        num.className = 'num';
+        num.textContent = String(k + 1);
+        t.append(clone, num);
+        const pick = () => { closeOverview(); go(k); root.focus({ preventScroll: true }); };
+        t.addEventListener('click', (e) => { e.stopPropagation(); pick(); });
+        t.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); pick(); }
+        });
+        ov.append(t);
+      });
+      markOverview();
+    }
+    function fitThumbs() {
+      Array.from(ov.children).forEach((t) => {
+        const c = t.firstElementChild;
+        if (c && t.clientWidth) c.style.setProperty('--s', String(t.clientWidth / 1280));
+      });
+    }
+    if (typeof ResizeObserver === 'function') new ResizeObserver(fitThumbs).observe(ov);
+    function openOverview() {
+      closeHelp();
+      buildOverview();
+      ov.hidden = false;
+      fitThumbs();
+      ovBtn.setAttribute('aria-pressed', 'true');
+      const t = ov.children[index];
+      if (t) t.focus({ preventScroll: true });
+    }
+    function closeOverview() {
+      if (ov.hidden) return;
+      ov.hidden = true;
+      ov.textContent = '';
+      ovBtn.setAttribute('aria-pressed', 'false');
+    }
+    function toggleOverview() {
+      if (ov.hidden) openOverview();
+      else { closeOverview(); root.focus({ preventScroll: true }); }
+    }
+    function moveInOverview(delta, absolute) {
+      const items = Array.from(ov.children);
+      if (!items.length) return;
+      const at = items.indexOf(document.activeElement && document.activeElement.closest ? document.activeElement.closest('.thumb') : null);
+      const from = at < 0 ? index : at;
+      const to = absolute ? delta : from + delta;
+      const t = items[Math.max(0, Math.min(items.length - 1, to))];
+      if (t) t.focus();
+    }
+
+    /* help, notes, presenter, print */
+    function openHelp() { closeOverview(); help.hidden = false; }
+    function closeHelp() { help.hidden = true; }
+    function toggleNotes() {
+      notesPanel.hidden = !notesPanel.hidden;
+      notesBtn.setAttribute('aria-pressed', notesPanel.hidden ? 'false' : 'true');
+      syncNotes();
+    }
+
+    function openPresenter() {
+      if (pw && !pw.closed) { pw.focus(); return; }
+      let w = null;
+      try { w = window.open('', 'ok-presenter-' + rootIndex, 'popup=yes,width=1180,height=780'); } catch (e) { w = null; }
+      if (!w || w.closed) {
+        say('The presenter window was blocked. Allow pop-ups for this page, then press P again.');
+        return;
+      }
+      pw = w;
+      const d = w.document;
+      d.title = 'Presenter view';
+      ['lang', 'class', 'data-theme', 'style'].forEach((a) => {
+        const v = document.documentElement.getAttribute(a);
+        if (v !== null) d.documentElement.setAttribute(a, v);
+      });
+      ['class', 'style'].forEach((a) => {
+        const v = document.body.getAttribute(a);
+        if (v !== null) d.body.setAttribute(a, v);
+      });
+      document.querySelectorAll('style, link[rel="stylesheet"]').forEach((n) => {
+        const c = d.importNode(n, true);
+        if (n.tagName === 'LINK') c.href = n.href;
+        d.head.appendChild(c);
+      });
+      const own = d.createElement('style');
+      own.textContent = PRESENTER_CSS(ROOT_CLASS);
+      d.head.appendChild(own);
+
+      d.body.innerHTML = '<div class="pv">'
+        + '<div class="pv-top"><b>Presenter view</b><span class="pv-pos" data-pos></span>'
+        + '<span class="pv-clock" data-clock aria-label="Elapsed time">0:00</span>'
+        + '<button type="button" data-t="pause">Pause</button><button type="button" data-t="reset">Reset</button></div>'
+        + '<div><p class="pv-lab">Current slide</p><div class="' + ROOT_CLASS + '" data-pane="cur"></div></div>'
+        + '<div class="pv-side"><div><p class="pv-lab">Next slide</p><div class="' + ROOT_CLASS + '" data-pane="next"></div></div>'
+        + '<div class="pv-nav"><button type="button" data-nav="-1">Previous</button><button type="button" data-nav="1">Next</button></div></div>'
+        + '<div class="pv-notes"><p class="pv-lab">Speaker notes</p><div data-notes></div></div>'
+        + '</div>';
+
+      const cfg = {
+        channel: deckKey,
+        total: slides.length,
+        start: index,
+        slides: slides.map((s) => {
+          const c = s.cloneNode(true);
+          c.querySelectorAll('.notes').forEach((n) => n.remove());
+          c.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+          c.classList.add('is-active');
+          c.removeAttribute('aria-hidden');
+          c.removeAttribute('inert');
+          c.inert = false;
+          return c.outerHTML;
+        }),
+        notes: slides.map((s, k) => noteHtml(k))
+      };
+      const sc = d.createElement('script');
+      sc.textContent = '(' + presenterMain.toString() + ')(' + JSON.stringify(cfg) + ');';
+      d.body.appendChild(sc);
+    }
+
+    function onMessage(m) {
+      if (!m || m.deck !== deckKey) return;
+      if (m.t === 'goto' && typeof m.i === 'number') go(m.i);
+      else if (m.t === 'hello') broadcast();
+    }
+    if (bc) bc.onmessage = (e) => onMessage(e.data);
+    window.addEventListener('message', (e) => {
+      if (pw && e.source === pw && e.data && e.data.okDeck) onMessage(e.data.okDeck);
+    });
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement === root) {
+        document.exitFullscreen();
+      } else if (root.requestFullscreen) {
+        root.requestFullscreen().catch(() => {});
+      }
+    }
+
+    prev.addEventListener('click', () => go(index - 1));
+    next.addEventListener('click', () => go(index + 1));
+    ovBtn.addEventListener('click', toggleOverview);
+    notesBtn.addEventListener('click', toggleNotes);
+    presBtn.addEventListener('click', openPresenter);
+    printBtn.addEventListener('click', () => {
+      closeOverview();
+      closeHelp();
+      if (window.origin === 'null') say('If the print dialog does not open, printing is blocked inside this frame. Open the deck on its own page.');
+      window.print();
+    });
+    helpBtn.addEventListener('click', () => { if (help.hidden) openHelp(); else closeHelp(); });
+    help.addEventListener('click', (e) => { if (e.target === help) closeHelp(); });
+    if (document.fullscreenEnabled) fs.addEventListener('click', toggleFullscreen);
+    else fs.hidden = true;
+    stage.addEventListener('click', () => root.focus({ preventScroll: true }));
+    window.addEventListener('beforeprint', () => { closeOverview(); closeHelp(); });
+
+    /* touch swipe, touch pointers only so mouse selection is untouched */
+    let sx = 0;
+    let sy = 0;
+    let swiping = false;
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'touch' || !ov.hidden || !help.hidden) return;
+      if (e.target.closest('button, a, input, textarea, select, [role="button"]')) return;
+      swiping = true; sx = e.clientX; sy = e.clientY;
+    });
+    stage.addEventListener('pointerup', (e) => {
+      if (!swiping) return;
+      swiping = false;
+      const dx = e.clientX - sx;
+      const dy = e.clientY - sy;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) go(index + (dx < 0 ? 1 : -1));
+    });
+    stage.addEventListener('pointercancel', () => { swiping = false; });
+
+    if (deeplink) {
+      window.addEventListener('hashchange', () => {
+        const n = hashIndex();
+        if (n !== null && n !== index) go(n, true);
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (isEditable(e.target)) return;
+      const inside = root.contains(document.activeElement);
+      const alone = document.querySelectorAll('[aria-roledescription="presentation"]').length === 1;
+      if (!inside && !alone) return;
+      if (e.key === ' ' && e.target.closest && e.target.closest('button, a, summary, [role="button"]')) return;
+
+      if (!ov.hidden) {
+        const cols = getComputedStyle(ov).gridTemplateColumns.split(' ').length || 1;
+        let used = true;
+        switch (e.key) {
+          case 'ArrowRight': moveInOverview(1); break;
+          case 'ArrowLeft': moveInOverview(-1); break;
+          case 'ArrowDown': moveInOverview(cols); break;
+          case 'ArrowUp': moveInOverview(-cols); break;
+          case 'Home': moveInOverview(0, true); break;
+          case 'End': moveInOverview(slides.length - 1, true); break;
+          case 'o': case 'O': case 'Escape': toggleOverview(); break;
+          default: used = false;
+        }
+        if (used) { e.preventDefault(); return; }
+      }
+
+      let handled = true;
+      switch (e.key) {
+        case 'ArrowRight': case 'PageDown': go(index + 1); break;
+        case 'ArrowLeft': case 'PageUp': go(index - 1); break;
+        case ' ': go(e.shiftKey ? index - 1 : index + 1); break;
+        case 'Home': go(0); break;
+        case 'End': go(slides.length - 1); break;
+        case 'f': case 'F': if (document.fullscreenEnabled) toggleFullscreen(); break;
+        case 'o': case 'O': toggleOverview(); break;
+        case 'n': case 'N': toggleNotes(); break;
+        case 'p': case 'P': openPresenter(); break;
+        case '?': if (help.hidden) openHelp(); else closeHelp(); break;
+        case 'Escape': if (!help.hidden) closeHelp(); else handled = false; break;
+        default: handled = false;
+      }
+      if (handled) e.preventDefault();
+    });
+
+    const start = deeplink ? hashIndex() : null;
+    go(start === null ? 0 : start, true);
+  });
+})();
+</script>
+<script>
+(() => {
+  const fmt = (s) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+
+  document.querySelectorAll('.c-full-workshop').forEach((root) => {
+    const cd = root.querySelector('.stage > .slide .cd');
+    if (!cd) return;
+    const time = cd.querySelector('.cd-time');
+    const fill = cd.querySelector('.cd-fill');
+    const state = cd.querySelector('.cd-state');
+    const go = cd.querySelector('[data-cd="go"]');
+    const reset = cd.querySelector('[data-cd="reset"]');
+    const total = Number(cd.getAttribute('data-seconds')) || 900;
+    const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let left = total;
+    let endAt = 0;
+    let timer = 0;
+
+    function paint() {
+      time.textContent = fmt(left);
+      fill.style.width = (left / total * 100) + '%';
+      if (calm) fill.style.transition = 'none';
+    }
+    function stop() {
+      clearInterval(timer);
+      timer = 0;
+    }
+    function tick() {
+      left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+      paint();
+      if (left === 0) {
+        stop();
+        cd.classList.add('is-done');
+        state.textContent = 'Time is up';
+        go.textContent = 'Start again';
+      }
+    }
+    function start() {
+      if (left === 0) left = total;
+      cd.classList.remove('is-done');
+      endAt = Date.now() + left * 1000;
+      timer = setInterval(tick, 250);
+      state.textContent = 'Running';
+      go.textContent = 'Pause';
+      tick();
+    }
+    function pause() {
+      left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+      stop();
+      paint();
+      state.textContent = 'Paused';
+      go.textContent = 'Resume';
+    }
+    function restart() {
+      stop();
+      left = total;
+      cd.classList.remove('is-done');
+      state.textContent = 'Ready, ' + (total / 60) + ' minutes';
+      go.textContent = 'Start';
+      paint();
+    }
+
+    go.addEventListener('click', () => { if (timer) pause(); else start(); });
+    reset.addEventListener('click', restart);
+  });
+})();
+</script>

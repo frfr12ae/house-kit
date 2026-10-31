@@ -1,0 +1,86 @@
+<!--
+@title Pitch why now
+@group Pitch
+@description Seed pitch timing slide: three shifts on a small timeline that make the company possible now.
+@tags pitch, startup, why now, timeline, market timing, slide
+@preview slide
+@added 2026-10-31
+@source Y Combinator seed deck guidance | https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck | inspired-by
+-->
+<style>
+  .c-pitch-why-now, .c-pitch-why-now *, .c-pitch-why-now *::before, .c-pitch-why-now *::after { box-sizing: border-box; }
+  .c-pitch-why-now {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-pitch-why-now .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 6cqi;
+  }
+  .c-pitch-why-now .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6cqi;
+    font-size: 1.5cqi;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--ds-ink);
+  }
+  .c-pitch-why-now .brand svg { width: 1.7cqi; height: 1.7cqi; fill: none; stroke: var(--ds-ink); stroke-width: 2; stroke-linecap: round; }
+  .c-pitch-why-now .brand svg .strike { stroke: var(--ds-highlight-line); }
+  .c-pitch-why-now .num {
+    position: absolute;
+    right: 6cqi;
+    bottom: 2.6cqi;
+    font-size: 1cqi;
+    line-height: 1;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-pitch-why-now h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 4.6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.06;
+    color: var(--ds-ink);
+  }
+  .c-pitch-why-now .kicker { font-size: 1.5cqi; font-weight: 700; color: var(--ds-muted); }
+
+  .c-pitch-why-now .main { display: grid; align-content: space-between; padding-top: 4cqi; }
+  .c-pitch-why-now h2 { max-width: 60cqi; }
+  .c-pitch-why-now .tl { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4cqi; padding-top: 4cqi; }
+  .c-pitch-why-now .tl::before { content: ""; position: absolute; top: 0.68cqi; left: 0; right: 0; height: 0.16cqi; background: var(--ds-line); }
+  .c-pitch-why-now .step { position: relative; display: grid; gap: 0.9cqi; align-content: start; }
+  .c-pitch-why-now .step::before { content: ""; position: absolute; top: -4cqi; left: 0; width: 1.5cqi; height: 1.5cqi; border-radius: 50%; background: var(--ds-surface); border: 0.3cqi solid var(--ds-neutral-line); }
+  .c-pitch-why-now .step.now::before { background: var(--ds-highlight-line); border-color: var(--ds-highlight-line); box-shadow: 0 0 0 0.6cqi var(--ds-highlight-fill); }
+  .c-pitch-why-now .yr { font-family: var(--ds-font-display); font-size: 3.4cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-pitch-why-now .step h3 { margin: 0.4cqi 0 0; font-size: 2cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-pitch-why-now .step p { margin: 0; max-width: 24cqi; font-size: 1.65cqi; line-height: 1.42; color: var(--ds-text); }
+</style>
+
+<section class="c-pitch-why-now" aria-label="Why now slide">
+  <div class="inner">
+    <div class="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3v14M8 3v14M12 3v14M16 3v14"/><path class="strike" d="M1.5 15.5L18.5 4.5"/></svg>Tallyhouse</div>
+    <div class="main">
+      <h2>Three shifts make this possible now.</h2>
+      <div class="tl">
+        <div class="step"><div class="yr">2022</div><h3>Bank feeds are standard</h3><p>Every major studio bank now shares transactions, so the data arrives on its own.</p></div>
+        <div class="step"><div class="yr">2024</div><h3>AI learned to read receipts</h3><p>Models read invoices and receipts with accountant-level accuracy, at pennies a page.</p></div>
+        <div class="step now"><div class="yr">2026</div><h3>E-invoicing becomes law</h3><p>Digital invoices are required in more markets, so paper workflows are on their way out.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="num" aria-hidden="true">4</div>
+</section>

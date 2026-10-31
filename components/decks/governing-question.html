@@ -1,0 +1,92 @@
+<!--
+@title Governing question
+@group Storyline
+@description The single key question a deck answers, set large and centred, with three sub-questions beneath as numbered chips.
+@tags slide, governing question, key question, issue, storyline, sub-questions
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-governing-question {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-governing-question .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-governing-question .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-governing-question .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-governing-question h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-governing-question .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-governing-question .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-governing-question .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-governing-question .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-governing-question .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-governing-question .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-governing-question .body { display: grid; align-items: center; padding-top: 0; }
+  .c-governing-question .stage { display: grid; justify-items: center; gap: 3.4cqi; text-align: center; }
+  .c-governing-question h1 { margin: 0; max-width: 70cqi; font-size: 4.2cqi; font-weight: 700; line-height: 1.18; letter-spacing: -0.015em; }
+  .c-governing-question .rule { display: flex; align-items: center; gap: 1.6cqi; width: 100%; font-size: 1.15cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-governing-question .rule::before, .c-governing-question .rule::after { content: ""; flex: 1; height: 0; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-governing-question .subs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2cqi; width: 100%; margin: 0; padding: 0; list-style: none; text-align: left; }
+  .c-governing-question .subs li { display: flex; align-items: flex-start; gap: 1.4cqi; padding: 1.8cqi 2cqi; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-governing-question .n { flex: none; display: grid; place-items: center; width: 3cqi; height: 3cqi; border-radius: 50%; background: var(--ds-highlight-fill); border: var(--ds-hairline) solid var(--ds-highlight-line); font-size: 1.5cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-governing-question .t { font-size: 1.6cqi; line-height: 1.4; font-weight: 600; color: var(--ds-ink); padding-top: 0.2cqi; }
+</style>
+
+<section class="c-governing-question" aria-label="Governing question">
+  <div class="inner">
+    <div class="top"><p class="kicker">Governing question</p></div>
+    <div class="body">
+      <div class="stage">
+        <h1>How should we grow regional parcel revenue to EUR 450m by 2029 without giving up margin?</h1>
+        <div class="rule"><span>Three sub-questions this deck answers</span></div>
+        <ol class="subs">
+        <li><span class="n">1</span><span class="t">Where is the growth: which customers and regions should we win?</span></li>
+        <li><span class="n">2</span><span class="t">What must change in the network to serve that demand profitably?</span></li>
+        <li><span class="n">3</span><span class="t">What will it cost, and how should we sequence the investment?</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Steering committee brief, October 2026.</span><span class="page">3</span></div>
+  </div>
+</section>

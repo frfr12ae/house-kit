@@ -1,0 +1,109 @@
+<!--
+@title Options evaluation
+@group Storyline
+@description Three options scored 1 to 5 against five weighted criteria, with a bold weighted-total row and the recommended option highlighted.
+@tags slide, options, evaluation, scoring, weighted, criteria, decision matrix, recommendation
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-options-evaluation {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-options-evaluation .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-options-evaluation .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-options-evaluation .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-options-evaluation h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-options-evaluation .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-options-evaluation .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-options-evaluation .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-options-evaluation .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-options-evaluation .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-options-evaluation .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-options-evaluation .grid { display: grid; grid-template-columns: 22cqi 9cqi repeat(3, minmax(0, 1fr)); grid-template-rows: auto repeat(5, minmax(0, 1fr)) minmax(0, 1.25fr); height: 100%; }
+  .c-options-evaluation .grid > div { display: flex; align-items: center; border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-options-evaluation .crit { font-size: 1.6cqi; font-weight: 600; color: var(--ds-ink); }
+  .c-options-evaluation .w { justify-content: center; font-size: 1.4cqi; font-weight: 600; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-options-evaluation .s { justify-content: center; font-size: 2cqi; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-options-evaluation .head { flex-direction: column; align-items: center; justify-content: flex-end; gap: 0.4cqi; padding-bottom: 1.2cqi; text-align: center; font-size: 1.7cqi; font-weight: 800; line-height: 1.2; color: var(--ds-ink); }
+  .c-options-evaluation .head small { font-size: 1.15cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-options-evaluation .head.lbl { align-items: flex-start; justify-content: flex-end; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-options-evaluation .head.lbl.c2 { align-items: center; }
+  .c-options-evaluation .tag { padding: 0.3cqi 1cqi; border-radius: var(--ds-radius-pill); background: var(--ds-highlight-line); font-size: 1cqi; font-weight: 800; letter-spacing: 0.02em; color: var(--ds-bg); }
+  .c-options-evaluation .rec { background: var(--ds-highlight-fill); border-left: var(--ds-stroke) solid var(--ds-highlight-line); border-right: var(--ds-stroke) solid var(--ds-highlight-line); border-bottom-color: color-mix(in srgb, var(--ds-highlight-line) 40%, transparent); }
+  .c-options-evaluation .head.rec { border-top: var(--ds-stroke) solid var(--ds-highlight-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)) calc(0.6cqi * var(--ds-radius-scale, 1)) 0 0; }
+  .c-options-evaluation .tot { border-top: var(--ds-stroke) solid var(--ds-ink); border-bottom-color: transparent !important; font-size: 2.6cqi; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ds-ink); }
+  .c-options-evaluation .tot.lab { font-size: 1.6cqi; justify-content: flex-start; }
+  .c-options-evaluation .tot.wt { font-size: 1.2cqi; color: var(--ds-muted); justify-content: center; }
+  .c-options-evaluation .tot.rec { border-top-color: var(--ds-highlight-line); border-bottom: var(--ds-stroke) solid var(--ds-highlight-line) !important; border-radius: 0 0 calc(0.6cqi * var(--ds-radius-scale, 1)) calc(0.6cqi * var(--ds-radius-scale, 1)); justify-content: center; }
+  .c-options-evaluation .tot:not(.rec):not(.lab):not(.wt) { justify-content: center; }
+</style>
+
+<section class="c-options-evaluation" aria-label="Weighted scoring of three options">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Options</p>
+        <h1>The hub-and-spoke network scores 3.75 of 5, ahead of both alternatives on a weighted basis</h1>
+      </div>
+      <ol class="tracker" aria-label="Deck sections"><li>Context</li><li class="on" aria-current="step">Options</li><li>Recommendation</li><li>Next steps</li></ol>
+    </div>
+    <div class="body">
+      <div class="grid">
+      <div class="head lbl">Criterion</div><div class="head lbl c2">Weight</div>
+      <div class="head"><small>Option A</small>Upgrade existing<br>depots</div>
+      <div class="head rec"><span class="tag">Recommended</span><small>Option B</small>Hub-and-spoke<br>network</div>
+      <div class="head"><small>Option C</small>Acquire a<br>regional rival</div>
+      <div class="crit">Revenue potential</div><div class="w">30%</div><div class="s">2</div><div class="s rec">4</div><div class="s">5</div>
+      <div class="crit">Capital required</div><div class="w">20%</div><div class="s">4</div><div class="s rec">3</div><div class="s">1</div>
+      <div class="crit">Delivery risk</div><div class="w">20%</div><div class="s">4</div><div class="s rec">3</div><div class="s">2</div>
+      <div class="crit">Time to impact</div><div class="w">15%</div><div class="s">3</div><div class="s rec">4</div><div class="s">2</div>
+      <div class="crit">Strategic fit</div><div class="w">15%</div><div class="s">2</div><div class="s rec">5</div><div class="s">3</div>
+      <div class="tot lab">Weighted total</div><div class="tot wt">100%</div><div class="tot">2.95</div><div class="tot rec">3.75</div><div class="tot">2.85</div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Steering committee scoring workshop, October 2026. Scores 1 (weak) to 5 (strong); for capital and risk, 5 is best.</span><span class="page">8</span></div>
+  </div>
+</section>

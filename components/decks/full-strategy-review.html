@@ -1,0 +1,1353 @@
+<!--
+@title Full deck: strategy review
+@group Full decks
+@description A ten-slide consulting strategy review for a fictional regional logistics company: cover, executive summary, issue tree, waterfall and 2x2 exhibits, options, recommendations, roadmap, next steps and appendix, with speaker notes.
+@tags deck, strategy, consulting, board, review, waterfall, issue tree, roadmap, full deck
+@preview fill
+@height 640
+@added 2026-10-31
+-->
+<style>
+  .c-full-strategy-review {
+    position: relative;
+    display: grid;
+    gap: var(--ds-space-4);
+    padding: var(--ds-space-4);
+    background: var(--ds-panel);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    outline: none;
+  }
+  .c-full-strategy-review:focus-visible { box-shadow: var(--ds-focus); }
+  .c-full-strategy-review [hidden] { display: none !important; }
+
+  .c-full-strategy-review .stage {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-md);
+    touch-action: pan-y;
+  }
+  .c-full-strategy-review .slide {
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease-in-out), visibility 0s linear var(--ds-dur-slow);
+  }
+  .c-full-strategy-review .slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease-in-out), visibility 0s;
+  }
+  .c-full-strategy-review .slide > * { width: 100%; }
+  .c-full-strategy-review .slide > .notes { display: none; }
+
+  .c-full-strategy-review .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0.3cqi;
+    min-height: 3px;
+    background: color-mix(in srgb, var(--ds-line) 70%, transparent);
+    pointer-events: none;
+    z-index: 3;
+  }
+  .c-full-strategy-review .progress i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--ds-action);
+    transition: width var(--ds-dur-slow) var(--ds-ease);
+  }
+
+  /* overview grid: the real slides, cloned and scaled by container units */
+  .c-full-strategy-review .overview {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: max-content;
+    align-content: start;
+    gap: 1.6cqi;
+    padding: 2.4cqi;
+    overflow: auto;
+    background: var(--ds-panel);
+  }
+  .c-full-strategy-review .thumb {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+    transition: transform var(--ds-dur-fast) var(--ds-ease), box-shadow var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-full-strategy-review .thumb::before { content: ""; display: block; padding-top: 56.25%; }
+  .c-full-strategy-review .thumb:hover { transform: translateY(-2px); box-shadow: var(--ds-shadow-md); }
+  .c-full-strategy-review .thumb:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-full-strategy-review .thumb[aria-current="true"] { border-color: var(--ds-highlight-line); box-shadow: 0 0 0 2px var(--ds-highlight-line); }
+  /* each thumbnail holds a full-size 1280 x 720 slide scaled by JS, so type never hits a minimum font size */
+  .c-full-strategy-review .thumb .slide {
+    inset: auto;
+    top: 0;
+    left: 0;
+    width: 1280px;
+    height: 720px;
+    transform-origin: 0 0;
+    transform: scale(var(--s, 0.2));
+    opacity: 1;
+    visibility: visible;
+    transition: none;
+    pointer-events: none;
+    user-select: none;
+  }
+  .c-full-strategy-review .thumb > .num {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    z-index: 1;
+    min-width: 20px;
+    padding: 1px 6px;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* keyboard help */
+  .c-full-strategy-review .help {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    display: grid;
+    place-items: center;
+    padding: var(--ds-space-4);
+    overflow: auto;
+    background: color-mix(in srgb, var(--ds-ink) 38%, transparent);
+  }
+  .c-full-strategy-review .help-card {
+    width: min(100%, 520px);
+    padding: var(--ds-space-5);
+    background: var(--ds-raised);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-lg);
+    color: var(--ds-text);
+  }
+  .c-full-strategy-review .help-card h2 { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-lg); font-weight: 700; color: var(--ds-ink); }
+  .c-full-strategy-review .help-card dl { display: grid; grid-template-columns: auto 1fr; gap: var(--ds-space-2) var(--ds-space-4); margin: 0; font-size: var(--ds-text-sm); line-height: var(--ds-leading-snug); }
+  .c-full-strategy-review .help-card dt { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .c-full-strategy-review .help-card dd { margin: 0; align-self: center; }
+  .c-full-strategy-review .help-card kbd {
+    display: inline-block;
+    min-width: 24px;
+    padding: 1px 7px;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-bottom-width: 2px;
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-surface);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    text-align: center;
+    color: var(--ds-ink);
+  }
+  .c-full-strategy-review .help-card .close { margin-top: var(--ds-space-4); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+
+  .c-full-strategy-review .toast {
+    position: absolute;
+    left: 50%;
+    bottom: 3cqi;
+    z-index: 7;
+    max-width: 86%;
+    padding: var(--ds-space-2) var(--ds-space-4);
+    transform: translateX(-50%);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* speaker notes under the stage */
+  .c-full-strategy-review .notes-panel {
+    padding: var(--ds-space-4) var(--ds-space-5);
+    max-height: 220px;
+    overflow: auto;
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+  }
+  .c-full-strategy-review .notes-panel h3 { margin: 0 0 var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-muted); }
+  .c-full-strategy-review .notes-body { font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); color: var(--ds-text); }
+  .c-full-strategy-review .notes-body p { margin: 0 0 var(--ds-space-2); }
+  .c-full-strategy-review .notes-body p:last-child { margin-bottom: 0; }
+  .c-full-strategy-review .notes-body .none { color: var(--ds-muted); }
+
+  .c-full-strategy-review .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ds-space-3);
+  }
+  .c-full-strategy-review .count {
+    min-width: 64px;
+    text-align: center;
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    color: var(--ds-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-full-strategy-review .spacer { flex: 1; }
+  .c-full-strategy-review .hint { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-full-strategy-review .btn {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-raised);
+    color: var(--ds-ink);
+    cursor: pointer;
+    transition: border-color var(--ds-dur-fast) var(--ds-ease), background var(--ds-dur-fast) var(--ds-ease);
+  }
+  .c-full-strategy-review .btn:hover:not(:disabled) { border-color: var(--ds-muted); }
+  .c-full-strategy-review .btn:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-full-strategy-review .btn:disabled { color: var(--ds-muted); background: var(--ds-panel); cursor: not-allowed; opacity: 0.6; }
+  .c-full-strategy-review .btn[aria-pressed="true"] { background: var(--ds-action); border-color: var(--ds-action); color: var(--ds-on-action); }
+  .c-full-strategy-review .btn svg { width: 16px; height: 16px; }
+
+  @media (max-width: 720px) { .c-full-strategy-review .hint { display: none; } }
+  @media (max-width: 520px) {
+    .c-full-strategy-review { padding: var(--ds-space-3); gap: var(--ds-space-3); }
+    .c-full-strategy-review .bar { gap: 6px; }
+    .c-full-strategy-review .btn { width: 32px; height: 32px; }
+    .c-full-strategy-review .count { min-width: 52px; }
+    .c-full-strategy-review [data-act="presenter"] { display: none; }
+    .c-full-strategy-review .overview { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3cqi; padding: 3cqi; }
+  }
+
+  .c-full-strategy-review:fullscreen {
+    grid-template-rows: minmax(0, 1fr) auto;
+    place-items: center;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    gap: var(--ds-space-3);
+    border-radius: 0;
+    background: var(--ds-bg);
+  }
+  .c-full-strategy-review:fullscreen .stage {
+    width: min(100%, calc((100vh - 72px) * 16 / 9));
+    border-radius: 0;
+  }
+  .c-full-strategy-review:fullscreen .notes-panel { display: none; }
+  .c-full-strategy-review:fullscreen .bar { opacity: 0.55; transition: opacity var(--ds-dur-base) var(--ds-ease); }
+  .c-full-strategy-review:fullscreen .bar:hover, .c-full-strategy-review:fullscreen .bar:focus-within { opacity: 1; }
+
+  /* Print and PDF: one slide per landscape 16:9 page, chrome hidden.
+     The @page line sets the paper to 1280 x 720 px; delete it if the page
+     that hosts this deck also prints other content. */
+  @page { size: 1280px 720px; margin: 0; }
+  @media print {
+    .c-full-strategy-review, .c-full-strategy-review * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .c-full-strategy-review { display: block; padding: 0; background: none; border-radius: 0; }
+    .c-full-strategy-review .bar, .c-full-strategy-review .notes-panel, .c-full-strategy-review .overview, .c-full-strategy-review .help,
+    .c-full-strategy-review .toast, .c-full-strategy-review .progress { display: none !important; }
+    .c-full-strategy-review .stage { aspect-ratio: auto; overflow: visible; background: none; border-radius: 0; box-shadow: none; }
+    .c-full-strategy-review .slide {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      opacity: 1;
+      visibility: visible;
+      transition: none;
+      break-inside: avoid;
+    }
+    .c-full-strategy-review .slide + .slide { break-before: page; }
+  }
+
+  .c-full-strategy-review .sl {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    container-type: inline-size;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-full-strategy-review .pg {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi;
+  }
+  .c-full-strategy-review .top { display: flex; justify-content: space-between; align-items: center; gap: 2cqi; }
+  .c-full-strategy-review .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-full-strategy-review .track { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-full-strategy-review .track li {
+    padding: 0.28cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 0.95cqi;
+    font-weight: 600;
+    color: var(--ds-muted);
+  }
+  .c-full-strategy-review .track li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-full-strategy-review .t {
+    margin: 1.1cqi 0 0;
+    max-width: 84cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.18;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-full-strategy-review .bd { min-height: 0; margin-top: 2.2cqi; }
+  .c-full-strategy-review .ft {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    margin-top: 1.4cqi;
+    padding-top: 1.1cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-full-strategy-review .pn { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  /* cover */
+  .c-full-strategy-review .cv { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; padding: 6cqi 7cqi 5cqi; }
+  .c-full-strategy-review .cv .brand { display: flex; align-items: center; gap: 1.2cqi; font-size: 1.6cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-full-strategy-review .cv .mk { width: 2.6cqi; height: 2.6cqi; border-radius: calc(0.5cqi * var(--ds-radius-scale, 1)); background: var(--ds-highlight-line); }
+  .c-full-strategy-review .cv .main { align-self: center; display: grid; gap: 2.4cqi; max-width: 74cqi; }
+  .c-full-strategy-review .cv .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-full-strategy-review .cv h1 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 5.6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.04;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-full-strategy-review .cv .sub { margin: 0; max-width: 56cqi; font-size: 1.9cqi; line-height: 1.45; }
+  .c-full-strategy-review .cv .ft { margin-top: 0; font-size: 1.2cqi; }
+  .c-full-strategy-review .cv .ft b { color: var(--ds-text); font-weight: 600; }
+
+  /* executive summary */
+  .c-full-strategy-review .scr { display: grid; grid-template-rows: minmax(0, 1fr) auto; row-gap: 2cqi; }
+  .c-full-strategy-review .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2cqi; min-height: 0; }
+  .c-full-strategy-review .col { padding: 1.8cqi 2cqi; border-top: 0.3cqi solid var(--ds-neutral-line); background: var(--ds-neutral-fill); border-radius: 0 0 calc(0.6cqi * var(--ds-radius-scale, 1)) calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-full-strategy-review .col.neg { border-top-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+  .c-full-strategy-review .col.pos { border-top-color: var(--ds-note-line); background: var(--ds-note-fill); }
+  .c-full-strategy-review .col h3 { margin: 0 0 1.2cqi; font-size: 1.7cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-full-strategy-review .col ul { display: grid; gap: 1.1cqi; margin: 0; padding: 0; list-style: none; }
+  .c-full-strategy-review .col li { position: relative; padding-left: 1.5cqi; font-size: 1.4cqi; line-height: 1.42; }
+  .c-full-strategy-review .col li::before { content: ""; position: absolute; left: 0; top: 0.62cqi; width: 0.6cqi; height: 0.6cqi; border-radius: 50%; background: var(--ds-ink); }
+  .c-full-strategy-review .col li b { color: var(--ds-ink); }
+  .c-full-strategy-review .take {
+    display: flex;
+    align-items: baseline;
+    gap: 1.6cqi;
+    padding: 1.3cqi 2cqi;
+    background: var(--ds-highlight-fill);
+    box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line);
+    border-radius: calc(0.6cqi * var(--ds-radius-scale, 1));
+    font-size: 1.5cqi;
+    line-height: 1.35;
+    color: var(--ds-ink);
+  }
+  .c-full-strategy-review .take b { flex: none; font-size: 1.15cqi; font-weight: 700; color: var(--ds-text); }
+  .c-full-strategy-review .take span { font-weight: 600; }
+
+  /* issue tree */
+  .c-full-strategy-review .tree { display: grid; grid-template-columns: 19cqi minmax(0, 1fr); align-items: center; column-gap: 4cqi; }
+  .c-full-strategy-review .root {
+    position: relative;
+    padding: 1.8cqi 1.8cqi;
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    border-radius: calc(0.7cqi * var(--ds-radius-scale, 1));
+    font-size: 1.6cqi;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .c-full-strategy-review .root::after { content: ""; position: absolute; left: 100%; top: 50%; width: 2cqi; height: var(--ds-hairline); background: var(--ds-muted); }
+  .c-full-strategy-review .brs { display: grid; }
+  .c-full-strategy-review .br { position: relative; display: grid; grid-template-columns: 19cqi minmax(0, 1fr) minmax(0, 1fr); gap: 1.4cqi; align-items: stretch; padding: 0.6cqi 0; }
+  .c-full-strategy-review .br::before { content: ""; position: absolute; left: -2cqi; top: 50%; width: 2cqi; height: var(--ds-hairline); background: var(--ds-muted); }
+  .c-full-strategy-review .br::after { content: ""; position: absolute; left: -2cqi; top: 0; bottom: 0; width: var(--ds-hairline); background: var(--ds-muted); }
+  .c-full-strategy-review .br:first-child::after { top: 50%; }
+  .c-full-strategy-review .br:last-child::after { bottom: 50%; }
+  .c-full-strategy-review .bx { display: grid; align-content: center; gap: 0.3cqi; padding: 0.9cqi 1.4cqi; border: var(--ds-stroke) solid var(--ds-neutral-line); background: var(--ds-neutral-fill); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); font-size: 1.45cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-full-strategy-review .bx em { font-style: normal; font-size: 1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-full-strategy-review .bx.key { border-color: var(--ds-highlight-line); background: var(--ds-highlight-fill); }
+  .c-full-strategy-review .lf { display: grid; align-content: center; gap: 0.3cqi; padding: 0.9cqi 1.4cqi; border-left: 0.3cqi solid var(--ds-neutral-line); background: var(--ds-raised); border-radius: 0 calc(0.6cqi * var(--ds-radius-scale, 1)) calc(0.6cqi * var(--ds-radius-scale, 1)) 0; box-shadow: var(--ds-shadow-sm); }
+  .c-full-strategy-review .lf b { font-size: 2.1cqi; font-weight: 800; letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-full-strategy-review .lf span { font-size: 1.15cqi; line-height: 1.3; }
+  .c-full-strategy-review .lf.up { border-left-color: var(--ds-note-line); }
+  .c-full-strategy-review .lf.dn { border-left-color: var(--ds-danger-line); }
+
+  /* exhibits */
+  .c-full-strategy-review .ex { display: grid; grid-template-rows: auto minmax(0, 1fr); row-gap: 1cqi; }
+  .c-full-strategy-review .ex .cap { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-full-strategy-review .ex svg { display: block; width: 100%; height: 100%; }
+  .c-full-strategy-review .wf-base { stroke: var(--ds-neutral-line); stroke-width: 1.5; }
+  .c-full-strategy-review .wf-link { stroke: var(--ds-muted); stroke-width: 1; stroke-dasharray: 3 3; }
+  .c-full-strategy-review .wf-total { fill: var(--ds-neutral-line); }
+  .c-full-strategy-review .wf-up { fill: var(--ds-note-line); }
+  .c-full-strategy-review .wf-down { fill: var(--ds-danger-line); }
+  .c-full-strategy-review .wf-key { fill: var(--ds-highlight-line); }
+  .c-full-strategy-review .wf-val { fill: var(--ds-text); font-size: 17px; font-weight: 700; text-anchor: middle; font-variant-numeric: tabular-nums; }
+  .c-full-strategy-review .wf-val.is-key { fill: var(--ds-ink); font-size: 20px; }
+  .c-full-strategy-review .wf-cat { fill: var(--ds-text); font-size: 15px; font-weight: 600; text-anchor: middle; }
+  .c-full-strategy-review .wf-cat.is-key { fill: var(--ds-ink); font-weight: 800; }
+  .c-full-strategy-review .wf-call { fill: var(--ds-note-fill); stroke: var(--ds-note-line); stroke-width: 1.5; }
+  .c-full-strategy-review .wf-calltxt { fill: var(--ds-ink); font-size: 17px; font-weight: 600; }
+  .c-full-strategy-review .wf-lead { fill: none; stroke: var(--ds-note-line); stroke-width: 1.5; }
+
+  .c-full-strategy-review .mxw { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); column-gap: 3cqi; min-height: 0; }
+  .c-full-strategy-review .mx-frame { fill: none; stroke: var(--ds-neutral-line); stroke-width: 1.5; }
+  .c-full-strategy-review .mx-fix { fill: var(--ds-highlight-fill); }
+  .c-full-strategy-review .mx-div { stroke: var(--ds-muted); stroke-width: 1; stroke-dasharray: 4 4; }
+  .c-full-strategy-review .mx-q { fill: var(--ds-muted); font-size: 15px; font-weight: 700; }
+  .c-full-strategy-review .mx-q.is-fix { fill: var(--ds-ink); }
+  .c-full-strategy-review .mx-ax { fill: var(--ds-muted); font-size: 13px; font-weight: 600; }
+  .c-full-strategy-review .mx-tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-full-strategy-review .mx-dot circle { fill: var(--ds-raised); stroke: var(--ds-neutral-line); stroke-width: 1.5; }
+  .c-full-strategy-review .mx-dot text { fill: var(--ds-ink); font-size: 13px; font-weight: 700; text-anchor: middle; }
+  .c-full-strategy-review .mx-dot.is-fix circle { fill: var(--ds-highlight-line); stroke: var(--ds-ink); }
+  .c-full-strategy-review .lg { display: grid; align-content: start; margin: 0; padding: 0; list-style: none; }
+  .c-full-strategy-review .lg li { display: grid; grid-template-columns: 2cqi minmax(0, 1fr) 4.4cqi 4.4cqi; align-items: center; gap: 1cqi; padding: 0.33cqi 0.8cqi; border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: 1.15cqi; }
+  .c-full-strategy-review .lg li.hd { padding-top: 0; font-size: 0.95cqi; font-weight: 600; color: var(--ds-muted); border-bottom-color: var(--ds-ink); }
+  .c-full-strategy-review .lg li.hd b { font-weight: 600; color: var(--ds-muted); }
+  .c-full-strategy-review .lg li i { display: grid; place-items: center; width: 1.7cqi; height: 1.7cqi; border: var(--ds-hairline) solid var(--ds-neutral-line); border-radius: 50%; background: var(--ds-raised); font-style: normal; font-size: 1cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-full-strategy-review .lg li b { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; color: var(--ds-ink); }
+  .c-full-strategy-review .lg li.is-fix { background: var(--ds-highlight-fill); }
+  .c-full-strategy-review .lg li.is-fix i { background: var(--ds-highlight-line); border-color: var(--ds-ink); }
+
+  /* options table */
+  .c-full-strategy-review .opt { display: grid; grid-template-columns: 15cqi repeat(3, minmax(0, 1fr)); grid-auto-rows: auto; align-content: start; }
+  .c-full-strategy-review .opt > div { display: grid; align-content: center; gap: 0.4cqi; padding: 0.7cqi 1.5cqi; border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: 1.25cqi; line-height: 1.35; }
+  .c-full-strategy-review .opt .h { align-content: end; padding-top: 0.2cqi; border-bottom: var(--ds-stroke) solid var(--ds-ink); }
+  .c-full-strategy-review .opt .h b { font-size: 1.5cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-full-strategy-review .opt .h span { font-size: 1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-full-strategy-review .opt .c:not(.v) { display: flex; align-items: center; justify-content: space-between; gap: 1cqi; }
+  .c-full-strategy-review .opt .tx { display: grid; gap: 0.2cqi; }
+  .c-full-strategy-review .opt .r { font-weight: 700; color: var(--ds-ink); }
+  .c-full-strategy-review .opt .c b { font-size: 1.5cqi; font-weight: 800; color: var(--ds-ink); letter-spacing: var(--ds-tracking-display); }
+  .c-full-strategy-review .opt .rec { background: var(--ds-highlight-fill); }
+  .c-full-strategy-review .opt .h.rec { box-shadow: inset 0 0.35cqi 0 var(--ds-highlight-line); }
+  .c-full-strategy-review .opt .v { border-bottom: 0; }
+  .c-full-strategy-review .opt .v.c { font-weight: 700; color: var(--ds-ink); }
+  .c-full-strategy-review .pips { display: inline-flex; gap: 0.35cqi; }
+  .c-full-strategy-review .pips i { width: 0.9cqi; height: 0.9cqi; border: var(--ds-stroke) solid var(--ds-ink); border-radius: 50%; }
+  .c-full-strategy-review .pips i.f { background: var(--ds-ink); }
+
+  /* recommendations */
+  .c-full-strategy-review .recs { display: grid; grid-template-rows: minmax(0, 1fr) auto; row-gap: 2cqi; }
+  .c-full-strategy-review .rc3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.4cqi; min-height: 0; }
+  .c-full-strategy-review .rc { display: grid; grid-template-rows: auto auto 1fr auto; padding-top: 1.6cqi; border-top: var(--ds-stroke) solid var(--ds-ink); }
+  .c-full-strategy-review .rc .n { font-size: 1.15cqi; font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-full-strategy-review .rc h3 { margin: 0.8cqi 0 0; font-size: 1.85cqi; font-weight: 700; line-height: 1.22; color: var(--ds-ink); }
+  .c-full-strategy-review .rc p { margin: 0.9cqi 0 0; font-size: 1.3cqi; line-height: 1.5; }
+  .c-full-strategy-review .rc .imp { display: flex; align-items: baseline; gap: 1cqi; padding-top: 1.2cqi; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-full-strategy-review .rc .imp b { font-size: 3.2cqi; font-weight: 800; letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-full-strategy-review .rc .imp span { font-size: 1.1cqi; line-height: 1.35; color: var(--ds-muted); }
+
+  /* roadmap */
+  .c-full-strategy-review .gt { display: grid; grid-template-columns: 17cqi repeat(5, minmax(0, 1fr)); grid-auto-rows: min-content; align-content: start; row-gap: 0; }
+  .c-full-strategy-review .gt .q { padding: 0 0 0.9cqi; border-bottom: var(--ds-stroke) solid var(--ds-ink); font-size: 1.1cqi; font-weight: 700; color: var(--ds-ink); text-align: center; }
+  .c-full-strategy-review .gt .ws { padding: 1.5cqi 1cqi 1.5cqi 0; border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: 1.3cqi; font-weight: 700; color: var(--ds-ink); display: grid; align-content: center; }
+  .c-full-strategy-review .gt .ws em { font-style: normal; font-size: 1cqi; font-weight: 500; color: var(--ds-muted); }
+  .c-full-strategy-review .gt .cell { display: grid; align-content: center; padding: 1.5cqi 0; border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-full-strategy-review .gt .cell i { display: block; padding: 0.6cqi 1cqi; margin: 0 0.25cqi; border-radius: calc(0.4cqi * var(--ds-radius-scale, 1)); font-style: normal; font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-ink); }
+  .c-full-strategy-review .gt .cell i.d { background: var(--ds-neutral-fill); border: var(--ds-hairline) solid var(--ds-neutral-line); }
+  .c-full-strategy-review .gt .cell i.p { background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); }
+  .c-full-strategy-review .gt .cell i.s { background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); }
+  .c-full-strategy-review .gt .eff { padding-top: 1.4cqi; font-size: 1.1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-full-strategy-review .gt .effv { padding-top: 1.1cqi; text-align: center; font-size: 2cqi; font-weight: 800; letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-full-strategy-review .gt .effv.last { color: var(--ds-ink); }
+  .c-full-strategy-review .gt .effv.last span { padding: 0.2cqi 1cqi; background: var(--ds-highlight-fill); border: var(--ds-hairline) solid var(--ds-highlight-line); border-radius: var(--ds-radius-pill); }
+  .c-full-strategy-review .keyl { display: flex; gap: 2cqi; margin-top: 1.4cqi; font-size: 1cqi; color: var(--ds-muted); }
+  .c-full-strategy-review .keyl span { display: inline-flex; align-items: center; gap: 0.6cqi; }
+  .c-full-strategy-review .keyl i { width: 1.2cqi; height: 0.8cqi; border-radius: 0.2cqi; }
+  .c-full-strategy-review .keyl .d { background: var(--ds-neutral-fill); border: var(--ds-hairline) solid var(--ds-neutral-line); }
+  .c-full-strategy-review .keyl .p { background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); }
+  .c-full-strategy-review .keyl .s { background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); }
+
+  /* next steps and appendix tables */
+  .c-full-strategy-review .tb { display: grid; align-content: start; }
+  .c-full-strategy-review .tb .row { display: grid; align-items: center; column-gap: 2cqi; padding: 1.5cqi 0; border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: 1.35cqi; line-height: 1.35; }
+  .c-full-strategy-review .tb .row.hd { padding-top: 0; padding-bottom: 0.9cqi; border-bottom: var(--ds-stroke) solid var(--ds-ink); font-size: 1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-full-strategy-review .tb.ns .row { grid-template-columns: 3cqi minmax(0, 1fr) 20cqi 9cqi; }
+  .c-full-strategy-review .tb.ap .row { grid-template-columns: 22cqi 18cqi minmax(0, 1fr); }
+  .c-full-strategy-review .tb .row b { color: var(--ds-ink); font-weight: 700; }
+  .c-full-strategy-review .tb .row .num { font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-full-strategy-review .tb .row.now { background: var(--ds-highlight-fill); box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line); padding-left: 1.2cqi; margin-left: -1.2cqi; }
+  .c-full-strategy-review .tb .row .tag { justify-self: start; padding: 0.3cqi 1cqi; border: var(--ds-hairline) solid var(--ds-highlight-line); border-radius: var(--ds-radius-pill); background: var(--ds-highlight-fill); font-size: 1cqi; font-weight: 700; color: var(--ds-ink); }
+</style>
+
+<section class="c-full-strategy-review" tabindex="0" role="region" aria-roledescription="presentation" aria-label="Full deck: strategy review" data-deeplink>
+  <div class="stage">
+    <div class="slide is-active">
+      <div class="sl">
+        <div class="cv">
+          <div class="brand"><span class="mk" aria-hidden="true"></span>Kestrel Freight</div>
+          <div class="main">
+            <div class="eyebrow">Network strategy review, FY26</div>
+            <h1>Restoring margin on a network that grew faster than it was designed</h1>
+            <p class="sub">What changed in FY26, three moves that recover most of the lost margin, and the decisions we need this month.</p>
+          </div>
+          <div class="ft"><span><b>Board discussion draft</b>, strictly confidential</span><span>31 October 2026</span></div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Welcome the board and say plainly what this is: a discussion draft, not a final recommendation. We want a decision on the programme budget by the end of the hour.</p>
+        <p>All figures in this deck are illustrative, for a fictional company called Kestrel Freight.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Executive summary</p><ul class="track" aria-label="Section"><li class="on" aria-current="true">Summary</li><li>Diagnosis</li><li>Options</li><li>Plan</li><li>Appendix</li></ul></div>
+        <h2 class="t">Margin fell 2.9 points in a year, and three changes to the network recover almost all of it</h2>
+        <div class="bd scr">
+          <div class="cols">
+            <div class="col">
+              <h3>Situation</h3>
+              <ul>
+                <li>Kestrel runs <b>10 lanes from 4 depots</b> and moved 6.8 million parcels in FY26.</li>
+                <li>Revenue grew 9% to <b>€212m</b>.</li>
+                <li>Customers rate delivery reliability at 94%.</li>
+              </ul>
+            </div>
+            <div class="col neg">
+              <h3>Complication</h3>
+              <ul>
+                <li>Operating margin fell from <b>8.4% to 5.5%</b>, a drop in profit from €16.3m to €11.7m.</li>
+                <li>Empty running alone cost <b>2.0 points</b>: one truck in three returns unloaded.</li>
+                <li>Three high-volume lanes earn below the network average.</li>
+              </ul>
+            </div>
+            <div class="col pos">
+              <h3>Resolution</h3>
+              <ul>
+                <li>Redraw routes on three lanes, add a priced contract tier and sell return loads.</li>
+                <li>Together worth <b>+2.8 points</b>, back to 8.3% by Q4 2027.</li>
+                <li>Investment of <b>€4.2m</b>, paid back in 14 months.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="take"><b>Decision needed</b><span>Approve the €4.2m programme and name a programme lead by 30 November.</span></div>
+        </div>
+        <div class="ft"><span>Source: Kestrel finance ledger FY25 and FY26, route telematics, team analysis. Illustrative figures.</span><span class="pn">2</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>Read the three columns left to right in under a minute. The numbers to remember: 8.4 to 5.5 percent, 2.0 points from empty running, 2.8 points recovered.</p>
+        <p>Land the decision here, then spend the rest of the hour showing why it is safe to say yes.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Diagnosis · Issue tree</p><ul class="track" aria-label="Section"><li>Summary</li><li class="on" aria-current="true">Diagnosis</li><li>Options</li><li>Plan</li><li>Appendix</li></ul></div>
+        <h2 class="t">Of three margin drivers, only network utilisation is fully inside our control</h2>
+        <div class="bd tree">
+          <div class="root">Why did operating margin fall 2.9 points in FY26?</div>
+          <div class="brs">
+            <div class="br">
+              <div class="bx">Revenue per parcel<em>Partly in our control</em></div>
+              <div class="lf up"><b>+1.1</b><span>Price per parcel up 4.1% as contracts were indexed</span></div>
+              <div class="lf up"><b>+0.5</b><span>Volume up 9%, mostly in lighter parcels</span></div>
+            </div>
+            <div class="br">
+              <div class="bx">Cost per kilometre<em>Outside our control</em></div>
+              <div class="lf dn"><b>−1.7</b><span>Fuel up 11% against FY25, unhedged for six months</span></div>
+              <div class="lf dn"><b>−1.0</b><span>Wages up 6% under the new collective agreement</span></div>
+            </div>
+            <div class="br">
+              <div class="bx key">Network utilisation<em>Fully in our control</em></div>
+              <div class="lf dn"><b>−2.0</b><span>Empty running up from 24% to 33% of kilometres</span></div>
+              <div class="lf"><b>31%</b><span>Of volume sits on three lanes earning below the network average</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="ft"><span>Source: Kestrel finance ledger FY25 and FY26, route telematics. Other items net +0.2 points. Illustrative figures.</span><span class="pn">3</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>Walk the tree from the question down. Revenue helped us, cost per kilometre hurt us and we cannot do much about fuel or wages this year.</p>
+        <p>The highlighted branch is why we are here: utilisation is the only driver we fully control, and it is also the biggest single drag.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Diagnosis · Exhibit 1</p><ul class="track" aria-label="Section"><li>Summary</li><li class="on" aria-current="true">Diagnosis</li><li>Options</li><li>Plan</li><li>Appendix</li></ul></div>
+        <h2 class="t">Operating margin fell 2.9 points, and empty running is the largest single driver</h2>
+        <div class="bd ex">
+          <p class="cap">Operating margin bridge, FY25 to FY26, % of revenue</p>
+          <svg viewBox="0 0 1000 316" role="img" aria-label="Waterfall of operating margin in percent. FY25 8.4. Price plus 1.1, volume plus 0.5, fuel minus 1.7, empty running minus 2.0, wages minus 1.0, other plus 0.2. FY26 5.5." preserveAspectRatio="xMidYMid meet">
+          <line class="wf-base" x1="56" x2="984" y1="276" y2="276"/>
+          <line class="wf-link" x1="151.0" x2="193.0" y1="67.7" y2="67.7"/>
+          <line class="wf-link" x1="267.0" x2="309.0" y1="40.4" y2="40.4"/>
+          <line class="wf-link" x1="383.0" x2="425.0" y1="28" y2="28"/>
+          <line class="wf-link" x1="499.0" x2="541.0" y1="70.2" y2="70.2"/>
+          <line class="wf-link" x1="615.0" x2="657.0" y1="119.8" y2="119.8"/>
+          <line class="wf-link" x1="731.0" x2="773.0" y1="144.6" y2="144.6"/>
+          <line class="wf-link" x1="847.0" x2="889.0" y1="139.6" y2="139.6"/>
+          <rect class="wf-total" x="77" y="67.7" width="74" height="208.3" rx="2"/>
+          <rect class="wf-up" x="193" y="40.4" width="74" height="27.3" rx="2"/>
+          <rect class="wf-up" x="309" y="28" width="74" height="12.4" rx="2"/>
+          <rect class="wf-down" x="425" y="28" width="74" height="42.2" rx="2"/>
+          <rect class="wf-key" x="541" y="70.2" width="74" height="49.6" rx="2"/>
+          <rect class="wf-down" x="657" y="119.8" width="74" height="24.8" rx="2"/>
+          <rect class="wf-up" x="773" y="139.6" width="74" height="5" rx="2"/>
+          <rect class="wf-total" x="889" y="139.6" width="74" height="136.4" rx="2"/>
+          <text class="wf-val" x="114.0" y="58.7">8.4%</text>
+          <text class="wf-val" x="230.0" y="31.4">+1.1</text>
+          <text class="wf-val" x="346.0" y="19">+0.5</text>
+          <text class="wf-val" x="462.0" y="90.2">−1.7</text>
+          <text class="wf-val is-key" x="578.0" y="139.8">−2.0</text>
+          <text class="wf-val" x="694.0" y="164.6">−1.0</text>
+          <text class="wf-val" x="810.0" y="130.6">+0.2</text>
+          <text class="wf-val" x="926.0" y="130.6">5.5%</text>
+          <text class="wf-cat" x="114.0" y="302">FY25 margin</text>
+          <text class="wf-cat" x="230.0" y="302">Price</text>
+          <text class="wf-cat" x="346.0" y="302">Volume</text>
+          <text class="wf-cat" x="462.0" y="302">Fuel</text>
+          <text class="wf-cat is-key" x="578.0" y="302">Empty running</text>
+          <text class="wf-cat" x="694.0" y="302">Wages</text>
+          <text class="wf-cat" x="810.0" y="302">Other</text>
+          <text class="wf-cat" x="926.0" y="302">FY26 margin</text>
+          <path class="wf-lead" d="M 627.0 76 L 617.0 96"/>
+          <rect class="wf-call" x="627.0" y="30" width="262" height="62" rx="6"/>
+          <text class="wf-calltxt" x="641.0" y="56">One truck in three now</text>
+          <text class="wf-calltxt" x="641.0" y="78">returns unloaded</text>
+        </svg>
+        </div>
+        <div class="ft"><span>Source: Kestrel finance ledger FY25 and FY26; empty running from route telematics. Illustrative figures.</span><span class="pn">4</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>Start at 8.4 on the left and read right. Price and volume added 1.6 points, but fuel, empty running and wages took 4.7 away.</p>
+        <p>Point at the highlighted bar. Two points of margin were lost to trucks driving back empty, which is the part of the bridge we can design our way out of.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Diagnosis · Exhibit 2</p><ul class="track" aria-label="Section"><li>Summary</li><li class="on" aria-current="true">Diagnosis</li><li>Options</li><li>Plan</li><li>Appendix</li></ul></div>
+        <h2 class="t">Three lanes carrying 31% of volume earn below the 5.5% network average and are the place to start</h2>
+        <div class="bd mxw">
+          <svg viewBox="0 0 640 340" role="img" aria-label="Two by two of ten lanes by share of volume and margin. Harbour loop, Inland trunk and North coast have high volume and below average margin." preserveAspectRatio="xMidYMid meet">
+          <rect class="mx-fix" x="246.7" y="171.3" width="353.3" height="124.69999999999999"/>
+          <rect class="mx-frame" x="70" y="24" width="530" height="272"/>
+          <line class="mx-div" x1="246.7" x2="246.7" y1="24" y2="296"/>
+          <line class="mx-div" x1="70" x2="600" y1="171.3" y2="171.3"/>
+          <text class="mx-q" x="82" y="46">Grow</text>
+          <text class="mx-q" x="588" y="46" text-anchor="end">Protect</text>
+          <text class="mx-q" x="82" y="284">Review</text>
+          <text class="mx-q is-fix" x="588" y="284" text-anchor="end">Fix first</text>
+          <g class="mx-dot"><circle cx="555.8" cy="110.1" r="13"/><text x="555.8" y="115.6">1</text></g>
+          <g class="mx-dot"><circle cx="379.2" cy="126" r="13"/><text x="379.2" y="131.5">2</text></g>
+          <g class="mx-dot"><circle cx="290.8" cy="78.4" r="13"/><text x="290.8" y="83.9">3</text></g>
+          <g class="mx-dot is-fix"><circle cx="335" cy="255.2" r="13"/><text x="335" y="260.7">4</text></g>
+          <g class="mx-dot is-fix"><circle cx="290.8" cy="230.3" r="13"/><text x="290.8" y="235.8">5</text></g>
+          <g class="mx-dot is-fix"><circle cx="268.8" cy="214.4" r="13"/><text x="268.8" y="219.9">6</text></g>
+          <g class="mx-dot"><circle cx="224.6" cy="160" r="13"/><text x="224.6" y="165.5">7</text></g>
+          <g class="mx-dot"><circle cx="202.5" cy="273.3" r="13"/><text x="202.5" y="278.8">8</text></g>
+          <g class="mx-dot"><circle cx="180.4" cy="173.6" r="13"/><text x="180.4" y="179.1">9</text></g>
+          <g class="mx-dot"><circle cx="180.4" cy="239.3" r="13"/><text x="180.4" y="244.8">10</text></g>
+          <text class="mx-ax" x="335" y="330" text-anchor="middle">Share of network volume, %  (divider at 8%)</text>
+          <text class="mx-ax" transform="translate(18 160) rotate(-90)" text-anchor="middle">Operating margin, %</text>
+          <text class="mx-tick" x="62" y="300" text-anchor="end">0</text>
+          <text class="mx-tick" x="62" y="28" text-anchor="end">12</text>
+          <text class="mx-tick" x="70" y="314" text-anchor="middle">0</text>
+          <text class="mx-tick" x="600" y="314" text-anchor="middle">24</text>
+        </svg>
+          <ul class="lg" aria-label="Lanes">
+            <li class="hd"><span></span><span>Lane</span><b>Volume</b><b>Margin</b></li>
+            <li><i>1</i><span>Metro parcels</span><b>22%</b><b>8.2%</b></li>
+            <li><i>2</i><span>Border express</span><b>14%</b><b>7.5%</b></li>
+            <li><i>3</i><span>Cold chain</span><b>10%</b><b>9.6%</b></li>
+            <li class="is-fix"><i>4</i><span>Harbour loop</span><b>12%</b><b>1.8%</b></li>
+            <li class="is-fix"><i>5</i><span>Inland trunk</span><b>10%</b><b>2.9%</b></li>
+            <li class="is-fix"><i>6</i><span>North coast</span><b>9%</b><b>3.6%</b></li>
+            <li><i>7</i><span>Airport shuttle</span><b>7%</b><b>6.0%</b></li>
+            <li><i>8</i><span>Island ferry</span><b>6%</b><b>1.0%</b></li>
+            <li><i>9</i><span>Rural collect</span><b>5%</b><b>5.4%</b></li>
+            <li><i>10</i><span>Valley round</span><b>5%</b><b>2.5%</b></li>
+          </ul>
+        </div>
+        <div class="ft"><span>Source: Kestrel lane profitability model, FY26. Highlighted lanes: 12%, 10% and 9% of volume. Illustrative figures.</span><span class="pn">5</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>High volume on the right, high margin at the top. The shaded corner is where volume is large and margin is below the network average of 5.5 percent.</p>
+        <p>Three lanes sit there: Harbour loop, Inland trunk and North coast, together 31 percent of volume. Fixing them moves the whole network.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Options · Evaluation</p><ul class="track" aria-label="Section"><li>Summary</li><li>Diagnosis</li><li class="on" aria-current="true">Options</li><li>Plan</li><li>Appendix</li></ul></div>
+        <h2 class="t">Redesigning routes and repricing three lanes captures most of the upside at the lowest risk</h2>
+        <div class="bd opt">
+          <div class="h"></div>
+          <div class="h"><b>A. Hold course</b><span>No change to the network</span></div>
+          <div class="h rec"><b>B. Redesign and reprice</b><span>Recommended</span></div>
+          <div class="h"><b>C. Exit three lanes</b><span>Withdraw from the weakest lanes</span></div>
+
+          <div class="r">Margin by FY28</div>
+          <div class="c"><span class="tx"><b>+0.0 pts</b></span><span class="pips" role="img" aria-label="1 of 4"><i class="f"></i><i></i><i></i><i></i></span></div>
+          <div class="c rec"><span class="tx"><b>+2.8 pts</b></span><span class="pips" role="img" aria-label="4 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span></div>
+          <div class="c"><span class="tx"><b>+1.6 pts</b></span><span class="pips" role="img" aria-label="3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span></div>
+
+          <div class="r">Investment</div>
+          <div class="c"><span class="tx"><b>None</b></span><span class="pips" role="img" aria-label="4 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span></div>
+          <div class="c rec"><span class="tx"><b>€4.2m</b></span><span class="pips" role="img" aria-label="2 of 4"><i class="f"></i><i class="f"></i><i></i><i></i></span></div>
+          <div class="c"><span class="tx"><b>€1.1m</b>plus exit costs</span><span class="pips" role="img" aria-label="3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span></div>
+
+          <div class="r">Execution risk</div>
+          <div class="c"><span class="tx"><b>Low</b></span><span class="pips" role="img" aria-label="4 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span></div>
+          <div class="c rec"><span class="tx"><b>Medium</b>Pilot first, then scale</span><span class="pips" role="img" aria-label="3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span></div>
+          <div class="c"><span class="tx"><b>High</b>Contract penalties</span><span class="pips" role="img" aria-label="1 of 4"><i class="f"></i><i></i><i></i><i></i></span></div>
+
+          <div class="r">Customer impact</div>
+          <div class="c"><span class="tx"><b>None today</b>Attrition keeps rising</span><span class="pips" role="img" aria-label="3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span></div>
+          <div class="c rec"><span class="tx"><b>Moderate</b>New tier for tight windows</span><span class="pips" role="img" aria-label="3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span></div>
+          <div class="c"><span class="tx"><b>Severe</b>31% of volume leaves</span><span class="pips" role="img" aria-label="1 of 4"><i class="f"></i><i></i><i></i><i></i></span></div>
+
+          <div class="r v">Verdict</div>
+          <div class="v c">Margin keeps falling</div>
+          <div class="v c rec">Do this first</div>
+          <div class="v c">Fallback if B stalls</div>
+        </div>
+        <div class="ft"><span>Source: Kestrel finance model, scenario runs of 20 October 2026. More filled dots is more attractive. Illustrative figures.</span><span class="pn">6</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>Option A is not neutral: margin keeps falling, so it scores one dot on margin. Option C exits lanes and loses a third of the volume that carries our fixed cost.</p>
+        <p>Option B scores best on margin and keeps customers. It needs the most money, which is why we pilot on one lane before we scale.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Options · Recommendation</p><ul class="track" aria-label="Section"><li>Summary</li><li>Diagnosis</li><li class="on" aria-current="true">Options</li><li>Plan</li><li>Appendix</li></ul></div>
+        <h2 class="t">Three moves recover 2.8 of the 2.9 points lost, for a €4.2m investment</h2>
+        <div class="bd recs">
+          <div class="rc3">
+            <div class="rc">
+              <span class="n">01</span>
+              <h3>Redraw routes on the three lanes</h3>
+              <p>Pair outbound and return legs, add one cross-dock and cut the longest runs by 40 minutes. Pilot on Harbour loop in Q1.</p>
+              <div class="imp"><b>+1.3</b><span>points of margin<br>€2.4m, owner: COO</span></div>
+            </div>
+            <div class="rc">
+              <span class="n">02</span>
+              <h3>Introduce a priced tier for tight delivery windows</h3>
+              <p>Customers who need a two-hour window pay for it. Standard windows stay as they are, so no one is repriced without a choice.</p>
+              <div class="imp"><b>+0.9</b><span>points of margin<br>€0.6m, owner: Head of sales</span></div>
+            </div>
+            <div class="rc">
+              <span class="n">03</span>
+              <h3>Sell return loads to partner carriers</h3>
+              <p>Offer spare capacity on return legs through a simple booking portal, starting with the four partners who already asked.</p>
+              <div class="imp"><b>+0.6</b><span>points of margin<br>€1.2m, owner: Network planning</span></div>
+            </div>
+          </div>
+          <div class="take"><b>Total</b><span>+2.8 points takes margin from 5.5% to 8.3% by Q4 2027. €4.2m invested, paid back in 14 months.</span></div>
+        </div>
+        <div class="ft"><span>Source: Kestrel finance model, October 2026. Impacts are run-rate by Q4 2027 and do not add the 0.1 point not recovered. Illustrative figures.</span><span class="pn">7</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>Each move has one owner and one number. Together they recover 2.8 of the 2.9 points, so we are not promising a full return to 8.4.</p>
+        <p>If someone asks what happens if only one works: route redesign alone is still worth 1.3 points and pays back on its own.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Plan · Roadmap</p><ul class="track" aria-label="Section"><li>Summary</li><li>Diagnosis</li><li>Options</li><li class="on" aria-current="true">Plan</li><li>Appendix</li></ul></div>
+        <h2 class="t">The full 2.8 points build quarter by quarter and arrive in Q4 2027</h2>
+        <div class="bd">
+          <div class="gt">
+            <div></div><div class="q">Q4 2026</div><div class="q">Q1 2027</div><div class="q">Q2 2027</div><div class="q">Q3 2027</div><div class="q">Q4 2027</div>
+
+            <div class="ws">Route redesign<em>Owner: COO</em></div>
+            <div class="cell" style="grid-column: 2 / 4"><i class="d">Route study</i></div>
+            <div class="cell" style="grid-column: 4 / 5"><i class="p">Pilot lane</i></div>
+            <div class="cell" style="grid-column: 5 / 7"><i class="s">Rollout to three lanes</i></div>
+
+            <div class="ws">Priced tier<em>Owner: Head of sales</em></div>
+            <div class="cell" style="grid-column: 2 / 3"><i class="d">Design</i></div>
+            <div class="cell" style="grid-column: 3 / 5"><i class="p">Offer at contract renewals</i></div>
+            <div class="cell" style="grid-column: 5 / 7"><i class="s">All tight-window contracts</i></div>
+
+            <div class="ws">Return loads<em>Owner: Head of network planning</em></div>
+            <div class="cell" style="grid-column: 2 / 4"><i class="d">Portal and partner terms</i></div>
+            <div class="cell" style="grid-column: 4 / 6"><i class="p">Four partners live</i></div>
+            <div class="cell" style="grid-column: 6 / 7"><i class="s">Open to all</i></div>
+
+            <div class="eff">Cumulative margin effect</div>
+            <div class="effv">+0.0</div><div class="effv">+0.4</div><div class="effv">+1.2</div><div class="effv">+2.0</div><div class="effv last"><span>+2.8</span></div>
+          </div>
+          <div class="keyl"><span><i class="d"></i>Design</span><span><i class="p"></i>Pilot</span><span><i class="s"></i>Scale</span></div>
+        </div>
+        <div class="ft"><span>Source: Kestrel programme plan, draft of 28 October 2026. Margin effect is the run-rate at quarter end, in points. Illustrative figures.</span><span class="pn">8</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>Three workstreams, each with a design phase, a pilot and a scale phase. Nothing scales before its pilot has hit the target.</p>
+        <p>The bottom row is what the board will see in the quarterly pack. If the Q2 figure is below 1.0, we come back to you before the Q3 spend.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Plan · Next steps</p><ul class="track" aria-label="Section"><li>Summary</li><li>Diagnosis</li><li>Options</li><li class="on" aria-current="true">Plan</li><li>Appendix</li></ul></div>
+        <h2 class="t">Three decisions this month start the clock on the first lane pilot in Q1</h2>
+        <div class="bd tb ns">
+          <div class="row hd"><span>#</span><span>Action</span><span>Owner</span><span>By</span></div>
+          <div class="row now"><span class="num">1</span><span><b>Approve the €4.2m programme budget</b></span><span>Board</span><span class="tag">30 Nov</span></div>
+          <div class="row"><span class="num">2</span><span><b>Name a programme lead</b> and a monthly steering group</span><span>CEO</span><span>7 Dec</span></div>
+          <div class="row"><span class="num">3</span><span><b>Hold renewals on the three lanes</b> until the new tier is ready</span><span>Head of sales</span><span>14 Dec</span></div>
+          <div class="row"><span class="num">4</span><span><b>Start the Harbour loop route study</b> with telematics data</span><span>Head of network planning</span><span>4 Jan</span></div>
+          <div class="row"><span class="num">5</span><span><b>Confirm the return-load partner shortlist</b> and draft terms</span><span>COO</span><span>29 Jan</span></div>
+        </div>
+        <div class="ft"><span>Source: Kestrel programme plan, draft of 28 October 2026. Dates are proposals for the board to confirm.</span><span class="pn">9</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>Ask for the first action in the room. The other four follow once there is a budget and a name on the programme.</p>
+        <p>Item three is easy to miss: if sales renews the three lanes on the old terms in December, we lose six months of the pricing benefit.</p>
+      </aside>
+    </div>
+
+    <div class="slide">
+      <div class="sl"><div class="pg">
+        <div class="top"><p class="kicker">Appendix · Assumptions</p><ul class="track" aria-label="Section"><li>Summary</li><li>Diagnosis</li><li>Options</li><li>Plan</li><li class="on" aria-current="true">Appendix</li></ul></div>
+        <h2 class="t">The model rests on five assumptions, each checked against FY26 actuals</h2>
+        <div class="bd tb ap">
+          <div class="row hd"><span>Assumption</span><span>Value</span><span>Basis</span></div>
+          <div class="row"><b>Fuel price</b><span>Flat at the FY26 average</span><span>Hedged through Q3 2027, open exposure in Q4</span></div>
+          <div class="row"><b>Wage growth</b><span>3.5% a year</span><span>Fixed by the collective agreement to 2028</span></div>
+          <div class="row"><b>Volume growth</b><span>4% a year</span><span>Half of the FY26 rate, to avoid flattering the case</span></div>
+          <div class="row"><b>Empty running</b><span>33% down to 24% of km</span><span>Nine-week pilot on Harbour loop reached 26%</span></div>
+          <div class="row"><b>Tier uptake</b><span>40% of tight-window contracts</span><span>Survey of 22 customers, 9 said yes at the proposed price</span></div>
+        </div>
+        <div class="ft"><span>Source: Kestrel finance model, route pilot of September 2026, customer survey of October 2026. Illustrative figures.</span><span class="pn">10</span></div>
+      </div></div>
+      <aside class="notes">
+        <p>Keep this slide in reserve for questions. The assumption most likely to be challenged is tier uptake, where we have a small sample.</p>
+        <p>The pilot already reached 26 percent empty running against a 24 percent target, so the route redesign figure is not a guess.</p>
+      </aside>
+    </div>
+    <div class="progress" aria-hidden="true"><i></i></div>
+    <div class="overview" role="group" aria-label="Slide overview" hidden></div>
+    <div class="help" role="dialog" aria-label="Keyboard shortcuts" hidden>
+      <div class="help-card">
+        <h2>Keyboard shortcuts</h2>
+        <dl>
+          <dt><kbd>&larr;</kbd><kbd>&rarr;</kbd></dt><dd>Previous and next slide (also Page Up, Page Down, Space)</dd>
+          <dt><kbd>Home</kbd><kbd>End</kbd></dt><dd>First and last slide</dd>
+          <dt><kbd>O</kbd></dt><dd>Overview grid, arrows to move, Enter to jump</dd>
+          <dt><kbd>N</kbd></dt><dd>Show or hide speaker notes</dd>
+          <dt><kbd>P</kbd></dt><dd>Open the presenter window</dd>
+          <dt><kbd>F</kbd></dt><dd>Fullscreen</dd>
+          <dt><kbd>?</kbd></dt><dd>This help</dd>
+          <dt><kbd>Esc</kbd></dt><dd>Close overview or help</dd>
+          <dt>Swipe</dt><dd>Left and right on a touch screen</dd>
+        </dl>
+        <p class="close">Press ? or Esc to close. The print button saves one slide per page.</p>
+      </div>
+    </div>
+    <div class="toast" role="status" aria-live="polite" hidden></div>
+  </div>
+
+  <div class="notes-panel" hidden>
+    <h3>Speaker notes</h3>
+    <div class="notes-body"></div>
+  </div>
+
+  <div class="bar">
+    <button class="btn" type="button" data-act="prev" aria-label="Previous slide">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+    </button>
+    <span class="count" aria-live="polite">1 / 10</span>
+    <button class="btn" type="button" data-act="next" aria-label="Next slide">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg>
+    </button>
+    <span class="spacer"></span>
+    <span class="hint">Arrow keys to move, ? for shortcuts</span>
+    <button class="btn" type="button" data-act="overview" aria-pressed="false" aria-label="Slide overview" title="Overview (O)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="notes" aria-pressed="false" aria-label="Speaker notes" title="Speaker notes (N)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3.5h10M3 7h10M3 10.5h6"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="presenter" aria-label="Open presenter window" title="Presenter window (P)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2.5" width="12" height="8" rx="1.4"/><path d="M6 13.5h4M8 10.5v3"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="print" aria-label="Print or save as PDF" title="Print or save as PDF">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6V2.5h7V6M4.5 11.5h-2V6h11v5.5h-2M4.5 9h7v4.5h-7z"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="help" aria-label="Keyboard shortcuts" title="Shortcuts (?)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M6.2 6.3a1.9 1.9 0 0 1 3.7.6c0 1.2-1.9 1.4-1.9 2.6M8 11.6v.1"/></svg>
+    </button>
+    <button class="btn" type="button" data-act="fs" aria-label="Toggle fullscreen" title="Fullscreen (F)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+(() => {
+  const ROOT_CLASS = 'c-full-strategy-review';
+  const isEditable = (el) => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+
+  /* Runs inside the presenter window. It is serialised with toString(), so it
+     must not touch anything outside its own body. */
+  function presenterMain(cfg) {
+    const q = (s) => document.querySelector(s);
+    const paneCur = q('[data-pane="cur"]');
+    const paneNext = q('[data-pane="next"]');
+    const notesEl = q('[data-notes]');
+    const posEl = q('[data-pos]');
+    const clockEl = q('[data-clock]');
+    const pauseBtn = q('[data-t="pause"]');
+    let index = cfg.start || 0;
+    let bc = null;
+    let acc = 0;
+    let since = Date.now();
+    let running = true;
+
+    try { if (typeof BroadcastChannel === 'function') bc = new BroadcastChannel(cfg.channel); } catch (e) { bc = null; }
+    const post = (m) => {
+      m.deck = cfg.channel;
+      try { if (bc) bc.postMessage(m); } catch (e) { /* channel closed */ }
+      try { if (window.opener) window.opener.postMessage({ okDeck: m }, '*'); } catch (e) { /* opener gone */ }
+    };
+    const clamp = (n) => Math.max(0, Math.min(cfg.total - 1, n));
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+
+    function render() {
+      paneCur.innerHTML = '<div class="stage">' + cfg.slides[index] + '</div>';
+      paneNext.innerHTML = index + 1 < cfg.total
+        ? '<div class="stage">' + cfg.slides[index + 1] + '</div>'
+        : '<div class="pv-end">End of deck</div>';
+      notesEl.innerHTML = cfg.notes[index] || '<p class="pv-none">No notes for this slide.</p>';
+      posEl.textContent = 'Slide ' + (index + 1) + ' of ' + cfg.total;
+    }
+    function tick() {
+      const ms = acc + (running ? Date.now() - since : 0);
+      const s = Math.floor(ms / 1000);
+      const h = Math.floor(s / 3600);
+      clockEl.textContent = (h ? h + ':' + pad(Math.floor(s / 60) % 60) : Math.floor(s / 60)) + ':' + pad(s % 60);
+    }
+    function move(n) {
+      n = clamp(n);
+      if (n === index) return;
+      index = n;
+      render();
+      post({ t: 'goto', i: index });
+    }
+    function receive(m) {
+      if (!m || m.deck !== cfg.channel) return;
+      if (m.t === 'go' && m.i !== index) { index = clamp(m.i); render(); }
+    }
+
+    if (bc) bc.onmessage = (e) => receive(e.data);
+    window.addEventListener('message', (e) => { if (e.data && e.data.okDeck) receive(e.data.okDeck); });
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      const k = e.key;
+      if (k === 'ArrowRight' || k === 'PageDown' || k === ' ') move(index + 1);
+      else if (k === 'ArrowLeft' || k === 'PageUp') move(index - 1);
+      else if (k === 'Home') move(0);
+      else if (k === 'End') move(cfg.total - 1);
+      else return;
+      e.preventDefault();
+    });
+    document.addEventListener('click', (e) => {
+      const nav = e.target.closest('[data-nav]');
+      if (nav) { move(index + Number(nav.getAttribute('data-nav'))); return; }
+      const t = e.target.closest('[data-t]');
+      if (!t) return;
+      if (t.getAttribute('data-t') === 'pause') {
+        if (running) { acc += Date.now() - since; running = false; } else { since = Date.now(); running = true; }
+        pauseBtn.textContent = running ? 'Pause' : 'Resume';
+      } else {
+        acc = 0; since = Date.now();
+      }
+      tick();
+    });
+
+    render();
+    tick();
+    setInterval(tick, 500);
+    post({ t: 'hello' });
+  }
+
+  const PRESENTER_CSS = (rc) => [
+    'html,body{margin:0;height:100%;}',
+    'body{background:var(--ds-bg);color:var(--ds-text);font-family:var(--ds-font-sans);}',
+    '.pv{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);grid-template-rows:auto auto 1fr;gap:16px;min-height:100%;padding:16px;box-sizing:border-box;}',
+    '.pv-top{grid-column:1 / -1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}',
+    '.pv-top b{font-size:15px;color:var(--ds-ink);}',
+    '.pv-pos{font-size:14px;color:var(--ds-muted);}',
+    '.pv-clock{margin-left:auto;font-size:34px;font-weight:700;color:var(--ds-ink);font-variant-numeric:tabular-nums;}',
+    '.pv button{font:inherit;font-size:13px;font-weight:600;padding:6px 14px;border:1px solid var(--ds-line);border-radius:999px;background:var(--ds-raised);color:var(--ds-ink);cursor:pointer;}',
+    '.pv button:focus-visible{outline:none;box-shadow:var(--ds-focus);}',
+    '.pv-lab{margin:0 0 6px;font-size:12px;font-weight:700;color:var(--ds-muted);}',
+    '.pv .' + rc + '{display:block;padding:0;background:none;border-radius:0;}',
+    '.pv-end{display:grid;place-items:center;aspect-ratio:16 / 9;border:1px dashed var(--ds-line);border-radius:12px;color:var(--ds-muted);font-size:14px;}',
+    '.pv-side{display:grid;align-content:start;gap:12px;}',
+    '.pv-nav{display:flex;gap:8px;}',
+    '.pv-notes{grid-column:1 / -1;padding:16px 20px;background:var(--ds-surface);border:1px solid var(--ds-line);border-radius:12px;font-size:21px;line-height:1.5;overflow:auto;}',
+    '.pv-notes p{margin:0 0 10px;}',
+    '.pv-none{color:var(--ds-muted);}'
+  ].join('\n');
+
+  const allRoots = Array.from(document.querySelectorAll('.' + ROOT_CLASS));
+  allRoots.forEach((root, rootIndex) => {
+    const deeplink = root.hasAttribute('data-deeplink');
+    const stage = root.querySelector('.stage');
+    const slides = Array.from(stage.querySelectorAll(':scope > .slide'));
+    const count = root.querySelector('.count');
+    const fill = root.querySelector('.progress i');
+    const prev = root.querySelector('[data-act="prev"]');
+    const next = root.querySelector('[data-act="next"]');
+    const fs = root.querySelector('[data-act="fs"]');
+    const ovBtn = root.querySelector('[data-act="overview"]');
+    const notesBtn = root.querySelector('[data-act="notes"]');
+    const presBtn = root.querySelector('[data-act="presenter"]');
+    const printBtn = root.querySelector('[data-act="print"]');
+    const helpBtn = root.querySelector('[data-act="help"]');
+    const ov = root.querySelector('.overview');
+    const help = root.querySelector('.help');
+    const toast = root.querySelector('.toast');
+    const notesPanel = root.querySelector('.notes-panel');
+    const notesBody = root.querySelector('.notes-body');
+    const deckKey = 'ok-deck:' + location.pathname + ':' + ROOT_CLASS + ':' + rootIndex;
+    let index = 0;
+    let pw = null;
+    let bc = null;
+    let toastTimer = 0;
+
+    try { if (typeof BroadcastChannel === 'function') bc = new BroadcastChannel(deckKey); } catch (e) { bc = null; }
+
+    function say(msg) {
+      toast.textContent = msg;
+      toast.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toast.hidden = true; }, 5000);
+    }
+
+    function hashIndex() {
+      const m = /^#slide-(\d+)$/.exec(location.hash);
+      return m ? Math.max(0, Math.min(slides.length - 1, Number(m[1]) - 1)) : null;
+    }
+    function writeHash() {
+      const h = '#slide-' + (index + 1);
+      if (location.hash === h) return;
+      /* replaceState keeps Back working; it throws in sandboxed frames, where the hash is skipped on purpose */
+      try { history.replaceState(history.state, '', h); } catch (e) { /* sandboxed frame: leave the URL alone */ }
+    }
+
+    function noteHtml(k) {
+      const a = slides[k].querySelector(':scope > .notes');
+      return a ? a.innerHTML.trim() : '';
+    }
+    function syncNotes() {
+      if (notesPanel.hidden) return;
+      notesBody.innerHTML = noteHtml(index) || '<p class="none">No notes for this slide.</p>';
+    }
+    function broadcast() {
+      if (!pw || pw.closed) return;
+      const m = { deck: deckKey, t: 'go', i: index };
+      try { if (bc) bc.postMessage(m); } catch (e) { /* channel closed */ }
+      try { pw.postMessage({ okDeck: m }, '*'); } catch (e) { /* window gone */ }
+    }
+    function markOverview() {
+      Array.from(ov.children).forEach((t, k) => t.setAttribute('aria-current', k === index ? 'true' : 'false'));
+    }
+
+    function go(n, silent) {
+      index = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, k) => {
+        const on = k === index;
+        s.classList.toggle('is-active', on);
+        s.setAttribute('aria-hidden', on ? 'false' : 'true');
+        s.inert = !on;
+      });
+      count.textContent = (index + 1) + ' / ' + slides.length;
+      fill.style.width = ((index + 1) / slides.length * 100) + '%';
+      prev.disabled = index === 0;
+      next.disabled = index === slides.length - 1;
+      syncNotes();
+      markOverview();
+      if (deeplink && !silent) writeHash();
+      broadcast();
+    }
+
+    /* overview */
+    function buildOverview() {
+      ov.textContent = '';
+      slides.forEach((s, k) => {
+        const clone = s.cloneNode(true);
+        clone.querySelectorAll('.notes').forEach((n) => n.remove());
+        clone.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+        clone.classList.remove('is-active');
+        clone.setAttribute('aria-hidden', 'true');
+        clone.inert = true;
+        const t = document.createElement('div');
+        t.className = 'thumb';
+        t.setAttribute('role', 'button');
+        t.tabIndex = 0;
+        t.setAttribute('aria-label', 'Go to slide ' + (k + 1));
+        const num = document.createElement('span');
+        num.className = 'num';
+        num.textContent = String(k + 1);
+        t.append(clone, num);
+        const pick = () => { closeOverview(); go(k); root.focus({ preventScroll: true }); };
+        t.addEventListener('click', (e) => { e.stopPropagation(); pick(); });
+        t.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); pick(); }
+        });
+        ov.append(t);
+      });
+      markOverview();
+    }
+    function fitThumbs() {
+      Array.from(ov.children).forEach((t) => {
+        const c = t.firstElementChild;
+        if (c && t.clientWidth) c.style.setProperty('--s', String(t.clientWidth / 1280));
+      });
+    }
+    if (typeof ResizeObserver === 'function') new ResizeObserver(fitThumbs).observe(ov);
+    function openOverview() {
+      closeHelp();
+      buildOverview();
+      ov.hidden = false;
+      fitThumbs();
+      ovBtn.setAttribute('aria-pressed', 'true');
+      const t = ov.children[index];
+      if (t) t.focus({ preventScroll: true });
+    }
+    function closeOverview() {
+      if (ov.hidden) return;
+      ov.hidden = true;
+      ov.textContent = '';
+      ovBtn.setAttribute('aria-pressed', 'false');
+    }
+    function toggleOverview() {
+      if (ov.hidden) openOverview();
+      else { closeOverview(); root.focus({ preventScroll: true }); }
+    }
+    function moveInOverview(delta, absolute) {
+      const items = Array.from(ov.children);
+      if (!items.length) return;
+      const at = items.indexOf(document.activeElement && document.activeElement.closest ? document.activeElement.closest('.thumb') : null);
+      const from = at < 0 ? index : at;
+      const to = absolute ? delta : from + delta;
+      const t = items[Math.max(0, Math.min(items.length - 1, to))];
+      if (t) t.focus();
+    }
+
+    /* help, notes, presenter, print */
+    function openHelp() { closeOverview(); help.hidden = false; }
+    function closeHelp() { help.hidden = true; }
+    function toggleNotes() {
+      notesPanel.hidden = !notesPanel.hidden;
+      notesBtn.setAttribute('aria-pressed', notesPanel.hidden ? 'false' : 'true');
+      syncNotes();
+    }
+
+    function openPresenter() {
+      if (pw && !pw.closed) { pw.focus(); return; }
+      let w = null;
+      try { w = window.open('', 'ok-presenter-' + rootIndex, 'popup=yes,width=1180,height=780'); } catch (e) { w = null; }
+      if (!w || w.closed) {
+        say('The presenter window was blocked. Allow pop-ups for this page, then press P again.');
+        return;
+      }
+      pw = w;
+      const d = w.document;
+      d.title = 'Presenter view';
+      ['lang', 'class', 'data-theme', 'style'].forEach((a) => {
+        const v = document.documentElement.getAttribute(a);
+        if (v !== null) d.documentElement.setAttribute(a, v);
+      });
+      ['class', 'style'].forEach((a) => {
+        const v = document.body.getAttribute(a);
+        if (v !== null) d.body.setAttribute(a, v);
+      });
+      document.querySelectorAll('style, link[rel="stylesheet"]').forEach((n) => {
+        const c = d.importNode(n, true);
+        if (n.tagName === 'LINK') c.href = n.href;
+        d.head.appendChild(c);
+      });
+      const own = d.createElement('style');
+      own.textContent = PRESENTER_CSS(ROOT_CLASS);
+      d.head.appendChild(own);
+
+      d.body.innerHTML = '<div class="pv">'
+        + '<div class="pv-top"><b>Presenter view</b><span class="pv-pos" data-pos></span>'
+        + '<span class="pv-clock" data-clock aria-label="Elapsed time">0:00</span>'
+        + '<button type="button" data-t="pause">Pause</button><button type="button" data-t="reset">Reset</button></div>'
+        + '<div><p class="pv-lab">Current slide</p><div class="' + ROOT_CLASS + '" data-pane="cur"></div></div>'
+        + '<div class="pv-side"><div><p class="pv-lab">Next slide</p><div class="' + ROOT_CLASS + '" data-pane="next"></div></div>'
+        + '<div class="pv-nav"><button type="button" data-nav="-1">Previous</button><button type="button" data-nav="1">Next</button></div></div>'
+        + '<div class="pv-notes"><p class="pv-lab">Speaker notes</p><div data-notes></div></div>'
+        + '</div>';
+
+      const cfg = {
+        channel: deckKey,
+        total: slides.length,
+        start: index,
+        slides: slides.map((s) => {
+          const c = s.cloneNode(true);
+          c.querySelectorAll('.notes').forEach((n) => n.remove());
+          c.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+          c.classList.add('is-active');
+          c.removeAttribute('aria-hidden');
+          c.removeAttribute('inert');
+          c.inert = false;
+          return c.outerHTML;
+        }),
+        notes: slides.map((s, k) => noteHtml(k))
+      };
+      const sc = d.createElement('script');
+      sc.textContent = '(' + presenterMain.toString() + ')(' + JSON.stringify(cfg) + ');';
+      d.body.appendChild(sc);
+    }
+
+    function onMessage(m) {
+      if (!m || m.deck !== deckKey) return;
+      if (m.t === 'goto' && typeof m.i === 'number') go(m.i);
+      else if (m.t === 'hello') broadcast();
+    }
+    if (bc) bc.onmessage = (e) => onMessage(e.data);
+    window.addEventListener('message', (e) => {
+      if (pw && e.source === pw && e.data && e.data.okDeck) onMessage(e.data.okDeck);
+    });
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement === root) {
+        document.exitFullscreen();
+      } else if (root.requestFullscreen) {
+        root.requestFullscreen().catch(() => {});
+      }
+    }
+
+    prev.addEventListener('click', () => go(index - 1));
+    next.addEventListener('click', () => go(index + 1));
+    ovBtn.addEventListener('click', toggleOverview);
+    notesBtn.addEventListener('click', toggleNotes);
+    presBtn.addEventListener('click', openPresenter);
+    printBtn.addEventListener('click', () => {
+      closeOverview();
+      closeHelp();
+      if (window.origin === 'null') say('If the print dialog does not open, printing is blocked inside this frame. Open the deck on its own page.');
+      window.print();
+    });
+    helpBtn.addEventListener('click', () => { if (help.hidden) openHelp(); else closeHelp(); });
+    help.addEventListener('click', (e) => { if (e.target === help) closeHelp(); });
+    if (document.fullscreenEnabled) fs.addEventListener('click', toggleFullscreen);
+    else fs.hidden = true;
+    stage.addEventListener('click', () => root.focus({ preventScroll: true }));
+    window.addEventListener('beforeprint', () => { closeOverview(); closeHelp(); });
+
+    /* touch swipe, touch pointers only so mouse selection is untouched */
+    let sx = 0;
+    let sy = 0;
+    let swiping = false;
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'touch' || !ov.hidden || !help.hidden) return;
+      if (e.target.closest('button, a, input, textarea, select, [role="button"]')) return;
+      swiping = true; sx = e.clientX; sy = e.clientY;
+    });
+    stage.addEventListener('pointerup', (e) => {
+      if (!swiping) return;
+      swiping = false;
+      const dx = e.clientX - sx;
+      const dy = e.clientY - sy;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) go(index + (dx < 0 ? 1 : -1));
+    });
+    stage.addEventListener('pointercancel', () => { swiping = false; });
+
+    if (deeplink) {
+      window.addEventListener('hashchange', () => {
+        const n = hashIndex();
+        if (n !== null && n !== index) go(n, true);
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (isEditable(e.target)) return;
+      const inside = root.contains(document.activeElement);
+      const alone = document.querySelectorAll('[aria-roledescription="presentation"]').length === 1;
+      if (!inside && !alone) return;
+      if (e.key === ' ' && e.target.closest && e.target.closest('button, a, summary, [role="button"]')) return;
+
+      if (!ov.hidden) {
+        const cols = getComputedStyle(ov).gridTemplateColumns.split(' ').length || 1;
+        let used = true;
+        switch (e.key) {
+          case 'ArrowRight': moveInOverview(1); break;
+          case 'ArrowLeft': moveInOverview(-1); break;
+          case 'ArrowDown': moveInOverview(cols); break;
+          case 'ArrowUp': moveInOverview(-cols); break;
+          case 'Home': moveInOverview(0, true); break;
+          case 'End': moveInOverview(slides.length - 1, true); break;
+          case 'o': case 'O': case 'Escape': toggleOverview(); break;
+          default: used = false;
+        }
+        if (used) { e.preventDefault(); return; }
+      }
+
+      let handled = true;
+      switch (e.key) {
+        case 'ArrowRight': case 'PageDown': go(index + 1); break;
+        case 'ArrowLeft': case 'PageUp': go(index - 1); break;
+        case ' ': go(e.shiftKey ? index - 1 : index + 1); break;
+        case 'Home': go(0); break;
+        case 'End': go(slides.length - 1); break;
+        case 'f': case 'F': if (document.fullscreenEnabled) toggleFullscreen(); break;
+        case 'o': case 'O': toggleOverview(); break;
+        case 'n': case 'N': toggleNotes(); break;
+        case 'p': case 'P': openPresenter(); break;
+        case '?': if (help.hidden) openHelp(); else closeHelp(); break;
+        case 'Escape': if (!help.hidden) closeHelp(); else handled = false; break;
+        default: handled = false;
+      }
+      if (handled) e.preventDefault();
+    });
+
+    const start = deeplink ? hashIndex() : null;
+    go(start === null ? 0 : start, true);
+  });
+})();
+</script>

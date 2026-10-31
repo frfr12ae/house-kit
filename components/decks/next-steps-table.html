@@ -1,0 +1,118 @@
+<!--
+@title Next steps table
+@group Storyline
+@description Actions by owner, due date and status, with status pills in the semantic colour pairs, so the room sees what is done, on track, at risk or blocked.
+@tags slide, next steps, actions, owner, status, table, tracker
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-next-steps-table {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-next-steps-table .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-next-steps-table .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-next-steps-table .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-next-steps-table h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-next-steps-table .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-next-steps-table .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-next-steps-table .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-next-steps-table .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-next-steps-table .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-next-steps-table .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-next-steps-table .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5cqi;
+    padding: 0.35cqi 1cqi;
+    border: var(--ds-hairline) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-neutral-fill);
+    font-size: 1.2cqi;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--ds-text);
+    white-space: nowrap;
+  }
+  .c-next-steps-table .pill.is-info { background: var(--ds-info-fill); border-color: var(--ds-info-line); color: var(--ds-ink); }
+  .c-next-steps-table .pill.is-note { background: var(--ds-note-fill); border-color: var(--ds-note-line); color: var(--ds-ink); }
+  .c-next-steps-table .pill.is-high { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-next-steps-table .pill.is-danger { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); color: var(--ds-ink); }
+  .c-next-steps-table .tbl { display: grid; grid-template-columns: minmax(0, 1fr) 22cqi 12cqi 14cqi; grid-template-rows: auto repeat(6, minmax(0, 1fr)); height: 100%; }
+  .c-next-steps-table .h { padding: 0 0 1cqi; border-bottom: var(--ds-stroke) solid var(--ds-ink); font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-next-steps-table .c { display: flex; align-items: center; border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: 1.5cqi; line-height: 1.3; }
+  .c-next-steps-table .act { padding-right: 2cqi; font-weight: 600; color: var(--ds-ink); }
+  .c-next-steps-table .due { font-variant-numeric: tabular-nums; }
+  .c-next-steps-table .pill { font-size: 1.25cqi; }
+  .c-next-steps-table .pill i { width: 0.8cqi; height: 0.8cqi; border-radius: 50%; background: var(--ds-neutral-line); }
+  .c-next-steps-table .pill.is-info i { background: var(--ds-info-line); }
+  .c-next-steps-table .pill.is-note i { background: var(--ds-note-line); }
+  .c-next-steps-table .pill.is-high i { background: var(--ds-highlight-line); }
+  .c-next-steps-table .pill.is-danger i { background: var(--ds-danger-line); }
+</style>
+
+<section class="c-next-steps-table" aria-label="Next steps by owner, date and status">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Next steps</p>
+        <h1>Six actions in the next 90 days, with one blocker to clear before the hub contract is signed</h1>
+      </div>
+      <ol class="tracker" aria-label="Deck sections"><li>Context</li><li>Options</li><li>Recommendation</li><li class="on" aria-current="step">Next steps</li></ol>
+    </div>
+    <div class="body">
+      <div class="tbl">
+      <div class="h">Action</div><div class="h">Owner</div><div class="h">Due</div><div class="h">Status</div>
+      <div class="c act">Confirm the hub site shortlist</div><div class="c">Head of Network</div><div class="c due">14 Nov 2026</div><div class="c"><span class="pill is-note"><i></i>Done</span></div>
+      <div class="c act">Sign the land option for hub one</div><div class="c">Chief Financial Officer</div><div class="c due">28 Nov 2026</div><div class="c"><span class="pill is-high"><i></i>At risk</span></div>
+      <div class="c act">Award the sortation equipment tender</div><div class="c">Head of Procurement</div><div class="c due">15 Dec 2026</div><div class="c"><span class="pill is-info"><i></i>On track</span></div>
+      <div class="c act">Approve the nightly route-optimisation pilot</div><div class="c">Chief Operating Officer</div><div class="c due">12 Jan 2027</div><div class="c"><span class="pill is-danger"><i></i>Blocked</span></div>
+      <div class="c act">Open talks with two new retail clients</div><div class="c">Head of Sales</div><div class="c due">31 Jan 2027</div><div class="c"><span class="pill is-info"><i></i>On track</span></div>
+      <div class="c act">Brief the works council on depot changes</div><div class="c">Head of People</div><div class="c due">15 Feb 2027</div><div class="c"><span class="pill "><i></i>Not started</span></div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Programme office tracker, 31 October 2026. Illustrative figures.</span><span class="page">12</span></div>
+  </div>
+</section>

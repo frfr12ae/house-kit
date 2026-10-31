@@ -1,0 +1,112 @@
+<!--
+@title Org chart
+@group Exhibits
+@description A three-level target organisation with SVG connector lines, new roles highlighted and a headcount tag on every box.
+@tags slide, org chart, organisation, structure, roles, headcount, hierarchy, target operating model
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-org-chart {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-org-chart .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-org-chart .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-org-chart .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-org-chart h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-org-chart .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-org-chart .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-org-chart .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-org-chart .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-org-chart .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-org-chart .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-org-chart .body { padding-top: 1.8cqi; }
+  .c-org-chart .org { position: relative; width: 88cqi; height: 31.5cqi; }
+  .c-org-chart .org svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .c-org-chart .ln { fill: none; stroke: var(--ds-neutral-line); stroke-width: 1.6; stroke-linecap: square; }
+  .c-org-chart .box { position: absolute; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6cqi; padding: 0 0.8cqi; text-align: center; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-org-chart .box b { font-size: 1.3cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-org-chart .l1 { background: var(--ds-action); border-color: var(--ds-action); }
+  .c-org-chart .l1 b { font-size: 1.6cqi; color: var(--ds-on-action); }
+  .c-org-chart .l2 b { font-size: 1.4cqi; }
+  .c-org-chart .is-new { padding-top: 0.3cqi; }
+  .c-org-chart .is-new { background: var(--ds-highlight-fill); border: var(--ds-stroke) solid var(--ds-highlight-line); }
+  .c-org-chart .flag { position: absolute; top: -0.85cqi; left: 50%; transform: translateX(-50%); padding: 0.15cqi 0.8cqi; border-radius: var(--ds-radius-pill); background: var(--ds-highlight-line); font-size: 0.95cqi; font-weight: 800; letter-spacing: 0.02em; color: var(--ds-bg); }
+  .c-org-chart .fte { padding: 0.2cqi 0.8cqi; border-radius: var(--ds-radius-pill); background: var(--ds-neutral-fill); border: var(--ds-hairline) solid var(--ds-neutral-line); font-size: 1cqi; font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; color: var(--ds-text); white-space: nowrap; }
+  .c-org-chart .l1 .fte { background: transparent; border-color: color-mix(in srgb, var(--ds-on-action) 50%, transparent); color: var(--ds-on-action); }
+  .c-org-chart .legend { position: absolute; top: 5cqi; right: 6cqi; display: flex; align-items: center; gap: 1.8cqi; margin: 0; padding: 0; list-style: none; font-size: 1.05cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-org-chart .legend li { display: flex; align-items: center; gap: 0.6cqi; }
+  .c-org-chart .sw { width: 1.5cqi; height: 1.1cqi; border-radius: calc(0.3cqi * var(--ds-radius-scale, 1)); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); }
+  .c-org-chart .sw.is-new { background: var(--ds-highlight-fill); border: var(--ds-stroke) solid var(--ds-highlight-line); }
+</style>
+
+<section class="c-org-chart" aria-label="Target organisation: three levels, new roles highlighted">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Target organisation</p>
+        <h1>The target organisation adds one executive role and four new units, for 1,980 FTE in total</h1>
+      </div>
+      <ul class="legend" aria-label="Legend"><li><i class="sw is-new"></i>New role</li><li><i class="sw"></i>Existing role</li><li><span class="fte">FTE</span>Full-time equivalents</li></ul>
+    </div>
+    <div class="body">
+      <div class="org">
+        <svg viewBox="0 0 880 315" preserveAspectRatio="none" aria-hidden="true"><path class="ln" d="M503.8 66V92.5M185 92.5H758.8M185 92.5V115M503.8 92.5V115M758.8 92.5V115M185 185V215M57.5 215H312.5M57.5 215V245M185 215V245M312.5 215V245M503.8 185V215M440 215H567.5M440 215V245M567.5 215V245M758.8 185V215M695 215H822.5M695 215V245M822.5 215V245"/></svg>
+        <div class="box l1" style="left:39.88cqi;top:0cqi;width:21cqi;height:6.6cqi"><b>Chief Executive Officer</b><span class="fte">1,980 FTE</span></div>
+        <div class="box l2" style="left:7.50cqi;top:11.5cqi;width:22cqi;height:7cqi"><b>Chief Operating Officer</b><span class="fte">1,850 FTE</span></div>
+        <div class="box l2" style="left:39.38cqi;top:11.5cqi;width:22cqi;height:7cqi"><b>Chief Financial Officer</b><span class="fte">68 FTE</span></div>
+        <div class="box l2 is-new" style="left:64.88cqi;top:11.5cqi;width:22cqi;height:7cqi"><span class="flag">New</span><b>Chief Commercial Officer</b><span class="fte">62 FTE</span></div>
+        <div class="box l3 is-new" style="left:0.00cqi;top:24.5cqi;width:11.5cqi;height:7cqi"><span class="flag">New</span><b>Hub Network</b><span class="fte">180 FTE</span></div>
+        <div class="box l3" style="left:12.75cqi;top:24.5cqi;width:11.5cqi;height:7cqi"><b>Depot Operations</b><span class="fte">1,150 FTE</span></div>
+        <div class="box l3" style="left:25.50cqi;top:24.5cqi;width:11.5cqi;height:7cqi"><b>Fleet and Linehaul</b><span class="fte">520 FTE</span></div>
+        <div class="box l3" style="left:38.25cqi;top:24.5cqi;width:11.5cqi;height:7cqi"><b>Finance and Planning</b><span class="fte">60 FTE</span></div>
+        <div class="box l3 is-new" style="left:51.00cqi;top:24.5cqi;width:11.5cqi;height:7cqi"><span class="flag">New</span><b>Investment Office</b><span class="fte">8 FTE</span></div>
+        <div class="box l3 is-new" style="left:63.75cqi;top:24.5cqi;width:11.5cqi;height:7cqi"><span class="flag">New</span><b>Key Accounts</b><span class="fte">24 FTE</span></div>
+        <div class="box l3 is-new" style="left:76.50cqi;top:24.5cqi;width:11.5cqi;height:7cqi"><span class="flag">New</span><b>E-commerce</b><span class="fte">38 FTE</span></div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Company HR system, September 2026 headcount; target design workshop. Illustrative figures.</span><span class="page">15</span></div>
+  </div>
+</section>

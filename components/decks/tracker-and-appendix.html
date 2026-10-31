@@ -1,0 +1,108 @@
+<!--
+@title Tracker and appendix slide
+@group Storyline
+@description A backup slide that shows the section tracker top right, an Appendix kicker, a dense but tidy supporting table with a total row, and numbered footnotes.
+@tags slide, appendix, backup, tracker, table, footnotes, investment, supporting data
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-tracker-and-appendix {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-tracker-and-appendix .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-tracker-and-appendix .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-tracker-and-appendix .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-tracker-and-appendix h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-tracker-and-appendix .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-tracker-and-appendix .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-tracker-and-appendix .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-tracker-and-appendix .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-tracker-and-appendix .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-tracker-and-appendix .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-tracker-and-appendix .body { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 1.6cqi; }
+  .c-tracker-and-appendix .tbl { display: grid; grid-template-columns: minmax(0, 1fr) repeat(5, 9.5cqi) 13cqi; grid-template-rows: auto repeat(6, minmax(0, 1fr)); }
+  .c-tracker-and-appendix .h { display: flex; align-items: flex-end; justify-content: flex-end; padding: 0 0 0.9cqi; border-bottom: var(--ds-stroke) solid var(--ds-ink); font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-tracker-and-appendix .h.lab { justify-content: flex-start; }
+  .c-tracker-and-appendix .h.b { justify-content: flex-start; padding-left: 2cqi; }
+  .c-tracker-and-appendix .c { display: flex; align-items: center; border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: 1.45cqi; }
+  .c-tracker-and-appendix .c.lab { font-weight: 600; color: var(--ds-ink); }
+  .c-tracker-and-appendix .c.n { justify-content: flex-end; font-variant-numeric: tabular-nums; }
+  .c-tracker-and-appendix .c.t { font-weight: 700; color: var(--ds-ink); }
+  .c-tracker-and-appendix .c:nth-child(7n) { padding-left: 2cqi; color: var(--ds-muted); }
+  .c-tracker-and-appendix .tr { font-weight: 800; color: var(--ds-ink) !important; border-top: var(--ds-stroke) solid var(--ds-ink); border-bottom: 0 !important; background: var(--ds-panel); }
+  .c-tracker-and-appendix sup { font-size: 0.65em; font-weight: 700; color: var(--ds-muted); margin-left: 0.2em; }
+  .c-tracker-and-appendix .notes { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.3cqi; font-size: 1cqi; line-height: 1.35; color: var(--ds-muted); }
+  .c-tracker-and-appendix .notes b { color: var(--ds-text); font-weight: 700; margin-right: 0.5em; }
+</style>
+
+<section class="c-tracker-and-appendix" aria-label="Appendix: investment by line item and year">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Appendix</p>
+        <h1>Backup: the EUR 85m investment is weighted to 2027, when 49% is spent</h1>
+      </div>
+      <ol class="tracker" aria-label="Deck sections"><li>Context</li><li>Options</li><li>Recommendation</li><li class="on" aria-current="step">Appendix</li></ol>
+    </div>
+    <div class="body">
+      <div class="tbl">
+      <div class="h lab">Line item, EUR m</div><div class="h">2027</div><div class="h">2028</div><div class="h">2029</div><div class="h">Total</div><div class="h">Share</div><div class="h b"><span>Basis<sup>3</sup></span></div>
+      <div class="c lab"><span>Automated hub one (north)</span></div><div class="c n">24</div><div class="c n">4</div><div class="c n">0</div><div class="c n t">28</div><div class="c n">33%</div><div class="c">Quote</div>
+      <div class="c lab"><span>Automated hub two (south)</span></div><div class="c n">6</div><div class="c n">22</div><div class="c n">2</div><div class="c n t">30</div><div class="c n">35%</div><div class="c">Benchmark</div>
+      <div class="c lab"><span>Depot refresh, six sites<sup>1</sup></span></div><div class="c n">8</div><div class="c n">6</div><div class="c n">3</div><div class="c n t">17</div><div class="c n">20%</div><div class="c">Benchmark</div>
+      <div class="c lab"><span>Fleet electrification<sup>2</sup></span></div><div class="c n">2</div><div class="c n">3</div><div class="c n">2</div><div class="c n t">7</div><div class="c n">8%</div><div class="c">Quote</div>
+      <div class="c lab"><span>Systems and route optimisation</span></div><div class="c n">2</div><div class="c n">1</div><div class="c n">0</div><div class="c n t">3</div><div class="c n">4%</div><div class="c">Estimate</div>
+      <div class="c lab tr">Total</div><div class="c n tr">42</div><div class="c n tr">36</div><div class="c n tr">7</div><div class="c n tr">85</div><div class="c n tr">100%</div><div class="c tr"></div>
+      </div>
+      <ul class="notes">
+        <li><b>1</b>The six depots with the highest 2026 parcel volume.</li>
+        <li><b>2</b>Covers 140 electric vans; the rest of the fleet stays leased.</li>
+        <li><b>3</b>Quote is a signed supplier quote, benchmark a recent comparable project, estimate an internal engineering view.</li>
+      </ul>
+    </div>
+    <div class="foot"><span>Source: Company investment plan, October 2026. Figures rounded; shares may not add to 100%. Illustrative figures.</span><span class="page">24</span></div>
+  </div>
+</section>

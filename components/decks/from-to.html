@@ -1,0 +1,97 @@
+<!--
+@title From-to shift
+@group Storyline
+@description A two-column shift table showing where the business is today and where it needs to be, five dimensions long, with arrows between each pair.
+@tags slide, from to, shift, transformation, current state, target state, change
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-from-to {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-from-to .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-from-to .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-from-to .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-from-to h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-from-to .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-from-to .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-from-to .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-from-to .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-from-to .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-from-to .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-from-to .tbl { display: grid; grid-template-columns: 14cqi minmax(0, 1fr) 6cqi minmax(0, 1fr); grid-template-rows: auto repeat(5, minmax(0, 1fr)); gap: 1cqi 0; height: 100%; }
+  .c-from-to .th { align-self: end; padding: 0 2cqi 0.4cqi; font-size: 1.15cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-from-to .th.is-to { color: var(--ds-ink); }
+  .c-from-to .dim { align-self: center; font-size: 1.5cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-from-to .from, .c-from-to .to { display: flex; align-items: center; padding: 0 2cqi; font-size: 1.7cqi; line-height: 1.3; }
+  .c-from-to .from { background: var(--ds-neutral-fill); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); color: var(--ds-text); }
+  .c-from-to .to { background: var(--ds-note-fill); box-shadow: inset 0.35cqi 0 0 var(--ds-note-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); font-weight: 600; color: var(--ds-ink); }
+  .c-from-to .arr { display: grid; place-items: center; }
+  .c-from-to .arr svg { width: 3.4cqi; height: 1.4cqi; fill: none; stroke: var(--ds-muted); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+
+<section class="c-from-to" aria-label="From today to target across five dimensions">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Target operating model</p>
+        <h1>Five shifts take us from a manual three-depot network to a service-led hub model</h1>
+      </div>
+      
+    </div>
+    <div class="body">
+      <div class="tbl">
+      <div></div><div class="th">From today</div><div></div><div class="th is-to">To target</div>
+      <div class="dim">Network</div><div class="from">Three depots with manual sorting</div><span class="arr"><svg viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h34M30 2l7 6-7 6"/></svg></span><div class="to">Two automated hubs and six spoke depots</div>
+      <div class="dim">Service</div><div class="from">Next-day delivery in 60% of postcodes</div><span class="arr"><svg viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h34M30 2l7 6-7 6"/></svg></span><div class="to">Next-day delivery in 95%, with two-hour windows</div>
+      <div class="dim">Unit cost</div><div class="from">EUR 3.10 per parcel delivered</div><span class="arr"><svg viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h34M30 2l7 6-7 6"/></svg></span><div class="to">EUR 2.60 per parcel delivered</div>
+      <div class="dim">Customers</div><div class="from">Three retailers make up 52% of volume</div><span class="arr"><svg viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h34M30 2l7 6-7 6"/></svg></span><div class="to">No client above 15% of volume</div>
+      <div class="dim">Planning</div><div class="from">Routes planned by hand each morning</div><span class="arr"><svg viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h34M30 2l7 6-7 6"/></svg></span><div class="to">Routes optimised nightly with live traffic data</div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Company operations review and target model, October 2026. Illustrative figures.</span><span class="page">6</span></div>
+  </div>
+</section>

@@ -1,0 +1,132 @@
+<!--
+@title Cover, Swiss grid
+@group Openers and structure
+@description Type-only cover on a visible twelve-column grid: one huge number, heavy rules and an asymmetric block of title and metadata.
+@tags slide, cover, swiss, grid, typography, number, opening
+@preview slide
+@added 2026-10-31
+@source frontend-slides style presets by Zara Zhang | https://github.com/zarazhangrui/frontend-slides | inspired-by
+-->
+<style>
+  .c-cover-swiss {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-cover-swiss .grid {
+    position: absolute;
+    inset: 0 5cqi;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 0;
+    pointer-events: none;
+  }
+  .c-cover-swiss .grid i {
+    display: block;
+    border-left: var(--ds-hairline) solid color-mix(in srgb, var(--ds-line) 70%, transparent);
+  }
+  .c-cover-swiss .grid i:last-child { border-right: var(--ds-hairline) solid color-mix(in srgb, var(--ds-line) 70%, transparent); }
+  .c-cover-swiss .inner {
+    position: absolute;
+    inset: 0 5cqi;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto 1fr auto;
+    column-gap: 0;
+    padding: 4.5cqi 0 4cqi;
+  }
+  .c-cover-swiss .inner > * { padding: 0 1.4cqi; min-width: 0; }
+  .c-cover-swiss .top-l {
+    grid-column: 1 / 7;
+    padding-top: 1.2cqi;
+    border-top: 0.9cqi solid var(--ds-ink);
+    font-size: 1.5cqi;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--ds-ink);
+  }
+  .c-cover-swiss .top-r {
+    grid-column: 7 / 13;
+    padding-top: 1.2cqi;
+    border-top: 0.9cqi solid var(--ds-ink);
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5cqi;
+    font-weight: 500;
+  }
+  .c-cover-swiss .num {
+    grid-column: 1 / 8;
+    grid-row: 2;
+    align-self: end;
+    margin-left: -0.6cqi;
+    font-family: var(--ds-font-display);
+    font-size: 37cqi;
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    line-height: 0.76;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-cover-swiss .square {
+    grid-column: 8 / 9;
+    grid-row: 2;
+    align-self: start;
+    justify-self: stretch;
+    margin: 3cqi 1.4cqi 0;
+    padding: 0;
+    aspect-ratio: 1;
+    background: var(--ds-highlight-line);
+  }
+  .c-cover-swiss .title {
+    grid-column: 8 / 13;
+    grid-row: 2;
+    align-self: end;
+    display: grid;
+    gap: 1.6cqi;
+  }
+  .c-cover-swiss h1 {
+    margin: 0;
+    font-size: 4.1cqi;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    color: var(--ds-ink);
+  }
+  .c-cover-swiss .sub { margin: 0; font-size: 1.55cqi; line-height: 1.45; }
+  .c-cover-swiss .bot {
+    grid-row: 3;
+    padding-top: 1.4cqi;
+    margin-top: 2.4cqi;
+    border-top: var(--ds-hairline) solid var(--ds-ink);
+    font-size: 1.25cqi;
+    line-height: 1.4;
+  }
+  .c-cover-swiss .bot b { display: block; font-weight: 800; color: var(--ds-ink); }
+  .c-cover-swiss .b1 { grid-column: 1 / 4; }
+  .c-cover-swiss .b2 { grid-column: 4 / 8; }
+  .c-cover-swiss .b3 { grid-column: 8 / 11; }
+  .c-cover-swiss .b4 { grid-column: 11 / 13; }
+</style>
+
+<section class="c-cover-swiss">
+  <div class="grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="inner">
+    <div class="top-l">Field Notes</div>
+    <div class="top-r"><span>Research series</span><span>2026</span></div>
+    <div class="num">04</div>
+    <div class="square" aria-hidden="true"></div>
+    <div class="title">
+      <h1>Systems that survive contact with users</h1>
+      <p class="sub">Notes from eleven product teams on what stayed standing after launch.</p>
+    </div>
+    <div class="bot b1"><b>Author</b>Lena Bergstrom</div>
+    <div class="bot b2"><b>Date</b>31 October 2026</div>
+    <div class="bot b3"><b>Format</b>Briefing, 40 min</div>
+    <div class="bot b4"><b>Edition</b>No. 04</div>
+  </div>
+</section>

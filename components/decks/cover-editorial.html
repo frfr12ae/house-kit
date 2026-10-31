@@ -1,0 +1,167 @@
+<!--
+@title Cover, editorial
+@group Openers and structure
+@description Magazine-style cover with an issue masthead between double rules, a serif headline, a date line and a strip of what is inside, for essays and long-read decks.
+@tags slide, cover, editorial, magazine, masthead, serif, opening
+@preview slide
+@added 2026-10-31
+@source frontend-slides style presets by Zara Zhang | https://github.com/zarazhangrui/frontend-slides | inspired-by
+-->
+<style>
+  .c-cover-editorial {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-cover-editorial .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    padding: 4.2cqi 6cqi 4cqi;
+  }
+  .c-cover-editorial .mast {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 1.2cqi 0;
+    border-top: 0.45cqi solid var(--ds-ink);
+    border-bottom: var(--ds-hairline) solid var(--ds-ink);
+    font-size: 1.2cqi;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ds-text);
+  }
+  .c-cover-editorial .mast .r { text-align: right; }
+  .c-cover-editorial .name {
+    font-family: var(--ds-font-serif);
+    font-size: 2.7cqi;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--ds-ink);
+  }
+  .c-cover-editorial .dateline {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.9cqi 0;
+    border-bottom: 0.45cqi solid var(--ds-ink);
+    font-family: var(--ds-font-serif);
+    font-size: 1.45cqi;
+    font-style: italic;
+    color: var(--ds-text);
+  }
+  .c-cover-editorial .stage {
+    position: relative;
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 1.5cqi;
+    padding: 1.6cqi 18cqi 1.2cqi 0;
+  }
+  .c-cover-editorial .kicker {
+    font-size: 1.3cqi;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ds-danger-line);
+  }
+  .c-cover-editorial h1 {
+    margin: 0;
+    font-family: var(--ds-font-serif);
+    font-size: 6.4cqi;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-wrap: balance;
+    color: var(--ds-ink);
+  }
+  .c-cover-editorial h1 em { font-weight: 400; }
+  .c-cover-editorial .dek {
+    margin: 0;
+    max-width: 54cqi;
+    font-family: var(--ds-font-serif);
+    font-size: 1.9cqi;
+    line-height: 1.42;
+  }
+  .c-cover-editorial .by { font-size: 1.3cqi; font-weight: 600; color: var(--ds-muted); letter-spacing: 0.04em; }
+  .c-cover-editorial .by b { color: var(--ds-ink); }
+  .c-cover-editorial .shape { position: absolute; right: 2cqi; top: 50%; width: 15cqi; height: 15cqi; transform: translateY(-50%); }
+  .c-cover-editorial .shape i { position: absolute; display: block; }
+  .c-cover-editorial .shape .c1 {
+    inset: 0;
+    border-radius: 50%;
+    border: var(--ds-stroke) solid var(--ds-ink);
+  }
+  .c-cover-editorial .shape .c2 {
+    left: 4cqi;
+    top: 4cqi;
+    width: 7cqi;
+    height: 7cqi;
+    border-radius: 50%;
+    background: var(--ds-highlight-line);
+  }
+  .c-cover-editorial .shape .ln {
+    left: -4cqi;
+    right: -4cqi;
+    top: 50%;
+    height: var(--ds-stroke);
+    background: var(--ds-ink);
+  }
+  .c-cover-editorial .shape .dt {
+    right: -0.6cqi;
+    top: calc(50% - 0.9cqi);
+    width: 1.8cqi;
+    height: 1.8cqi;
+    border-radius: 50%;
+    background: var(--ds-ink);
+  }
+  .c-cover-editorial .inside {
+    display: grid;
+    grid-template-columns: auto repeat(3, minmax(0, 1fr));
+    column-gap: 3cqi;
+    align-items: baseline;
+    padding-top: 1.5cqi;
+    border-top: var(--ds-hairline) solid var(--ds-ink);
+    font-size: 1.35cqi;
+    line-height: 1.35;
+  }
+  .c-cover-editorial .inside .lab {
+    font-size: 1.1cqi;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ds-muted);
+  }
+  .c-cover-editorial .inside span b { display: block; font-family: var(--ds-font-serif); font-size: 1.6cqi; color: var(--ds-ink); }
+</style>
+
+<section class="c-cover-editorial">
+  <div class="inner">
+    <div class="mast">
+      <span>Vol. 12</span>
+      <span class="name">The Planning Review</span>
+      <span class="r">Issue 04</span>
+    </div>
+    <div class="dateline"><span>Saturday, 31 October 2026</span><span>The strategy edition</span></div>
+    <div class="stage">
+      <span class="kicker">Cover story</span>
+      <h1>The quiet case for <em>fewer</em> projects</h1>
+      <p class="dek">Why the teams that ship the most are the ones that start the least, and how to run a portfolio review that actually cuts.</p>
+      <span class="by">Words by <b>Amara Okafor</b></span>
+      <div class="shape" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="ln"></i><i class="dt"></i></div>
+    </div>
+    <div class="inside">
+      <span class="lab">Inside</span>
+      <span><b>The cost of yes</b>Page 4</span>
+      <span><b>Three bets, ranked</b>Page 11</span>
+      <span><b>A kill-list template</b>Page 18</span>
+    </div>
+  </div>
+</section>

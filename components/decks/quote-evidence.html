@@ -1,0 +1,120 @@
+<!--
+@title Quote with evidence
+@group Exhibits
+@description A customer quote on the left with three supporting data points on the right that prove it, each with a number, a label and its context.
+@tags slide, quote, evidence, testimonial, proof, data points, customer, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-quote-evidence {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-quote-evidence .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-quote-evidence .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-quote-evidence .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-quote-evidence .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-quote-evidence .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-quote-evidence .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-quote-evidence h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-quote-evidence .exhibit { min-height: 0; }
+  .c-quote-evidence .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-quote-evidence svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-quote-evidence svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-quote-evidence .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-quote-evidence .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-quote-evidence .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-quote-evidence .sm { font-size: 12px; }
+  .c-quote-evidence .md { font-size: 13px; }
+  .c-quote-evidence .lg { font-size: 14px; }
+  .c-quote-evidence .b { font-weight: 700; }
+  .c-quote-evidence .sb { font-weight: 600; }
+  .c-quote-evidence .ink { fill: var(--ds-ink); }
+  .c-quote-evidence .mu { fill: var(--ds-muted); }
+  .c-quote-evidence .mid { text-anchor: middle; }
+  .c-quote-evidence .end { text-anchor: end; }
+  .c-quote-evidence .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-quote-evidence .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-quote-evidence .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-quote-evidence .exhibit { display: grid; }
+  .c-quote-evidence .grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); column-gap: 6cqi; align-items: stretch; padding-top: 1.2cqi; }
+  .c-quote-evidence .quote { position: relative; display: flex; flex-direction: column; justify-content: center; margin: 0; padding-right: 1cqi; }
+  .c-quote-evidence .mark { position: absolute; top: 0.4cqi; left: -0.4cqi; font-family: var(--ds-font-serif); font-size: 11cqi; line-height: 1; color: var(--ds-highlight-line); }
+  .c-quote-evidence blockquote { margin: 0; padding-top: 5.6cqi; font-family: var(--ds-font-serif); font-size: 2.4cqi; line-height: 1.38; color: var(--ds-ink); }
+  .c-quote-evidence figcaption { display: grid; gap: 0.3cqi; margin-top: 1.8cqi; padding-top: 1.2cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.3cqi; }
+  .c-quote-evidence figcaption b { font-weight: 700; color: var(--ds-ink); }
+  .c-quote-evidence figcaption span { color: var(--ds-muted); }
+  .c-quote-evidence .proof { display: flex; flex-direction: column; padding-left: 4cqi; border-left: var(--ds-hairline) solid var(--ds-line); }
+  .c-quote-evidence .ph { margin: 0; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-quote-evidence ul { display: grid; align-content: space-evenly; flex: 1; margin: 0; padding: 0; list-style: none; }
+  .c-quote-evidence li { display: grid; grid-template-columns: 13cqi minmax(0, 1fr); column-gap: 1.4cqi; align-items: center; padding: 0.4cqi 0 0.4cqi 1.4cqi; box-shadow: inset 0.3cqi 0 0 var(--ds-note-line); }
+  .c-quote-evidence li b { font-size: 3.1cqi; font-weight: 800; letter-spacing: -0.02em; line-height: 1; color: var(--ds-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .c-quote-evidence li span { font-size: 1.25cqi; line-height: 1.4; color: var(--ds-text); }
+  .c-quote-evidence li strong { display: block; margin-bottom: 0.2cqi; font-size: 1.4cqi; color: var(--ds-ink); }
+</style>
+
+<section class="c-quote-evidence" aria-label="Slide 13: a customer quote and three data points that support it">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Customer evidence · Route optimisation</p>
+      </div>
+      <h2>Customers say routing removed wasted driver time, and the operating data backs them up</h2>
+    </div>
+    <div class="exhibit">
+      <div class="grid">
+        <figure class="quote">
+          <span class="mark" aria-hidden="true">“</span>
+          <blockquote>Our drivers used to spend the first hour of every shift on the phone to depots. Now the route is there when they clock in, and we have stopped paying for missed delivery slots.</blockquote>
+          <figcaption><b>Head of Operations</b><span>Regional grocery chain, customer since 2019</span></figcaption>
+        </figure>
+        <div class="proof">
+          <p class="ph">What the operating data shows</p>
+          <ul>
+            <li><b>−52 min</b><span><strong>Driver admin time per shift</strong>From 74 to 22 minutes before the first stop, across 14 depots.</span></li>
+            <li><b>−57%</b><span><strong>Missed delivery slots</strong>From 6.8% to 2.9% of drops outside the booked window.</span></li>
+            <li><b>€1.2m</b><span><strong>Slot penalties avoided</strong>Compared with the same nine months of 2025, for this customer group.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: customer interview, September 2026; operations data, January to September 2026 against 2025. Illustrative figures.</span>
+      <span class="page">13</span>
+    </div>
+  </div>
+</section>

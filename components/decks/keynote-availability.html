@@ -1,0 +1,151 @@
+<!--
+@title Keynote availability
+@group Keynote
+@description The closing "available today" slide: a huge headline, the date, three price tiers, platform pills and a call to action.
+@tags keynote, availability, pricing, launch, cta, platforms, closing
+@preview slide
+@replay true
+@added 2026-10-31
+@source Apple keynote presentation style | https://www.apple.com/apple-events/ | inspired-by
+-->
+<style>
+  .c-keynote-availability, .c-keynote-availability *, .c-keynote-availability *::before, .c-keynote-availability *::after { box-sizing: border-box; }
+.c-keynote-availability {
+  --k-bg: var(--ds-ink);
+  --k-fg: var(--ds-bg);
+  --k-dim: color-mix(in srgb, var(--ds-bg) 60%, var(--ds-ink));
+  --k-soft: color-mix(in srgb, var(--ds-bg) 82%, var(--ds-ink));
+  --k-line: color-mix(in srgb, var(--ds-bg) 16%, transparent);
+  --k-card: color-mix(in srgb, var(--ds-bg) 7%, var(--ds-ink));
+  --k-card-2: color-mix(in srgb, var(--ds-bg) 12%, var(--ds-ink));
+  --k-blue: var(--ds-info-line);
+  --k-amber: var(--ds-highlight-line);
+  --k-green: var(--ds-note-line);
+  --k-t1: color-mix(in srgb, var(--ds-info-line) 80%, var(--ds-bg));
+  --k-t2: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-bg));
+  --k-t3: color-mix(in srgb, var(--ds-note-line) 80%, var(--ds-bg));
+  --k-s1: color-mix(in srgb, var(--ds-info-line) 66%, var(--ds-bg));
+  --k-s2: color-mix(in srgb, var(--ds-highlight-line) 66%, var(--ds-bg));
+  --k-s3: color-mix(in srgb, var(--ds-note-line) 66%, var(--ds-bg));
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-family: var(--ds-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.c-keynote-availability .sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 50% 118%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 94% -8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 2% 30%, color-mix(in srgb, var(--k-green) 8%, transparent), transparent 70%);
+}
+.c-keynote-availability .pad { position: absolute; inset: 0; padding: 5.5cqi 7cqi; }
+.c-keynote-availability .eyebrow { margin: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--k-dim); }
+.c-keynote-availability .display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: 1.02;
+  color: var(--k-fg);
+}
+.c-keynote-availability .grad {
+  display: inline-block;
+  padding: 0 0.04em 0.1em 0;
+  margin: 0 -0.04em -0.1em 0;
+  background: linear-gradient(100deg, var(--k-t1) 0%, var(--k-t3) 52%, var(--k-t2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.c-keynote-availability.is-armed .rv { opacity: 0; transform: translateY(1.8cqi); }
+.c-keynote-availability.is-armed.is-in .rv {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+  .c-keynote-availability .sky {
+    background:
+      radial-gradient(50% 70% at 20% 14%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+      radial-gradient(40% 50% at 92% 100%, color-mix(in srgb, var(--k-amber) 16%, transparent), transparent 70%),
+      radial-gradient(40% 50% at 54% 112%, color-mix(in srgb, var(--k-green) 14%, transparent), transparent 70%);
+  }
+  .c-keynote-availability .head { position: absolute; left: 7cqi; top: 5.4cqi; display: grid; gap: 1.2cqi; }
+  .c-keynote-availability h1 { font-size: 10.4cqi; line-height: 1; }
+  .c-keynote-availability .date { margin: 0; font-size: 2.1cqi; color: var(--k-soft); }
+  .c-keynote-availability .date b { color: var(--k-fg); font-weight: 600; }
+  .c-keynote-availability .tiers { position: absolute; left: 7cqi; right: 7cqi; top: 27.5cqi; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4cqi; }
+  .c-keynote-availability .tier {
+    position: relative;
+    display: grid;
+    gap: 0.5cqi;
+    padding: 1.8cqi 2cqi;
+    border: var(--ds-hairline) solid var(--k-line);
+    border-radius: calc(1.8cqi * var(--ds-radius-scale, 1));
+    background: linear-gradient(160deg, var(--k-card-2), var(--k-card));
+  }
+  .c-keynote-availability .tier.pick { border-color: color-mix(in srgb, var(--k-amber) 70%, transparent); background: linear-gradient(160deg, color-mix(in srgb, var(--k-amber) 16%, var(--k-card-2)), var(--k-card)); box-shadow: 0 0 5cqi color-mix(in srgb, var(--k-amber) 24%, transparent); }
+  .c-keynote-availability .tier h3 { margin: 0; font-size: 1.5cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--k-dim); }
+  .c-keynote-availability .tier .price { display: flex; align-items: baseline; gap: 0.9cqi; white-space: nowrap; font-family: var(--ds-font-display); font-size: 4.6cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1.05; color: var(--k-fg); }
+  .c-keynote-availability .tier .price small { font-family: var(--ds-font-sans); font-size: 1.25cqi; font-weight: 500; letter-spacing: 0; color: var(--k-dim); }
+  .c-keynote-availability .tier p { margin: 0; font-size: 1.4cqi; color: var(--k-soft); }
+  .c-keynote-availability .tier .flag { position: absolute; right: 1.6cqi; top: 1.5cqi; padding: 0.35cqi 1cqi; border-radius: var(--ds-radius-pill); background: var(--k-amber); font-size: 1.05cqi; font-weight: 700; color: var(--k-bg); }
+  .c-keynote-availability .bottom { position: absolute; left: 7cqi; right: 7cqi; bottom: 5.4cqi; display: flex; align-items: center; justify-content: space-between; gap: 3cqi; }
+  .c-keynote-availability .plats { display: flex; align-items: center; flex-wrap: wrap; gap: 0.8cqi; }
+  .c-keynote-availability .plats span { padding: 0.7cqi 1.5cqi; border: var(--ds-hairline) solid var(--k-line); border-radius: var(--ds-radius-pill); font-size: 1.45cqi; font-weight: 600; color: var(--k-soft); }
+  .c-keynote-availability .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2cqi;
+    padding: 1.5cqi 2.8cqi;
+    border-radius: var(--ds-radius-pill);
+    background: var(--k-fg);
+    font-size: 2cqi;
+    font-weight: 700;
+    color: var(--k-bg);
+    box-shadow: 0 0 5cqi color-mix(in srgb, var(--k-blue) 45%, transparent);
+  }
+  .c-keynote-availability .cta svg { width: 2.4cqi; height: 2.4cqi; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+
+<section class="c-keynote-availability" aria-label="Orbit 2 is available today">
+  <div class="sky"></div>
+  <div class="head">
+    <h1 class="display rv" style="--d:0">Available <span class="grad">today.</span></h1>
+    <p class="date rv" style="--d:1"><b>Wednesday, 4 November 2026.</b> Free update for every Orbit 1 team.</p>
+  </div>
+  <div class="tiers">
+    <div class="tier rv" style="--d:2"><h3>Free</h3><div class="price">$0</div><p>For individuals and small projects.</p></div>
+    <div class="tier pick rv" style="--d:3"><span class="flag">Recommended</span><h3>Pro</h3><div class="price">$12<small>per user, per month</small></div><p>Unlimited spaces and offline mode.</p></div>
+    <div class="tier rv" style="--d:4"><h3>Team</h3><div class="price">$24<small>per user, per month</small></div><p>Admin controls and single sign-on.</p></div>
+  </div>
+  <div class="bottom">
+    <div class="plats rv" style="--d:5"><span>macOS</span><span>Windows</span><span>iOS</span><span>Android</span><span>Web</span></div>
+    <span class="cta rv" style="--d:6">Get Orbit 2<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-keynote-availability').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

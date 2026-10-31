@@ -1,0 +1,108 @@
+<!--
+@title Key takeaways
+@group Workshop
+@description Closing recap with three numbered takeaways, one short line each, and a "one thing to try Monday" note box.
+@tags slide, workshop, takeaways, recap, summary, next step, action
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-key-takeaways {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-key-takeaways .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 27cqi;
+    column-gap: 6cqi;
+    padding: 6cqi 7cqi 5.5cqi;
+  }
+  .c-key-takeaways .main { display: grid; grid-template-rows: auto 1fr; min-width: 0; }
+  .c-key-takeaways .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-key-takeaways h2 {
+    margin: 1.2cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 5cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.05;
+    color: var(--ds-ink);
+  }
+  .c-key-takeaways ol { align-self: center; display: grid; margin: 0; padding: 0; list-style: none; }
+  .c-key-takeaways li {
+    display: grid;
+    grid-template-columns: 7cqi minmax(0, 1fr);
+    column-gap: 1.6cqi;
+    align-items: center;
+    padding: 2.3cqi 0;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-key-takeaways li:last-child { border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-key-takeaways .n {
+    font-family: var(--ds-font-display);
+    font-size: 5.2cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 0.9;
+    color: var(--ds-info-line);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-key-takeaways h3 { margin: 0 0 0.6cqi; font-size: 2.5cqi; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; color: var(--ds-ink); }
+  .c-key-takeaways li p { margin: 0; font-size: 1.7cqi; line-height: 1.42; }
+  .c-key-takeaways .monday {
+    align-self: center;
+    position: relative;
+    display: grid;
+    gap: 1.4cqi;
+    padding: 3cqi 2.6cqi 2.6cqi;
+    background: var(--ds-note-fill);
+    border: var(--ds-stroke) solid var(--ds-note-line);
+    border-radius: calc(1.4cqi * var(--ds-radius-scale, 1));
+  }
+  .c-key-takeaways .monday .tag {
+    position: absolute;
+    left: 2.4cqi;
+    top: -1.5cqi;
+    padding: 0.6cqi 1.5cqi;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-note-line);
+    font-size: 1.2cqi;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ds-ink);
+  }
+  .c-key-takeaways .monday h4 { margin: 0; font-size: 2.3cqi; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; color: var(--ds-ink); }
+  .c-key-takeaways .monday p { margin: 0; font-size: 1.55cqi; line-height: 1.45; color: var(--ds-text); }
+  .c-key-takeaways .monday .time { font-size: 1.3cqi; font-weight: 700; color: var(--ds-muted); padding-top: 1.2cqi; border-top: var(--ds-hairline) solid var(--ds-note-line); }
+</style>
+
+<section class="c-key-takeaways">
+  <div class="inner">
+    <div class="main">
+      <div>
+        <div class="eyebrow">Recap</div>
+        <h2>Three takeaways</h2>
+      </div>
+      <ol>
+        <li><span class="n">1</span><div><h3>Fewer projects finish faster</h3><p>Every extra project slows all the others, so cap the list.</p></div></li>
+        <li><span class="n">2</span><div><h3>Every risk needs a name</h3><p>An owner and a first check turn a worry into work.</p></div></li>
+        <li><span class="n">3</span><div><h3>Decide the stop rule early</h3><p>Agree what ends a project before it starts.</p></div></li>
+      </ol>
+    </div>
+    <aside class="monday">
+      <span class="tag">Try on Monday</span>
+      <h4>Write down the one project you would drop.</h4>
+      <p>Share it with your lead before Wednesday and ask what it would take to say yes.</p>
+      <span class="time">Takes 15 minutes</span>
+    </aside>
+  </div>
+</section>

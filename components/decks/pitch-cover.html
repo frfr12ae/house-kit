@@ -1,0 +1,97 @@
+<!--
+@title Pitch cover
+@group Pitch
+@description Seed pitch opener: a large wordmark, one line on what the company does, the round and the date.
+@tags pitch, startup, cover, seed, slide, opening
+@preview slide
+@added 2026-10-31
+@source Y Combinator seed deck guidance | https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck | inspired-by
+-->
+<style>
+  .c-pitch-cover, .c-pitch-cover *, .c-pitch-cover *::before, .c-pitch-cover *::after { box-sizing: border-box; }
+  .c-pitch-cover {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-pitch-cover .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 6cqi;
+  }
+  .c-pitch-cover .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6cqi;
+    font-size: 1.5cqi;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--ds-ink);
+  }
+  .c-pitch-cover .brand svg { width: 1.7cqi; height: 1.7cqi; fill: none; stroke: var(--ds-ink); stroke-width: 2; stroke-linecap: round; }
+  .c-pitch-cover .brand svg .strike { stroke: var(--ds-highlight-line); }
+  .c-pitch-cover .num {
+    position: absolute;
+    right: 6cqi;
+    bottom: 2.6cqi;
+    font-size: 1cqi;
+    line-height: 1;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-pitch-cover h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 4.6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.06;
+    color: var(--ds-ink);
+  }
+  .c-pitch-cover .kicker { font-size: 1.5cqi; font-weight: 700; color: var(--ds-muted); }
+
+  .c-pitch-cover .inner { grid-template-rows: auto minmax(0, 1fr) auto; }
+  .c-pitch-cover .main { align-self: center; display: grid; gap: 2.6cqi; }
+  .c-pitch-cover .word { display: flex; align-items: center; gap: 2cqi; }
+  .c-pitch-cover .word svg { width: 7.4cqi; height: 7.4cqi; fill: none; stroke: var(--ds-ink); stroke-width: 2; stroke-linecap: round; }
+  .c-pitch-cover .word svg .strike { stroke: var(--ds-highlight-line); }
+  .c-pitch-cover .word b {
+    font-family: var(--ds-font-display);
+    font-size: 10.4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--ds-ink);
+  }
+  .c-pitch-cover .what { margin: 0; max-width: 56cqi; font-size: 2.7cqi; line-height: 1.34; color: var(--ds-text); }
+  .c-pitch-cover .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 1.8cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 1.6cqi;
+    color: var(--ds-muted);
+  }
+  .c-pitch-cover .foot b { color: var(--ds-ink); font-weight: 700; }
+</style>
+
+<section class="c-pitch-cover" aria-label="Tallyhouse cover slide">
+  <div class="inner">
+    <div class="kicker">Investor presentation</div>
+    <div class="main">
+      <div class="word"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3v14M8 3v14M12 3v14M16 3v14"/><path class="strike" d="M1.5 15.5L18.5 4.5"/></svg><b>Tallyhouse</b></div>
+      <p class="what">Bookkeeping that runs itself, for studios of two to twenty people.</p>
+    </div>
+    <div class="foot"><span><b>Seed round</b>, $4.5M</span><span>October 2026</span></div>
+  </div>
+  <div class="num" aria-hidden="true">1</div>
+</section>

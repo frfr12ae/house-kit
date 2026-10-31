@@ -1,0 +1,121 @@
+<!--
+@title Breakout groups
+@group Workshop
+@description Four breakout group cards with a name, topic, room and facilitator, above a timing bar that splits the session into brief, work and report back.
+@tags slide, workshop, breakout, groups, rooms, facilitator, timing
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-breakout-groups {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-breakout-groups .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 5.5cqi 7cqi 5cqi;
+  }
+  .c-breakout-groups .head { display: flex; justify-content: space-between; align-items: end; }
+  .c-breakout-groups .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-breakout-groups h2 {
+    margin: 1cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 4.6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.05;
+    color: var(--ds-ink);
+  }
+  .c-breakout-groups .head p { margin: 0; max-width: 24cqi; font-size: 1.5cqi; line-height: 1.45; text-align: right; }
+  .c-breakout-groups .cards {
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.8cqi;
+    padding: 3cqi 0 2.6cqi;
+  }
+  .c-breakout-groups .card {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 1.4cqi;
+    padding: 2cqi 1.9cqi 1.9cqi;
+    background: var(--g-fill);
+    border: var(--ds-hairline) solid var(--g-line);
+    border-radius: calc(1.1cqi * var(--ds-radius-scale, 1));
+  }
+  .c-breakout-groups .a { --g-fill: var(--ds-info-fill); --g-line: var(--ds-info-line); }
+  .c-breakout-groups .b { --g-fill: var(--ds-note-fill); --g-line: var(--ds-note-line); }
+  .c-breakout-groups .c { --g-fill: var(--ds-highlight-fill); --g-line: var(--ds-highlight-line); }
+  .c-breakout-groups .d { --g-fill: var(--ds-neutral-fill); --g-line: var(--ds-neutral-line); }
+  .c-breakout-groups .name { display: flex; align-items: center; gap: 0.9cqi; font-size: 1.3cqi; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-breakout-groups .name::before { content: ""; width: 1.3cqi; height: 1.3cqi; border-radius: 50%; background: var(--g-line); }
+  .c-breakout-groups h3 { margin: 0; font-size: 2.15cqi; font-weight: 800; letter-spacing: -0.01em; line-height: 1.16; color: var(--ds-ink); }
+  .c-breakout-groups dl { display: grid; gap: 1cqi; margin: 0; padding-top: 1.4cqi; border-top: var(--ds-hairline) solid var(--g-line); font-size: 1.35cqi; }
+  .c-breakout-groups dl div { display: grid; gap: 0.1cqi; }
+  .c-breakout-groups dt { font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-breakout-groups dd { margin: 0; font-size: 1.6cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-breakout-groups .timing { display: grid; gap: 0.9cqi; }
+  .c-breakout-groups .bar { display: flex; gap: 0.5cqi; }
+  .c-breakout-groups .bar span {
+    display: block;
+    height: 1.1cqi;
+    border-radius: 99px;
+    background: var(--ds-line);
+  }
+  .c-breakout-groups .bar .s1 { flex: 5; background: var(--ds-neutral-line); }
+  .c-breakout-groups .bar .s2 { flex: 20; background: var(--ds-highlight-line); }
+  .c-breakout-groups .bar .s3 { flex: 10; background: var(--ds-info-line); }
+  .c-breakout-groups .legend { display: flex; gap: 0.5cqi; font-size: 1.3cqi; color: var(--ds-muted); }
+  .c-breakout-groups .legend span { display: block; }
+  .c-breakout-groups .legend b { color: var(--ds-ink); font-weight: 700; }
+  .c-breakout-groups .legend .s1 { flex: 5; }
+  .c-breakout-groups .legend .s2 { flex: 20; }
+  .c-breakout-groups .legend .s3 { flex: 10; }
+</style>
+
+<section class="c-breakout-groups">
+  <div class="inner">
+    <div class="head">
+      <div>
+        <div class="eyebrow">Breakouts, 35 minutes</div>
+        <h2>Find your group</h2>
+      </div>
+      <p>Take your notes with you. Back in this room at 11:20 sharp.</p>
+    </div>
+    <div class="cards">
+      <div class="card a">
+        <span class="name">Group A</span>
+        <h3>Intake and triage</h3>
+        <dl><div><dt>Room</dt><dd>Atrium</dd></div><div><dt>Facilitator</dt><dd>Noor Haddad</dd></div></dl>
+      </div>
+      <div class="card b">
+        <span class="name">Group B</span>
+        <h3>Handover between teams</h3>
+        <dl><div><dt>Room</dt><dd>Studio 2</dd></div><div><dt>Facilitator</dt><dd>Tomas Reyes</dd></div></dl>
+      </div>
+      <div class="card c">
+        <span class="name">Group C</span>
+        <h3>Quality checks before release</h3>
+        <dl><div><dt>Room</dt><dd>Library</dd></div><div><dt>Facilitator</dt><dd>Ingrid Solberg</dd></div></dl>
+      </div>
+      <div class="card d">
+        <span class="name">Group D</span>
+        <h3>Reporting back to clients</h3>
+        <dl><div><dt>Room</dt><dd>Terrace</dd></div><div><dt>Facilitator</dt><dd>Kofi Mensah</dd></div></dl>
+      </div>
+    </div>
+    <div class="timing">
+      <div class="bar" aria-hidden="true"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div>
+      <div class="legend"><span class="s1"><b>5 min</b> Brief</span><span class="s2"><b>20 min</b> Group work</span><span class="s3"><b>10 min</b> Report back</span></div>
+    </div>
+  </div>
+</section>

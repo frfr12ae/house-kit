@@ -1,0 +1,131 @@
+<!--
+@title Table of contents
+@group Openers and structure
+@description Two-column contents slide with section numbers, titles and page numbers joined by dotted leaders, grouped into two parts.
+@tags slide, contents, toc, index, report, leaders, page numbers
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-table-of-contents {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-table-of-contents .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 6cqi 7cqi 5cqi;
+  }
+  .c-table-of-contents .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding-bottom: 2.2cqi;
+    border-bottom: 0.35cqi solid var(--ds-ink);
+  }
+  .c-table-of-contents h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 5.4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+  }
+  .c-table-of-contents .meta { font-size: 1.4cqi; color: var(--ds-muted); text-align: right; line-height: 1.45; }
+  .c-table-of-contents .cols {
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 7cqi;
+  }
+  .c-table-of-contents .part ol { margin: 0; padding: 0; list-style: none; }
+  .c-table-of-contents .part-label {
+    display: flex;
+    align-items: center;
+    gap: 1cqi;
+    margin-bottom: 1cqi;
+    font-size: 1.35cqi;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ds-muted);
+  }
+  .c-table-of-contents .part-label::before {
+    content: "";
+    width: 1.1cqi;
+    height: 1.1cqi;
+    border-radius: 50%;
+    background: var(--ds-info-line);
+  }
+  .c-table-of-contents .part.b .part-label::before { background: var(--ds-highlight-line); }
+  .c-table-of-contents li {
+    display: grid;
+    grid-template-columns: 4.6cqi auto minmax(2cqi, 1fr) auto;
+    align-items: baseline;
+    padding: 1.45cqi 0;
+    font-size: 2.1cqi;
+    line-height: 1.2;
+  }
+  .c-table-of-contents .n {
+    font-size: 1.5cqi;
+    font-weight: 700;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-table-of-contents .t { font-weight: 700; color: var(--ds-ink); }
+  .c-table-of-contents .lead {
+    align-self: end;
+    height: 0.5em;
+    margin: 0 0.9cqi;
+    background-image: radial-gradient(circle, var(--ds-muted) 0.13cqi, transparent 0.18cqi);
+    background-size: 0.75cqi 0.75cqi;
+    background-repeat: space no-repeat;
+    background-position: left bottom;
+  }
+  .c-table-of-contents .p {
+    font-size: 1.8cqi;
+    font-weight: 700;
+    color: var(--ds-text);
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+
+<section class="c-table-of-contents">
+  <div class="inner">
+    <div class="head">
+      <h2>Contents</h2>
+      <div class="meta">Annual operations review<br>31 October 2026, 36 pages</div>
+    </div>
+    <div class="cols">
+      <div class="part a">
+        <div class="part-label">Part one, Diagnose</div>
+        <ol>
+        <li><span class="n">01</span><span class="t">Executive summary</span><i class="lead" aria-hidden="true"></i><span class="p">3</span></li>
+        <li><span class="n">02</span><span class="t">Where we stand</span><i class="lead" aria-hidden="true"></i><span class="p">6</span></li>
+        <li><span class="n">03</span><span class="t">What customers told us</span><i class="lead" aria-hidden="true"></i><span class="p">11</span></li>
+        <li><span class="n">04</span><span class="t">Cost and capacity</span><i class="lead" aria-hidden="true"></i><span class="p">16</span></li>
+        <li><span class="n">05</span><span class="t">Risks we carry</span><i class="lead" aria-hidden="true"></i><span class="p">21</span></li>
+        </ol>
+      </div>
+      <div class="part b">
+        <div class="part-label">Part two, Decide</div>
+        <ol start="6">
+        <li><span class="n">06</span><span class="t">Three growth options</span><i class="lead" aria-hidden="true"></i><span class="p">24</span></li>
+        <li><span class="n">07</span><span class="t">Economics and payback</span><i class="lead" aria-hidden="true"></i><span class="p">28</span></li>
+        <li><span class="n">08</span><span class="t">Recommendation</span><i class="lead" aria-hidden="true"></i><span class="p">31</span></li>
+        <li><span class="n">09</span><span class="t">Roadmap and owners</span><i class="lead" aria-hidden="true"></i><span class="p">33</span></li>
+        <li><span class="n">10</span><span class="t">Appendix</span><i class="lead" aria-hidden="true"></i><span class="p">35</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>

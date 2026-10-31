@@ -1,0 +1,93 @@
+<!--
+@title Waterfall bridge
+@group Exhibits
+@description An EBIT bridge from last year to this year with six drivers: positive steps in the note colour, negative in danger, subtotals in neutral, dashed connectors and bracketed groups.
+@tags slide, waterfall, bridge, ebit, variance, chart, finance, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-waterfall-bridge {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-waterfall-bridge .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-waterfall-bridge .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-waterfall-bridge .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-waterfall-bridge .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-waterfall-bridge .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-waterfall-bridge .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-waterfall-bridge h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-waterfall-bridge .exhibit { min-height: 0; }
+  .c-waterfall-bridge .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-waterfall-bridge svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-waterfall-bridge svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-waterfall-bridge .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-waterfall-bridge .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-waterfall-bridge .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-waterfall-bridge .sm { font-size: 12px; }
+  .c-waterfall-bridge .md { font-size: 13px; }
+  .c-waterfall-bridge .lg { font-size: 14px; }
+  .c-waterfall-bridge .b { font-weight: 700; }
+  .c-waterfall-bridge .sb { font-weight: 600; }
+  .c-waterfall-bridge .ink { fill: var(--ds-ink); }
+  .c-waterfall-bridge .mu { fill: var(--ds-muted); }
+  .c-waterfall-bridge .mid { text-anchor: middle; }
+  .c-waterfall-bridge .end { text-anchor: end; }
+  .c-waterfall-bridge .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-waterfall-bridge .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-waterfall-bridge .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+</style>
+
+<section class="c-waterfall-bridge" aria-label="Slide 5: EBIT bridge from FY2025 to FY2026">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Financial review · EBIT bridge</p>
+      </div>
+      <h2>EBIT rose €1.3m to €19.7m: volume, price and efficiency added €8.5m, but fuel, wages and a depot one-off took back €7.2m</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="EBIT bridge in million euros. FY2025 18.4, volume growth plus 4.1, price and mix plus 2.6, network efficiency plus 1.8, fuel minus 3.2, driver wages minus 2.9, depot one-off minus 1.1, FY2026 19.7."><text class="md b ink" x="0" y="14">EBIT bridge, FY2025 to FY2026, €m</text><line class="axis" x1="50" x2="880" y1="248" y2="248"/><text class="tick end" x="42" y="252">0</text><line class="grid" x1="50" x2="880" y1="185.3" y2="185.3"/><text class="tick end" x="42" y="189.3">10</text><line class="grid" x1="50" x2="880" y1="122.7" y2="122.7"/><text class="tick end" x="42" y="126.7">20</text><line class="grid" x1="50" x2="880" y1="60" y2="60"/><text class="tick end" x="42" y="64">30</text><rect x="69.9" y="132.7" width="64" height="115.3" rx="2" style="fill:var(--ds-neutral-line)"/><text class="lg b ink mid" x="101.9" y="125.7">18.4</text><text class="md b ink mid" x="101.9" y="268">FY2025</text><rect x="173.6" y="107" width="64" height="25.7" rx="2" style="fill:var(--ds-note-line)"/><text class="lg b ink mid" x="205.6" y="100">+4.1</text><text class="md sb mid" x="205.6" y="268">Volume</text><text class="md sb mid" x="205.6" y="283">growth</text><rect x="277.4" y="90.7" width="64" height="16.3" rx="2" style="fill:var(--ds-note-line)"/><text class="lg b ink mid" x="309.4" y="83.7">+2.6</text><text class="md b ink mid" x="309.4" y="268">Price and mix</text><rect x="381.1" y="79.4" width="64" height="11.3" rx="2" style="fill:var(--ds-note-line)"/><text class="lg b ink mid" x="413.1" y="72.4">+1.8</text><text class="md sb mid" x="413.1" y="268">Network</text><text class="md sb mid" x="413.1" y="283">efficiency</text><rect x="484.9" y="79.4" width="64" height="20.1" rx="2" style="fill:var(--ds-danger-line)"/><text class="lg b ink mid" x="516.9" y="72.4">−3.2</text><text class="md b ink mid" x="516.9" y="268">Fuel</text><rect x="588.6" y="99.5" width="64" height="18.2" rx="2" style="fill:var(--ds-danger-line)"/><text class="lg b ink mid" x="620.6" y="92.5">−2.9</text><text class="md sb mid" x="620.6" y="268">Driver</text><text class="md sb mid" x="620.6" y="283">wages</text><rect x="692.4" y="117.7" width="64" height="6.9" rx="2" style="fill:var(--ds-danger-line)"/><text class="lg b ink mid" x="724.4" y="110.7">−1.1</text><text class="md sb mid" x="724.4" y="268">Depot</text><text class="md sb mid" x="724.4" y="283">one-off</text><rect x="796.1" y="124.5" width="64" height="123.5" rx="2" style="fill:var(--ds-neutral-line)"/><text class="lg b ink mid" x="828.1" y="117.5">19.7</text><text class="md b ink mid" x="828.1" y="268">FY2026</text><text class="sm mu mid" x="828.1" y="283">+7% on FY2025</text><line x1="133.9" x2="173.6" y1="132.7" y2="132.7" style="stroke:var(--ds-neutral-line);stroke-width:1;stroke-dasharray:3 3"/><line x1="237.6" x2="277.4" y1="107" y2="107" style="stroke:var(--ds-neutral-line);stroke-width:1;stroke-dasharray:3 3"/><line x1="341.4" x2="381.1" y1="90.7" y2="90.7" style="stroke:var(--ds-neutral-line);stroke-width:1;stroke-dasharray:3 3"/><line x1="445.1" x2="484.9" y1="79.4" y2="79.4" style="stroke:var(--ds-neutral-line);stroke-width:1;stroke-dasharray:3 3"/><line x1="548.9" x2="588.6" y1="99.5" y2="99.5" style="stroke:var(--ds-neutral-line);stroke-width:1;stroke-dasharray:3 3"/><line x1="652.6" x2="692.4" y1="117.7" y2="117.7" style="stroke:var(--ds-neutral-line);stroke-width:1;stroke-dasharray:3 3"/><line x1="756.4" x2="796.1" y1="124.5" y2="124.5" style="stroke:var(--ds-neutral-line);stroke-width:1;stroke-dasharray:3 3"/><path d="M173.6 47 V40 H445.1 V47" style="fill:none;stroke:var(--ds-note-line);stroke-width:1.5"/><text class="md b ink mid" x="309.4" y="33">Gains: +€8.5m</text><path d="M484.9 47 V40 H756.4 V47" style="fill:none;stroke:var(--ds-danger-line);stroke-width:1.5"/><text class="md b ink mid" x="620.6" y="33">Cost pressure: −€7.2m</text></svg>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: management accounts FY2025 and FY2026 (to September, annualised). Illustrative figures.</span>
+      <span class="page">5</span>
+    </div>
+  </div>
+</section>

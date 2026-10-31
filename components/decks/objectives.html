@@ -1,0 +1,152 @@
+<!--
+@title Objectives
+@group Openers and structure
+@description "By the end of today" slide with three outcome cards, each with a tickable checkbox, a concrete result and the artefact people leave with.
+@tags slide, objectives, outcomes, learning goals, workshop, checklist
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-objectives {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-objectives .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 6cqi 7cqi 5cqi;
+  }
+  .c-objectives .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-objectives h2 {
+    margin: 1.2cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 5cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.05;
+    color: var(--ds-ink);
+  }
+  .c-objectives .cards {
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.2cqi;
+    padding-top: 3.4cqi;
+  }
+  .c-objectives .card {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 1.2cqi;
+    padding: 2.4cqi 2.4cqi 2.2cqi;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: calc(1.2cqi * var(--ds-radius-scale, 1));
+    cursor: pointer;
+    transition: background var(--ds-dur-base) var(--ds-ease), border-color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-objectives .card:has(input:checked) { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-objectives .card:has(input:focus-visible) { box-shadow: var(--ds-focus); }
+  .c-objectives .row { display: flex; justify-content: space-between; align-items: center; }
+  .c-objectives .n {
+    font-size: 1.5cqi;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-objectives input {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    width: 2.8cqi;
+    height: 2.8cqi;
+    margin: 0;
+    border: var(--ds-stroke) solid var(--ds-neutral-line);
+    border-radius: calc(0.7cqi * var(--ds-radius-scale, 1));
+    background: var(--ds-surface);
+    cursor: pointer;
+    transition: background var(--ds-dur-base) var(--ds-ease), border-color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-objectives input:checked { background: var(--ds-note-line); border-color: var(--ds-note-line); }
+  .c-objectives input:checked::after {
+    content: "";
+    position: absolute;
+    left: 0.85cqi;
+    top: 0.35cqi;
+    width: 0.75cqi;
+    height: 1.4cqi;
+    border: solid var(--ds-ink);
+    border-width: 0 0.28cqi 0.28cqi 0;
+    transform: rotate(40deg);
+  }
+  .c-objectives h3 {
+    margin: 0;
+    font-size: 2.35cqi;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.18;
+    color: var(--ds-ink);
+  }
+  .c-objectives .card p { margin: 0; font-size: 1.6cqi; line-height: 1.45; }
+  .c-objectives .out {
+    display: flex;
+    align-items: center;
+    gap: 0.9cqi;
+    padding-top: 1.4cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 1.35cqi;
+    color: var(--ds-muted);
+  }
+  .c-objectives .out b { color: var(--ds-text); font-weight: 700; }
+  .c-objectives .note { font-size: 1.4cqi; color: var(--ds-muted); }
+</style>
+
+<section class="c-objectives">
+  <div class="inner">
+    <div>
+      <div class="eyebrow">Workshop, 90 minutes</div>
+      <h2>By the end of today</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="row"><span class="n">01</span><input type="checkbox" aria-label="Outcome 1"></span>
+        <h3>Name your top three risks</h3>
+        <p>Rank what could sink the launch by impact and likelihood, as a group.</p>
+        <span class="out">Output <b>One ranked risk list</b></span>
+      </div>
+      <div class="card">
+        <span class="row"><span class="n">02</span><input type="checkbox" aria-label="Outcome 2"></span>
+        <h3>Give every risk an owner</h3>
+        <p>Match each risk to a named person and the first check they will run.</p>
+        <span class="out">Output <b>Owner map</b></span>
+      </div>
+      <div class="card">
+        <span class="row"><span class="n">03</span><input type="checkbox" aria-label="Outcome 3"></span>
+        <h3>Agree the first 30 days</h3>
+        <p>Turn the list into dated actions that fit inside the current sprint plan.</p>
+        <span class="out">Output <b>30-day action plan</b></span>
+      </div>
+    </div>
+    <div class="note">Tick them off as we go.</div>
+  </div>
+</section>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-objectives').forEach((root) => {
+    root.querySelectorAll('.card').forEach((card) => {
+      const box = card.querySelector('input');
+      card.addEventListener('click', (e) => { if (e.target !== box) box.checked = !box.checked; });
+    });
+  });
+})();
+</script>

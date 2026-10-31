@@ -1,0 +1,259 @@
+<!--
+@title Keynote bento
+@group Keynote
+@description A bento grid of five feature tiles in three sizes, each with an icon, a short title, a micro-visual built from shapes and one line of copy.
+@tags keynote, bento, features, grid, tiles, launch
+@preview slide
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-keynote-bento, .c-keynote-bento *, .c-keynote-bento *::before, .c-keynote-bento *::after { box-sizing: border-box; }
+.c-keynote-bento {
+  --k-bg: var(--ds-ink);
+  --k-fg: var(--ds-bg);
+  --k-dim: color-mix(in srgb, var(--ds-bg) 60%, var(--ds-ink));
+  --k-soft: color-mix(in srgb, var(--ds-bg) 82%, var(--ds-ink));
+  --k-line: color-mix(in srgb, var(--ds-bg) 16%, transparent);
+  --k-card: color-mix(in srgb, var(--ds-bg) 7%, var(--ds-ink));
+  --k-card-2: color-mix(in srgb, var(--ds-bg) 12%, var(--ds-ink));
+  --k-blue: var(--ds-info-line);
+  --k-amber: var(--ds-highlight-line);
+  --k-green: var(--ds-note-line);
+  --k-t1: color-mix(in srgb, var(--ds-info-line) 80%, var(--ds-bg));
+  --k-t2: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-bg));
+  --k-t3: color-mix(in srgb, var(--ds-note-line) 80%, var(--ds-bg));
+  --k-s1: color-mix(in srgb, var(--ds-info-line) 66%, var(--ds-bg));
+  --k-s2: color-mix(in srgb, var(--ds-highlight-line) 66%, var(--ds-bg));
+  --k-s3: color-mix(in srgb, var(--ds-note-line) 66%, var(--ds-bg));
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-family: var(--ds-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.c-keynote-bento .sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 50% 118%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 94% -8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 2% 30%, color-mix(in srgb, var(--k-green) 8%, transparent), transparent 70%);
+}
+.c-keynote-bento .pad { position: absolute; inset: 0; padding: 5.5cqi 7cqi; }
+.c-keynote-bento .eyebrow { margin: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--k-dim); }
+.c-keynote-bento .display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: 1.02;
+  color: var(--k-fg);
+}
+.c-keynote-bento .grad {
+  display: inline-block;
+  padding: 0 0.04em 0.1em 0;
+  margin: 0 -0.04em -0.1em 0;
+  background: linear-gradient(100deg, var(--k-t1) 0%, var(--k-t3) 52%, var(--k-t2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.c-keynote-bento.is-armed .rv { opacity: 0; transform: translateY(1.8cqi); }
+.c-keynote-bento.is-armed.is-in .rv {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+  .c-keynote-bento .sky {
+    background:
+      radial-gradient(60% 50% at 50% 120%, color-mix(in srgb, var(--k-blue) 20%, transparent), transparent 70%),
+      radial-gradient(40% 40% at 96% 0%, color-mix(in srgb, var(--k-amber) 12%, transparent), transparent 70%);
+  }
+  .c-keynote-bento .title { position: absolute; left: 7cqi; top: 5.4cqi; font-size: 4.6cqi; }
+  .c-keynote-bento .grid {
+    position: absolute;
+    left: 7cqi;
+    right: 7cqi;
+    top: 15cqi;
+    bottom: 5cqi;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1.3cqi;
+  }
+  .c-keynote-bento .tile {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5cqi;
+    padding: 1.6cqi;
+    border: var(--ds-hairline) solid var(--k-line);
+    border-radius: calc(1.8cqi * var(--ds-radius-scale, 1));
+    background:
+      radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--tint) 16%, transparent), transparent 70%),
+      linear-gradient(160deg, var(--k-card-2), var(--k-card));
+  }
+  .c-keynote-bento .t-a { grid-column: 1; grid-row: 1 / span 2; --tint: var(--k-blue); }
+  .c-keynote-bento .t-b { grid-column: 2 / span 2; grid-row: 1; --tint: var(--k-amber); flex-direction: row; gap: 1.6cqi; }
+  .c-keynote-bento .t-c { grid-column: 4; grid-row: 1 / span 2; --tint: var(--k-green); }
+  .c-keynote-bento .t-d { grid-column: 2; grid-row: 2; --tint: var(--k-blue); }
+  .c-keynote-bento .t-e { grid-column: 3; grid-row: 2; --tint: var(--k-amber); }
+  .c-keynote-bento .copy { display: flex; flex-direction: column; gap: 0.5cqi; min-width: 0; }
+  .c-keynote-bento .t-b .copy { flex: 0 0 46%; }
+  .c-keynote-bento .ico {
+    display: grid;
+    place-items: center;
+    width: 3.2cqi;
+    height: 3.2cqi;
+    margin-bottom: 0.5cqi;
+    border-radius: calc(0.9cqi * var(--ds-radius-scale, 1));
+    background: color-mix(in srgb, var(--tint) 22%, transparent);
+    color: var(--tint);
+  }
+  .c-keynote-bento .ico svg { width: 1.9cqi; height: 1.9cqi; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .c-keynote-bento h3 { margin: 0; font-size: 1.85cqi; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; color: var(--k-fg); }
+  .c-keynote-bento .tile p { margin: 0; font-size: 1.2cqi; line-height: 1.38; color: var(--k-dim); }
+  .c-keynote-bento .viz { position: relative; flex: 1; min-height: 0; margin-top: 0.8cqi; }
+  .c-keynote-bento .t-b .viz { margin-top: 0; }
+
+  /* live canvas */
+  .c-keynote-bento .board {
+    overflow: hidden;
+    border: var(--ds-hairline) solid var(--k-line);
+    border-radius: 1.2cqi;
+    background-color: color-mix(in srgb, var(--k-fg) 4%, transparent);
+    background-image: radial-gradient(color-mix(in srgb, var(--k-fg) 18%, transparent) 0.09cqi, transparent 0.11cqi);
+    background-size: 1.6cqi 1.6cqi;
+  }
+  .c-keynote-bento .shape { position: absolute; border-radius: 0.8cqi; }
+  .c-keynote-bento .sh1 { left: 12%; top: 12%; width: 46%; height: 26%; background: color-mix(in srgb, var(--k-blue) 70%, transparent); }
+  .c-keynote-bento .sh2 { right: 10%; top: 34%; width: 30%; height: 20%; border-radius: 50%; background: color-mix(in srgb, var(--k-amber) 72%, transparent); }
+  .c-keynote-bento .sh3 { left: 20%; bottom: 14%; width: 58%; height: 15%; background: color-mix(in srgb, var(--k-green) 66%, transparent); }
+  .c-keynote-bento .cur { position: absolute; display: flex; align-items: flex-start; gap: 0.3cqi; font-size: 0.95cqi; font-weight: 700; }
+  .c-keynote-bento .cur i { width: 1.2cqi; height: 1.4cqi; background: currentColor; clip-path: polygon(0 0, 100% 62%, 56% 68%, 36% 100%); }
+  .c-keynote-bento .cur b { margin-top: 0.8cqi; padding: 0.15cqi 0.6cqi; border-radius: 0.8cqi; background: currentColor; }
+  .c-keynote-bento .cur b span { color: var(--k-bg); }
+  .c-keynote-bento .cur.c1 { left: 44%; top: 34%; color: var(--k-s2); }
+  .c-keynote-bento .cur.c2 { left: 22%; top: 58%; color: var(--k-s3); }
+
+  /* threads */
+  .c-keynote-bento .thread { display: grid; align-content: center; gap: 0.8cqi; }
+  .c-keynote-bento .row { display: grid; grid-template-columns: 1.8cqi minmax(0, 1fr); gap: 0.8cqi; align-items: center; }
+  .c-keynote-bento .row i { width: 1.8cqi; height: 1.8cqi; border-radius: 50%; background: var(--k-blue); }
+  .c-keynote-bento .row:nth-child(2) i { background: var(--k-green); }
+  .c-keynote-bento .row b { display: block; height: 0.8cqi; border-radius: 0.4cqi; background: color-mix(in srgb, var(--k-fg) 24%, transparent); }
+  .c-keynote-bento .sum { margin-top: 0.3cqi; padding: 0.9cqi 1.1cqi; border-left: 0.3cqi solid var(--k-amber); border-radius: 0.3cqi 1cqi 1cqi 0.3cqi; background: color-mix(in srgb, var(--k-amber) 14%, transparent); }
+  .c-keynote-bento .sum em { display: block; margin-bottom: 0.5cqi; font-style: normal; font-size: 0.95cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--k-s2); }
+  .c-keynote-bento .sum b { display: block; height: 0.7cqi; border-radius: 0.35cqi; background: color-mix(in srgb, var(--k-fg) 30%, transparent); }
+  .c-keynote-bento .sum b + b { margin-top: 0.5cqi; width: 66%; }
+
+  /* offline */
+  .c-keynote-bento .sync { display: grid; align-content: end; gap: 0.8cqi; }
+  .c-keynote-bento .state { justify-self: start; display: inline-flex; align-items: center; gap: 0.6cqi; padding: 0.4cqi 1cqi; border: var(--ds-hairline) solid color-mix(in srgb, var(--k-amber) 55%, transparent); border-radius: var(--ds-radius-pill); font-size: 1.05cqi; font-weight: 700; color: var(--k-s2); }
+  .c-keynote-bento .state i { width: 0.7cqi; height: 0.7cqi; border-radius: 50%; background: var(--k-amber); }
+  .c-keynote-bento .item { display: grid; grid-template-columns: 1.1cqi minmax(0, 1fr) auto; gap: 0.8cqi; align-items: center; padding: 0.9cqi 1cqi; border-radius: 0.9cqi; background: color-mix(in srgb, var(--k-fg) 6%, transparent); }
+  .c-keynote-bento .item i { width: 1.1cqi; height: 1.1cqi; border-radius: 50%; background: var(--k-green); }
+  .c-keynote-bento .item b { height: 0.7cqi; border-radius: 0.35cqi; background: color-mix(in srgb, var(--k-fg) 26%, transparent); }
+  .c-keynote-bento .item span { font-size: 0.95cqi; font-weight: 600; color: var(--k-dim); }
+  .c-keynote-bento .item.q i { background: var(--k-amber); }
+
+  /* private */
+  .c-keynote-bento .lock { display: flex; align-items: center; justify-content: space-between; gap: 1cqi; padding: 0.9cqi 1cqi; border-radius: 1cqi; background: color-mix(in srgb, var(--k-fg) 6%, transparent); }
+  .c-keynote-bento .lock .bars { display: grid; gap: 0.5cqi; flex: 1; }
+  .c-keynote-bento .lock .bars b { display: block; height: 0.7cqi; border-radius: 0.35cqi; background: color-mix(in srgb, var(--k-fg) 28%, transparent); }
+  .c-keynote-bento .lock .bars b + b { width: 58%; }
+  .c-keynote-bento .toggle { position: relative; flex: none; width: 4.4cqi; height: 2.4cqi; border-radius: 2.4cqi; background: var(--k-green); box-shadow: 0 0 1.6cqi color-mix(in srgb, var(--k-green) 45%, transparent); }
+  .c-keynote-bento .toggle::after { content: ""; position: absolute; right: 0.25cqi; top: 0.25cqi; width: 1.9cqi; height: 1.9cqi; border-radius: 50%; background: var(--k-bg); }
+
+  /* voice */
+  .c-keynote-bento .wave { display: flex; align-items: center; justify-content: space-between; gap: 0.35cqi; height: 100%; max-height: 4.6cqi; align-self: end; }
+  .c-keynote-bento .wave i {
+    flex: 1;
+    height: var(--h);
+    border-radius: 1cqi;
+    background: linear-gradient(to top, var(--k-t2), var(--k-t3));
+    animation: c-keynote-bento-wave 1500ms var(--ds-ease-in-out) infinite alternate;
+    animation-delay: calc(var(--n) * -140ms);
+  }
+  @keyframes c-keynote-bento-wave { from { transform: scaleY(0.45); } to { transform: scaleY(1); } }
+  @media (prefers-reduced-motion: reduce) { .c-keynote-bento .wave i { animation: none; } }
+</style>
+
+<section class="c-keynote-bento" aria-label="Five new features in Orbit 2">
+  <div class="sky"></div>
+  <h2 class="display title rv" style="--d:0">Meet <span class="grad">Orbit 2.</span></h2>
+  <div class="grid">
+    <article class="tile t-a rv" style="--d:1">
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 7-6 2-2 6z"/></svg></span>
+      <h3>Live canvas</h3>
+      <p>Think together on one board, in real time.</p>
+      <div class="viz board" aria-hidden="true">
+        <span class="shape sh1"></span><span class="shape sh2"></span><span class="shape sh3"></span>
+        <span class="cur c1"><i></i><b><span>Maya</span></b></span>
+        <span class="cur c2"><i></i><b><span>Jon</span></b></span>
+      </div>
+    </article>
+    <article class="tile t-b rv" style="--d:2">
+      <div class="copy">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></span>
+        <h3>Threads that summarise themselves</h3>
+        <p>Catch up on a hundred replies in ten seconds.</p>
+      </div>
+      <div class="viz thread" aria-hidden="true">
+        <div class="row"><i></i><b style="width:86%"></b></div>
+        <div class="row"><i></i><b style="width:62%"></b></div>
+        <div class="sum"><em>Summary</em><b></b><b></b></div>
+      </div>
+    </article>
+    <article class="tile t-c rv" style="--d:3">
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8 6 6 0 0 0-11.2 1.5A3.5 3.5 0 0 0 7 18z"/><path d="M4 4l16 16"/></svg></span>
+      <h3>Works offline</h3>
+      <p>Keep going on a plane. Orbit catches up later.</p>
+      <div class="viz sync" aria-hidden="true">
+        <span class="state"><i></i>Offline, 2 queued</span>
+        <div class="item"><i></i><b></b><span>Synced</span></div>
+        <div class="item q"><i></i><b></b><span>Queued</span></div>
+        <div class="item q"><i></i><b></b><span>Queued</span></div>
+      </div>
+    </article>
+    <article class="tile t-d rv" style="--d:4">
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+      <h3>Private by default</h3>
+      <p>Encrypted end to end, always.</p>
+      <div class="viz" aria-hidden="true"><div class="lock"><span class="bars"><b></b><b></b></span><span class="toggle"></span></div></div>
+    </article>
+    <article class="tile t-e rv" style="--d:5">
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>
+      <h3>Voice rooms</h3>
+      <p>Drop into a call in one click.</p>
+      <div class="viz" aria-hidden="true"><div class="wave">
+        <i style="--h:40%;--n:0"></i><i style="--h:70%;--n:1"></i><i style="--h:55%;--n:2"></i><i style="--h:95%;--n:3"></i><i style="--h:60%;--n:4"></i><i style="--h:85%;--n:5"></i><i style="--h:45%;--n:6"></i><i style="--h:75%;--n:7"></i><i style="--h:50%;--n:8"></i><i style="--h:90%;--n:9"></i><i style="--h:58%;--n:10"></i><i style="--h:38%;--n:11"></i>
+      </div></div>
+    </article>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-keynote-bento').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

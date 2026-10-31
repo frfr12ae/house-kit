@@ -1,0 +1,93 @@
+<!--
+@title Stacked share chart
+@group Exhibits
+@description Five 100% stacked bars of revenue mix with ribbons between years, percentage labels in every segment, totals above and series named directly at the right edge.
+@tags slide, stacked, 100 percent, mix, share, revenue, chart, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-stacked-share {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-stacked-share .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-stacked-share .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-stacked-share .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-stacked-share .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-stacked-share .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-stacked-share .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-stacked-share h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-stacked-share .exhibit { min-height: 0; }
+  .c-stacked-share .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-stacked-share svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-stacked-share svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-stacked-share .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-stacked-share .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-stacked-share .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-stacked-share .sm { font-size: 12px; }
+  .c-stacked-share .md { font-size: 13px; }
+  .c-stacked-share .lg { font-size: 14px; }
+  .c-stacked-share .b { font-weight: 700; }
+  .c-stacked-share .sb { font-weight: 600; }
+  .c-stacked-share .ink { fill: var(--ds-ink); }
+  .c-stacked-share .mu { fill: var(--ds-muted); }
+  .c-stacked-share .mid { text-anchor: middle; }
+  .c-stacked-share .end { text-anchor: end; }
+  .c-stacked-share .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-stacked-share .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-stacked-share .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+</style>
+
+<section class="c-stacked-share" aria-label="Slide 9: revenue mix by service line, 2022 to 2026">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Financial review · Revenue mix</p>
+      </div>
+      <h2>Parcel now earns 46% of revenue, up 15 points since 2022, while pallet freight has fallen from 46% to 29%</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="100 percent stacked bars of revenue mix from 2022 to 2026. Parcel and e-commerce grows from 31 to 46 percent, pallet freight falls from 46 to 29, contract logistics from 17 to 15, cold chain grows from 6 to 10."><text class="md b ink" x="0" y="14">Revenue mix by service line, % of revenue</text><text class="tick end" x="64" y="266">0%</text><text class="tick end" x="64" y="157">50%</text><text class="tick end" x="64" y="48">100%</text><polygon points="174,161.7 214,170.4 214,262 174,262" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, transparent)"/><polygon points="298,170.4 338,179.2 338,262 298,262" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, transparent)"/><polygon points="422,179.2 462,190.1 462,262 422,262" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, transparent)"/><polygon points="546,190.1 586,198.8 586,262 546,262" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, transparent)"/><polygon points="174,94.1 214,96.3 214,170.4 174,161.7" style="fill:color-mix(in srgb, var(--ds-highlight-line) 34%, transparent)"/><polygon points="298,96.3 338,96.3 338,179.2 298,170.4" style="fill:color-mix(in srgb, var(--ds-highlight-line) 34%, transparent)"/><polygon points="422,96.3 462,98.5 462,190.1 422,179.2" style="fill:color-mix(in srgb, var(--ds-highlight-line) 34%, transparent)"/><polygon points="546,98.5 586,98.5 586,198.8 546,190.1" style="fill:color-mix(in srgb, var(--ds-highlight-line) 34%, transparent)"/><polygon points="174,57.1 214,59.3 214,96.3 174,94.1" style="fill:color-mix(in srgb, var(--ds-neutral-line) 20%, transparent)"/><polygon points="298,59.3 338,61.4 338,96.3 298,96.3" style="fill:color-mix(in srgb, var(--ds-neutral-line) 20%, transparent)"/><polygon points="422,61.4 462,63.6 462,98.5 422,96.3" style="fill:color-mix(in srgb, var(--ds-neutral-line) 20%, transparent)"/><polygon points="546,63.6 586,65.8 586,98.5 546,98.5" style="fill:color-mix(in srgb, var(--ds-neutral-line) 20%, transparent)"/><polygon points="174,44 214,44 214,59.3 174,57.1" style="fill:color-mix(in srgb, var(--ds-note-line) 20%, transparent)"/><polygon points="298,44 338,44 338,61.4 298,59.3" style="fill:color-mix(in srgb, var(--ds-note-line) 20%, transparent)"/><polygon points="422,44 462,44 462,63.6 422,61.4" style="fill:color-mix(in srgb, var(--ds-note-line) 20%, transparent)"/><polygon points="546,44 586,44 586,65.8 546,63.6" style="fill:color-mix(in srgb, var(--ds-note-line) 20%, transparent)"/><rect x="90" y="161.7" width="84" height="100.3" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="132" y="215.9">46%</text><rect x="90" y="94.1" width="84" height="67.6" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="132" y="131.9">31%</text><rect x="90" y="57.1" width="84" height="37.1" style="fill:color-mix(in srgb, var(--ds-neutral-line) 38%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="132" y="79.6">17%</text><rect x="90" y="44" width="84" height="13.1" style="fill:color-mix(in srgb, var(--ds-note-line) 42%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="132" y="54.5">6%</text><text class="md b ink mid" x="132" y="36">€142m</text><text class="md sb mid" x="132" y="284">2022</text><rect x="214" y="170.4" width="84" height="91.6" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="256" y="220.2">42%</text><rect x="214" y="96.3" width="84" height="74.1" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="256" y="137.4">34%</text><rect x="214" y="59.3" width="84" height="37.1" style="fill:color-mix(in srgb, var(--ds-neutral-line) 38%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="256" y="81.8">17%</text><rect x="214" y="44" width="84" height="15.3" style="fill:color-mix(in srgb, var(--ds-note-line) 42%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="256" y="55.6">7%</text><text class="md b ink mid" x="256" y="36">€151m</text><text class="md sb mid" x="256" y="284">2023</text><rect x="338" y="179.2" width="84" height="82.8" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="380" y="224.6">38%</text><rect x="338" y="96.3" width="84" height="82.8" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="380" y="141.7">38%</text><rect x="338" y="61.4" width="84" height="34.9" style="fill:color-mix(in srgb, var(--ds-neutral-line) 38%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="380" y="82.9">16%</text><rect x="338" y="44" width="84" height="17.4" style="fill:color-mix(in srgb, var(--ds-note-line) 42%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="380" y="56.7">8%</text><text class="md b ink mid" x="380" y="36">€160m</text><text class="md sb mid" x="380" y="284">2024</text><rect x="462" y="190.1" width="84" height="71.9" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="504" y="230">33%</text><rect x="462" y="98.5" width="84" height="91.6" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="504" y="148.3">42%</text><rect x="462" y="63.6" width="84" height="34.9" style="fill:color-mix(in srgb, var(--ds-neutral-line) 38%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="504" y="85.1">16%</text><rect x="462" y="44" width="84" height="19.6" style="fill:color-mix(in srgb, var(--ds-note-line) 42%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="504" y="57.8">9%</text><text class="md b ink mid" x="504" y="36">€171m</text><text class="md sb mid" x="504" y="284">2025</text><rect x="586" y="198.8" width="84" height="63.2" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="628" y="234.4">29%</text><rect x="586" y="98.5" width="84" height="100.3" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="628" y="152.6">46%</text><rect x="586" y="65.8" width="84" height="32.7" style="fill:color-mix(in srgb, var(--ds-neutral-line) 38%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="628" y="86.2">15%</text><rect x="586" y="44" width="84" height="21.8" style="fill:color-mix(in srgb, var(--ds-note-line) 42%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="628" y="58.9">10%</text><text class="md b ink mid" x="628" y="36">€181m</text><text class="md sb mid" x="628" y="284">2026</text><line class="axis" x1="70" x2="674" y1="262" y2="262"/><text class="sm mu end" x="64" y="36">Total</text><text class="md b" x="692" y="228.4">Pallet freight</text><text class="sm mu" x="692" y="242.4">46% in 2022, 29% in 2026</text><text class="md b ink" x="692" y="146.6">Parcel and e-commerce</text><text class="sm mu" x="692" y="160.6">31% in 2022, 46% in 2026</text><text class="md b" x="692" y="85.2">Contract logistics</text><text class="sm mu" x="692" y="99.2">17% in 2022, 15% in 2026</text><text class="md b" x="692" y="44.9">Cold chain</text><text class="sm mu" x="692" y="58.9">6% in 2022, 10% in 2026</text></svg>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: management accounts 2022 to 2026, revenue by service line. Illustrative figures.</span>
+      <span class="page">9</span>
+    </div>
+  </div>
+</section>

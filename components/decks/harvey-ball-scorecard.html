@@ -1,0 +1,107 @@
+<!--
+@title Harvey ball scorecard
+@group Exhibits
+@description Options rated against criteria with SVG Harvey balls at 0, 25, 50, 75 and 100 percent, a highlighted recommended row and a legend.
+@tags slide, harvey ball, scorecard, rating, options, criteria, evaluation, matrix
+@preview slide
+@added 2026-10-31
+@source StrategyU slide layouts | https://strategyu.co/slide-layouts | inspired-by
+-->
+<style>
+  .c-harvey-ball-scorecard {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-harvey-ball-scorecard .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-harvey-ball-scorecard .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-harvey-ball-scorecard .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-harvey-ball-scorecard h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-harvey-ball-scorecard .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-harvey-ball-scorecard .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-harvey-ball-scorecard .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-harvey-ball-scorecard .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-harvey-ball-scorecard .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-harvey-ball-scorecard .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-harvey-ball-scorecard .body { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 1.8cqi; }
+  .c-harvey-ball-scorecard .grid { display: grid; grid-template-columns: 22cqi repeat(5, minmax(0, 1fr)); grid-template-rows: auto repeat(4, minmax(0, 1fr)); }
+  .c-harvey-ball-scorecard .th { display: flex; align-items: flex-end; justify-content: center; padding: 0 0.6cqi 1cqi; border-bottom: var(--ds-stroke) solid var(--ds-ink); text-align: center; font-size: 1.15cqi; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-harvey-ball-scorecard .th.first { justify-content: flex-start; padding-left: 0; }
+  .c-harvey-ball-scorecard .opt, .c-harvey-ball-scorecard .cell { display: flex; align-items: center; border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-harvey-ball-scorecard .opt { gap: 1cqi; padding-right: 1cqi; font-size: 1.6cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-harvey-ball-scorecard .cell { justify-content: center; }
+  .c-harvey-ball-scorecard .is-rec { background: var(--ds-highlight-fill); border-bottom-color: color-mix(in srgb, var(--ds-highlight-line) 40%, transparent); }
+  .c-harvey-ball-scorecard .opt.is-rec { flex-direction: column; align-items: flex-start; justify-content: center; gap: 0.5cqi; padding-left: 1.4cqi; box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line); }
+  .c-harvey-ball-scorecard .tag { padding: 0.25cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-highlight-line); font-size: 1cqi; font-weight: 800; letter-spacing: 0.02em; color: var(--ds-bg); }
+  .c-harvey-ball-scorecard .ball { display: block; width: 3.2cqi; height: 3.2cqi; }
+  .c-harvey-ball-scorecard .ball .bg { fill: var(--ds-raised); }
+  .c-harvey-ball-scorecard .ball .fl { fill: var(--ds-ink); }
+  .c-harvey-ball-scorecard .ball .ring { fill: none; stroke: var(--ds-ink); stroke-width: 1.6; }
+  .c-harvey-ball-scorecard .legend { display: flex; align-items: center; gap: 3cqi; margin: 0; padding: 1.2cqi 0 0; list-style: none; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.2cqi; color: var(--ds-text); }
+  .c-harvey-ball-scorecard .legend li { display: flex; align-items: center; gap: 0.8cqi; }
+  .c-harvey-ball-scorecard .legend .ball { width: 2cqi; height: 2cqi; }
+  .c-harvey-ball-scorecard .legend .head { margin-right: 0; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-muted); }
+</style>
+
+<section class="c-harvey-ball-scorecard" aria-label="Harvey ball scorecard of four options">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Option assessment</p>
+        <h1>The two-hub network is the only option rated at least partial on every criterion</h1>
+      </div>
+      
+    </div>
+    <div class="body">
+      <div class="grid">
+      <div class="th first">Option</div><div class="th">Revenue upside</div><div class="th">Capital efficiency</div><div class="th">Delivery risk</div><div class="th">Speed to impact</div><div class="th">Strategic fit</div>
+      <div class="opt">Upgrade existing depots</div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="25%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 22 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="100%"><circle class="bg" cx="12" cy="12" r="10"/><circle class="fl" cx="12" cy="12" r="10"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="75%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 1 1 2 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="75%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 1 1 2 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="25%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 22 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div>
+      <div class="opt is-rec">Two-hub network<span class="tag">Recommended</span></div><div class="cell is-rec"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="75%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 1 1 2 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell is-rec"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="50%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 12 22Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell is-rec"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="75%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 1 1 2 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell is-rec"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="50%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 12 22Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell is-rec"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="100%"><circle class="bg" cx="12" cy="12" r="10"/><circle class="fl" cx="12" cy="12" r="10"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div>
+      <div class="opt">Acquire a regional rival</div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="100%"><circle class="bg" cx="12" cy="12" r="10"/><circle class="fl" cx="12" cy="12" r="10"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="0%"><circle class="bg" cx="12" cy="12" r="10"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="25%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 22 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="25%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 22 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="50%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 12 22Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div>
+      <div class="opt">Outsource linehaul</div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="50%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 12 22Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="75%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 1 1 2 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="50%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 12 22Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="75%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 1 1 2 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div><div class="cell"><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="25%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 22 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg></div>
+      </div>
+      <ul class="legend"><li class="head">Rating</li><li><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="0%"><circle class="bg" cx="12" cy="12" r="10"/><circle class="ring" cx="12" cy="12" r="10"/></svg><span>Does not meet</span></li><li><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="25%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 22 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg><span>Weak</span></li><li><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="50%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 0 1 12 22Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg><span>Partial</span></li><li><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="75%"><circle class="bg" cx="12" cy="12" r="10"/><path class="fl" d="M12 12V2A10 10 0 1 1 2 12Z"/><circle class="ring" cx="12" cy="12" r="10"/></svg><span>Good</span></li><li><svg class="ball" viewBox="0 0 24 24" role="img" aria-label="100%"><circle class="bg" cx="12" cy="12" r="10"/><circle class="fl" cx="12" cy="12" r="10"/><circle class="ring" cx="12" cy="12" r="10"/></svg><span>Fully meets</span></li></ul>
+    </div>
+    <div class="foot"><span>Source: Steering committee assessment, October 2026. Delivery risk is rated so that a full ball means the lowest risk.</span><span class="page">9</span></div>
+  </div>
+</section>

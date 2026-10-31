@@ -1,0 +1,93 @@
+<!--
+@title Before and after metrics
+@group Exhibits
+@description Paired bars per metric, before and after, with a delta chip that turns danger when the change is unfavourable. Bars are scaled within each metric.
+@tags slide, before after, metrics, delta, comparison, impact, results, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-before-after-metrics {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-before-after-metrics .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-before-after-metrics .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-before-after-metrics .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-before-after-metrics .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-before-after-metrics .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-before-after-metrics .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-before-after-metrics h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-before-after-metrics .exhibit { min-height: 0; }
+  .c-before-after-metrics .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-before-after-metrics svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-before-after-metrics svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-before-after-metrics .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-before-after-metrics .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-before-after-metrics .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-before-after-metrics .sm { font-size: 12px; }
+  .c-before-after-metrics .md { font-size: 13px; }
+  .c-before-after-metrics .lg { font-size: 14px; }
+  .c-before-after-metrics .b { font-weight: 700; }
+  .c-before-after-metrics .sb { font-weight: 600; }
+  .c-before-after-metrics .ink { fill: var(--ds-ink); }
+  .c-before-after-metrics .mu { fill: var(--ds-muted); }
+  .c-before-after-metrics .mid { text-anchor: middle; }
+  .c-before-after-metrics .end { text-anchor: end; }
+  .c-before-after-metrics .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-before-after-metrics .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-before-after-metrics .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+</style>
+
+<section class="c-before-after-metrics" aria-label="Slide 16: before and after comparison of six operating metrics">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Programme results · Route engine</p>
+      </div>
+      <h2>Five of six operating metrics improved after the route engine went live; only fleet utilisation moved the wrong way</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="Before and after comparison of six operating metrics. On-time delivery 91.8 to 94.2 percent, failed first deliveries 9.1 to 5.6 percent, cost per parcel 4.21 to 3.83 euro, driver admin time 74 to 22 minutes, complaints per 1000 parcels 7.8 to 4.9, fleet utilisation 84 to 81 percent, the only one that got worse."><text class="sm mu" x="246" y="12">Before: average of the 12 months to June 2026. After: October 2026.</text><text class="sm b mu mid" x="778" y="12">Change</text><line class="grid" x1="0" x2="880" y1="72" y2="72"/><text class="lg b ink" x="0" y="45">On-time delivery</text><text class="sm mu" x="0" y="60">% of parcels, higher is better</text><text class="sm mu end" x="238" y="45">Before</text><text class="sm sb end" x="238" y="62">After</text><rect x="246" y="34" width="321.6" height="14" rx="2" style="fill:var(--ds-neutral-line);opacity:0.55"/><rect x="246" y="51" width="330" height="14" rx="2" style="fill:var(--ds-info-line)"/><text class="md mu" x="575.6" y="46">91.8%</text><text class="md b ink" x="584" y="63">94.2%</text><rect x="726" y="36" width="104" height="26" rx="13" style="fill:var(--ds-note-fill);stroke:var(--ds-note-line);stroke-width:1.5"/><polygon points="740,53 750,53 745,45" style="fill:var(--ds-note-line)"/><text class="md b ink" x="757" y="53.5">+2.4 pts</text><line class="grid" x1="0" x2="880" y1="119" y2="119"/><text class="lg b ink" x="0" y="92">Failed first deliveries</text><text class="sm mu" x="0" y="107">% of parcels, lower is better</text><text class="sm mu end" x="238" y="92">Before</text><text class="sm sb end" x="238" y="109">After</text><rect x="246" y="81" width="330" height="14" rx="2" style="fill:var(--ds-neutral-line);opacity:0.55"/><rect x="246" y="98" width="203.1" height="14" rx="2" style="fill:var(--ds-info-line)"/><text class="md mu" x="584" y="93">9.1%</text><text class="md b ink" x="457.1" y="110">5.6%</text><rect x="726" y="83" width="104" height="26" rx="13" style="fill:var(--ds-note-fill);stroke:var(--ds-note-line);stroke-width:1.5"/><polygon points="740,92 750,92 745,100" style="fill:var(--ds-note-line)"/><text class="md b ink" x="757" y="100.5">−3.5 pts</text><line class="grid" x1="0" x2="880" y1="166" y2="166"/><text class="lg b ink" x="0" y="139">Cost per parcel</text><text class="sm mu" x="0" y="154">Euro, lower is better</text><text class="sm mu end" x="238" y="139">Before</text><text class="sm sb end" x="238" y="156">After</text><rect x="246" y="128" width="330" height="14" rx="2" style="fill:var(--ds-neutral-line);opacity:0.55"/><rect x="246" y="145" width="300.2" height="14" rx="2" style="fill:var(--ds-info-line)"/><text class="md mu" x="584" y="140">€4.21</text><text class="md b ink" x="554.2" y="157">€3.83</text><rect x="726" y="130" width="104" height="26" rx="13" style="fill:var(--ds-note-fill);stroke:var(--ds-note-line);stroke-width:1.5"/><polygon points="740,139 750,139 745,147" style="fill:var(--ds-note-line)"/><text class="md b ink" x="757" y="147.5">−9.0%</text><line class="grid" x1="0" x2="880" y1="213" y2="213"/><text class="lg b ink" x="0" y="186">Driver admin time</text><text class="sm mu" x="0" y="201">Minutes per shift, lower is better</text><text class="sm mu end" x="238" y="186">Before</text><text class="sm sb end" x="238" y="203">After</text><rect x="246" y="175" width="330" height="14" rx="2" style="fill:var(--ds-neutral-line);opacity:0.55"/><rect x="246" y="192" width="98.1" height="14" rx="2" style="fill:var(--ds-info-line)"/><text class="md mu" x="584" y="187">74 min</text><text class="md b ink" x="352.1" y="204">22 min</text><rect x="726" y="177" width="104" height="26" rx="13" style="fill:var(--ds-note-fill);stroke:var(--ds-note-line);stroke-width:1.5"/><polygon points="740,186 750,186 745,194" style="fill:var(--ds-note-line)"/><text class="md b ink" x="757" y="194.5">−52 min</text><line class="grid" x1="0" x2="880" y1="260" y2="260"/><text class="lg b ink" x="0" y="233">Complaints</text><text class="sm mu" x="0" y="248">Per 1,000 parcels, lower is better</text><text class="sm mu end" x="238" y="233">Before</text><text class="sm sb end" x="238" y="250">After</text><rect x="246" y="222" width="330" height="14" rx="2" style="fill:var(--ds-neutral-line);opacity:0.55"/><rect x="246" y="239" width="207.3" height="14" rx="2" style="fill:var(--ds-info-line)"/><text class="md mu" x="584" y="234">7.8</text><text class="md b ink" x="461.3" y="251">4.9</text><rect x="726" y="224" width="104" height="26" rx="13" style="fill:var(--ds-note-fill);stroke:var(--ds-note-line);stroke-width:1.5"/><polygon points="740,233 750,233 745,241" style="fill:var(--ds-note-line)"/><text class="md b ink" x="757" y="241.5">−37%</text><line class="grid" x1="0" x2="880" y1="307" y2="307"/><text class="lg b ink" x="0" y="280">Fleet utilisation</text><text class="sm mu" x="0" y="295">% of capacity, higher is better</text><text class="sm mu end" x="238" y="280">Before</text><text class="sm sb end" x="238" y="297">After</text><rect x="246" y="269" width="330" height="14" rx="2" style="fill:var(--ds-neutral-line);opacity:0.55"/><rect x="246" y="286" width="318.2" height="14" rx="2" style="fill:var(--ds-danger-line)"/><text class="md mu" x="584" y="281">84%</text><text class="md b ink" x="572.2" y="298">81%</text><rect x="726" y="271" width="104" height="26" rx="13" style="fill:var(--ds-danger-fill);stroke:var(--ds-danger-line);stroke-width:1.5"/><polygon points="740,280 750,280 745,288" style="fill:var(--ds-danger-line)"/><text class="md b ink" x="757" y="288.5">−3 pts</text></svg>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: telematics and finance ledger. Bars are scaled within each metric, not across metrics. Illustrative figures.</span>
+      <span class="page">16</span>
+    </div>
+  </div>
+</section>

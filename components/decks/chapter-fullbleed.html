@@ -1,0 +1,114 @@
+<!--
+@title Chapter, full bleed
+@group Openers and structure
+@description Full-bleed chapter divider on the action colour: a huge cropped chapter number over a faint dot and line pattern, with the section name and a one-line promise.
+@tags slide, chapter, divider, section, full-bleed, number, pattern
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-chapter-fullbleed {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-action);
+    color: var(--ds-on-action);
+    font-family: var(--ds-font-sans);
+  }
+  .c-chapter-fullbleed .pattern {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, color-mix(in srgb, var(--ds-on-action) 22%, transparent) 0.14cqi, transparent 0.2cqi),
+      repeating-linear-gradient(-45deg, transparent 0 3.4cqi, color-mix(in srgb, var(--ds-on-action) 6%, transparent) 3.4cqi 3.55cqi);
+    background-size: 2.6cqi 2.6cqi, auto;
+    -webkit-mask-image: linear-gradient(100deg, transparent 20%, black 78%);
+    mask-image: linear-gradient(100deg, transparent 20%, black 78%);
+  }
+  .c-chapter-fullbleed .num {
+    position: absolute;
+    right: -5cqi;
+    bottom: -13cqi;
+    font-family: var(--ds-font-display);
+    font-size: 66cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: color-mix(in srgb, var(--ds-on-action) 10%, transparent);
+    -webkit-text-stroke: 0.22cqi color-mix(in srgb, var(--ds-on-action) 55%, transparent);
+    font-variant-numeric: tabular-nums;
+    -webkit-mask-image: linear-gradient(100deg, transparent 38%, black 68%);
+    mask-image: linear-gradient(100deg, transparent 38%, black 68%);
+    user-select: none;
+  }
+  .c-chapter-fullbleed .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 6cqi 7cqi;
+  }
+  .c-chapter-fullbleed .top {
+    display: flex;
+    align-items: center;
+    gap: 1.4cqi;
+    font-size: 1.5cqi;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .c-chapter-fullbleed .top::before {
+    content: "";
+    width: 5cqi;
+    height: 0.5cqi;
+    border-radius: 99px;
+    background: var(--ds-highlight-line);
+  }
+  .c-chapter-fullbleed .name {
+    align-self: end;
+    display: grid;
+    gap: 1.6cqi;
+    max-width: 44cqi;
+  }
+  .c-chapter-fullbleed h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.02;
+    color: var(--ds-on-action);
+  }
+  .c-chapter-fullbleed p {
+    margin: 0;
+    max-width: 36cqi;
+    font-size: 1.9cqi;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--ds-on-action) 78%, transparent);
+  }
+  .c-chapter-fullbleed .rail { display: flex; gap: 0.7cqi; padding-top: 3cqi; }
+  .c-chapter-fullbleed .rail i {
+    display: block;
+    width: 4cqi;
+    height: 0.6cqi;
+    border-radius: 99px;
+    background: color-mix(in srgb, var(--ds-on-action) 28%, transparent);
+  }
+  .c-chapter-fullbleed .rail i.is-done { background: color-mix(in srgb, var(--ds-on-action) 70%, transparent); }
+  .c-chapter-fullbleed .rail i.is-now { background: var(--ds-highlight-line); }
+</style>
+
+<section class="c-chapter-fullbleed">
+  <div class="pattern" aria-hidden="true"></div>
+  <div class="num" aria-hidden="true">03</div>
+  <div class="inner">
+    <div class="top">Chapter three</div>
+    <div class="name">
+      <h2>Making the numbers work</h2>
+      <p>Unit economics, the payback curve and what has to be true for the plan to hold.</p>
+    </div>
+    <div class="rail" aria-hidden="true"><i class="is-done"></i><i class="is-done"></i><i class="is-now"></i><i></i><i></i></div>
+  </div>
+</section>

@@ -1,0 +1,101 @@
+<!--
+@title Pitch traction
+@group Pitch
+@description Seed pitch traction slide: current MRR as the big number, a growth badge and a hockey-stick MRR chart with milestones.
+@tags pitch, startup, traction, mrr, growth, chart, slide
+@preview slide
+@added 2026-10-31
+@source Y Combinator seed deck guidance | https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck | inspired-by
+-->
+<style>
+  .c-pitch-traction, .c-pitch-traction *, .c-pitch-traction *::before, .c-pitch-traction *::after { box-sizing: border-box; }
+  .c-pitch-traction {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-pitch-traction .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 6cqi;
+  }
+  .c-pitch-traction .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6cqi;
+    font-size: 1.5cqi;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--ds-ink);
+  }
+  .c-pitch-traction .brand svg { width: 1.7cqi; height: 1.7cqi; fill: none; stroke: var(--ds-ink); stroke-width: 2; stroke-linecap: round; }
+  .c-pitch-traction .brand svg .strike { stroke: var(--ds-highlight-line); }
+  .c-pitch-traction .num {
+    position: absolute;
+    right: 6cqi;
+    bottom: 2.6cqi;
+    font-size: 1cqi;
+    line-height: 1;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-pitch-traction h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 4.6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.06;
+    color: var(--ds-ink);
+  }
+  .c-pitch-traction .kicker { font-size: 1.5cqi; font-weight: 700; color: var(--ds-muted); }
+
+  .c-pitch-traction .main { display: grid; grid-template-columns: 29cqi minmax(0, 1fr); gap: 4cqi; align-items: center; padding-top: 2cqi; }
+  .c-pitch-traction .left { display: grid; gap: 1.6cqi; align-content: center; }
+  .c-pitch-traction .figure { font-family: var(--ds-font-display); font-size: 12cqi; font-weight: var(--ds-weight-display); letter-spacing: -0.04em; line-height: 0.9; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-pitch-traction .badge { justify-self: start; padding: 0.5cqi 1.3cqi; border: var(--ds-hairline) solid var(--ds-note-line); border-radius: var(--ds-radius-pill); background: var(--ds-note-fill); font-size: 1.8cqi; font-weight: 800; color: var(--ds-ink); }
+  .c-pitch-traction .note { margin: 0; font-size: 1.7cqi; line-height: 1.42; color: var(--ds-text); }
+  .c-pitch-traction .plot svg { display: block; width: 100%; height: auto; }
+  .c-pitch-traction .gl { stroke: var(--ds-line); stroke-width: 1; }
+  .c-pitch-traction .yt { fill: var(--ds-muted); font-size: 12px; text-anchor: end; font-variant-numeric: tabular-nums; }
+  .c-pitch-traction .xt { fill: var(--ds-muted); font-size: 12px; font-weight: 600; }
+  .c-pitch-traction .area { fill: color-mix(in srgb, var(--ds-info-line) 16%, transparent); }
+  .c-pitch-traction .ln { fill: none; stroke: var(--ds-info-line); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+  .c-pitch-traction .ml { stroke: var(--ds-neutral-line); stroke-width: 1; stroke-dasharray: 2 3; }
+  .c-pitch-traction .md { fill: var(--ds-surface); stroke: var(--ds-ink); stroke-width: 2; }
+  .c-pitch-traction .mt { fill: var(--ds-ink); font-size: 13px; font-weight: 700; }
+  .c-pitch-traction .end { fill: var(--ds-highlight-line); stroke: var(--ds-surface); stroke-width: 3; }
+</style>
+
+<section class="c-pitch-traction" aria-label="Traction slide">
+  <div class="inner">
+    <div class="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3v14M8 3v14M12 3v14M16 3v14"/><path class="strike" d="M1.5 15.5L18.5 4.5"/></svg>Tallyhouse</div>
+    <div class="main">
+      <div class="left">
+        <div class="kicker">Monthly recurring revenue</div>
+        <div class="figure">$84k</div>
+        <div class="badge">+22% a month</div>
+        <p class="note">Six-month average growth, from 880 paying studios.</p>
+      </div>
+      <div class="plot">
+        <svg viewBox="0 0 540 316" role="img" aria-label="Line chart of monthly recurring revenue over 18 months, from $1.2k in May 2025 to $84k in October 2026, with milestones at public launch, $10k, bank feeds and $50k." preserveAspectRatio="xMidYMid meet">
+          <line class="gl" x1="36" x2="530" y1="280.0" y2="280.0"/><text class="yt" x="28" y="284.0">0</text><line class="gl" x1="36" x2="530" y1="208.9" y2="208.9"/><text class="yt" x="28" y="212.9">$25k</text><line class="gl" x1="36" x2="530" y1="137.8" y2="137.8"/><text class="yt" x="28" y="141.8">$50k</text><line class="gl" x1="36" x2="530" y1="66.7" y2="66.7"/><text class="yt" x="28" y="70.7">$75k</text>
+          <path class="area" d="M36.0,276.6 L65.1,275.4 L94.1,274.0 L123.2,272.0 L152.2,269.8 L181.3,266.6 L210.4,262.6 L239.4,257.2 L268.5,249.8 L297.5,239.6 L326.6,226.0 L355.6,208.9 L384.7,187.6 L413.8,160.5 L442.8,129.2 L471.9,96.5 L500.9,69.5 L530.0,41.1 L530.0,280 L36,280 Z"/>
+          <path class="ln" d="M36.0,276.6 L65.1,275.4 L94.1,274.0 L123.2,272.0 L152.2,269.8 L181.3,266.6 L210.4,262.6 L239.4,257.2 L268.5,249.8 L297.5,239.6 L326.6,226.0 L355.6,208.9 L384.7,187.6 L413.8,160.5 L442.8,129.2 L471.9,96.5 L500.9,69.5 L530.0,41.1"/>
+          <line class="ml" x1="152.2" x2="152.2" y1="263.8" y2="245.8"/><circle class="md" cx="152.2" cy="269.8" r="4.5"/><text class="mt" x="152.2" y="239.8" text-anchor="middle">Public launch</text><line class="ml" x1="268.5" x2="268.5" y1="243.8" y2="225.8"/><circle class="md" cx="268.5" cy="249.8" r="4.5"/><text class="mt" x="268.5" y="219.8" text-anchor="middle">$10k MRR</text><line class="ml" x1="355.6" x2="355.6" y1="202.9" y2="184.9"/><circle class="md" cx="355.6" cy="208.9" r="4.5"/><text class="mt" x="365.6" y="178.9" text-anchor="end">Bank feeds</text><line class="ml" x1="442.8" x2="442.8" y1="123.2" y2="105.2"/><circle class="md" cx="442.8" cy="129.2" r="4.5"/><text class="mt" x="452.8" y="99.2" text-anchor="end">$50k MRR</text>
+          <circle class="end" cx="530.0" cy="41.1" r="7"/>
+          <text class="xt" x="36.0" y="302" text-anchor="start">May 25</text><text class="xt" x="210.4" y="302" text-anchor="middle">Nov 25</text><text class="xt" x="384.7" y="302" text-anchor="middle">May 26</text><text class="xt" x="530.0" y="302" text-anchor="end">Oct 26</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="num" aria-hidden="true">6</div>
+</section>

@@ -1,0 +1,134 @@
+<!--
+@title Competitive landscape table
+@group Exhibits
+@description A table of five competitors against six capabilities using filled, half and empty marks, with our own row highlighted and a total score column.
+@tags slide, competitors, landscape, harvey ball, capability, table, benchmark, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-competitive-landscape {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-competitive-landscape .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-competitive-landscape .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-competitive-landscape .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-competitive-landscape .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-competitive-landscape .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-competitive-landscape .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-competitive-landscape h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-competitive-landscape .exhibit { min-height: 0; }
+  .c-competitive-landscape .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-competitive-landscape svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-competitive-landscape svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-competitive-landscape .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-competitive-landscape .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-competitive-landscape .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-competitive-landscape .sm { font-size: 12px; }
+  .c-competitive-landscape .md { font-size: 13px; }
+  .c-competitive-landscape .lg { font-size: 14px; }
+  .c-competitive-landscape .b { font-weight: 700; }
+  .c-competitive-landscape .sb { font-weight: 600; }
+  .c-competitive-landscape .ink { fill: var(--ds-ink); }
+  .c-competitive-landscape .mu { fill: var(--ds-muted); }
+  .c-competitive-landscape .mid { text-anchor: middle; }
+  .c-competitive-landscape .end { text-anchor: end; }
+  .c-competitive-landscape .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-competitive-landscape .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-competitive-landscape .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-competitive-landscape .exhibit { display: flex; flex-direction: column; gap: 1.2cqi; }
+  .c-competitive-landscape .table { display: grid; }
+  .c-competitive-landscape .row {
+    display: grid;
+    grid-template-columns: 1.9fr repeat(6, 1fr) 0.9fr;
+    align-items: center;
+    min-height: 3.7cqi;
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-competitive-landscape .row.head { min-height: 3.4cqi; border-bottom: var(--ds-stroke) solid var(--ds-ink); }
+  .c-competitive-landscape .cap { padding: 0 0.6cqi; text-align: center; font-size: 1.15cqi; font-weight: 700; line-height: 1.25; color: var(--ds-ink); }
+  .c-competitive-landscape .who { padding-left: 1.2cqi; font-size: 1.15cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-competitive-landscape .row:not(.head) .who { display: grid; line-height: 1.25; }
+  .c-competitive-landscape .who b { font-size: 1.45cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-competitive-landscape .who span { font-size: 1.1cqi; font-weight: 400; color: var(--ds-muted); }
+  .c-competitive-landscape .cell { display: grid; place-items: center; }
+  .c-competitive-landscape .score { font-size: 1.6cqi; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-competitive-landscape .row.is-us { background: var(--ds-highlight-fill); box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line); }
+  .c-competitive-landscape .ball {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 1.9cqi;
+    height: 1.9cqi;
+    border-radius: 50%;
+    border: 0.2cqi solid var(--ds-ink);
+    vertical-align: middle;
+  }
+  .c-competitive-landscape .ball.full { background: var(--ds-ink); }
+  .c-competitive-landscape .ball.half { background: linear-gradient(90deg, var(--ds-ink) 50%, transparent 50%); }
+  .c-competitive-landscape .key { display: flex; align-items: center; gap: 2.4cqi; padding-left: 1.2cqi; font-size: 1.1cqi; color: var(--ds-text); }
+  .c-competitive-landscape .k { display: inline-flex; align-items: center; gap: 0.7cqi; }
+  .c-competitive-landscape .key .ball { width: 1.4cqi; height: 1.4cqi; }
+  .c-competitive-landscape .note { margin-left: auto; color: var(--ds-muted); }
+</style>
+
+<section class="c-competitive-landscape" aria-label="Slide 7: competitive landscape across six capabilities">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Market review · Competitive position</p>
+        <ul class="tracker" aria-label="Where this slide sits in the deck"><li class="is-on" aria-current="step">Diagnosis</li><li>Options</li><li>Roadmap</li></ul>
+      </div>
+      <h2>Two scale players out-score us overall, but only we are strong in both cold chain and live tracking</h2>
+    </div>
+    <div class="exhibit">
+      <div class="table" role="table" aria-label="Competitor capability comparison">
+        <div class="row head" role="row"><div class="who" role="columnheader">Player</div><div class="cap" role="columnheader">Network density</div><div class="cap" role="columnheader">Same-day delivery</div><div class="cap" role="columnheader">Cold chain</div><div class="cap" role="columnheader">Live tracking</div><div class="cap" role="columnheader">Returns handling</div><div class="cap" role="columnheader">Price position</div><div class="cap" role="columnheader">Score of 12</div></div>
+        <div class="row is-us" role="row"><div class="who" role="rowheader"><b>Us</b><span>Our network</span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell score" role="cell">8</div></div>
+        <div class="row" role="row"><div class="who" role="rowheader"><b>Competitor A</b><span>National scale network</span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell score" role="cell">9</div></div>
+        <div class="row" role="row"><div class="who" role="rowheader"><b>Competitor B</b><span>Parcel-led integrator</span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell score" role="cell">9</div></div>
+        <div class="row" role="row"><div class="who" role="rowheader"><b>Competitor C</b><span>Cold-chain specialist</span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell score" role="cell">4</div></div>
+        <div class="row" role="row"><div class="who" role="rowheader"><b>Competitor D</b><span>Regional haulier</span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell score" role="cell">5</div></div>
+        <div class="row" role="row"><div class="who" role="rowheader"><b>Competitor E</b><span>Digital-first newcomer</span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball empty" role="img" aria-label="Limited"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball full" role="img" aria-label="Strong"></span></div><div class="cell" role="cell"><span class="ball half" role="img" aria-label="Partial"></span></div><div class="cell score" role="cell">7</div></div>
+      </div>
+      <div class="key"><span class="k"><span class="ball full" role="img" aria-label="Strong"></span> Strong</span><span class="k"><span class="ball half" role="img" aria-label="Partial"></span> Partial</span><span class="k"><span class="ball empty" role="img" aria-label="Limited"></span> Limited</span><span class="note">Score: strong counts 2, partial 1, limited 0.</span></div>
+    </div>
+    <div class="foot">
+      <span>Source: customer interviews and website review, September 2026; team assessment. Illustrative ratings.</span>
+      <span class="page">7</span>
+    </div>
+  </div>
+</section>

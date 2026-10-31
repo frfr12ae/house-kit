@@ -1,0 +1,121 @@
+<!--
+@title Keynote what's new
+@group Keynote
+@description A changelog-style list of six updates, each with a version tag, a title, one line and a category pill. Use for a release recap or a "plus a lot more" slide.
+@tags keynote, changelog, release notes, whats new, updates, versions
+@preview slide
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-keynote-whats-new, .c-keynote-whats-new *, .c-keynote-whats-new *::before, .c-keynote-whats-new *::after { box-sizing: border-box; }
+.c-keynote-whats-new {
+  --k-bg: var(--ds-ink);
+  --k-fg: var(--ds-bg);
+  --k-dim: color-mix(in srgb, var(--ds-bg) 60%, var(--ds-ink));
+  --k-soft: color-mix(in srgb, var(--ds-bg) 82%, var(--ds-ink));
+  --k-line: color-mix(in srgb, var(--ds-bg) 16%, transparent);
+  --k-card: color-mix(in srgb, var(--ds-bg) 7%, var(--ds-ink));
+  --k-card-2: color-mix(in srgb, var(--ds-bg) 12%, var(--ds-ink));
+  --k-blue: var(--ds-info-line);
+  --k-amber: var(--ds-highlight-line);
+  --k-green: var(--ds-note-line);
+  --k-t1: color-mix(in srgb, var(--ds-info-line) 80%, var(--ds-bg));
+  --k-t2: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-bg));
+  --k-t3: color-mix(in srgb, var(--ds-note-line) 80%, var(--ds-bg));
+  --k-s1: color-mix(in srgb, var(--ds-info-line) 66%, var(--ds-bg));
+  --k-s2: color-mix(in srgb, var(--ds-highlight-line) 66%, var(--ds-bg));
+  --k-s3: color-mix(in srgb, var(--ds-note-line) 66%, var(--ds-bg));
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-family: var(--ds-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.c-keynote-whats-new .sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 50% 118%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 94% -8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 2% 30%, color-mix(in srgb, var(--k-green) 8%, transparent), transparent 70%);
+}
+.c-keynote-whats-new .pad { position: absolute; inset: 0; padding: 5.5cqi 7cqi; }
+.c-keynote-whats-new .eyebrow { margin: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--k-dim); }
+.c-keynote-whats-new .display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: 1.02;
+  color: var(--k-fg);
+}
+.c-keynote-whats-new .grad {
+  display: inline-block;
+  padding: 0 0.04em 0.1em 0;
+  margin: 0 -0.04em -0.1em 0;
+  background: linear-gradient(100deg, var(--k-t1) 0%, var(--k-t3) 52%, var(--k-t2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.c-keynote-whats-new.is-armed .rv { opacity: 0; transform: translateY(1.8cqi); }
+.c-keynote-whats-new.is-armed.is-in .rv {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+  .c-keynote-whats-new .sky {
+    background:
+      radial-gradient(50% 50% at 18% 6%, color-mix(in srgb, var(--k-blue) 20%, transparent), transparent 70%),
+      radial-gradient(44% 44% at 100% 100%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+      radial-gradient(40% 40% at 0% 100%, color-mix(in srgb, var(--k-green) 10%, transparent), transparent 70%);
+  }
+  .c-keynote-whats-new .title { position: absolute; left: 7cqi; top: 5.4cqi; font-size: 5cqi; }
+  .c-keynote-whats-new .list { position: absolute; left: 7cqi; right: 7cqi; top: 17.2cqi; display: grid; border-bottom: var(--ds-hairline) solid var(--k-line); }
+  .c-keynote-whats-new .item { display: grid; grid-template-columns: 10cqi 25cqi minmax(0, 1fr) 9.5cqi; align-items: center; gap: 1.6cqi; height: 5.7cqi; border-top: var(--ds-hairline) solid var(--k-line); }
+  .c-keynote-whats-new .ver { justify-self: start; padding: 0.4cqi 1cqi; border: var(--ds-hairline) solid var(--k-line); border-radius: calc(0.7cqi * var(--ds-radius-scale, 1)); background: color-mix(in srgb, var(--k-fg) 6%, transparent); font-family: var(--ds-font-mono); font-size: 1.3cqi; font-weight: 600; color: var(--k-soft); }
+  .c-keynote-whats-new .item h3 { margin: 0; font-size: 2.1cqi; font-weight: 700; letter-spacing: -0.01em; color: var(--k-fg); white-space: nowrap; }
+  .c-keynote-whats-new .item p { margin: 0; font-size: 1.6cqi; color: var(--k-dim); }
+  .c-keynote-whats-new .pill { justify-self: end; display: inline-flex; align-items: center; gap: 0.6cqi; padding: 0.45cqi 1.2cqi 0.45cqi 1cqi; border: var(--ds-hairline) solid color-mix(in srgb, var(--tint) 60%, transparent); border-radius: var(--ds-radius-pill); background: color-mix(in srgb, var(--tint) 14%, transparent); font-size: 1.2cqi; font-weight: 700; color: var(--k-fg); }
+  .c-keynote-whats-new .pill::before { content: ""; width: 0.7cqi; height: 0.7cqi; border-radius: 50%; background: var(--tint); }
+  .c-keynote-whats-new .pill.new { --tint: var(--k-blue); }
+  .c-keynote-whats-new .pill.fast { --tint: var(--k-green); }
+  .c-keynote-whats-new .pill.better { --tint: var(--k-amber); }
+</style>
+
+<section class="c-keynote-whats-new" aria-label="Six updates in Orbit 2">
+  <div class="sky"></div>
+  <h2 class="display title rv" style="--d:0">What's <span class="grad">new.</span></h2>
+  <div class="list">
+    <div class="item rv" style="--d:1"><span class="ver">v2.0.0</span><h3>Live canvas</h3><p>Think together on one infinite board.</p><span class="pill new">New</span></div>
+    <div class="item rv" style="--d:2"><span class="ver">v2.0.0</span><h3>Thread summaries</h3><p>Every long thread gets a short recap.</p><span class="pill new">New</span></div>
+    <div class="item rv" style="--d:3"><span class="ver">v2.0.0</span><h3>Offline mode</h3><p>Edit anywhere, sync when you are back.</p><span class="pill new">New</span></div>
+    <div class="item rv" style="--d:4"><span class="ver">v1.9.8</span><h3>Instant search</h3><p>Results appear as you type.</p><span class="pill fast">Faster</span></div>
+    <div class="item rv" style="--d:5"><span class="ver">v1.9.5</span><h3>Voice rooms</h3><p>Join a call in one click.</p><span class="pill better">Improved</span></div>
+    <div class="item rv" style="--d:6"><span class="ver">v1.9.2</span><h3>Keyboard shortcuts</h3><p>Forty new shortcuts, all remappable.</p><span class="pill better">Improved</span></div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-keynote-whats-new').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

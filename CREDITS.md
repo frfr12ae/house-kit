@@ -43,16 +43,85 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Unit chart](components/dataviz/unit-chart.html) | dataviz | Original | Frederik | MIT |
 | [Action title slide](components/decks/action-title-slide.html) | decks | Original | Frederik | MIT |
 | [Agenda slide](components/decks/agenda-slide.html) | decks | Original | Frederik | MIT |
+| [Agenda, notebook tabs](components/decks/agenda-tabs.html) | decks | Inspired by [frontend-slides style presets by Zara Zhang](https://github.com/zarazhangrui/frontend-slides) | Frederik | MIT |
+| [Annotated timeline chart](components/decks/annotated-timeline-chart.html) | decks | Original | Frederik | MIT |
+| [Before and after metrics](components/decks/before-after-metrics.html) | decks | Original | Frederik | MIT |
 | [Big number slide](components/decks/big-number-slide.html) | decks | Original | Frederik | MIT |
+| [Breakout groups](components/decks/breakout-groups.html) | decks | Original | Frederik | MIT |
+| [Chapter, full bleed](components/decks/chapter-fullbleed.html) | decks | Original | Frederik | MIT |
+| [Chart with insight callout](components/decks/chart-insight-callout.html) | decks | Inspired by [StrategyU slide layouts](https://strategyu.co/slide-layouts) | Frederik | MIT |
 | [Chart slide](components/decks/chart-slide.html) | decks | Original | Frederik | MIT |
 | [Closing slide](components/decks/closing-slide.html) | decks | Original | Frederik | MIT |
 | [Comparison slide](components/decks/comparison-slide.html) | decks | Original | Frederik | MIT |
+| [Competitive landscape table](components/decks/competitive-landscape.html) | decks | Original | Frederik | MIT |
+| [Cover, editorial](components/decks/cover-editorial.html) | decks | Inspired by [frontend-slides style presets by Zara Zhang](https://github.com/zarazhangrui/frontend-slides) | Frederik | MIT |
+| [Cover, split](components/decks/cover-split.html) | decks | Inspired by [frontend-slides style presets by Zara Zhang](https://github.com/zarazhangrui/frontend-slides) | Frederik | MIT |
+| [Cover, Swiss grid](components/decks/cover-swiss.html) | decks | Inspired by [frontend-slides style presets by Zara Zhang](https://github.com/zarazhangrui/frontend-slides) | Frederik | MIT |
 | [Deck shell](components/decks/deck-shell.html) | decks | Original | Frederik | MIT |
+| [Discussion prompt](components/decks/discussion-prompt.html) | decks | Original | Frederik | MIT |
+| [Executive summary (SCR)](components/decks/exec-summary-scr.html) | decks | Inspired by [Barbara Minto, The Pyramid Principle (SCR)](https://www.barbaraminto.com) | Frederik | MIT |
+| [Exercise timer](components/decks/exercise-timer.html) | decks | Original | Frederik | MIT |
+| [From-to shift](components/decks/from-to.html) | decks | Original | Frederik | MIT |
+| [Full deck: launch keynote](components/decks/full-launch-keynote.html) | decks | Inspired by [Apple keynote presentation style](https://www.apple.com/apple-events/) | Frederik | MIT |
+| [Full deck: pitch deck](components/decks/full-pitch-deck.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Full deck: strategy review](components/decks/full-strategy-review.html) | decks | Original | Frederik | MIT |
+| [Full deck: workshop](components/decks/full-workshop.html) | decks | Original | Frederik | MIT |
+| [Funnel slide](components/decks/funnel-slide.html) | decks | Original | Frederik | MIT |
+| [Gantt roadmap](components/decks/gantt-roadmap.html) | decks | Original | Frederik | MIT |
+| [Governing question](components/decks/governing-question.html) | decks | Original | Frederik | MIT |
+| [Harvey ball scorecard](components/decks/harvey-ball-scorecard.html) | decks | Inspired by [StrategyU slide layouts](https://strategyu.co/slide-layouts) | Frederik | MIT |
+| [Issue tree](components/decks/issue-tree.html) | decks | Inspired by [Deckary consulting slide templates](https://deckary.com/blog/consulting-slide-templates) | Frederik | MIT |
+| [Key takeaways](components/decks/key-takeaways.html) | decks | Original | Frederik | MIT |
+| [Keynote availability](components/decks/keynote-availability.html) | decks | Inspired by [Apple keynote presentation style](https://www.apple.com/apple-events/) | Frederik | MIT |
+| [Keynote bento](components/decks/keynote-bento.html) | decks | Original | Frederik | MIT |
+| [Keynote code](components/decks/keynote-code.html) | decks | Original | Frederik | MIT |
+| [Keynote cover](components/decks/keynote-cover.html) | decks | Original | Frederik | MIT |
+| [Keynote demo cue](components/decks/keynote-demo-cue.html) | decks | Original | Frederik | MIT |
+| [Keynote device hero](components/decks/keynote-device-hero.html) | decks | Inspired by [Apple keynote presentation style](https://www.apple.com/apple-events/) | Frederik | MIT |
+| [Keynote giant metric](components/decks/keynote-giant-metric.html) | decks | Inspired by [Apple keynote presentation style](https://www.apple.com/apple-events/) | Frederik | MIT |
+| [Keynote logo wall](components/decks/keynote-logo-wall.html) | decks | Original | Frederik | MIT |
+| [Keynote shortcuts](components/decks/keynote-shortcuts.html) | decks | Original | Frederik | MIT |
+| [Keynote spec compare](components/decks/keynote-spec-compare.html) | decks | Original | Frederik | MIT |
+| [Keynote statement](components/decks/keynote-statement.html) | decks | Inspired by [Apple keynote presentation style](https://www.apple.com/apple-events/) | Frederik | MIT |
+| [Keynote steps](components/decks/keynote-steps.html) | decks | Original | Frederik | MIT |
+| [Keynote what's new](components/decks/keynote-whats-new.html) | decks | Original | Frederik | MIT |
+| [KPI dashboard slide](components/decks/kpi-dashboard.html) | decks | Original | Frederik | MIT |
+| [Market map (Marimekko)](components/decks/market-map.html) | decks | Original | Frederik | MIT |
+| [Next steps table](components/decks/next-steps-table.html) | decks | Original | Frederik | MIT |
+| [Objectives](components/decks/objectives.html) | decks | Original | Frederik | MIT |
+| [Options evaluation](components/decks/options-evaluation.html) | decks | Original | Frederik | MIT |
+| [Org chart](components/decks/org-chart.html) | decks | Original | Frederik | MIT |
+| [Parking lot](components/decks/parking-lot.html) | decks | Original | Frederik | MIT |
+| [Pitch ask](components/decks/pitch-ask.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch business model](components/decks/pitch-business-model.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch competition](components/decks/pitch-competition.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch cover](components/decks/pitch-cover.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch market](components/decks/pitch-market.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch problem](components/decks/pitch-problem.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch product](components/decks/pitch-product.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch solution](components/decks/pitch-solution.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch team](components/decks/pitch-team.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch traction](components/decks/pitch-traction.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch vision](components/decks/pitch-vision.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Pitch why now](components/decks/pitch-why-now.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
+| [Poll results](components/decks/poll-results.html) | decks | Original | Frederik | MIT |
+| [Questions](components/decks/qa-slide.html) | decks | Original | Frederik | MIT |
+| [Quote with evidence](components/decks/quote-evidence.html) | decks | Original | Frederik | MIT |
 | [Quote slide](components/decks/quote-slide.html) | decks | Original | Frederik | MIT |
+| [RACI matrix](components/decks/raci-matrix.html) | decks | Original | Frederik | MIT |
+| [Recommendations](components/decks/recommendations.html) | decks | Original | Frederik | MIT |
+| [Risk matrix](components/decks/risk-matrix.html) | decks | Original | Frederik | MIT |
 | [Section slide](components/decks/section-slide.html) | decks | Original | Frederik | MIT |
+| [Stacked share chart](components/decks/stacked-share.html) | decks | Original | Frederik | MIT |
 | [Storyboard sheet](components/decks/storyboard-sheet.html) | decks | Original | Frederik | MIT |
+| [Table of contents](components/decks/table-of-contents.html) | decks | Original | Frederik | MIT |
+| [TAM, SAM and SOM](components/decks/tam-sam-som.html) | decks | Inspired by [Deckary consulting slide templates](https://deckary.com/blog/consulting-slide-templates) | Frederik | MIT |
+| [Three pillars](components/decks/three-pillars.html) | decks | Original | Frederik | MIT |
 | [Title slide](components/decks/title-slide.html) | decks | Original | Frederik | MIT |
+| [Tracker and appendix slide](components/decks/tracker-and-appendix.html) | decks | Original | Frederik | MIT |
+| [Two by two options matrix](components/decks/two-by-two.html) | decks | Original | Frederik | MIT |
 | [Two column slide](components/decks/two-column-slide.html) | decks | Original | Frederik | MIT |
+| [Waterfall bridge](components/decks/waterfall-bridge.html) | decks | Original | Frederik | MIT |
 | [Branch and merge flow](components/diagrams/branch-merge-flow.html) | diagrams | Inspired by [21st.dev Branch and Merge Routing](https://21st.dev/@21st/components/lp-branch-merge-routing) | Frederik | MIT |
 | [ER diagram](components/diagrams/er-diagram.html) | diagrams | Adapted from [diagram-design by Cathryn Lavery](https://github.com/cathrynlavery/diagram-design) | Frederik | MIT |
 | [Fan-out flow](components/diagrams/fan-out-flow.html) | diagrams | Inspired by [21st.dev Parallel Task Fanout](https://21st.dev/@21st/components/lp-parallel-task-fanout) | Frederik | MIT |

@@ -1,0 +1,247 @@
+<!--
+@title Keynote device hero
+@group Keynote
+@description A laptop and a phone built from shapes, both showing the same app, with a soft reflection, a floor glow and a short headline above.
+@tags keynote, device, laptop, phone, mockup, hero, product, apple event
+@preview slide
+@replay true
+@added 2026-10-31
+@source Apple keynote presentation style | https://www.apple.com/apple-events/ | inspired-by
+-->
+<style>
+  .c-keynote-device-hero, .c-keynote-device-hero *, .c-keynote-device-hero *::before, .c-keynote-device-hero *::after { box-sizing: border-box; }
+.c-keynote-device-hero {
+  --k-bg: var(--ds-ink);
+  --k-fg: var(--ds-bg);
+  --k-dim: color-mix(in srgb, var(--ds-bg) 60%, var(--ds-ink));
+  --k-soft: color-mix(in srgb, var(--ds-bg) 82%, var(--ds-ink));
+  --k-line: color-mix(in srgb, var(--ds-bg) 16%, transparent);
+  --k-card: color-mix(in srgb, var(--ds-bg) 7%, var(--ds-ink));
+  --k-card-2: color-mix(in srgb, var(--ds-bg) 12%, var(--ds-ink));
+  --k-blue: var(--ds-info-line);
+  --k-amber: var(--ds-highlight-line);
+  --k-green: var(--ds-note-line);
+  --k-t1: color-mix(in srgb, var(--ds-info-line) 80%, var(--ds-bg));
+  --k-t2: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-bg));
+  --k-t3: color-mix(in srgb, var(--ds-note-line) 80%, var(--ds-bg));
+  --k-s1: color-mix(in srgb, var(--ds-info-line) 66%, var(--ds-bg));
+  --k-s2: color-mix(in srgb, var(--ds-highlight-line) 66%, var(--ds-bg));
+  --k-s3: color-mix(in srgb, var(--ds-note-line) 66%, var(--ds-bg));
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-family: var(--ds-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.c-keynote-device-hero .sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 50% 118%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 94% -8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 2% 30%, color-mix(in srgb, var(--k-green) 8%, transparent), transparent 70%);
+}
+.c-keynote-device-hero .pad { position: absolute; inset: 0; padding: 5.5cqi 7cqi; }
+.c-keynote-device-hero .eyebrow { margin: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--k-dim); }
+.c-keynote-device-hero .display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: 1.02;
+  color: var(--k-fg);
+}
+.c-keynote-device-hero .grad {
+  display: inline-block;
+  padding: 0 0.04em 0.1em 0;
+  margin: 0 -0.04em -0.1em 0;
+  background: linear-gradient(100deg, var(--k-t1) 0%, var(--k-t3) 52%, var(--k-t2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.c-keynote-device-hero.is-armed .rv { opacity: 0; transform: translateY(1.8cqi); }
+.c-keynote-device-hero.is-armed.is-in .rv {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+  .c-keynote-device-hero .sky {
+    background:
+      radial-gradient(50% 55% at 46% 70%, color-mix(in srgb, var(--k-blue) 26%, transparent), transparent 70%),
+      radial-gradient(30% 40% at 90% 8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+      radial-gradient(30% 36% at 6% 100%, color-mix(in srgb, var(--k-green) 12%, transparent), transparent 70%);
+  }
+  .c-keynote-device-hero .head { position: absolute; left: 0; right: 0; top: 5.2cqi; text-align: center; font-size: 5.6cqi; }
+  .c-keynote-device-hero .rig {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 17.5cqi;
+    height: 34cqi;
+    -webkit-box-reflect: below 0.4cqi linear-gradient(to bottom, transparent 0%, transparent 58%, color-mix(in srgb, var(--k-fg) 22%, transparent) 100%);
+  }
+  .c-keynote-device-hero .floor {
+    position: absolute;
+    left: 12cqi;
+    width: 76cqi;
+    top: 48.5cqi;
+    height: 9cqi;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--k-blue) 38%, transparent), transparent);
+    filter: blur(1cqi);
+  }
+  /* laptop */
+  .c-keynote-device-hero .laptop { position: absolute; left: 21cqi; top: 0; width: 50cqi; }
+  .c-keynote-device-hero .lid {
+    height: 31cqi;
+    padding: 0.8cqi;
+    border-radius: 1.7cqi 1.7cqi 0.3cqi 0.3cqi;
+    background: linear-gradient(160deg, var(--k-card-2), var(--k-card));
+    border: 0.12cqi solid var(--k-line);
+    box-shadow: 0 0 9cqi color-mix(in srgb, var(--k-blue) 28%, transparent), 0 0 2cqi color-mix(in srgb, var(--k-blue) 20%, transparent);
+  }
+  .c-keynote-device-hero .base {
+    position: relative;
+    width: 56cqi;
+    height: 1.5cqi;
+    margin-left: -3cqi;
+    border-radius: 0 0 2.2cqi 2.2cqi;
+    background: linear-gradient(to bottom, var(--k-card-2), var(--k-card));
+    border: 0.12cqi solid var(--k-line);
+    border-top: 0;
+  }
+  .c-keynote-device-hero .base::after { content: ""; position: absolute; left: 50%; top: 0; width: 8cqi; height: 0.55cqi; transform: translateX(-50%); border-radius: 0 0 0.6cqi 0.6cqi; background: var(--k-line); }
+  /* app UI shared by laptop and phone */
+  .c-keynote-device-hero .screen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0.8cqi;
+    background:
+      radial-gradient(70% 70% at 100% 0%, color-mix(in srgb, var(--k-blue) 22%, transparent), transparent 70%),
+      radial-gradient(60% 60% at 0% 100%, color-mix(in srgb, var(--k-green) 12%, transparent), transparent 70%),
+      var(--k-bg);
+  }
+  .c-keynote-device-hero .app { display: grid; grid-template-columns: 10.5cqi minmax(0, 1fr); height: 100%; }
+  .c-keynote-device-hero .nav { display: grid; align-content: start; gap: 0.6cqi; padding: 1.4cqi 1cqi; border-right: var(--ds-hairline) solid var(--k-line); background: color-mix(in srgb, var(--k-fg) 4%, transparent); }
+  .c-keynote-device-hero .logo { display: flex; align-items: center; gap: 0.6cqi; margin-bottom: 0.8cqi; font-size: 1.15cqi; font-weight: 700; }
+  .c-keynote-device-hero .logo i { width: 1.5cqi; height: 1.5cqi; border-radius: 50%; border: 0.2cqi solid var(--k-fg); }
+  .c-keynote-device-hero .chan { display: flex; align-items: center; gap: 0.5cqi; padding: 0.55cqi 0.6cqi; border-radius: 0.5cqi; font-size: 1cqi; font-weight: 600; color: var(--k-dim); }
+  .c-keynote-device-hero .chan.on { background: color-mix(in srgb, var(--k-blue) 24%, transparent); color: var(--k-fg); }
+  .c-keynote-device-hero .feed { display: grid; align-content: start; gap: 1.2cqi; padding: 1.2cqi 1.8cqi 1.4cqi; min-width: 0; }
+  .c-keynote-device-hero .bar-top { display: flex; align-items: center; justify-content: space-between; font-size: 1.3cqi; font-weight: 700; }
+  .c-keynote-device-hero .faces { display: flex; }
+  .c-keynote-device-hero .faces i { width: 2cqi; height: 2cqi; margin-left: -0.5cqi; border-radius: 50%; border: 0.2cqi solid var(--k-bg); background: var(--k-blue); }
+  .c-keynote-device-hero .faces i:nth-child(2) { background: var(--k-amber); }
+  .c-keynote-device-hero .faces i:nth-child(3) { background: var(--k-green); }
+  .c-keynote-device-hero .msg { display: grid; grid-template-columns: 2.4cqi minmax(0, 1fr); gap: 1cqi; align-items: start; }
+  .c-keynote-device-hero .av { width: 2.4cqi; height: 2.4cqi; border-radius: 50%; background: var(--k-amber); }
+  .c-keynote-device-hero .msg:nth-of-type(2) .av { background: var(--k-green); }
+  .c-keynote-device-hero .msg:nth-of-type(3) .av { background: var(--k-blue); }
+  .c-keynote-device-hero .ln { display: block; height: 0.8cqi; border-radius: 0.4cqi; background: color-mix(in srgb, var(--k-fg) 24%, transparent); }
+  .c-keynote-device-hero .ln + .ln { margin-top: 0.7cqi; }
+  .c-keynote-device-hero .ln.s { width: 38%; background: color-mix(in srgb, var(--k-fg) 44%, transparent); height: 0.9cqi; margin-bottom: 0.7cqi; }
+  .c-keynote-device-hero .card { margin-top: 1cqi; display: flex; align-items: flex-end; gap: 0.7cqi; height: 5.6cqi; padding: 1cqi; border: var(--ds-hairline) solid var(--k-line); border-radius: 0.9cqi; background: color-mix(in srgb, var(--k-fg) 5%, transparent); }
+  .c-keynote-device-hero .card i { flex: 1; border-radius: 0.3cqi 0.3cqi 0 0; background: linear-gradient(to top, var(--k-blue), var(--k-t3)); }
+  .c-keynote-device-hero .compose { align-self: end; height: 2.6cqi; border: var(--ds-hairline) solid var(--k-line); border-radius: 1cqi; background: color-mix(in srgb, var(--k-fg) 5%, transparent); }
+  .c-keynote-device-hero .laptop .feed { grid-template-rows: auto auto auto auto 1fr; height: 100%; }
+  /* phone */
+  .c-keynote-device-hero .phone {
+    position: absolute;
+    left: 65cqi;
+    top: 7.5cqi;
+    width: 12.6cqi;
+    height: 26.4cqi;
+    padding: 0.5cqi;
+    border-radius: 2.5cqi;
+    background: linear-gradient(160deg, var(--k-card-2), var(--k-card));
+    border: 0.14cqi solid color-mix(in srgb, var(--k-fg) 24%, transparent);
+    box-shadow: 0 2.4cqi 5cqi color-mix(in srgb, var(--k-bg) 85%, transparent), 0 0 7cqi color-mix(in srgb, var(--k-blue) 26%, transparent);
+  }
+  .c-keynote-device-hero .phone .screen { border-radius: 2cqi; display: grid; grid-template-rows: auto 1fr auto; padding: 0 1cqi 1cqi; }
+  .c-keynote-device-hero .island { justify-self: center; width: 3.6cqi; height: 1cqi; margin-top: 0.7cqi; border-radius: 1cqi; background: var(--k-bg); border: var(--ds-hairline) solid var(--k-line); }
+  .c-keynote-device-hero .chat { display: grid; align-content: center; gap: 0.8cqi; }
+  .c-keynote-device-hero .chat .t { margin: 0 0 0.4cqi; font-size: 1.1cqi; font-weight: 700; }
+  .c-keynote-device-hero .bub { height: 2.2cqi; width: 70%; border-radius: 1cqi 1cqi 1cqi 0.2cqi; background: color-mix(in srgb, var(--k-fg) 20%, transparent); }
+  .c-keynote-device-hero .bub.me { justify-self: end; width: 58%; border-radius: 1cqi 1cqi 0.2cqi 1cqi; background: var(--k-blue); }
+  .c-keynote-device-hero .bub.tall { height: 3.8cqi; width: 78%; }
+  .c-keynote-device-hero .tabs { display: flex; justify-content: space-around; padding-top: 0.8cqi; }
+  .c-keynote-device-hero .tabs i { width: 1.3cqi; height: 1.3cqi; border-radius: 0.4cqi; background: color-mix(in srgb, var(--k-fg) 30%, transparent); }
+  .c-keynote-device-hero .tabs i:first-child { background: var(--k-blue); }
+  .c-keynote-device-hero.is-armed .laptop, .c-keynote-device-hero.is-armed .phone { opacity: 0; transform: translateY(3cqi); }
+  .c-keynote-device-hero.is-armed.is-in .laptop, .c-keynote-device-hero.is-armed.is-in .phone {
+    opacity: 1;
+    transform: none;
+    transition: opacity var(--ds-dur-story) var(--ds-ease), transform var(--ds-dur-story) var(--ds-ease);
+  }
+  .c-keynote-device-hero.is-armed.is-in .phone { transition-delay: 220ms; }
+</style>
+
+<section class="c-keynote-device-hero" aria-label="Orbit 2 on a laptop and a phone">
+  <div class="sky"></div>
+  <div class="floor" aria-hidden="true"></div>
+  <h2 class="display head rv" style="--d:0">One workspace. Every <span class="grad">device.</span></h2>
+  <div class="rig" aria-hidden="true">
+    <div class="laptop">
+      <div class="lid">
+        <div class="screen">
+          <div class="app">
+            <div class="nav">
+              <div class="logo"><i></i>Orbit</div>
+              <div class="chan on">Launch week</div>
+              <div class="chan">Design</div>
+              <div class="chan">Roadmap</div>
+              <div class="chan">Team notes</div>
+            </div>
+            <div class="feed">
+              <div class="bar-top"><span>Launch week</span><span class="faces"><i></i><i></i><i></i></span></div>
+              <div class="msg"><span class="av"></span><div><span class="ln s"></span><span class="ln" style="width:86%"></span><span class="ln" style="width:58%"></span></div></div>
+              <div class="msg"><span class="av"></span><div><span class="ln s"></span><span class="ln" style="width:72%"></span>
+                <div class="card"><i style="height:38%"></i><i style="height:52%"></i><i style="height:46%"></i><i style="height:70%"></i><i style="height:62%"></i><i style="height:90%"></i><i style="height:78%"></i></div></div></div>
+              <div class="msg"><span class="av"></span><div><span class="ln s"></span><span class="ln" style="width:64%"></span></div></div>
+              <div class="compose"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="base"></div>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <span class="island"></span>
+        <div class="chat">
+          <p class="t">Launch week</p>
+          <span class="bub"></span>
+          <span class="bub me"></span>
+          <span class="bub tall"></span>
+          <span class="bub me" style="width:44%"></span>
+        </div>
+        <div class="tabs"><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-keynote-device-hero').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

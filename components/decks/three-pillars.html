@@ -1,0 +1,115 @@
+<!--
+@title Three pillars
+@group Storyline
+@description The three things to remember as three columns, each with a number, a simple stroke icon, a title and two lines of support, closed by a combined outcome bar.
+@tags slide, three pillars, key messages, strategy, icons, summary, rule of three
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-three-pillars {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-three-pillars .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-three-pillars .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-three-pillars .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-three-pillars h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-three-pillars .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-three-pillars .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-three-pillars .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-three-pillars .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-three-pillars .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-three-pillars .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-three-pillars .body { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 2.4cqi; }
+  .c-three-pillars .pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3.4cqi; margin: 0; padding: 0; list-style: none; }
+  .c-three-pillars .pillar { padding-top: 1.6cqi; border-top: var(--ds-stroke) solid var(--ds-ink); }
+  .c-three-pillars .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2cqi; }
+  .c-three-pillars .num { font-size: 1.4cqi; font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-three-pillars .ico { display: grid; place-items: center; width: 5cqi; height: 5cqi; border-radius: calc(1cqi * var(--ds-radius-scale, 1)); background: var(--ds-panel); color: var(--ds-ink); }
+  .c-three-pillars .pillar:first-child .ico { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-three-pillars .ico svg { width: 2.8cqi; height: 2.8cqi; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .c-three-pillars .ico .k { fill: var(--ds-surface); }
+  .c-three-pillars h2 { margin: 0 0 1.2cqi; font-size: 2.2cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-three-pillars .pillar p { margin: 0 0 0.8cqi; font-size: 1.5cqi; line-height: 1.45; }
+  .c-three-pillars .total { display: flex; align-items: baseline; gap: 1.6cqi; padding: 1.5cqi 2cqi; background: var(--ds-highlight-fill); box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); font-size: 1.6cqi; line-height: 1.35; color: var(--ds-ink); }
+  .c-three-pillars .total b { flex: none; font-size: 1.2cqi; font-weight: 700; color: var(--ds-text); }
+  .c-three-pillars .total span { font-weight: 600; }
+</style>
+
+<section class="c-three-pillars" aria-label="Three pillars of the growth plan">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Strategy on a page</p>
+        <h1>Three pillars carry the growth plan: build the network, win e-commerce, run lean</h1>
+      </div>
+      
+    </div>
+    <div class="body">
+      <ol class="pillars">
+      <li class="pillar">
+        <div class="head"><span class="num">01</span><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.6"/><circle cx="5" cy="18" r="2.6"/><circle cx="19" cy="18" r="2.6"/><path d="M10.7 7.3 6.3 15.7M13.3 7.3l4.4 8.4M7.6 18h8.8"/></svg></span></div>
+        <h2>Build the network</h2>
+        <p>Two automated hubs lift sorting capacity by 60%.</p>
+        <p>Six refreshed depots feed them with shorter runs.</p>
+      </li>
+      <li class="pillar">
+        <div class="head"><span class="num">02</span><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M4 16l5-5 4 3.5L20 7"/><path d="M15 7h5v5"/></svg></span></div>
+        <h2>Win e-commerce</h2>
+        <p>Next-day delivery reaches 95% of postcodes.</p>
+        <p>No single client exceeds 15% of volume.</p>
+      </li>
+      <li class="pillar">
+        <div class="head"><span class="num">03</span><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2.1" class="k"/><circle cx="16" cy="12" r="2.1" class="k"/><circle cx="11" cy="17" r="2.1" class="k"/></svg></span></div>
+        <h2>Run it lean</h2>
+        <p>Nightly route optimisation removes idle mileage.</p>
+        <p>Cost per parcel falls from EUR 3.10 to EUR 2.60.</p>
+      </li>
+      </ol>
+      <div class="total"><b>Together</b><span>EUR 140m of extra revenue and three points of EBIT margin by 2029.</span></div>
+    </div>
+    <div class="foot"><span>Source: Company strategy workshop, October 2026; financial model v4. Illustrative figures.</span><span class="page">5</span></div>
+  </div>
+</section>

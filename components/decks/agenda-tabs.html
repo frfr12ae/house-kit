@@ -1,0 +1,164 @@
+<!--
+@title Agenda, notebook tabs
+@group Openers and structure
+@description Agenda as notebook tabs down the right edge of a paper page, with the current chapter's content, timing and takeaway on the page.
+@tags slide, agenda, tabs, notebook, chapters, outline
+@preview slide
+@added 2026-10-31
+@source frontend-slides style presets by Zara Zhang | https://github.com/zarazhangrui/frontend-slides | inspired-by
+-->
+<style>
+  .c-agenda-tabs {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-panel);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-agenda-tabs .page {
+    position: absolute;
+    left: 3.5cqi;
+    top: 4cqi;
+    bottom: 4cqi;
+    right: 14cqi;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 4.5cqi 5.5cqi 3.5cqi 6cqi;
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: calc(1.2cqi * var(--ds-radius-scale, 1)) 0 0 calc(1.2cqi * var(--ds-radius-scale, 1));
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-agenda-tabs .page::before {
+    content: "";
+    position: absolute;
+    left: 2.6cqi;
+    top: 3cqi;
+    bottom: 3cqi;
+    width: 0.3cqi;
+    border-radius: 99px;
+    background: var(--tab-line);
+  }
+  .c-agenda-tabs .head { display: flex; justify-content: space-between; align-items: baseline; }
+  .c-agenda-tabs .eyebrow { font-size: 1.4cqi; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-agenda-tabs .where { font-size: 1.4cqi; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-agenda-tabs .main { align-self: center; display: grid; gap: 1.8cqi; }
+  .c-agenda-tabs .big {
+    font-family: var(--ds-font-serif);
+    font-size: 9cqi;
+    font-weight: 400;
+    line-height: 0.8;
+    color: var(--tab-line);
+  }
+  .c-agenda-tabs h2 {
+    margin: 0;
+    font-family: var(--ds-font-serif);
+    font-size: 5cqi;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+    color: var(--ds-ink);
+  }
+  .c-agenda-tabs ul { display: grid; gap: 1cqi; margin: 0.6cqi 0 0; padding: 0; list-style: none; font-size: 1.85cqi; line-height: 1.35; }
+  .c-agenda-tabs li { display: grid; grid-template-columns: 1.8cqi 1fr; column-gap: 1.2cqi; align-items: baseline; }
+  .c-agenda-tabs li::before {
+    content: "";
+    width: 0.9cqi;
+    height: 0.9cqi;
+    border-radius: 50%;
+    background: var(--tab-line);
+  }
+  .c-agenda-tabs .foot {
+    display: flex;
+    gap: 1.2cqi;
+    padding-top: 1.6cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 1.35cqi;
+    color: var(--ds-muted);
+  }
+  .c-agenda-tabs .foot span {
+    padding: 0.4cqi 1.2cqi;
+    border-radius: var(--ds-radius-pill);
+    background: var(--tab-fill);
+    border: var(--ds-hairline) solid var(--tab-line);
+    color: var(--ds-ink);
+    font-weight: 600;
+  }
+  .c-agenda-tabs .tabs {
+    position: absolute;
+    left: calc(100% - 14cqi);
+    top: 8cqi;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 1cqi;
+  }
+  .c-agenda-tabs .tabs li { display: block; }
+  .c-agenda-tabs .tabs li::before { display: none; }
+  .c-agenda-tabs .tab {
+    display: flex;
+    align-items: center;
+    gap: 1cqi;
+    width: 9.8cqi;
+    height: 7.4cqi;
+    padding: 0 1.2cqi;
+    background: var(--tab-fill);
+    border: var(--ds-hairline) solid var(--tab-line);
+    border-left: 0;
+    border-radius: 0 calc(1.1cqi * var(--ds-radius-scale, 1)) calc(1.1cqi * var(--ds-radius-scale, 1)) 0;
+    font-size: 1.35cqi;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ds-text);
+  }
+  .c-agenda-tabs .tab b { font-size: 1.9cqi; font-weight: 800; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-agenda-tabs .tab.is-current {
+    width: 11.8cqi;
+    margin-left: -1px;
+    border-color: var(--tab-line);
+    box-shadow: var(--ds-shadow-sm);
+    color: var(--ds-ink);
+  }
+  .c-agenda-tabs .tab.is-current::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    width: 2px;
+    height: 7.4cqi;
+    background: var(--ds-surface);
+  }
+  .c-agenda-tabs .tab { position: relative; }
+  .c-agenda-tabs .t1 { --tab-fill: var(--ds-info-fill); --tab-line: var(--ds-info-line); }
+  .c-agenda-tabs .t2 { --tab-fill: var(--ds-note-fill); --tab-line: var(--ds-note-line); }
+  .c-agenda-tabs .t3 { --tab-fill: var(--ds-highlight-fill); --tab-line: var(--ds-highlight-line); }
+  .c-agenda-tabs .t4 { --tab-fill: var(--ds-danger-fill); --tab-line: var(--ds-danger-line); }
+  .c-agenda-tabs .t5 { --tab-fill: var(--ds-neutral-fill); --tab-line: var(--ds-neutral-line); }
+  .c-agenda-tabs { --tab-fill: var(--ds-highlight-fill); --tab-line: var(--ds-highlight-line); }
+</style>
+
+<section class="c-agenda-tabs">
+  <div class="page">
+    <div class="head"><span class="eyebrow">Chapter 3 of 5</span><span class="where">Min 20 to 40</span></div>
+    <div class="main">
+      <span class="big" aria-hidden="true">3</span>
+      <h2>Three growth options</h2>
+      <ul>
+        <li>Expand the pilot to two new regions</li>
+        <li>Bundle onboarding with the core plan</li>
+        <li>Open a partner channel for resellers</li>
+      </ul>
+    </div>
+    <div class="foot"><span>20 min</span><span>Decision at the end</span></div>
+  </div>
+  <ol class="tabs" aria-label="Agenda">
+    <li><span class="tab t1"><b>1</b>Today</span></li>
+    <li><span class="tab t2"><b>2</b>Clients</span></li>
+    <li><span class="tab t3 is-current" aria-current="step"><b>3</b>Options</span></li>
+    <li><span class="tab t4"><b>4</b>Risks</span></li>
+    <li><span class="tab t5"><b>5</b>Decide</span></li>
+  </ol>
+</section>

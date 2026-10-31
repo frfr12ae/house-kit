@@ -1,0 +1,108 @@
+<!--
+@title Issue tree
+@group Storyline
+@description A left-to-right issue tree: one key question branching into three drivers and seven sub-issues, with SVG connectors and the priority branch highlighted.
+@tags slide, issue tree, logic tree, mece, decomposition, hypothesis, problem structuring
+@preview slide
+@added 2026-10-31
+@source Deckary consulting slide templates | https://deckary.com/blog/consulting-slide-templates | inspired-by
+-->
+<style>
+  .c-issue-tree {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-issue-tree .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-issue-tree .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-issue-tree .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-issue-tree h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-issue-tree .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-issue-tree .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-issue-tree .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-issue-tree .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-issue-tree .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-issue-tree .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-issue-tree .body { padding-top: 1.6cqi; }
+  .c-issue-tree .tree { position: relative; width: 88cqi; height: 32.4cqi; }
+  .c-issue-tree .tree svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .c-issue-tree .ln { fill: none; stroke: var(--ds-neutral-line); stroke-width: 1.6; stroke-linecap: square; }
+  .c-issue-tree .ln.is-pri { stroke: var(--ds-highlight-line); stroke-width: 2.4; }
+  .c-issue-tree .node { position: absolute; box-sizing: border-box; display: flex; align-items: center; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); color: var(--ds-ink); }
+  .c-issue-tree .root { flex-direction: column; align-items: flex-start; justify-content: center; gap: 0.5cqi; padding: 0 1.6cqi; background: var(--ds-action); border-color: var(--ds-action); color: var(--ds-on-action); font-size: 1.55cqi; font-weight: 700; line-height: 1.25; }
+  .c-issue-tree .lbl { font-size: 1cqi; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.7; }
+  .c-issue-tree .branch { padding: 0 1.6cqi; font-size: 1.7cqi; font-weight: 700; line-height: 1.2; }
+  .c-issue-tree .branch.is-pri { background: var(--ds-highlight-fill); border: var(--ds-stroke) solid var(--ds-highlight-line); }
+  .c-issue-tree .flag { position: absolute; top: -0.9cqi; left: 1.2cqi; padding: 0.2cqi 0.8cqi; border-radius: var(--ds-radius-pill); background: var(--ds-highlight-line); font-size: 0.95cqi; font-weight: 700; letter-spacing: 0.02em; color: var(--ds-bg); }
+  .c-issue-tree .leaf { gap: 1cqi; padding: 0 1.4cqi; font-size: 1.4cqi; line-height: 1.2; }
+  .c-issue-tree .leaf b { flex: none; font-size: 1.15cqi; font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-issue-tree .leaf.is-pri { background: var(--ds-highlight-fill); border-color: color-mix(in srgb, var(--ds-highlight-line) 60%, transparent); }
+</style>
+
+<section class="c-issue-tree" aria-label="Issue tree: key question, three branches, seven sub-issues">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Problem structure</p>
+        <h1>Network capacity is the branch to resolve first, because it gates both growth and cost</h1>
+      </div>
+    </div>
+    <div class="body">
+      <div class="tree">
+        <svg viewBox="0 0 880 324" preserveAspectRatio="none" aria-hidden="true"><path class="ln" d="M190 162H230M230 42V282M230 42H260M480 42H520M520 18V66M520 18H560M520 66H560M230 282H260M480 282H520M520 258V306M520 258H560M520 306H560"/><path class="ln is-pri" d="M230 162H260M480 162H520M520 114V210M520 114H560M520 162H560M520 210H560"/></svg>
+      <div class="node root" style="left:0;top:10.70cqi;width:19cqi;height:11cqi"><span class="lbl">Key question</span>How do we reach EUR 450m revenue by 2029 at a 14% margin?</div>
+      <div class="node branch" style="left:26cqi;top:0.70cqi;width:22cqi;height:7cqi">Grow demand</div>
+      <div class="node leaf" style="left:56cqi;top:0.00cqi;width:32cqi;height:3.6cqi"><b>1.1</b><span>Win share in e-commerce parcels</span></div>
+      <div class="node leaf" style="left:56cqi;top:4.80cqi;width:32cqi;height:3.6cqi"><b>1.2</b><span>Enter two adjacent regions</span></div>
+      <div class="node branch is-pri" style="left:26cqi;top:12.70cqi;width:22cqi;height:7cqi"><span class="flag">Priority</span>Fix network capacity</div>
+      <div class="node leaf is-pri" style="left:56cqi;top:9.60cqi;width:32cqi;height:3.6cqi"><b>2.1</b><span>Add automated sortation hubs</span></div>
+      <div class="node leaf is-pri" style="left:56cqi;top:14.40cqi;width:32cqi;height:3.6cqi"><b>2.2</b><span>Refresh the six busiest depots</span></div>
+      <div class="node leaf is-pri" style="left:56cqi;top:19.20cqi;width:32cqi;height:3.6cqi"><b>2.3</b><span>Rebalance routes across depots</span></div>
+      <div class="node branch" style="left:26cqi;top:24.70cqi;width:22cqi;height:7cqi">Lower unit cost</div>
+      <div class="node leaf" style="left:56cqi;top:24.00cqi;width:32cqi;height:3.6cqi"><b>3.1</b><span>Cut last-mile cost per drop</span></div>
+      <div class="node leaf" style="left:56cqi;top:28.80cqi;width:32cqi;height:3.6cqi"><b>3.2</b><span>Renegotiate fleet and fuel contracts</span></div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Strategy workshop with the executive team, October 2026.</span><span class="page">4</span></div>
+  </div>
+</section>

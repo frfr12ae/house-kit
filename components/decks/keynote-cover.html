@@ -1,0 +1,187 @@
+<!--
+@title Keynote cover
+@group Keynote
+@description Launch event cover on a cinematic dark stage: a glowing orb with orbiting rings, the event title and the date, with almost no other type.
+@tags keynote, cover, launch, event, title, orb, glow, apple event
+@preview slide
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-keynote-cover, .c-keynote-cover *, .c-keynote-cover *::before, .c-keynote-cover *::after { box-sizing: border-box; }
+.c-keynote-cover {
+  --k-bg: var(--ds-ink);
+  --k-fg: var(--ds-bg);
+  --k-dim: color-mix(in srgb, var(--ds-bg) 60%, var(--ds-ink));
+  --k-soft: color-mix(in srgb, var(--ds-bg) 82%, var(--ds-ink));
+  --k-line: color-mix(in srgb, var(--ds-bg) 16%, transparent);
+  --k-card: color-mix(in srgb, var(--ds-bg) 7%, var(--ds-ink));
+  --k-card-2: color-mix(in srgb, var(--ds-bg) 12%, var(--ds-ink));
+  --k-blue: var(--ds-info-line);
+  --k-amber: var(--ds-highlight-line);
+  --k-green: var(--ds-note-line);
+  --k-t1: color-mix(in srgb, var(--ds-info-line) 80%, var(--ds-bg));
+  --k-t2: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-bg));
+  --k-t3: color-mix(in srgb, var(--ds-note-line) 80%, var(--ds-bg));
+  --k-s1: color-mix(in srgb, var(--ds-info-line) 66%, var(--ds-bg));
+  --k-s2: color-mix(in srgb, var(--ds-highlight-line) 66%, var(--ds-bg));
+  --k-s3: color-mix(in srgb, var(--ds-note-line) 66%, var(--ds-bg));
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-family: var(--ds-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.c-keynote-cover .sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 50% 118%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 94% -8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 2% 30%, color-mix(in srgb, var(--k-green) 8%, transparent), transparent 70%);
+}
+.c-keynote-cover .pad { position: absolute; inset: 0; padding: 5.5cqi 7cqi; }
+.c-keynote-cover .eyebrow { margin: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--k-dim); }
+.c-keynote-cover .display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: 1.02;
+  color: var(--k-fg);
+}
+.c-keynote-cover .grad {
+  display: inline-block;
+  padding: 0 0.04em 0.1em 0;
+  margin: 0 -0.04em -0.1em 0;
+  background: linear-gradient(100deg, var(--k-t1) 0%, var(--k-t3) 52%, var(--k-t2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.c-keynote-cover.is-armed .rv { opacity: 0; transform: translateY(1.8cqi); }
+.c-keynote-cover.is-armed.is-in .rv {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+  .c-keynote-cover .sky {
+    background:
+      radial-gradient(46% 80% at 70% 50%, color-mix(in srgb, var(--k-blue) 30%, transparent), transparent 70%),
+      radial-gradient(40% 60% at 98% 4%, color-mix(in srgb, var(--k-amber) 18%, transparent), transparent 70%),
+      radial-gradient(60% 50% at 0% 108%, color-mix(in srgb, var(--k-green) 12%, transparent), transparent 70%);
+  }
+  .c-keynote-cover .scene { position: absolute; left: 70cqi; top: 27cqi; width: 0; height: 0; }
+  .c-keynote-cover .halo {
+    position: absolute;
+    left: -32cqi;
+    top: -32cqi;
+    width: 64cqi;
+    height: 64cqi;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--k-blue) 32%, transparent), transparent 64%);
+  }
+  .c-keynote-cover .orb {
+    position: absolute;
+    z-index: 2;
+    left: -15cqi;
+    top: -15cqi;
+    width: 30cqi;
+    height: 30cqi;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 31% 25%, color-mix(in srgb, var(--k-fg) 60%, var(--k-blue)) 0%, transparent 30%),
+      radial-gradient(circle at 80% 84%, var(--k-amber) 0%, transparent 46%),
+      radial-gradient(circle at 16% 80%, var(--k-green) 0%, transparent 42%),
+      radial-gradient(circle at 50% 50%, var(--k-blue) 0%, color-mix(in srgb, var(--k-blue) 42%, var(--k-bg)) 100%);
+    box-shadow:
+      inset -2.6cqi -3.2cqi 7cqi color-mix(in srgb, var(--k-bg) 60%, transparent),
+      inset 0.6cqi 0.8cqi 2.4cqi color-mix(in srgb, var(--k-fg) 30%, transparent),
+      0 0 7cqi color-mix(in srgb, var(--k-blue) 50%, transparent),
+      0 0 22cqi color-mix(in srgb, var(--k-blue) 26%, transparent);
+  }
+  .c-keynote-cover .ring {
+    position: absolute;
+    left: -33cqi;
+    top: -10.5cqi;
+    width: 66cqi;
+    height: 21cqi;
+    border-radius: 50%;
+    border: 0.14cqi solid color-mix(in srgb, var(--k-fg) 36%, transparent);
+    transform: rotate(-14deg);
+  }
+  .c-keynote-cover .ring.back { z-index: 1; clip-path: inset(-8cqi -8cqi 50% -8cqi); }
+  .c-keynote-cover .ring.front { z-index: 3; clip-path: inset(50% -8cqi -8cqi -8cqi); }
+  .c-keynote-cover .dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    animation: c-keynote-cover-x 9s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  }
+  .c-keynote-cover .dot i {
+    position: absolute;
+    left: -0.9cqi;
+    top: -0.9cqi;
+    width: 1.8cqi;
+    height: 1.8cqi;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--k-fg), var(--k-t2) 72%);
+    box-shadow: 0 0 2.6cqi color-mix(in srgb, var(--k-amber) 85%, transparent);
+    animation: c-keynote-cover-y 9s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+    animation-delay: -4.5s;
+  }
+  @keyframes c-keynote-cover-x { from { transform: translateX(-33cqi); } to { transform: translateX(33cqi); } }
+  @keyframes c-keynote-cover-y { from { transform: translateY(-10.5cqi); } to { transform: translateY(10.5cqi); } }
+  .c-keynote-cover .brand { position: absolute; left: 7cqi; top: 5.5cqi; display: flex; align-items: center; gap: 1cqi; font-size: 1.8cqi; font-weight: 700; letter-spacing: 0.01em; }
+  .c-keynote-cover .brand .mark { position: relative; width: 2.3cqi; height: 2.3cqi; border-radius: 50%; border: 0.24cqi solid var(--k-fg); }
+  .c-keynote-cover .brand .mark::after { content: ""; position: absolute; right: -0.55cqi; top: -0.2cqi; width: 0.7cqi; height: 0.7cqi; border-radius: 50%; background: var(--k-amber); }
+  .c-keynote-cover .main { position: absolute; left: 7cqi; bottom: 7cqi; display: grid; gap: 1.6cqi; }
+  .c-keynote-cover h1 { font-size: 13.5cqi; line-height: 0.95; }
+  .c-keynote-cover .when { margin: 0; display: grid; gap: 0.3cqi; font-size: 2cqi; line-height: 1.3; color: var(--k-soft); }
+  .c-keynote-cover .when b { font-weight: 600; color: var(--k-fg); }
+  @media (prefers-reduced-motion: reduce) {
+    .c-keynote-cover .dot { animation: none; transform: translateX(27cqi); }
+    .c-keynote-cover .dot i { animation: none; transform: translateY(-6cqi); }
+  }
+</style>
+
+<section class="c-keynote-cover" aria-label="Orbit 2 launch event">
+  <div class="sky"></div>
+  <div class="scene" aria-hidden="true">
+    <div class="halo"></div>
+    <div class="ring back"><div class="dot"><i></i></div></div>
+    <div class="orb"></div>
+    <div class="ring front"><div class="dot"><i></i></div></div>
+  </div>
+  <div class="brand"><span class="mark"></span>Orbit</div>
+  <div class="main">
+    <p class="eyebrow rv" style="--d:0">Launch event</p>
+    <h1 class="display rv" style="--d:1">Orbit <span class="grad">2</span></h1>
+    <p class="when rv" style="--d:2"><b>Wednesday, 4 November 2026</b><span>10:00 PT, live and on demand</span></p>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-keynote-cover').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

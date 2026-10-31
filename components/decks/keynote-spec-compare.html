@@ -1,0 +1,152 @@
+<!--
+@title Keynote spec compare
+@group Keynote
+@description Horizontal bars comparing the old and new version on three specs, the new one in a glowing gradient, with the multiplier called out at the end of each row.
+@tags keynote, compare, specs, bars, benchmark, performance, launch
+@preview slide
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-keynote-spec-compare, .c-keynote-spec-compare *, .c-keynote-spec-compare *::before, .c-keynote-spec-compare *::after { box-sizing: border-box; }
+.c-keynote-spec-compare {
+  --k-bg: var(--ds-ink);
+  --k-fg: var(--ds-bg);
+  --k-dim: color-mix(in srgb, var(--ds-bg) 60%, var(--ds-ink));
+  --k-soft: color-mix(in srgb, var(--ds-bg) 82%, var(--ds-ink));
+  --k-line: color-mix(in srgb, var(--ds-bg) 16%, transparent);
+  --k-card: color-mix(in srgb, var(--ds-bg) 7%, var(--ds-ink));
+  --k-card-2: color-mix(in srgb, var(--ds-bg) 12%, var(--ds-ink));
+  --k-blue: var(--ds-info-line);
+  --k-amber: var(--ds-highlight-line);
+  --k-green: var(--ds-note-line);
+  --k-t1: color-mix(in srgb, var(--ds-info-line) 80%, var(--ds-bg));
+  --k-t2: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-bg));
+  --k-t3: color-mix(in srgb, var(--ds-note-line) 80%, var(--ds-bg));
+  --k-s1: color-mix(in srgb, var(--ds-info-line) 66%, var(--ds-bg));
+  --k-s2: color-mix(in srgb, var(--ds-highlight-line) 66%, var(--ds-bg));
+  --k-s3: color-mix(in srgb, var(--ds-note-line) 66%, var(--ds-bg));
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-family: var(--ds-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.c-keynote-spec-compare .sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 50% 118%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 94% -8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 2% 30%, color-mix(in srgb, var(--k-green) 8%, transparent), transparent 70%);
+}
+.c-keynote-spec-compare .pad { position: absolute; inset: 0; padding: 5.5cqi 7cqi; }
+.c-keynote-spec-compare .eyebrow { margin: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--k-dim); }
+.c-keynote-spec-compare .display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: 1.02;
+  color: var(--k-fg);
+}
+.c-keynote-spec-compare .grad {
+  display: inline-block;
+  padding: 0 0.04em 0.1em 0;
+  margin: 0 -0.04em -0.1em 0;
+  background: linear-gradient(100deg, var(--k-t1) 0%, var(--k-t3) 52%, var(--k-t2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.c-keynote-spec-compare.is-armed .rv { opacity: 0; transform: translateY(1.8cqi); }
+.c-keynote-spec-compare.is-armed.is-in .rv {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+  .c-keynote-spec-compare .sky {
+    background:
+      radial-gradient(50% 60% at 70% 55%, color-mix(in srgb, var(--k-blue) 16%, transparent), transparent 70%),
+      radial-gradient(40% 40% at 4% 108%, color-mix(in srgb, var(--k-green) 12%, transparent), transparent 70%),
+      radial-gradient(40% 40% at 98% 0%, color-mix(in srgb, var(--k-amber) 12%, transparent), transparent 70%);
+  }
+  .c-keynote-spec-compare .title { position: absolute; left: 7cqi; top: 5.4cqi; font-size: 5cqi; }
+  .c-keynote-spec-compare .legend { position: absolute; right: 7cqi; top: 7.4cqi; display: flex; gap: 2.4cqi; font-size: 1.4cqi; font-weight: 600; color: var(--k-soft); }
+  .c-keynote-spec-compare .legend span { display: inline-flex; align-items: center; gap: 0.7cqi; }
+  .c-keynote-spec-compare .legend i { width: 2cqi; height: 0.8cqi; border-radius: 0.4cqi; background: color-mix(in srgb, var(--k-fg) 28%, transparent); }
+  .c-keynote-spec-compare .legend span + span i { background: linear-gradient(90deg, var(--k-blue), var(--k-green)); }
+  .c-keynote-spec-compare .rows { position: absolute; left: 7cqi; right: 7cqi; top: 17cqi; display: grid; }
+  .c-keynote-spec-compare .spec { display: grid; grid-template-columns: 18cqi minmax(0, 1fr) 12cqi; align-items: center; gap: 2cqi; height: 11.4cqi; border-top: var(--ds-hairline) solid var(--k-line); }
+  .c-keynote-spec-compare .spec:last-child { border-bottom: var(--ds-hairline) solid var(--k-line); }
+  .c-keynote-spec-compare .name { display: grid; gap: 0.4cqi; }
+  .c-keynote-spec-compare .name b { font-size: 2.2cqi; font-weight: 700; line-height: 1.15; color: var(--k-fg); }
+  .c-keynote-spec-compare .name span { font-size: 1.3cqi; color: var(--k-dim); }
+  .c-keynote-spec-compare .bars { display: grid; gap: 1.2cqi; }
+  .c-keynote-spec-compare .bar { display: flex; align-items: center; gap: 1.2cqi; font-size: 1.4cqi; font-weight: 600; color: var(--k-dim); font-variant-numeric: tabular-nums; }
+  .c-keynote-spec-compare .bar i { flex: none; width: var(--w); height: 2.3cqi; border-radius: 0.7cqi; background: color-mix(in srgb, var(--k-fg) 24%, transparent); }
+  .c-keynote-spec-compare .bar.new { color: var(--k-fg); font-weight: 700; }
+  .c-keynote-spec-compare .bar.new i { background: linear-gradient(90deg, var(--k-blue), var(--k-green)); box-shadow: 0 0 2.4cqi color-mix(in srgb, var(--k-blue) 45%, transparent); }
+  .c-keynote-spec-compare .mult { justify-self: end; text-align: right; display: grid; gap: 0.2cqi; }
+  .c-keynote-spec-compare .mult b { font-family: var(--ds-font-display); font-size: 5.6cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1; }
+  .c-keynote-spec-compare .mult span { font-size: 1.3cqi; color: var(--k-dim); }
+  .c-keynote-spec-compare .mult .grad { filter: drop-shadow(0 0 1.6cqi color-mix(in srgb, var(--k-blue) 40%, transparent)); }
+  .c-keynote-spec-compare.is-armed .bar i { width: 0; }
+  .c-keynote-spec-compare.is-armed.is-in .bar i { width: var(--w); transition: width var(--ds-dur-story) var(--ds-ease); transition-delay: calc(var(--d, 0) * 140ms + 200ms); }
+  .c-keynote-spec-compare.is-armed.is-in .bar.new i { transition-delay: calc(var(--d, 0) * 140ms + 420ms); }
+</style>
+
+<section class="c-keynote-spec-compare" aria-label="Orbit 2 compared with Orbit 1 on three specs">
+  <div class="sky"></div>
+  <h2 class="display title rv" style="--d:0">Faster in every <span class="grad">way.</span></h2>
+  <p class="legend rv" style="--d:1"><span><i></i>Orbit 1</span><span><i></i>Orbit 2</span></p>
+  <div class="rows">
+    <div class="spec" style="--d:0">
+      <div class="name rv" style="--d:1"><b>Sync throughput</b><span>megabytes per second</span></div>
+      <div class="bars">
+        <div class="bar"><i style="--w:29.3%"></i>80</div>
+        <div class="bar new"><i style="--w:88%"></i>240</div>
+      </div>
+      <div class="mult rv" style="--d:2"><b class="grad">3x</b><span>faster</span></div>
+    </div>
+    <div class="spec" style="--d:1">
+      <div class="name rv" style="--d:2"><b>Live editors</b><span>per document, at once</span></div>
+      <div class="bars">
+        <div class="bar"><i style="--w:22%"></i>25</div>
+        <div class="bar new"><i style="--w:88%"></i>100</div>
+      </div>
+      <div class="mult rv" style="--d:3"><b class="grad">4x</b><span>more</span></div>
+    </div>
+    <div class="spec" style="--d:2">
+      <div class="name rv" style="--d:3"><b>Search</b><span>queries per second</span></div>
+      <div class="bars">
+        <div class="bar"><i style="--w:25.1%"></i>120</div>
+        <div class="bar new"><i style="--w:88%"></i>420</div>
+      </div>
+      <div class="mult rv" style="--d:4"><b class="grad">3.5x</b><span>faster</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-keynote-spec-compare').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

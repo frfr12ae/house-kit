@@ -1,0 +1,109 @@
+<!--
+@title Two by two options matrix
+@group Exhibits
+@description A strategic options 2x2 with labelled quadrants, eight option bubbles sized by value, a size key and one highlighted recommendation.
+@tags slide, 2x2, matrix, options, prioritisation, bubble, strategy, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-two-by-two {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-two-by-two .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-two-by-two .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-two-by-two .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-two-by-two .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-two-by-two .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-two-by-two .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-two-by-two h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-two-by-two .exhibit { min-height: 0; }
+  .c-two-by-two .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-two-by-two svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-two-by-two svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-two-by-two .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-two-by-two .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-two-by-two .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-two-by-two .sm { font-size: 12px; }
+  .c-two-by-two .md { font-size: 13px; }
+  .c-two-by-two .lg { font-size: 14px; }
+  .c-two-by-two .b { font-weight: 700; }
+  .c-two-by-two .sb { font-weight: 600; }
+  .c-two-by-two .ink { fill: var(--ds-ink); }
+  .c-two-by-two .mu { fill: var(--ds-muted); }
+  .c-two-by-two .mid { text-anchor: middle; }
+  .c-two-by-two .end { text-anchor: end; }
+  .c-two-by-two .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-two-by-two .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-two-by-two .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-two-by-two .reco {
+    position: absolute;
+    padding: 1.5cqi 1.7cqi;
+    background: var(--ds-highlight-fill);
+    box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line);
+    border-radius: calc(0.6cqi * var(--ds-radius-scale, 1));
+  }
+  .c-two-by-two .tag { margin: 0; font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-two-by-two .lead { margin: 0.6cqi 0 0; font-size: 1.6cqi; font-weight: 700; line-height: 1.25; color: var(--ds-ink); }
+  .c-two-by-two .txt { margin: 0.8cqi 0 0; font-size: 1.25cqi; line-height: 1.45; color: var(--ds-text); }
+</style>
+
+<section class="c-two-by-two" aria-label="Slide 12: two by two of eight strategic options, route optimiser recommended">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Network strategy · Options</p>
+        <ul class="tracker" aria-label="Where this slide sits in the deck"><li>Diagnosis</li><li class="is-on" aria-current="step">Options</li><li>Roadmap</li></ul>
+      </div>
+      <h2>Route optimisation is the only option that is both easy to deliver and worth more than €5m a year</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="Two by two of eight strategic options. Customer impact on the vertical axis, ease of delivery on the horizontal axis, bubble area is annual EBIT value. Route optimiser is in the do now quadrant and is highlighted."><rect x="334" y="12" width="270" height="132" style="fill:color-mix(in srgb, var(--ds-highlight-fill) 85%, transparent)"/><rect x="64" y="12" width="270" height="132" style="fill:color-mix(in srgb, var(--ds-neutral-fill) 55%, transparent)"/><rect x="334" y="144" width="270" height="132" style="fill:color-mix(in srgb, var(--ds-neutral-fill) 55%, transparent)"/><rect x="64" y="144" width="270" height="132" style="fill:color-mix(in srgb, var(--ds-neutral-fill) 25%, transparent)"/><line class="axis" x1="64" x2="604" y1="276" y2="276"/><line class="axis" x1="64" x2="64" y1="12" y2="276"/><line x1="334" x2="334" y1="12" y2="276" style="stroke:var(--ds-line);stroke-width:1.5"/><line x1="64" x2="604" y1="144" y2="144" style="stroke:var(--ds-line);stroke-width:1.5"/><text class="sm b mu " x="72" y="28" style="letter-spacing:0.06em">PLAN AS A PROGRAMME</text><text class="sm b mu end" x="596" y="28" style="letter-spacing:0.06em">DO NOW</text><text class="sm b mu " x="72" y="268" style="letter-spacing:0.06em">RECONSIDER</text><text class="sm b mu end" x="596" y="268" style="letter-spacing:0.06em">FILL-INS</text><text class="sm b ink mid" x="334" y="304">Ease of delivery</text><text class="sm mu" x="64" y="304">Hard</text><text class="sm mu end" x="604" y="304">Easy</text><text class="sm b ink mid" transform="translate(16 144) rotate(-90)">Customer impact</text><text class="sm mu" transform="translate(16 276) rotate(-90)">Low</text><text class="sm mu end" transform="translate(16 12) rotate(-90)">High</text><circle cx="485.2" cy="59.5" r="29.4" style="fill:color-mix(in srgb, var(--ds-highlight-line) 60%, transparent);stroke:var(--ds-highlight-line);stroke-width:2.5"/><text class="md b ink end halo" x="448.8" y="58.5">Route optimiser</text><text class="sm mu end halo" x="448.8" y="72.5">€6.0m a year</text><circle cx="442" cy="117.6" r="25.5" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, transparent);stroke:var(--ds-info-line);stroke-width:1.5"/><text class="md b ink  halo" x="474.5" y="116.6">Dynamic pricing</text><text class="sm mu  halo" x="474.5" y="130.6">€4.5m a year</text><circle cx="215.2" cy="70.1" r="33.9" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, transparent);stroke:var(--ds-info-line);stroke-width:1.5"/><text class="md b ink end halo" x="174.3" y="69.1">Cross-dock hub</text><text class="sm mu end halo" x="174.3" y="83.1">€8.0m a year</text><circle cx="269.2" cy="109.7" r="26.8" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, transparent);stroke:var(--ds-info-line);stroke-width:1.5"/><text class="md b ink  halo" x="303" y="108.7">Electric vans</text><text class="sm mu  halo" x="303" y="122.7">€5.0m a year</text><circle cx="215.2" cy="186.2" r="30.6" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, transparent);stroke:var(--ds-info-line);stroke-width:1.5"/><text class="md b ink  halo" x="252.8" y="185.2">Depot merger</text><text class="sm mu  halo" x="252.8" y="199.2">€6.5m a year</text><circle cx="258.4" cy="228.5" r="19" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, transparent);stroke:var(--ds-info-line);stroke-width:1.5"/><text class="md b ink end halo" x="232.4" y="227.5">Pallet alliance</text><text class="sm mu end halo" x="232.4" y="241.5">€2.5m a year</text><circle cx="366.4" cy="212.6" r="20.8" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, transparent);stroke:var(--ds-info-line);stroke-width:1.5"/><text class="md b ink  halo" x="394.2" y="211.6">Returns service</text><text class="sm mu  halo" x="394.2" y="225.6">€3.0m a year</text><circle cx="501.4" cy="175.7" r="17" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, transparent);stroke:var(--ds-info-line);stroke-width:1.5"/><text class="md b ink  halo" x="525.4" y="174.7">Driver app</text><text class="sm mu  halo" x="525.4" y="188.7">€2.0m a year</text><text class="sm b ink" x="640" y="20">Bubble area = annual EBIT value</text><circle cx="664" cy="95" r="17" style="fill:none;stroke:var(--ds-muted);stroke-width:1.2"/><text class="sm mu mid" x="664" y="128">€2m</text><circle cx="724" cy="85.2" r="26.8" style="fill:none;stroke:var(--ds-muted);stroke-width:1.2"/><text class="sm mu mid" x="724" y="128">€5m</text><circle cx="808" cy="78.1" r="33.9" style="fill:none;stroke:var(--ds-muted);stroke-width:1.2"/><text class="sm mu mid" x="808" y="128">€8m</text></svg>
+        <div class="reco" style="left:72.7%;right:0;top:47%;bottom:2%">
+          <p class="tag">Recommendation</p>
+          <p class="lead">Start with the route optimiser</p>
+          <p class="txt">€6.0m EBIT a year, live in about four months with tools the depots already use.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: operations workshop, September 2026; finance estimates of annual EBIT at run rate. Illustrative figures.</span>
+      <span class="page">12</span>
+    </div>
+  </div>
+</section>

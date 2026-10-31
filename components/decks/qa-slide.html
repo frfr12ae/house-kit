@@ -1,0 +1,142 @@
+<!--
+@title Questions
+@group Workshop
+@description Questions slide built around a giant question mark, with contact details and three seed questions to break the silence.
+@tags slide, workshop, questions, q&a, contact, closing
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-qa-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-qa-slide .motif {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 38cqi;
+    background: var(--ds-highlight-fill);
+    overflow: hidden;
+  }
+  .c-qa-slide .motif .ring {
+    position: absolute;
+    left: -9cqi;
+    top: 6cqi;
+    width: 38cqi;
+    height: 38cqi;
+    border-radius: 50%;
+    border: 0.45cqi solid var(--ds-highlight-line);
+  }
+  .c-qa-slide .motif .ring.r2 { left: 6cqi; top: 22cqi; width: 26cqi; height: 26cqi; }
+  .c-qa-slide .mark {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    font-family: var(--ds-font-display);
+    font-size: 54cqi;
+    font-weight: var(--ds-weight-display);
+    line-height: 0.9;
+    color: var(--ds-ink);
+    user-select: none;
+  }
+  .c-qa-slide .dot {
+    position: absolute;
+    right: 5cqi;
+    top: 6cqi;
+    width: 3cqi;
+    height: 3cqi;
+    border-radius: 50%;
+    background: var(--ds-ink);
+  }
+  .c-qa-slide .inner {
+    position: absolute;
+    left: 38cqi;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 6cqi 7cqi 5.5cqi 6cqi;
+  }
+  .c-qa-slide .eyebrow { font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-qa-slide h2 {
+    margin: 1.2cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 5.6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.02;
+    color: var(--ds-ink);
+  }
+  .c-qa-slide .seeds { align-self: center; display: grid; gap: 1.2cqi; }
+  .c-qa-slide .seeds .lab { font-size: 1.3cqi; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-qa-slide .seeds ul { display: grid; gap: 1cqi; margin: 0; padding: 0; list-style: none; }
+  .c-qa-slide .seeds li {
+    display: grid;
+    grid-template-columns: 2.6cqi 1fr;
+    column-gap: 1.4cqi;
+    align-items: baseline;
+    padding: 1.4cqi 1.8cqi;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: calc(1cqi * var(--ds-radius-scale, 1));
+    font-size: 1.8cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-ink);
+  }
+  .c-qa-slide .seeds li::before {
+    content: "?";
+    font-size: 1.8cqi;
+    font-weight: 800;
+    color: var(--ds-highlight-line);
+  }
+  .c-qa-slide .contact {
+    display: flex;
+    gap: 3cqi;
+    padding-top: 1.8cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 1.4cqi;
+    color: var(--ds-muted);
+  }
+  .c-qa-slide .contact b { display: block; font-size: 1.1cqi; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+  .c-qa-slide .contact span { white-space: nowrap; color: var(--ds-ink); font-size: 1.55cqi; font-weight: 600; }
+</style>
+
+<section class="c-qa-slide">
+  <div class="motif" aria-hidden="true">
+    <i class="ring"></i><i class="ring r2"></i>
+    <span class="mark">?</span>
+    <i class="dot"></i>
+  </div>
+  <div class="inner">
+    <div>
+      <div class="eyebrow">Open floor, 15 minutes</div>
+      <h2>Questions</h2>
+    </div>
+    <div class="seeds">
+      <span class="lab">To get us started</span>
+      <ul>
+        <li>How do we pick the first project to stop?</li>
+        <li>What if leadership will not give up a favourite?</li>
+        <li>How often should we run this review?</li>
+      </ul>
+    </div>
+    <div class="contact">
+      <div><b>Email</b><span>hello@example.com</span></div>
+      <div><b>Slides</b><span>example.com/planning</span></div>
+      <div><b>Chat</b><span>#planning</span></div>
+    </div>
+  </div>
+</section>

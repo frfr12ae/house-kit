@@ -1,0 +1,93 @@
+<!--
+@title Market map (Marimekko)
+@group Exhibits
+@description A Marimekko of market segments: column width is segment size, stacked bars are player share, every cell carries a percentage label and players are named directly.
+@tags slide, marimekko, market map, share, segments, competition, chart, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-market-map {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-market-map .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-market-map .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-market-map .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-market-map .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-market-map .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-market-map .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-market-map h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-market-map .exhibit { min-height: 0; }
+  .c-market-map .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-market-map svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-market-map svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-market-map .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-market-map .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-market-map .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-market-map .sm { font-size: 12px; }
+  .c-market-map .md { font-size: 13px; }
+  .c-market-map .lg { font-size: 14px; }
+  .c-market-map .b { font-weight: 700; }
+  .c-market-map .sb { font-weight: 600; }
+  .c-market-map .ink { fill: var(--ds-ink); }
+  .c-market-map .mu { fill: var(--ds-muted); }
+  .c-market-map .mid { text-anchor: middle; }
+  .c-market-map .end { text-anchor: end; }
+  .c-market-map .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-market-map .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-market-map .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+</style>
+
+<section class="c-market-map" aria-label="Slide 6: market map of segment size and player share">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Market review · Competitive position</p>
+      </div>
+      <h2>We hold 26% of pallet freight but under 10% in parcel and <span style="white-space:nowrap">e-commerce</span>, which together make up 55% of the market</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="Marimekko chart. Column width is segment size in 2026, total 14.2 billion euros. Stacked bars show revenue share of us and three competitors. Our share is 8% in regional parcel, 6% in e-commerce last mile, 26% in pallet and groupage, 12% in temperature controlled and 15% in contract logistics."><text class="tick end" x="36" y="266">0%</text><text class="tick end" x="36" y="216">25%</text><text class="tick end" x="36" y="166">50%</text><text class="tick end" x="36" y="116">75%</text><text class="tick end" x="36" y="66">100%</text><text class="md b ink mid" x="150.2" y="32">Regional parcel</text><text class="sm mu mid" x="150.2" y="48">€4.2bn</text><rect x="44" y="246" width="212.4" height="16" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="150.2" y="258">8%</text><rect x="44" y="184" width="212.4" height="62" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="150.2" y="219">31%</text><rect x="44" y="136" width="212.4" height="48" style="fill:color-mix(in srgb, var(--ds-info-line) 32%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="150.2" y="164">24%</text><rect x="44" y="106" width="212.4" height="30" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="150.2" y="125">15%</text><rect x="44" y="62" width="212.4" height="44" style="fill:var(--ds-neutral-fill);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="150.2" y="88">22%</text><text class="md b ink mid" x="350.4" y="32">E-commerce last mile</text><text class="sm mu mid" x="350.4" y="48">€3.6bn</text><rect x="259.4" y="250" width="182" height="12" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="350.4" y="260">6%</text><rect x="259.4" y="194" width="182" height="56" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="350.4" y="226">28%</text><rect x="259.4" y="126" width="182" height="68" style="fill:color-mix(in srgb, var(--ds-info-line) 32%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="350.4" y="164">34%</text><rect x="259.4" y="102" width="182" height="24" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="350.4" y="118">12%</text><rect x="259.4" y="62" width="182" height="40" style="fill:var(--ds-neutral-fill);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="350.4" y="86">20%</text><text class="md b ink mid" x="522.8" y="32">Pallet and groupage</text><text class="sm mu mid" x="522.8" y="48">€3.1bn</text><rect x="444.4" y="210" width="156.7" height="52" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="522.8" y="240">26%</text><rect x="444.4" y="174" width="156.7" height="36" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="522.8" y="196">18%</text><rect x="444.4" y="146" width="156.7" height="28" style="fill:color-mix(in srgb, var(--ds-info-line) 32%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="522.8" y="164">14%</text><rect x="444.4" y="128" width="156.7" height="18" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="522.8" y="141">9%</text><rect x="444.4" y="62" width="156.7" height="66" style="fill:var(--ds-neutral-fill);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="522.8" y="99">33%</text><text class="md b ink mid" x="639.5" y="17">Temperature</text><text class="md b ink mid" x="639.5" y="32">controlled</text><text class="sm mu mid" x="639.5" y="48">€1.4bn</text><rect x="604.1" y="238" width="70.8" height="24" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="639.5" y="254">12%</text><rect x="604.1" y="220" width="70.8" height="18" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="639.5" y="233">9%</text><rect x="604.1" y="208" width="70.8" height="12" style="fill:color-mix(in srgb, var(--ds-info-line) 32%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="639.5" y="218">6%</text><rect x="604.1" y="166" width="70.8" height="42" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="639.5" y="191">21%</text><rect x="604.1" y="62" width="70.8" height="104" style="fill:var(--ds-neutral-fill);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="639.5" y="118">52%</text><text class="md b ink mid" x="726" y="17">Contract</text><text class="md b ink mid" x="726" y="32">logistics</text><text class="sm mu mid" x="726" y="48">€1.9bn</text><rect x="677.9" y="232" width="96.1" height="30" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="md b ink mid" x="726" y="251">15%</text><rect x="784" y="242" width="10" height="10" rx="2" style="fill:color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface));stroke:var(--ds-line)"/><text class="md b ink" x="800" y="251.5">Us</text><rect x="677.9" y="208" width="96.1" height="24" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="726" y="224">12%</text><rect x="784" y="215" width="10" height="10" rx="2" style="fill:color-mix(in srgb, var(--ds-info-line) 46%, var(--ds-surface));stroke:var(--ds-line)"/><text class="md sb" x="800" y="224.5">Competitor A</text><rect x="677.9" y="168" width="96.1" height="40" style="fill:color-mix(in srgb, var(--ds-info-line) 32%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="726" y="192">20%</text><rect x="784" y="183" width="10" height="10" rx="2" style="fill:color-mix(in srgb, var(--ds-info-line) 32%, var(--ds-surface));stroke:var(--ds-line)"/><text class="md sb" x="800" y="192.5">Competitor B</text><rect x="677.9" y="152" width="96.1" height="16" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, var(--ds-surface));stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="726" y="164">8%</text><rect x="784" y="155" width="10" height="10" rx="2" style="fill:color-mix(in srgb, var(--ds-info-line) 20%, var(--ds-surface));stroke:var(--ds-line)"/><text class="md sb" x="800" y="164.5">Competitor C</text><rect x="677.9" y="62" width="96.1" height="90" style="fill:var(--ds-neutral-fill);stroke:var(--ds-surface);stroke-width:1.5"/><text class="sm sb ink mid" x="726" y="111">45%</text><rect x="784" y="102" width="10" height="10" rx="2" style="fill:var(--ds-neutral-fill);stroke:var(--ds-line)"/><text class="md sb" x="800" y="111.5">Others</text><line class="axis" x1="44" x2="774" y1="262" y2="262"/><text class="sm mu" x="44" y="290">Column width = segment size 2026 (total €14.2bn). Column height = share of segment revenue.</text></svg>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: industry association data 2026; company estimates for competitor shares. Illustrative figures.</span>
+      <span class="page">6</span>
+    </div>
+  </div>
+</section>

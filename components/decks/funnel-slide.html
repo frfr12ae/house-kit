@@ -1,0 +1,112 @@
+<!--
+@title Funnel slide
+@group Exhibits
+@description A sales funnel with stage volumes, conversion rates between stages and the biggest leak highlighted, plus a short so-what box.
+@tags slide, funnel, conversion, sales, pipeline, leak, chart, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-funnel-slide {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-funnel-slide .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-funnel-slide .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-funnel-slide .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-funnel-slide .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-funnel-slide .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-funnel-slide .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-funnel-slide h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-funnel-slide .exhibit { min-height: 0; }
+  .c-funnel-slide .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-funnel-slide svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-funnel-slide svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-funnel-slide .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-funnel-slide .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-funnel-slide .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-funnel-slide .sm { font-size: 12px; }
+  .c-funnel-slide .md { font-size: 13px; }
+  .c-funnel-slide .lg { font-size: 14px; }
+  .c-funnel-slide .b { font-weight: 700; }
+  .c-funnel-slide .sb { font-weight: 600; }
+  .c-funnel-slide .ink { fill: var(--ds-ink); }
+  .c-funnel-slide .mu { fill: var(--ds-muted); }
+  .c-funnel-slide .mid { text-anchor: middle; }
+  .c-funnel-slide .end { text-anchor: end; }
+  .c-funnel-slide .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-funnel-slide .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-funnel-slide .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-funnel-slide .callout {
+    position: absolute;
+    padding: 1.6cqi 1.7cqi;
+    background: var(--ds-highlight-fill);
+    box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line);
+    border-radius: calc(0.6cqi * var(--ds-radius-scale, 1));
+  }
+  .c-funnel-slide .tag { margin: 0; font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-funnel-slide .lead { margin: 0.6cqi 0 0; font-size: 1.5cqi; font-weight: 700; line-height: 1.3; color: var(--ds-ink); }
+  .c-funnel-slide .txt { margin: 1cqi 0 0; font-size: 1.2cqi; line-height: 1.45; color: var(--ds-text); }
+  .c-funnel-slide .fig { display: grid; margin: 1.4cqi 0 0; padding-top: 1.2cqi; border-top: var(--ds-hairline) solid var(--ds-highlight-line); }
+  .c-funnel-slide .fig b { font-size: 2.6cqi; font-weight: 800; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-funnel-slide .fig span { font-size: 1.1cqi; color: var(--ds-muted); }
+</style>
+
+<section class="c-funnel-slide" aria-label="Slide 11: sales funnel with the quote to negotiation step highlighted as the biggest leak">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Commercial review · Sales pipeline</p>
+      </div>
+      <h2>Seven in ten quotes never reach negotiation: that single step is the biggest leak in the sales funnel</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="Sales funnel per year: 5000 leads, 3000 qualified, 1800 quoted, 540 in negotiation, 270 won. Conversion between stages is 60, 60, 30 and 50 percent. Quoted to negotiation at 30 percent is the biggest leak."><polygon points="180,42 620,42 532,68 268,68" style="fill:color-mix(in srgb, var(--ds-info-fill) 100%, var(--ds-surface));stroke:none;stroke-width:1"/><polygon points="268,104 532,104 479.2,130 320.8,130" style="fill:color-mix(in srgb, var(--ds-info-fill) 100%, var(--ds-surface));stroke:none;stroke-width:1"/><polygon points="320.8,166 479.2,166 423.8,192 376.2,192" style="fill:var(--ds-highlight-fill);stroke:var(--ds-highlight-line);stroke-width:1"/><polygon points="376.2,228 423.8,228 411.9,254 388.1,254" style="fill:color-mix(in srgb, var(--ds-info-fill) 100%, var(--ds-surface));stroke:none;stroke-width:1"/><rect x="180" y="6" width="440" height="36" rx="3" style="fill:var(--ds-info-line)"/><text class="lg b ink end" x="150" y="29">Leads</text><text class="lg b ink" x="630" y="29">5,000</text><rect x="268" y="68" width="264" height="36" rx="3" style="fill:var(--ds-info-line)"/><text class="lg b ink end" x="150" y="91">Qualified</text><text class="lg b ink" x="542" y="91">3,000</text><rect x="320.8" y="130" width="158.4" height="36" rx="3" style="fill:var(--ds-info-line)"/><text class="lg b ink end" x="150" y="153">Quoted</text><text class="lg b ink" x="489.2" y="153">1,800</text><rect x="376.2" y="192" width="47.5" height="36" rx="3" style="fill:var(--ds-info-line)"/><text class="lg b ink end" x="150" y="215">Negotiation</text><text class="lg b ink" x="433.8" y="215">540</text><rect x="388.1" y="254" width="23.8" height="36" rx="3" style="fill:var(--ds-info-line)"/><text class="lg b ink end" x="150" y="277">Won</text><text class="lg b ink" x="421.9" y="277">270</text><rect x="364" y="44" width="72" height="22" rx="11" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:1.2"/><polygon points="378,52 386,52 382,59" style="fill:var(--ds-neutral-line)"/><text class="md b ink" x="392" y="59.5">60%</text><rect x="364" y="106" width="72" height="22" rx="11" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:1.2"/><polygon points="378,114 386,114 382,121" style="fill:var(--ds-neutral-line)"/><text class="md b ink" x="392" y="121.5">60%</text><rect x="364" y="168" width="72" height="22" rx="11" style="fill:var(--ds-highlight-fill);stroke:var(--ds-highlight-line);stroke-width:2"/><polygon points="378,176 386,176 382,183" style="fill:var(--ds-highlight-line)"/><text class="md b ink" x="392" y="183.5">30%</text><text class="md b ink" x="452" y="183.5">1,260 lost, the lowest conversion</text><rect x="364" y="230" width="72" height="22" rx="11" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:1.2"/><polygon points="378,238 386,238 382,245" style="fill:var(--ds-neutral-line)"/><text class="md b ink" x="392" y="245.5">50%</text><text class="sm mu" x="0" y="296">Annual contract</text><text class="sm mu" x="0" y="310">opportunities, 2026</text></svg>
+        <div class="callout" style="left:80%;right:0;top:0;bottom:0">
+          <p class="tag">So what</p>
+          <p class="lead">Seven in ten quotes never reach negotiation</p>
+          <p class="txt">Lifting quote to negotiation from 30% to 40% adds 90 won contracts a year, a third more than today.</p>
+          <p class="fig"><b>5.4%</b><span>of leads become contracts today</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: CRM export, January to December 2026 (annualised from October). Illustrative figures.</span>
+      <span class="page">11</span>
+    </div>
+  </div>
+</section>

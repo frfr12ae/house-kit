@@ -1,0 +1,153 @@
+<!--
+@title Keynote shortcuts
+@group Keynote
+@description Five keyboard shortcut rows with raised keycaps and a plain description each, beside a short headline. Use to show how fast a product is to drive.
+@tags keynote, shortcuts, keyboard, keycap, keys, productivity
+@preview slide
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-keynote-shortcuts, .c-keynote-shortcuts *, .c-keynote-shortcuts *::before, .c-keynote-shortcuts *::after { box-sizing: border-box; }
+.c-keynote-shortcuts {
+  --k-bg: var(--ds-ink);
+  --k-fg: var(--ds-bg);
+  --k-dim: color-mix(in srgb, var(--ds-bg) 60%, var(--ds-ink));
+  --k-soft: color-mix(in srgb, var(--ds-bg) 82%, var(--ds-ink));
+  --k-line: color-mix(in srgb, var(--ds-bg) 16%, transparent);
+  --k-card: color-mix(in srgb, var(--ds-bg) 7%, var(--ds-ink));
+  --k-card-2: color-mix(in srgb, var(--ds-bg) 12%, var(--ds-ink));
+  --k-blue: var(--ds-info-line);
+  --k-amber: var(--ds-highlight-line);
+  --k-green: var(--ds-note-line);
+  --k-t1: color-mix(in srgb, var(--ds-info-line) 80%, var(--ds-bg));
+  --k-t2: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-bg));
+  --k-t3: color-mix(in srgb, var(--ds-note-line) 80%, var(--ds-bg));
+  --k-s1: color-mix(in srgb, var(--ds-info-line) 66%, var(--ds-bg));
+  --k-s2: color-mix(in srgb, var(--ds-highlight-line) 66%, var(--ds-bg));
+  --k-s3: color-mix(in srgb, var(--ds-note-line) 66%, var(--ds-bg));
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-family: var(--ds-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.c-keynote-shortcuts .sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 50% 118%, color-mix(in srgb, var(--k-blue) 24%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 94% -8%, color-mix(in srgb, var(--k-amber) 14%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 2% 30%, color-mix(in srgb, var(--k-green) 8%, transparent), transparent 70%);
+}
+.c-keynote-shortcuts .pad { position: absolute; inset: 0; padding: 5.5cqi 7cqi; }
+.c-keynote-shortcuts .eyebrow { margin: 0; font-size: 1.3cqi; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--k-dim); }
+.c-keynote-shortcuts .display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: 1.02;
+  color: var(--k-fg);
+}
+.c-keynote-shortcuts .grad {
+  display: inline-block;
+  padding: 0 0.04em 0.1em 0;
+  margin: 0 -0.04em -0.1em 0;
+  background: linear-gradient(100deg, var(--k-t1) 0%, var(--k-t3) 52%, var(--k-t2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.c-keynote-shortcuts.is-armed .rv { opacity: 0; transform: translateY(1.8cqi); }
+.c-keynote-shortcuts.is-armed.is-in .rv {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+  .c-keynote-shortcuts .sky {
+    background:
+      radial-gradient(44% 70% at 74% 50%, color-mix(in srgb, var(--k-blue) 18%, transparent), transparent 70%),
+      radial-gradient(34% 40% at 0% 100%, color-mix(in srgb, var(--k-green) 10%, transparent), transparent 70%),
+      radial-gradient(34% 40% at 100% 0%, color-mix(in srgb, var(--k-amber) 12%, transparent), transparent 70%);
+  }
+  .c-keynote-shortcuts .intro { position: absolute; left: 7cqi; top: 0; bottom: 0; width: 34cqi; display: grid; align-content: center; gap: 2cqi; }
+  .c-keynote-shortcuts h2 { font-size: 5.4cqi; line-height: 1.04; }
+  .c-keynote-shortcuts .sub { margin: 0; font-size: 1.8cqi; line-height: 1.45; color: var(--k-dim); }
+  .c-keynote-shortcuts .panel {
+    position: absolute;
+    left: 46cqi;
+    right: 7cqi;
+    top: 7cqi;
+    bottom: 7cqi;
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    padding: 0.6cqi 2.4cqi;
+    border: var(--ds-hairline) solid var(--k-line);
+    border-radius: calc(2cqi * var(--ds-radius-scale, 1));
+    background: linear-gradient(160deg, var(--k-card-2), var(--k-card));
+    box-shadow: 0 0 8cqi color-mix(in srgb, var(--k-blue) 16%, transparent);
+  }
+  .c-keynote-shortcuts .row { display: grid; grid-template-columns: 17cqi minmax(0, 1fr); align-items: center; gap: 1.6cqi; border-top: var(--ds-hairline) solid var(--k-line); }
+  .c-keynote-shortcuts .row:first-child { border-top: 0; }
+  .c-keynote-shortcuts .keys { display: flex; gap: 0.7cqi; }
+  .c-keynote-shortcuts .key {
+    display: inline-grid;
+    place-items: center;
+    min-width: 4.4cqi;
+    height: 4.4cqi;
+    padding: 0 1cqi;
+    border: var(--ds-hairline) solid color-mix(in srgb, var(--k-fg) 22%, transparent);
+    border-bottom: 0.45cqi solid color-mix(in srgb, var(--k-fg) 22%, var(--k-card));
+    border-radius: calc(1cqi * var(--ds-radius-scale, 1));
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--k-fg) 16%, var(--k-card)), var(--k-card-2));
+    box-shadow: inset 0 0.1cqi 0 color-mix(in srgb, var(--k-fg) 24%, transparent), 0 0.6cqi 1.4cqi color-mix(in srgb, var(--k-bg) 70%, transparent);
+    font-family: var(--ds-font-sans);
+    font-size: 2cqi;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--k-fg);
+  }
+  .c-keynote-shortcuts .row.on .key { box-shadow: inset 0 0.1cqi 0 color-mix(in srgb, var(--k-fg) 24%, transparent), 0 0 2.4cqi color-mix(in srgb, var(--k-blue) 55%, transparent); border-color: color-mix(in srgb, var(--k-blue) 70%, transparent); }
+  .c-keynote-shortcuts .desc { font-size: 2.2cqi; font-weight: 600; line-height: 1.2; color: var(--k-fg); }
+  .c-keynote-shortcuts .desc span { display: block; margin-top: 0.3cqi; font-size: 1.25cqi; font-weight: 500; color: var(--k-dim); }
+</style>
+
+<section class="c-keynote-shortcuts" aria-label="Five Orbit 2 keyboard shortcuts">
+  <div class="sky"></div>
+  <div class="intro">
+    <p class="eyebrow rv" style="--d:0">Keyboard</p>
+    <h2 class="display rv" style="--d:1">Everything<br>is a <span class="grad">keystroke.</span></h2>
+    <p class="sub rv" style="--d:2">Forty new shortcuts, all of them remappable.</p>
+  </div>
+  <div class="panel rv" style="--d:1">
+    <div class="row on"><span class="keys"><kbd class="key">&#8984;</kbd><kbd class="key">K</kbd></span><span class="desc">Jump anywhere<span>Search people, spaces and commands</span></span></div>
+    <div class="row"><span class="keys"><kbd class="key">&#8984;</kbd><kbd class="key">&#8679;</kbd><kbd class="key">N</kbd></span><span class="desc">New space<span>Start from a template or blank</span></span></div>
+    <div class="row"><span class="keys"><kbd class="key">&#8997;</kbd><kbd class="key">&#8629;</kbd></span><span class="desc">Reply in thread<span>Keep the main channel quiet</span></span></div>
+    <div class="row"><span class="keys"><kbd class="key">&#8984;</kbd><kbd class="key">.</kbd></span><span class="desc">Start a huddle<span>Voice room, one keystroke</span></span></div>
+    <div class="row"><span class="keys"><kbd class="key">&#8984;</kbd><kbd class="key">&#8679;</kbd><kbd class="key">L</kbd></span><span class="desc">Share a live link<span>Anyone can follow along</span></span></div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-keynote-shortcuts').forEach((root) => {
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

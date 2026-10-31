@@ -1,0 +1,105 @@
+<!--
+@title RACI matrix
+@group Exhibits
+@description Activities by role with Responsible, Accountable, Consulted and Informed letters in small colour-coded pills, plus a legend.
+@tags slide, raci, responsibilities, roles, governance, accountability, matrix, ownership
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-raci-matrix {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-raci-matrix .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-raci-matrix .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-raci-matrix .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-raci-matrix h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-raci-matrix .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-raci-matrix .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-raci-matrix .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-raci-matrix .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-raci-matrix .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-raci-matrix .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-raci-matrix .body { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 1.8cqi; }
+  .c-raci-matrix .grid { display: grid; grid-template-columns: minmax(0, 1fr) repeat(6, 10cqi); grid-template-rows: auto repeat(7, minmax(0, 1fr)); }
+  .c-raci-matrix .th { display: flex; align-items: flex-end; justify-content: center; padding: 0 0.4cqi 1cqi; border-bottom: var(--ds-stroke) solid var(--ds-ink); text-align: center; font-size: 1.15cqi; font-weight: 700; line-height: 1.25; color: var(--ds-muted); }
+  .c-raci-matrix .th.first { justify-content: flex-start; padding-left: 0; font-size: 1.1cqi; letter-spacing: 0.08em; text-transform: uppercase; }
+  .c-raci-matrix .act, .c-raci-matrix .cell { display: flex; align-items: center; border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-raci-matrix .act { font-size: 1.55cqi; font-weight: 600; color: var(--ds-ink); }
+  .c-raci-matrix .cell { justify-content: center; gap: 0.4cqi; }
+  .c-raci-matrix .p { display: inline-grid; place-items: center; min-width: 2.6cqi; height: 2.1cqi; padding: 0 0.3cqi; border: var(--ds-hairline) solid var(--ds-neutral-line); border-radius: var(--ds-radius-pill); background: var(--ds-neutral-fill); font-size: 1.2cqi; font-weight: 700; line-height: 1; color: var(--ds-ink); }
+  .c-raci-matrix .p.is-r { background: var(--ds-info-fill); border-color: var(--ds-info-line); }
+  .c-raci-matrix .p.is-a { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-raci-matrix .p.is-i { background: transparent; border-color: var(--ds-line); color: var(--ds-muted); }
+  .c-raci-matrix .legend { display: flex; align-items: center; gap: 3cqi; margin: 0; padding: 1.2cqi 0 0; list-style: none; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.2cqi; color: var(--ds-text); }
+  .c-raci-matrix .legend li { display: flex; align-items: center; gap: 0.8cqi; }
+  .c-raci-matrix .legend b { font-weight: 700; color: var(--ds-ink); }
+</style>
+
+<section class="c-raci-matrix" aria-label="RACI matrix for the hub programme">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Governance</p>
+        <h1>Every activity has exactly one accountable owner, and the COO holds three of the seven</h1>
+      </div>
+      
+    </div>
+    <div class="body">
+      <div class="grid">
+      <div class="th first">Activity</div><div class="th">CEO</div><div class="th">COO</div><div class="th">CFO</div><div class="th">Head of Network</div><div class="th">Head of Sales</div><div class="th">Head of People</div>
+      <div class="act">Approve the hub investment case</div><div class="cell"><span class="p is-a">A</span></div><div class="cell"><span class="p is-r">R</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-i">I</span></div>
+      <div class="act">Select hub sites and design</div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-a">A</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-r">R</span></div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-i">I</span></div>
+      <div class="act">Procure sortation equipment</div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-a">A</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-r">R</span></div><div class="cell"></div><div class="cell"></div>
+      <div class="act">Redesign depot routes</div><div class="cell"></div><div class="cell"><span class="p is-a">A</span></div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-r">R</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-i">I</span></div>
+      <div class="act">Win new retail clients</div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-a">A</span><span class="p is-r">R</span></div><div class="cell"></div>
+      <div class="act">Consult the works council</div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"></div><div class="cell"><span class="p is-a">A</span><span class="p is-r">R</span></div>
+      <div class="act">Track benefits and report monthly</div><div class="cell"><span class="p is-i">I</span></div><div class="cell"><span class="p is-r">R</span></div><div class="cell"><span class="p is-a">A</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-c">C</span></div><div class="cell"><span class="p is-i">I</span></div>
+      </div>
+      <ul class="legend"><li><span class="p is-r">R</span><span><b>Responsible</b>, does the work</span></li><li><span class="p is-a">A</span><span><b>Accountable</b>, owns the outcome</span></li><li><span class="p is-c">C</span><span><b>Consulted</b>, gives input before</span></li><li><span class="p is-i">I</span><span><b>Informed</b>, told after</span></li></ul>
+    </div>
+    <div class="foot"><span>Source: Programme governance charter, draft of October 2026. AR in one cell means the same role is accountable and does the work.</span><span class="page">14</span></div>
+  </div>
+</section>

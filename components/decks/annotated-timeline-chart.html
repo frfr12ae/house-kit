@@ -1,0 +1,103 @@
+<!--
+@title Annotated timeline chart
+@group Exhibits
+@description A 24 month line chart with three numbered event markers on the line, dashed drop lines and a matching note for each event below the axis.
+@tags slide, line chart, timeline, annotation, events, trend, time series, exhibit
+@preview slide
+@added 2026-10-31
+-->
+<style>
+  .c-annotated-timeline-chart {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-annotated-timeline-chart .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-annotated-timeline-chart .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-annotated-timeline-chart .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-annotated-timeline-chart .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-annotated-timeline-chart .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-annotated-timeline-chart .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-annotated-timeline-chart h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-annotated-timeline-chart .exhibit { min-height: 0; }
+  .c-annotated-timeline-chart .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-annotated-timeline-chart svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-annotated-timeline-chart svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-annotated-timeline-chart .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-annotated-timeline-chart .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-annotated-timeline-chart .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-annotated-timeline-chart .sm { font-size: 12px; }
+  .c-annotated-timeline-chart .md { font-size: 13px; }
+  .c-annotated-timeline-chart .lg { font-size: 14px; }
+  .c-annotated-timeline-chart .b { font-weight: 700; }
+  .c-annotated-timeline-chart .sb { font-weight: 600; }
+  .c-annotated-timeline-chart .ink { fill: var(--ds-ink); }
+  .c-annotated-timeline-chart .mu { fill: var(--ds-muted); }
+  .c-annotated-timeline-chart .mid { text-anchor: middle; }
+  .c-annotated-timeline-chart .end { text-anchor: end; }
+  .c-annotated-timeline-chart .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-annotated-timeline-chart .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-annotated-timeline-chart .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-annotated-timeline-chart .notes { position: absolute; left: 0; right: 0; top: 79%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.4cqi; margin: 0; padding: 0; list-style: none; }
+  .c-annotated-timeline-chart .notes li { display: grid; grid-template-columns: 2.2cqi minmax(0, 1fr); gap: 1cqi; align-items: start; padding-top: 1cqi; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-annotated-timeline-chart .notes b { display: grid; place-items: center; width: 2cqi; height: 2cqi; border-radius: 50%; background: color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-surface)); box-shadow: inset 0 0 0 0.18cqi var(--ds-highlight-line); font-size: 1.1cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-annotated-timeline-chart .notes span { font-size: 1.15cqi; line-height: 1.4; color: var(--ds-text); }
+  .c-annotated-timeline-chart .notes strong { display: block; margin-bottom: 0.2cqi; font-size: 1.25cqi; color: var(--ds-ink); }
+</style>
+
+<section class="c-annotated-timeline-chart" aria-label="Slide 15: on-time delivery rate over 24 months with three annotated events">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Operations review · Service quality</p>
+      </div>
+      <h2>On-time delivery is up 4.0 points in 24 months, with two step-ups tied to the new sorting hub and the route engine</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="Line chart of monthly on-time delivery rate from November 2024 to October 2026, rising from 90.2 to 94.2 percent, with three numbered events: the sorting hub opens in April 2025, a driver shortage in December 2025 and the route engine going live in July 2026."><text class="md b ink" x="0" y="14">On-time delivery rate, % of parcels, monthly</text><line class="axis" x1="70" x2="868" y1="212" y2="212"/><text class="tick end" x="60" y="216">88</text><line class="grid" x1="70" x2="868" y1="168" y2="168"/><text class="tick end" x="60" y="172">90</text><line class="grid" x1="70" x2="868" y1="124" y2="124"/><text class="tick end" x="60" y="128">92</text><line class="grid" x1="70" x2="868" y1="80" y2="80"/><text class="tick end" x="60" y="84">94</text><line class="grid" x1="70" x2="868" y1="36" y2="36"/><text class="tick end" x="60" y="40">96</text><text class="tick mid" x="70" y="232">Nov 24</text><text class="tick mid" x="173" y="232">Feb 25</text><text class="tick mid" x="276.1" y="232">May 25</text><text class="tick mid" x="379.1" y="232">Aug 25</text><text class="tick mid" x="482.2" y="232">Nov 25</text><text class="tick mid" x="585.2" y="232">Feb 26</text><text class="tick mid" x="688.3" y="232">May 26</text><text class="tick mid" x="791.3" y="232">Aug 26</text><text class="tick mid" x="860" y="232">Oct 26</text><line x1="241.7" x2="241.7" y1="156" y2="212" style="stroke:var(--ds-highlight-line);stroke-width:1.2;stroke-dasharray:3 3"/><line x1="516.5" x2="516.5" y1="191.2" y2="212" style="stroke:var(--ds-highlight-line);stroke-width:1.2;stroke-dasharray:3 3"/><line x1="757" x2="757" y1="114.2" y2="212" style="stroke:var(--ds-highlight-line);stroke-width:1.2;stroke-dasharray:3 3"/><path d="M70 163.6L104.3 192.2L138.7 154.8L173 148.2L207.4 143.8L241.7 146L276.1 124L310.4 115.2L344.8 121.8L379.1 113L413.5 106.4L447.8 110.8L482.2 113L516.5 181.2L550.9 165.8L585.2 146L619.6 130.6L653.9 124L688.3 117.4L722.6 113L757 104.2L791.3 88.8L825.7 80L860 75.6" style="fill:none;stroke:var(--ds-info-line);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round"/><circle cx="70" cy="163.6" r="4" style="fill:var(--ds-info-line)"/><text class="md b ink" x="74" y="151.6">90.2%</text><circle cx="860" cy="75.6" r="5" style="fill:var(--ds-info-line);stroke:var(--ds-surface);stroke-width:2"/><text class="lg b ink end" x="860" y="63.6">94.2%</text><circle cx="241.7" cy="146" r="10" style="fill:color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-surface));stroke:var(--ds-highlight-line);stroke-width:2"/><text class="sm b ink mid" x="241.7" y="150">1</text><circle cx="516.5" cy="181.2" r="10" style="fill:color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-surface));stroke:var(--ds-highlight-line);stroke-width:2"/><text class="sm b ink mid" x="516.5" y="185.2">2</text><circle cx="757" cy="104.2" r="10" style="fill:color-mix(in srgb, var(--ds-highlight-line) 80%, var(--ds-surface));stroke:var(--ds-highlight-line);stroke-width:2"/><text class="sm b ink mid" x="757" y="108.2">3</text></svg>
+        <ol class="notes">
+          <li><b>1</b><span><strong>April 2025: sorting hub opens</strong>Up 1.1 points within three months, from 91.0% to 92.1%.</span></li>
+          <li><b>2</b><span><strong>December 2025: driver shortage</strong>Rate falls 3.1 points to 89.4%; back at the November level only in June.</span></li>
+          <li><b>3</b><span><strong>July 2026: route engine goes live</strong>Up 1.3 points in three months, to a record 94.2% in October.</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: telematics, November 2024 to October 2026; programme office event log. Illustrative figures.</span>
+      <span class="page">15</span>
+    </div>
+  </div>
+</section>

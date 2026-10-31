@@ -1,0 +1,115 @@
+<!--
+@title TAM, SAM and SOM
+@group Exhibits
+@description Nested circles sized by area for total, serviceable and obtainable market, each with its value, a plain definition and numbered assumption footnotes.
+@tags slide, tam, sam, som, market size, nested circles, assumptions, exhibit
+@preview slide
+@added 2026-10-31
+@source Deckary consulting slide templates | https://deckary.com/blog/consulting-slide-templates | inspired-by
+-->
+<style>
+  .c-tam-sam-som {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-tam-sam-som .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-tam-sam-som .top { display: flex; align-items: center; justify-content: space-between; gap: 2cqi; }
+  .c-tam-sam-som .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-tam-sam-som .tracker { display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-tam-sam-som .tracker li { padding: 0.3cqi 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); font-size: 1cqi; font-weight: 600; line-height: 1.2; color: var(--ds-muted); }
+  .c-tam-sam-som .tracker li.is-on { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-tam-sam-som h2 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-tam-sam-som .exhibit { min-height: 0; }
+  .c-tam-sam-som .frame { position: relative; width: 100%; aspect-ratio: 880 / 315; }
+  .c-tam-sam-som svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+  .c-tam-sam-som svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-tam-sam-som .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-tam-sam-som .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-tam-sam-som .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-tam-sam-som .sm { font-size: 12px; }
+  .c-tam-sam-som .md { font-size: 13px; }
+  .c-tam-sam-som .lg { font-size: 14px; }
+  .c-tam-sam-som .b { font-weight: 700; }
+  .c-tam-sam-som .sb { font-weight: 600; }
+  .c-tam-sam-som .ink { fill: var(--ds-ink); }
+  .c-tam-sam-som .mu { fill: var(--ds-muted); }
+  .c-tam-sam-som .mid { text-anchor: middle; }
+  .c-tam-sam-som .end { text-anchor: end; }
+  .c-tam-sam-som .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-tam-sam-som .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-tam-sam-som .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-tam-sam-som .def { position: absolute; padding-right: 1cqi; }
+  .c-tam-sam-som .nm { margin: 0; font-size: 1.1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-tam-sam-som .nm b { margin-right: 0.5cqi; font-size: 1.1cqi; font-weight: 800; color: var(--ds-ink); letter-spacing: 0.04em; }
+  .c-tam-sam-som .dd { margin: 0.4cqi 0 0; font-size: 1.3cqi; line-height: 1.45; color: var(--ds-text); max-width: 46cqi; }
+  .c-tam-sam-som .def.is-key .dd { color: var(--ds-ink); font-weight: 600; }
+  .c-tam-sam-som .notes { position: absolute; left: 40%; right: 0; bottom: 0; margin: 0; padding: 0.8cqi 0 0; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 0.95cqi; line-height: 1.45; color: var(--ds-muted); }
+  .c-tam-sam-som .notes span { display: block; }
+</style>
+
+<section class="c-tam-sam-som" aria-label="Slide 10: total, serviceable and obtainable market for regional freight">
+  <div class="inner">
+    <div class="head">
+      <div class="top">
+        <p class="kicker">Market review · Market size</p>
+        <ul class="tracker" aria-label="Where this slide sits in the deck"><li class="is-on" aria-current="step">Diagnosis</li><li>Options</li><li>Roadmap</li></ul>
+      </div>
+      <h2>The serviceable market is €1.9bn, and a realistic 2029 target of €300m needs only a 16% share of it</h2>
+    </div>
+    <div class="exhibit">
+      <div class="frame">
+<svg viewBox="0 0 880 315" role="img" aria-label="Nested circles with area proportional to market size: total addressable market 4.8 billion euros, serviceable market 1.9 billion, obtainable market 300 million."><circle cx="168" cy="155" r="148" style="fill:color-mix(in srgb, var(--ds-info-line) 22%, var(--ds-surface));stroke:var(--ds-info-line);stroke-width:1.5"/><circle cx="168" cy="209.9" r="93.1" style="fill:color-mix(in srgb, var(--ds-info-line) 44%, var(--ds-surface));stroke:var(--ds-info-line);stroke-width:1.5"/><circle cx="168" cy="266" r="37" style="fill:color-mix(in srgb, var(--ds-highlight-line) 70%, var(--ds-surface));stroke:var(--ds-highlight-line);stroke-width:2"/><text class="lg b ink mid" x="168" y="33">€4.8bn</text><text class="sm b mu mid" x="168" y="48">TAM</text><text class="lg b ink mid" x="168" y="142.8">€1.9bn</text><text class="sm b mu mid" x="168" y="157.8">SAM</text><text class="md b ink mid" x="168" y="271">€300m</text><text class="sm b mu mid" x="168" y="221">SOM</text><path d="M168 7 H325 V9 H340" style="fill:none;stroke:var(--ds-info-line);stroke-width:1.2;stroke-dasharray:0"/><circle cx="168" cy="7" r="3" style="fill:var(--ds-info-line)"/><path d="M168 116.8 H325 V99 H340" style="fill:none;stroke:var(--ds-info-line);stroke-width:1.2;stroke-dasharray:3 3"/><circle cx="168" cy="116.8" r="3" style="fill:var(--ds-info-line)"/><path d="M168 229 H325 V189 H340" style="fill:none;stroke:var(--ds-highlight-line);stroke-width:1.2;stroke-dasharray:3 3"/><circle cx="168" cy="229" r="3" style="fill:var(--ds-highlight-line)"/></svg>
+        <div class="def" style="left:40%;right:0;top:0%">
+          <p class="nm"><b>TAM</b> Total addressable market</p>
+          <p class="dd">All regional road freight and parcel spend in the four countries we could enter by 2030.¹</p>
+        </div>
+        <div class="def" style="left:40%;right:0;top:28.6%">
+          <p class="nm"><b>SAM</b> Serviceable addressable market</p>
+          <p class="dd">The part we can serve with today's depots and vehicle types: pallet, parcel and cold chain within 250 km of a depot.²</p>
+        </div>
+        <div class="def is-key" style="left:40%;right:0;top:57.1%">
+          <p class="nm"><b>SOM</b> Serviceable obtainable market</p>
+          <p class="dd">What we can realistically win by 2029, a 16% share of SAM, limited by depot capacity and sales hiring.³</p>
+        </div>
+        <p class="notes"><span>1. Statistics for road freight and parcels in four countries, grown at 3.1% a year to 2029.</span><span>2. Excludes bulk, air and cross-border freight; assumes no new depots before 2028.</span><span>3. A 16% share equals our share today in markets where we have operated for five years.</span></p>
+      </div>
+    </div>
+    <div class="foot">
+      <span>Source: national freight statistics 2025; company model. Illustrative figures. Circle areas are proportional to value.</span>
+      <span class="page">10</span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,181 @@
+<!--
+@title Poll results
+@group Workshop
+@description Live-poll results as horizontal bars with vote counts and percentages, the winning option highlighted and the total votes counted up. Bars grow in on load.
+@tags slide, workshop, poll, results, vote, bars, audience, chart
+@preview slide
+@replay true
+@added 2026-10-31
+-->
+<style>
+  .c-poll-results {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-poll-results .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 29cqi minmax(0, 1fr);
+    column-gap: 7cqi;
+    padding: 6cqi 7cqi 5.5cqi;
+  }
+  .c-poll-results .side { display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
+  .c-poll-results .eyebrow { display: flex; align-items: center; gap: 0.9cqi; font-size: 1.5cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-poll-results .eyebrow::before {
+    content: "";
+    width: 1.1cqi;
+    height: 1.1cqi;
+    border-radius: 50%;
+    background: var(--ds-danger-line);
+  }
+  .c-poll-results h2 {
+    align-self: center;
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 3.7cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.1;
+    color: var(--ds-ink);
+  }
+  .c-poll-results .total {
+    display: grid;
+    gap: 0.3cqi;
+    padding-top: 1.8cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-poll-results .total b {
+    font-size: 3.4cqi;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .c-poll-results .total span { font-size: 1.4cqi; color: var(--ds-muted); }
+  .c-poll-results .rows { align-self: center; display: grid; gap: 1.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-poll-results .row {
+    display: grid;
+    gap: 0.9cqi;
+    padding: 1.4cqi 1.8cqi 1.6cqi;
+    border: var(--ds-hairline) solid transparent;
+    border-radius: calc(1cqi * var(--ds-radius-scale, 1));
+  }
+  .c-poll-results .row.is-win { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-poll-results .line { display: flex; align-items: baseline; gap: 1cqi; }
+  .c-poll-results .label { flex: 1; font-size: 2cqi; font-weight: 700; color: var(--ds-ink); line-height: 1.2; }
+  .c-poll-results .win-tag {
+    align-self: center;
+    padding: 0.3cqi 1cqi;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-highlight-line);
+    font-size: 1.1cqi;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-ink);
+  }
+  .c-poll-results .count { font-size: 1.4cqi; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-poll-results .pct {
+    min-width: 6.2cqi;
+    text-align: right;
+    font-size: 2.6cqi;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-poll-results .track { height: 1.7cqi; border-radius: 99px; background: color-mix(in srgb, var(--ds-line) 70%, transparent); overflow: hidden; }
+  .c-poll-results .fill {
+    display: block;
+    width: calc(var(--v) * 1%);
+    height: 100%;
+    border-radius: 99px;
+    background: var(--ds-neutral-line);
+    transform-origin: left center;
+  }
+  .c-poll-results .row.is-win .fill { background: var(--ds-highlight-line); }
+  .c-poll-results .row.is-win .track { background: color-mix(in srgb, var(--ds-highlight-line) 25%, transparent); }
+
+  /* hidden state carries no transition, so arming never animates; only the move to .is-in does */
+  .c-poll-results.is-armed .fill { transform: scaleX(0); }
+  .c-poll-results.is-armed.is-in .fill {
+    transform: scaleX(1);
+    transition: transform var(--ds-dur-story) var(--ds-ease);
+    transition-delay: calc(var(--i) * 120ms);
+  }
+</style>
+
+<section class="c-poll-results">
+  <div class="inner">
+    <div class="side">
+      <div class="eyebrow">Live poll, closed</div>
+      <h2>Which part of planning costs your team the most time?</h2>
+      <div class="total"><b data-count="142">142</b><span>votes from 48 people</span></div>
+    </div>
+    <ul class="rows">
+      <li class="row is-win" style="--i: 0">
+        <div class="line"><span class="label">Chasing approvals</span><span class="win-tag">Most votes</span><span class="count">54 votes</span><span class="pct" data-value="38">38%</span></div>
+        <div class="track"><span class="fill" style="--v: 38"></span></div>
+      </li>
+      <li class="row" style="--i: 1">
+        <div class="line"><span class="label">Rewriting the same status update</span><span class="count">38 votes</span><span class="pct" data-value="27">27%</span></div>
+        <div class="track"><span class="fill" style="--v: 27"></span></div>
+      </li>
+      <li class="row" style="--i: 2">
+        <div class="line"><span class="label">Finding the latest version</span><span class="count">30 votes</span><span class="pct" data-value="21">21%</span></div>
+        <div class="track"><span class="fill" style="--v: 21"></span></div>
+      </li>
+      <li class="row" style="--i: 3">
+        <div class="line"><span class="label">Meetings with no decision</span><span class="count">20 votes</span><span class="pct" data-value="14">14%</span></div>
+        <div class="track"><span class="fill" style="--v: 14"></span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<script>
+(() => {
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-poll-results').forEach((root) => {
+    if (reduced) return;
+    const ms = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
+    const pcts = [...root.querySelectorAll('.pct')];
+    const total = root.querySelector('[data-count]');
+    pcts.forEach((el) => { el.textContent = '0%'; });
+    total.textContent = '0';
+    root.classList.add('is-armed');
+
+    function count(el, to, delay, suffix) {
+      const start = performance.now() + delay;
+      const tick = (now) => {
+        const t = Math.max(0, Math.min(1, (now - start) / ms));
+        el.textContent = Math.round(to * ease(t)) + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+    function run() {
+      root.classList.add('is-in');
+      pcts.forEach((el, i) => count(el, parseFloat(el.dataset.value), i * 120, '%'));
+      count(total, parseFloat(total.dataset.count), 0, '');
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(run));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

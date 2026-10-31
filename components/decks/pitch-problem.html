@@ -1,0 +1,91 @@
+<!--
+@title Pitch problem
+@group Pitch
+@description Seed pitch problem slide: the problem in one sentence and three pains, each with a number.
+@tags pitch, startup, problem, pain, slide
+@preview slide
+@added 2026-10-31
+@source Y Combinator seed deck guidance | https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck | inspired-by
+-->
+<style>
+  .c-pitch-problem, .c-pitch-problem *, .c-pitch-problem *::before, .c-pitch-problem *::after { box-sizing: border-box; }
+  .c-pitch-problem {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-pitch-problem .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 6cqi;
+  }
+  .c-pitch-problem .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6cqi;
+    font-size: 1.5cqi;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--ds-ink);
+  }
+  .c-pitch-problem .brand svg { width: 1.7cqi; height: 1.7cqi; fill: none; stroke: var(--ds-ink); stroke-width: 2; stroke-linecap: round; }
+  .c-pitch-problem .brand svg .strike { stroke: var(--ds-highlight-line); }
+  .c-pitch-problem .num {
+    position: absolute;
+    right: 6cqi;
+    bottom: 2.6cqi;
+    font-size: 1cqi;
+    line-height: 1;
+    color: var(--ds-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-pitch-problem h2 {
+    margin: 0;
+    font-family: var(--ds-font-display);
+    font-size: 4.6cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.06;
+    color: var(--ds-ink);
+  }
+  .c-pitch-problem .kicker { font-size: 1.5cqi; font-weight: 700; color: var(--ds-muted); }
+
+  .c-pitch-problem .main { display: grid; align-content: space-between; padding-top: 4cqi; }
+  .c-pitch-problem h2 { max-width: 66cqi; }
+  .c-pitch-problem .pains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.2cqi; }
+  .c-pitch-problem .pain { display: grid; gap: 1.1cqi; align-content: start; padding-top: 1.8cqi; border-top: 0.35cqi solid var(--ds-danger-line); }
+  .c-pitch-problem .fig {
+    font-family: var(--ds-font-display);
+    font-size: 6.4cqi;
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-pitch-problem .fig small { margin-left: 0.25em; font-size: 0.34em; font-weight: 700; letter-spacing: 0; color: var(--ds-muted); }
+  .c-pitch-problem .pain p { margin: 0; max-width: 24cqi; font-size: 1.8cqi; line-height: 1.4; color: var(--ds-text); }
+</style>
+
+<section class="c-pitch-problem" aria-label="Problem slide">
+  <div class="inner">
+    <div class="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3v14M8 3v14M12 3v14M16 3v14"/><path class="strike" d="M1.5 15.5L18.5 4.5"/></svg>Tallyhouse</div>
+    <div class="main">
+      <h2>Small studios do their books on nights and weekends.</h2>
+      <div class="pains">
+        <div class="pain"><div class="fig">9<small>hours</small></div><p>every month spent chasing receipts and matching them to bank lines.</p></div>
+        <div class="pain"><div class="fig">31%</div><p>of invoices land more than 30 days late, and nobody has time to chase.</p></div>
+        <div class="pain"><div class="fig">$3,200</div><p>a year in fixes when the accountant finds the mess at year-end.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="num" aria-hidden="true">2</div>
+</section>

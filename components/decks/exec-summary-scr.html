@@ -1,0 +1,116 @@
+<!--
+@title Executive summary (SCR)
+@group Storyline
+@description A situation, complication, resolution summary in three columns, each with a bold lead line and supporting bullets; the resolution column carries the recommendation.
+@tags slide, executive summary, scr, situation, complication, resolution, pyramid, storyline
+@preview slide
+@added 2026-10-31
+@source Barbara Minto, The Pyramid Principle (SCR) | https://www.barbaraminto.com | inspired-by
+-->
+<style>
+  .c-exec-summary-scr {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-exec-summary-scr .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-exec-summary-scr .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqi; }
+  .c-exec-summary-scr .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-exec-summary-scr h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-exec-summary-scr .tracker { position: absolute; top: 5cqi; right: 6cqi; display: flex; gap: 0.5cqi; margin: 0; padding: 0; list-style: none; }
+  .c-exec-summary-scr .tracker li {
+    padding: 0.3cqi 0.9cqi;
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-pill);
+    font-size: 1cqi;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-exec-summary-scr .tracker li.on { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); color: var(--ds-ink); }
+  .c-exec-summary-scr .body { min-height: 0; padding: 2.4cqi 0 2cqi; }
+  .c-exec-summary-scr .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-exec-summary-scr .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-exec-summary-scr .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.4cqi; height: 100%; }
+  .c-exec-summary-scr .col {
+    display: flex;
+    flex-direction: column;
+    padding: 1.7cqi 2cqi;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-top: 0.4cqi solid var(--ds-neutral-line);
+    border-radius: calc(0.6cqi * var(--ds-radius-scale, 1));
+  }
+  .c-exec-summary-scr .col.is-comp { border-top-color: var(--ds-danger-line); }
+  .c-exec-summary-scr .col.is-res { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-exec-summary-scr .label { font-size: 1.15cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-exec-summary-scr h2 { margin: 0.9cqi 0 1.2cqi; font-size: 1.9cqi; font-weight: 700; line-height: 1.25; color: var(--ds-ink); }
+  .c-exec-summary-scr ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.9cqi; }
+  .c-exec-summary-scr li { position: relative; padding-left: 1.7cqi; font-size: 1.4cqi; line-height: 1.4; }
+  .c-exec-summary-scr li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 0.6cqi; height: 0.6cqi; border-radius: 50%; background: var(--ds-muted); }
+  .c-exec-summary-scr .is-res li::before { background: var(--ds-highlight-line); }
+</style>
+
+<section class="c-exec-summary-scr" aria-label="Executive summary: situation, complication, resolution">
+  <div class="inner">
+    <div class="top">
+      <div class="hd">
+        <p class="kicker">Executive summary</p>
+        <h1>Capacity, not demand, now limits our growth, so we recommend a EUR 85m hub-and-spoke build</h1>
+      </div>
+      
+    </div>
+    <div class="body">
+      <div class="cols">
+      <div class="col is-sit">
+        <span class="label">Situation</span>
+        <h2>Regional parcel demand is strong and we are well placed to serve it</h2>
+        <ul><li>Parcel volume has grown 14% a year since 2023 and reached 41 million in 2026</li><li>Revenue of EUR 310m at a stable 11% EBIT margin</li><li>Three depots handle 80% of all volume</li></ul>
+      </div>
+      <div class="col is-comp">
+        <span class="label">Complication</span>
+        <h2>Capacity and unit cost are now moving the wrong way</h2>
+        <ul><li>Depots run at 94% of peak capacity and overtime is up 31%</li><li>Cost per parcel rose 8% while average price rose only 3%</li><li>Two national rivals now offer next-day delivery in our home region</li></ul>
+      </div>
+      <div class="col is-res">
+        <span class="label">Resolution</span>
+        <h2>Invest EUR 85m over three years in a hub-and-spoke network</h2>
+        <ul><li>Open two automated hubs to lift capacity by 60%</li><li>Refresh the six busiest depots and retire two weak routes</li><li>Reach a 14% EBIT margin and EUR 450m revenue by 2029</li></ul>
+      </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Company finance ledger FY2026, network capacity study October 2026. Illustrative figures.</span><span class="page">2</span></div>
+  </div>
+</section>
