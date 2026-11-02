@@ -39,6 +39,12 @@
           "blurb": "Heroes, feature grids, pricing, FAQ, footers and device mockups for HTML pages."
         },
         {
+          "id": "apps",
+          "label": "App screens",
+          "icon": "apps",
+          "blurb": "Whole screens to start an internal tool from: an admin shell, an analytics dashboard and an AI OS cockpit, each driven by one data object."
+        },
+        {
           "id": "email",
           "label": "Email",
           "icon": "email",

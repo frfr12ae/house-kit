@@ -1,0 +1,374 @@
+<!--
+@title AI OS cockpit
+@description The home page of a personal AI operating system: what needs you, today, what is new in your knowledge, what shipped and whether every system and agent is healthy, plus Projects, Outputs, Knowledge and Systems tabs, a search that filters every list, and an ask bar. One DATA object drives it, so a scheduled script can write the JSON and the page needs no server.
+@tags cockpit, ai os, home, command centre, personal dashboard, agents, health, status, second brain
+@preview fill
+@height 980
+@featured true
+@added 2026-11-02
+@source shadcn/ui dashboard blocks | https://ui.shadcn.com/blocks | inspired-by
+-->
+<style>
+  .c-ai-cockpit {
+    padding: var(--ds-space-5);
+    background: var(--ds-bg);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-sm);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-ai-cockpit button { font: inherit; color: inherit; }
+  .c-ai-cockpit button:focus-visible, .c-ai-cockpit input:focus-visible, .c-ai-cockpit a:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-ai-cockpit a { color: var(--ds-ink); text-decoration-color: var(--ds-line); text-underline-offset: 3px; }
+
+  /* top bar */
+  .c-ai-cockpit .bar { display: grid; grid-template-columns: auto auto minmax(180px, 1fr) auto; align-items: center; gap: var(--ds-space-4); margin-bottom: var(--ds-space-5); }
+  .c-ai-cockpit .brand { display: flex; align-items: center; gap: var(--ds-space-3); }
+  .c-ai-cockpit .mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: var(--ds-radius-md); background: var(--ds-action); color: var(--ds-on-action); }
+  .c-ai-cockpit .mark svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+  .c-ai-cockpit .brand b { display: block; font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-ai-cockpit .brand small { display: block; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-ai-cockpit .tabs { display: inline-flex; padding: 3px; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-panel); overflow-x: auto; scrollbar-width: none; }
+  .c-ai-cockpit .tabs button { display: inline-flex; align-items: baseline; gap: 6px; padding: 6px var(--ds-space-3); border: 0; border-radius: var(--ds-radius-sm); background: transparent; font-weight: 600; color: var(--ds-muted); cursor: pointer; white-space: nowrap; }
+  .c-ai-cockpit .tabs button[aria-selected="true"] { background: var(--ds-raised); color: var(--ds-ink); box-shadow: var(--ds-shadow-sm); }
+  .c-ai-cockpit .tabs small { font-size: var(--ds-text-xs); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .c-ai-cockpit .tabs small.is-bad { padding: 0 6px; border-radius: var(--ds-radius-pill); background: var(--ds-danger-fill); border: var(--ds-hairline) solid var(--ds-danger-line); color: var(--ds-ink); }
+  .c-ai-cockpit .find { display: flex; align-items: center; gap: var(--ds-space-2); height: 38px; padding: 0 var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-raised); color: var(--ds-muted); }
+  .c-ai-cockpit .find svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; }
+  .c-ai-cockpit .find input { flex: 1; min-width: 0; height: 100%; border: 0; background: transparent; font: inherit; color: var(--ds-ink); }
+  .c-ai-cockpit .find input:focus-visible { box-shadow: none; }
+  .c-ai-cockpit .find:focus-within { box-shadow: var(--ds-focus); }
+  .c-ai-cockpit .checked { display: inline-flex; align-items: center; gap: var(--ds-space-2); color: var(--ds-muted); white-space: nowrap; }
+
+  .c-ai-cockpit .dot { display: inline-block; width: 9px; height: 9px; flex: none; border-radius: 50%; background: var(--ds-note-line); }
+  .c-ai-cockpit .dot.warn { background: var(--ds-highlight-line); }
+  .c-ai-cockpit .dot.bad { background: var(--ds-danger-line); }
+  .c-ai-cockpit .dot.off { background: transparent; border: var(--ds-hairline) solid var(--ds-muted); }
+
+  /* needs you */
+  .c-ai-cockpit .needs { margin-bottom: var(--ds-space-4); padding: var(--ds-space-5); border: var(--ds-stroke) solid var(--ds-danger-line); border-radius: var(--ds-radius-lg); background: var(--ds-danger-fill); }
+  .c-ai-cockpit .needs.is-clear { border-color: var(--ds-note-line); background: var(--ds-note-fill); }
+  .c-ai-cockpit .needs h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--ds-space-3); margin: 0 0 var(--ds-space-3); font-family: var(--ds-font-display); font-size: var(--ds-text-xl); font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); color: var(--ds-ink); }
+  .c-ai-cockpit .needs h2 small { font-family: var(--ds-font-sans); font-size: var(--ds-text-sm); font-weight: 400; letter-spacing: 0; color: var(--ds-text); }
+  .c-ai-cockpit .needs ul { display: grid; gap: var(--ds-space-2); margin: 0; padding: 0; list-style: none; }
+  .c-ai-cockpit .needs li { display: grid; grid-template-columns: 9px minmax(110px, 200px) minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-3); }
+  .c-ai-cockpit .needs b { color: var(--ds-ink); }
+  .c-ai-cockpit .needs .fix { padding: 3px var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-pill); background: var(--ds-raised); font-size: var(--ds-text-xs); font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+  /* ask bar */
+  .c-ai-cockpit .ask { display: flex; gap: var(--ds-space-2); margin-bottom: var(--ds-space-4); padding: var(--ds-space-2); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); background: var(--ds-raised); }
+  .c-ai-cockpit .ask input { flex: 1; min-width: 0; padding: 0 var(--ds-space-3); border: 0; border-radius: var(--ds-radius-md); background: transparent; font: inherit; font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-ai-cockpit .ask button { padding: var(--ds-space-2) var(--ds-space-4); border: 0; border-radius: var(--ds-radius-md); background: var(--ds-action); color: var(--ds-on-action); font-weight: 600; cursor: pointer; }
+  .c-ai-cockpit .answer { margin: calc(var(--ds-space-2) * -1) 0 var(--ds-space-4); padding: var(--ds-space-3) var(--ds-space-4); border-left: var(--ds-stroke) solid var(--ds-info-line); background: var(--ds-info-fill); border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0; color: var(--ds-ink); }
+  .c-ai-cockpit .answer[hidden] { display: none; }
+
+  /* columns */
+  .c-ai-cockpit .cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-4); }
+  .c-ai-cockpit .card { display: flex; flex-direction: column; min-width: 0; padding: var(--ds-space-5); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); background: var(--ds-surface); }
+  .c-ai-cockpit .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-2); margin-bottom: var(--ds-space-4); }
+  .c-ai-cockpit .card h3 { margin: 0; font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-ai-cockpit .card h3 small { margin-left: 6px; font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); font-weight: 400; color: var(--ds-muted); }
+  .c-ai-cockpit .more { padding: 0; border: 0; background: none; font-weight: 600; color: var(--ds-ink); text-decoration: underline; text-decoration-color: var(--ds-line); text-underline-offset: 3px; cursor: pointer; }
+  .c-ai-cockpit .block { padding: var(--ds-space-3) 0; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-ai-cockpit .block h4 { margin: 0 0 var(--ds-space-1); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-ai-cockpit .block p { margin: 0; color: var(--ds-ink); }
+  .c-ai-cockpit .block ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; color: var(--ds-ink); }
+  .c-ai-cockpit .block li { display: flex; gap: var(--ds-space-2); }
+  .c-ai-cockpit .block li span { color: var(--ds-muted); font-variant-numeric: tabular-nums; min-width: 40px; }
+  .c-ai-cockpit .run { display: flex; flex-wrap: wrap; gap: var(--ds-space-2); }
+  .c-ai-cockpit .run button { display: inline-flex; align-items: center; gap: 6px; padding: 5px var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-raised); font-weight: 600; cursor: pointer; }
+  .c-ai-cockpit .run button::before { content: ""; border-left: 6px solid var(--ds-info-line); border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+  .c-ai-cockpit .run button:hover { background: var(--ds-panel); }
+  .c-ai-cockpit .run button.is-queued { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+
+  .c-ai-cockpit .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: var(--ds-space-2); margin-bottom: var(--ds-space-3); }
+  .c-ai-cockpit .stat { padding: var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-raised); }
+  .c-ai-cockpit .stat b { display: block; font-size: var(--ds-text-lg); color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-ai-cockpit .stat span { font-size: var(--ds-text-xs); color: var(--ds-muted); }
+
+  .c-ai-cockpit .feed { display: grid; gap: var(--ds-space-3); margin: 0; padding: 0; list-style: none; }
+  .c-ai-cockpit .feed li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--ds-space-2); }
+  .c-ai-cockpit .feed b { color: var(--ds-ink); line-height: var(--ds-leading-snug); }
+  .c-ai-cockpit .feed .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-ai-cockpit .feed p { grid-column: 1 / -1; margin: 0; font-size: var(--ds-text-xs); color: var(--ds-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .c-ai-cockpit .kind { padding: 0 6px; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-sm); background: var(--ds-raised); font-family: var(--ds-font-mono); font-size: 11px; color: var(--ds-ink); }
+  .c-ai-cockpit .seen { display: grid; place-items: center; width: 26px; height: 26px; border: 0; border-radius: var(--ds-radius-sm); background: transparent; color: var(--ds-muted); cursor: pointer; }
+  .c-ai-cockpit .seen:hover { background: var(--ds-panel); color: var(--ds-ink); }
+  .c-ai-cockpit .seen svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+  .c-ai-cockpit .foot { display: flex; justify-content: space-between; margin-top: auto; padding-top: var(--ds-space-4); }
+
+  .c-ai-cockpit .split { display: grid; gap: 6px; margin: var(--ds-space-4) 0 0; padding: var(--ds-space-3) 0 0; border-top: var(--ds-hairline) solid var(--ds-line); list-style: none; }
+  .c-ai-cockpit .split li { display: grid; grid-template-columns: minmax(0, 90px) minmax(0, 1fr) 28px; align-items: center; gap: var(--ds-space-2); }
+  .c-ai-cockpit .split .track { height: 6px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); overflow: hidden; }
+  .c-ai-cockpit .split .fill { display: block; height: 100%; width: var(--w); border-radius: inherit; background: var(--c); }
+  .c-ai-cockpit .split .n { text-align: right; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+
+  .c-ai-cockpit .sys { display: grid; gap: var(--ds-space-3); margin: 0; padding: 0; list-style: none; }
+  .c-ai-cockpit .sys li { display: grid; grid-template-columns: 9px minmax(0, 1fr); gap: 2px var(--ds-space-3); align-items: center; }
+  .c-ai-cockpit .sys b { color: var(--ds-ink); }
+  .c-ai-cockpit .sys small { grid-column: 2; color: var(--ds-muted); font-size: var(--ds-text-xs); }
+
+  /* other tabs */
+  .c-ai-cockpit [role="tabpanel"][hidden] { display: none; }
+  .c-ai-cockpit .list { margin: 0; padding: 0; list-style: none; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); background: var(--ds-surface); }
+  .c-ai-cockpit .list li { display: grid; grid-template-columns: 9px minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-3); padding: var(--ds-space-3) var(--ds-space-5); border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-ai-cockpit .list li:first-child { border-top: 0; }
+  .c-ai-cockpit .list b { color: var(--ds-ink); }
+  .c-ai-cockpit .list small { display: block; color: var(--ds-muted); font-size: var(--ds-text-xs); }
+  .c-ai-cockpit .list .r { color: var(--ds-muted); font-size: var(--ds-text-xs); white-space: nowrap; }
+  .c-ai-cockpit .empty { padding: var(--ds-space-5); color: var(--ds-muted); text-align: center; }
+  .c-ai-cockpit .is-filtered-out { display: none !important; }
+  .c-ai-cockpit .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  @container (max-width: 1100px) {
+    .c-ai-cockpit .bar { grid-template-columns: auto minmax(0, 1fr) auto; }
+    .c-ai-cockpit .tabs { grid-column: 1 / -1; grid-row: 2; justify-self: start; max-width: 100%; }
+    .c-ai-cockpit .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @container (max-width: 640px) {
+    .c-ai-cockpit .bar { grid-template-columns: minmax(0, 1fr) auto; }
+    .c-ai-cockpit .find { grid-column: 1 / -1; grid-row: 3; }
+    .c-ai-cockpit .cols { grid-template-columns: minmax(0, 1fr); }
+    .c-ai-cockpit .needs { padding: var(--ds-space-4); }
+    .c-ai-cockpit .needs li { grid-template-columns: 9px minmax(0, 1fr) auto; }
+    .c-ai-cockpit .needs li span:not(.dot) { grid-column: 2 / -1; grid-row: 2; }
+    .c-ai-cockpit .list li { padding: var(--ds-space-3); }
+  }
+</style>
+
+<section class="c-ai-cockpit" aria-label="Cockpit">
+  <header class="bar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="6" r="2.5"/><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/><path d="M10.8 8.2l-4 7M13.2 8.2l4 7M8 17.5h8"/></svg></span>
+      <div><b data-out="name"></b><small data-out="date"></small></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Sections"></div>
+    <label class="find"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="sr">Search</span><input type="search" data-act="find" placeholder="Search notes, outputs, projects" autocomplete="off"></label>
+    <span class="checked"><span class="dot" data-out="checked-dot"></span><span data-out="checked"></span></span>
+  </header>
+
+  <div role="tabpanel" data-panel="cockpit">
+    <div class="needs" data-out="needs"></div>
+
+    <form class="ask" data-act="ask">
+      <label class="sr" for="c-ai-cockpit-ask">Ask your OS</label>
+      <input id="c-ai-cockpit-ask" placeholder="Ask your OS: what did I ship for Atlas this week?" autocomplete="off">
+      <button type="submit">Ask</button>
+    </form>
+    <p class="answer" role="status" aria-live="polite" hidden></p>
+
+    <div class="cols">
+      <article class="card">
+        <div class="card-head"><h3>Today</h3></div>
+        <div data-out="today"></div>
+        <div class="block"><h4>Run</h4><div class="run" data-out="run"></div></div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>New in knowledge<small data-out="k-count"></small></h3><button class="more" type="button" data-go="knowledge">Knowledge</button></div>
+        <div class="stats" data-out="k-stats"></div>
+        <ul class="feed" data-out="k-feed"></ul>
+        <div class="foot"><button class="more" type="button" data-act="seen-all">Mark all seen</button><span data-out="k-more"></span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Shipped this week</h3><button class="more" type="button" data-go="outputs">Outputs</button></div>
+        <div class="stats" data-out="s-stats"></div>
+        <ul class="feed" data-out="s-feed"></ul>
+        <ul class="split" data-out="s-split" aria-label="Commits by project"></ul>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Systems and agents</h3><button class="more" type="button" data-go="systems">Details</button></div>
+        <ul class="sys" data-out="sys"></ul>
+      </article>
+    </div>
+  </div>
+  <div role="tabpanel" data-panel="projects" hidden><ul class="list" data-out="l-projects"></ul></div>
+  <div role="tabpanel" data-panel="outputs" hidden><ul class="list" data-out="l-outputs"></ul></div>
+  <div role="tabpanel" data-panel="knowledge" hidden><ul class="list" data-out="l-knowledge"></ul></div>
+  <div role="tabpanel" data-panel="systems" hidden><ul class="list" data-out="l-systems"></ul></div>
+</section>
+
+<script>
+(() => {
+  // Replace DATA with what your own collector writes (a scheduled script that dumps cockpit JSON
+  // works on a locked-down PC: no server, the page reads it inline). state: ok, warn, bad, off.
+  // Run buttons dispatch a 'cockpit:run' event on the root; listen for it to wire real jobs.
+  const DATA = {
+    name: 'myOS',
+    generated: new Date(Date.now() - 4 * 60000).toISOString(),
+    needs: [
+      { state: 'bad', where: 'Nightly backup', what: 'Last run failed: target disk not mounted', fix: 'Retry' },
+      { state: 'bad', where: 'Inbox agent', what: 'Mail connector token expired, 14 messages waiting', fix: 'Reconnect' },
+      { state: 'warn', where: 'Overdue, Atlas', what: 'Send the Q4 measurement plan to the client', fix: 'Open' },
+    ],
+    today: [
+      { label: 'Calendar', items: [['09:30', 'Atlas weekly'], ['13:00', 'Focus block: proposal'], ['15:30', 'Call with Harbor']] },
+      { label: 'Reminders', items: [['', 'Renew domain for side project'], ['', 'Approve invoice 2026-118']] },
+      { label: 'Next scheduled', text: 'Thu 5 Nov, 04:30: weekly dependency updates' },
+    ],
+    run: ['Audit', 'Daily brief', 'Process inbox', 'Security check'],
+    knowledge: {
+      stats: [[34, 'creator notes'], [6, 'wiki articles'], [1, 'in inbox']],
+      items: [
+        { title: 'Agents that hand work to each other beat one big agent', kind: 'watch', who: 'Creator video', when: '2d ago', gist: 'Splitting planning from doing cut retries in half in the demo.' },
+        { title: 'Evaluating retrieval: the three numbers that matter', kind: 'read', who: 'Engineering blog', when: '3d ago', gist: 'Recall at k, answer faithfulness and latency, measured on your own questions.' },
+        { title: 'Prompt caching changes the cost maths for long context', kind: 'note', who: 'Own note', when: '5d ago', gist: 'Cache the stable prefix; only the tail is billed at full price.' },
+        { title: 'Small local models for classification at work', kind: 'watch', who: 'Creator video', when: '6d ago', gist: 'A 3B model labels tickets well enough when the labels are few and clear.' },
+      ],
+    },
+    shipped: {
+      stats: [[12, 'outputs'], [76, 'commits']],
+      items: [
+        { title: 'Q4 measurement plan', kind: 'report', project: 'Atlas', when: 'Mon' },
+        { title: 'Launch explainer, 45 s', kind: 'video', project: 'Harbor', when: 'Sun' },
+        { title: 'Onboarding one-pager', kind: 'page', project: 'Internal', when: 'Fri' },
+      ],
+      split: [['Atlas', 34], ['Harbor', 14], ['Internal', 14], ['Side project', 7]],
+    },
+    systems: [
+      { state: 'ok', name: 'Knowledge health', detail: '16 of 17 checks ok' },
+      { state: 'ok', name: 'Scheduled jobs', detail: '11 of 11 ran on time' },
+      { state: 'bad', name: 'Nightly backup', detail: 'Failed 02:00, disk not mounted' },
+      { state: 'ok', name: 'Automations', detail: '23 active, 235 runs, 0 errors (24 h)' },
+      { state: 'warn', name: 'Inbox agent', detail: 'Paused: connector needs sign-in' },
+      { state: 'ok', name: 'Research agent', detail: 'Idle, last run 06:10' },
+      { state: 'ok', name: 'Model usage', detail: '1.2M tokens today, typical 1.6M' },
+    ],
+    projects: [
+      { state: 'warn', name: 'Atlas', detail: 'Measurement plan overdue', right: '34 commits' },
+      { state: 'ok', name: 'Harbor', detail: 'Launch video delivered', right: '14 commits' },
+      { state: 'ok', name: 'Internal', detail: 'Cockpit and templates', right: '14 commits' },
+      { state: 'off', name: 'Side project', detail: 'Paused until December', right: '7 commits' },
+    ],
+  };
+
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const dot = (s) => '<span class="dot' + (s === 'ok' ? '' : ' ' + s) + '" aria-hidden="true"></span><span class="sr">' + ({ ok: 'OK', warn: 'Attention', bad: 'Failing', off: 'Off' }[s]) + '</span>';
+  const tick = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const SERIES = ['var(--ds-series-1)', 'var(--ds-series-2)', 'var(--ds-series-3)', 'var(--ds-series-4)', 'var(--ds-series-5)'];
+  const SHOWN = 4;
+
+  document.querySelectorAll('.c-ai-cockpit').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const out = (k) => root.querySelector('[data-out="' + k + '"]');
+    const unseen = DATA.knowledge.items.slice();
+    const outputs = DATA.shipped.items;
+    const bad = DATA.systems.filter((s) => s.state !== 'ok').length;
+
+    const TABS = [
+      ['cockpit', 'Cockpit', ''],
+      ['projects', 'Projects', DATA.projects.length],
+      ['outputs', 'Outputs', DATA.shipped.stats[0][0]],
+      ['knowledge', 'Knowledge', unseen.length],
+      ['systems', 'Systems', bad],
+    ];
+    out('name').textContent = DATA.name;
+    out('date').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+    const mins = Math.round((Date.now() - new Date(DATA.generated)) / 60000);
+    out('checked').textContent = 'Checked ' + (mins < 1 ? 'just now' : mins < 60 ? mins + ' min ago' : Math.round(mins / 60) + ' h ago');
+    if (mins > 120) out('checked-dot').classList.add('warn');
+
+    const tabs = root.querySelector('.tabs');
+    tabs.innerHTML = TABS.map(([id, label, n], i) => '<button type="button" role="tab" data-tab="' + id + '" aria-selected="' + (i === 0) + '"' + (i ? ' tabindex="-1"' : '') + '>' + label + (n !== '' ? '<small' + (id === 'systems' && n ? ' class="is-bad"' : '') + '>' + n + '</small>' : '') + '</button>').join('');
+
+    function go(id, focus) {
+      root.querySelectorAll('[data-tab]').forEach((t) => { const on = t.dataset.tab === id; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); });
+      root.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== id; });
+    }
+
+    function needs() {
+      const n = DATA.needs.length;
+      const el = out('needs');
+      el.classList.toggle('is-clear', n === 0);
+      const failing = DATA.needs.filter((x) => x.state === 'bad').length;
+      el.innerHTML = n
+        ? '<h2>' + n + (n === 1 ? ' thing needs' : ' things need') + ' you<small>' + failing + ' failing, ' + (n - failing) + ' to look at</small></h2><ul>' +
+          DATA.needs.map((x, i) => '<li>' + dot(x.state) + '<b>' + esc(x.where) + '</b><span>' + esc(x.what) + '</span><button class="fix" type="button" data-fix="' + i + '">' + esc(x.fix || 'Open') + '</button></li>').join('') + '</ul>'
+        : '<h2>All clear<small>Nothing needs you right now</small></h2>';
+    }
+
+    function knowledge() {
+      out('k-count').textContent = unseen.length;
+      out('k-stats').innerHTML = DATA.knowledge.stats.map(([n, l]) => '<div class="stat"><b>' + n + '</b><span>' + l + '</span></div>').join('');
+      out('k-feed').innerHTML = unseen.slice(0, SHOWN).map((k) => '<li data-find="' + esc((k.title + ' ' + k.who + ' ' + k.gist).toLowerCase()) + '"><div><b>' + esc(k.title) + '</b><div class="meta"><span class="kind">' + k.kind + '</span>' + esc(k.who) + ', ' + k.when + '</div></div><button class="seen" type="button" data-seen="' + esc(k.title) + '" aria-label="Mark seen: ' + esc(k.title) + '">' + tick + '</button><p>' + esc(k.gist) + '</p></li>').join('') || '<li class="empty">You are up to date.</li>';
+      out('k-more').textContent = unseen.length > SHOWN ? '+' + (unseen.length - SHOWN) + ' more' : '';
+      root.querySelector('[data-tab="knowledge"] small').textContent = unseen.length;
+    }
+
+    function rest() {
+      out('today').innerHTML = DATA.today.map((b) => '<div class="block"><h4>' + b.label + '</h4>' + (b.items ? '<ul>' + b.items.map(([t, x]) => '<li>' + (t ? '<span>' + t + '</span>' : '') + esc(x) + '</li>').join('') + '</ul>' : '<p>' + esc(b.text) + '</p>') + '</div>').join('');
+      out('run').innerHTML = DATA.run.map((r) => '<button type="button" data-run="' + esc(r) + '">' + esc(r) + '</button>').join('');
+      out('s-stats').innerHTML = DATA.shipped.stats.map(([n, l]) => '<div class="stat"><b>' + n + '</b><span>' + l + '</span></div>').join('');
+      out('s-feed').innerHTML = outputs.map((o) => '<li data-find="' + esc((o.title + ' ' + o.project).toLowerCase()) + '"><div><b>' + esc(o.title) + '</b><div class="meta"><span class="kind">' + o.kind + '</span>' + esc(o.project) + ', ' + o.when + '</div></div></li>').join('');
+      const max = Math.max(...DATA.shipped.split.map((s) => s[1]));
+      out('s-split').innerHTML = DATA.shipped.split.map(([p, n], i) => '<li><span>' + esc(p) + '</span><span class="track"><span class="fill" style="--w:' + ((n / max) * 100).toFixed(0) + '%;--c:' + SERIES[i % SERIES.length] + '"></span></span><span class="n">' + n + '</span></li>').join('');
+      out('sys').innerHTML = DATA.systems.map((s) => '<li data-find="' + esc((s.name + ' ' + s.detail).toLowerCase()) + '">' + dot(s.state) + '<b>' + esc(s.name) + '</b><small>' + esc(s.detail) + '</small></li>').join('');
+      const row = (state, title, sub, right, find) => '<li data-find="' + esc(find.toLowerCase()) + '">' + dot(state) + '<div><b>' + esc(title) + '</b><small>' + esc(sub) + '</small></div><span class="r">' + esc(right) + '</span></li>';
+      out('l-projects').innerHTML = DATA.projects.map((p) => row(p.state, p.name, p.detail, p.right, p.name + ' ' + p.detail)).join('');
+      out('l-outputs').innerHTML = outputs.map((o) => row('ok', o.title, o.kind + ', ' + o.project, o.when, o.title + ' ' + o.project + ' ' + o.kind)).join('');
+      out('l-knowledge').innerHTML = DATA.knowledge.items.map((k) => row(unseen.includes(k) ? 'warn' : 'ok', k.title, k.gist, unseen.includes(k) ? 'new' : 'seen', k.title + ' ' + k.gist + ' ' + k.who)).join('');
+      out('l-systems').innerHTML = DATA.systems.map((s) => row(s.state, s.name, s.detail, '', s.name + ' ' + s.detail)).join('');
+    }
+
+    function filter(q) {
+      q = q.trim().toLowerCase();
+      root.querySelectorAll('[data-find]').forEach((el) => el.classList.toggle('is-filtered-out', !!q && !el.dataset.find.includes(q)));
+    }
+
+    root.addEventListener('click', (e) => {
+      const t = e.target.closest('button');
+      if (!t || !root.contains(t)) return;
+      if (t.dataset.tab) go(t.dataset.tab);
+      else if (t.dataset.go) go(t.dataset.go, true);
+      else if (t.dataset.seen) { const i = unseen.findIndex((k) => k.title === t.dataset.seen); if (i > -1) unseen.splice(i, 1); knowledge(); rest(); filter(root.querySelector('[data-act="find"]').value); }
+      else if (t.dataset.act === 'seen-all') { unseen.length = 0; knowledge(); rest(); }
+      else if (t.dataset.run) {
+        root.dispatchEvent(new CustomEvent('cockpit:run', { bubbles: true, detail: { job: t.dataset.run } }));
+        t.classList.add('is-queued');
+        t.textContent = t.dataset.run + ': queued';
+      }
+      else if (t.dataset.fix) {
+        const x = DATA.needs[Number(t.dataset.fix)];
+        root.dispatchEvent(new CustomEvent('cockpit:run', { bubbles: true, detail: { job: (x.fix || 'Open') + ': ' + x.where } }));
+        t.textContent = 'Sent';
+        t.disabled = true;
+      }
+    });
+
+    tabs.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      const ids = TABS.map((x) => x[0]);
+      const cur = ids.indexOf(root.querySelector('[aria-selected="true"]').dataset.tab);
+      go(ids[(cur + (e.key === 'ArrowRight' ? 1 : ids.length - 1)) % ids.length], true);
+    });
+
+    root.querySelector('[data-act="find"]').addEventListener('input', (e) => filter(e.target.value));
+
+    // The ask bar answers from DATA by keyword. Swap answer() for a call to your own model endpoint.
+    function answer(q) {
+      const words = q.toLowerCase().split(/\W+/).filter((w) => w.length > 3);
+      const hits = [...outputs.map((o) => o.title + ' (' + o.project + ', ' + o.when + ')'), ...DATA.needs.map((n) => n.where + ': ' + n.what), ...DATA.knowledge.items.map((k) => k.title)]
+        .filter((s) => words.some((w) => s.toLowerCase().includes(w)));
+      return hits.length ? 'Found ' + hits.length + ': ' + hits.slice(0, 3).join('; ') + '.' : 'Nothing in today’s data matches. Connect answer() to a model to ask open questions.';
+    }
+    root.querySelector('[data-act="ask"]').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = e.target.querySelector('input');
+      if (!input.value.trim()) return;
+      const a = root.querySelector('.answer');
+      a.hidden = false;
+      a.textContent = answer(input.value);
+    });
+
+    needs();
+    knowledge();
+    rest();
+  });
+})();
+</script>

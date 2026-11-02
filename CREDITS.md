@@ -23,6 +23,9 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Suggestion chips](components/ai/suggestion-chips.html) | ai | Original | Frederik | MIT |
 | [Thinking indicator](components/ai/thinking-indicator.html) | ai | Original | Frederik | MIT |
 | [Tool call cards](components/ai/tool-call-card.html) | ai | Original | Frederik | MIT |
+| [Admin shell](components/apps/admin-shell.html) | apps | Inspired by [shadcn/ui blocks (dashboard-01, sidebar-07)](https://ui.shadcn.com/blocks); Inspired by [shadcn-admin by satnaing](https://github.com/satnaing/shadcn-admin) | Frederik | MIT |
+| [AI OS cockpit](components/apps/ai-cockpit.html) | apps | Inspired by [shadcn/ui dashboard blocks](https://ui.shadcn.com/blocks) | Frederik | MIT |
+| [Analytics dashboard](components/apps/analytics-dashboard.html) | apps | Inspired by [shadcn/ui dashboard example and chart-area-interactive](https://ui.shadcn.com/blocks) | Frederik | MIT |
 | [Dot grid](components/backgrounds/dot-grid.html) | backgrounds | Original | Frederik | MIT |
 | [Flowing gradient](components/backgrounds/flowing-gradient.html) | backgrounds | Inspired by [HyperFrames shader blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
 | [Godrays](components/backgrounds/godrays.html) | backgrounds | Inspired by [HyperFrames shader blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |

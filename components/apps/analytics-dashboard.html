@@ -1,0 +1,302 @@
+<!--
+@title Analytics dashboard
+@description A full analytics screen: tabs, a 7, 30 or 90 day range that drives everything, four KPI cards with change badges, an interactive stacked area chart with a hover readout, a channel bar chart, recent conversions and a top pages table. Swap series() for your own data.
+@tags analytics, dashboard, kpi, area chart, metrics, traffic, shadcn, app screen
+@preview fill
+@height 1080
+@featured true
+@added 2026-11-02
+@source shadcn/ui dashboard example and chart-area-interactive | https://ui.shadcn.com/blocks | inspired-by
+-->
+<style>
+  .c-analytics-dashboard {
+    padding: var(--ds-space-6) var(--ds-space-5);
+    background: var(--ds-bg);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-sm);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-analytics-dashboard button { font: inherit; color: inherit; }
+  .c-analytics-dashboard button:focus-visible { outline: none; box-shadow: var(--ds-focus); }
+  .c-analytics-dashboard .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-4); margin-bottom: var(--ds-space-5); }
+  .c-analytics-dashboard h2 { margin: 0; font-size: var(--ds-text-xl); font-weight: 700; letter-spacing: -0.01em; color: var(--ds-ink); }
+  .c-analytics-dashboard .head p { margin: var(--ds-space-1) 0 0; color: var(--ds-muted); }
+  .c-analytics-dashboard .seg { display: inline-flex; padding: 3px; border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-panel); }
+  .c-analytics-dashboard .seg button { padding: 5px var(--ds-space-3); border: 0; border-radius: var(--ds-radius-sm); background: transparent; font-weight: 600; color: var(--ds-muted); cursor: pointer; white-space: nowrap; }
+  .c-analytics-dashboard .seg button[aria-pressed="true"], .c-analytics-dashboard .seg button[aria-selected="true"] { background: var(--ds-raised); color: var(--ds-ink); box-shadow: var(--ds-shadow-sm); }
+  .c-analytics-dashboard .tabs { margin-bottom: var(--ds-space-5); }
+  .c-analytics-dashboard [role="tabpanel"][hidden] { display: none; }
+
+  .c-analytics-dashboard .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-4); margin-bottom: var(--ds-space-4); }
+  .c-analytics-dashboard .card { min-width: 0; padding: var(--ds-space-5); background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); }
+  .c-analytics-dashboard .kpi .top { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-2); color: var(--ds-muted); }
+  .c-analytics-dashboard .kpi .val { margin: var(--ds-space-2) 0 var(--ds-space-3); font-size: var(--ds-text-xl); font-weight: 700; letter-spacing: -0.01em; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-analytics-dashboard .kpi .foot { margin: 0; font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  .c-analytics-dashboard .delta { display: inline-flex; align-items: center; gap: 3px; padding: 1px 8px; border: var(--ds-hairline) solid var(--ds-note-line); border-radius: var(--ds-radius-pill); background: var(--ds-note-fill); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-analytics-dashboard .delta.down { border-color: var(--ds-danger-line); background: var(--ds-danger-fill); }
+
+  .c-analytics-dashboard .card h3 { margin: 0; font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-analytics-dashboard .card .sub { margin: 2px 0 0; color: var(--ds-muted); }
+  .c-analytics-dashboard .card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--ds-space-3); margin-bottom: var(--ds-space-4); }
+  .c-analytics-dashboard .legend { display: flex; gap: var(--ds-space-4); margin: 0; padding: 0; list-style: none; color: var(--ds-muted); }
+  .c-analytics-dashboard .legend li { display: inline-flex; align-items: center; gap: 6px; }
+  .c-analytics-dashboard .legend i { width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
+
+  .c-analytics-dashboard .chart { position: relative; }
+  .c-analytics-dashboard .chart svg { display: block; width: 100%; height: 260px; overflow: visible; }
+  .c-analytics-dashboard .grid line { stroke: var(--ds-line); stroke-dasharray: 3 4; }
+  .c-analytics-dashboard .axis { position: absolute; inset: 0; pointer-events: none; font-size: 11px; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-analytics-dashboard .axis span { position: absolute; line-height: 1; white-space: nowrap; }
+  .c-analytics-dashboard .axis .yl { left: 0; width: 32px; text-align: right; transform: translateY(-50%); }
+  .c-analytics-dashboard .axis .xl { bottom: 2px; transform: translateX(-50%); }
+  .c-analytics-dashboard .area-a { fill: color-mix(in srgb, var(--ds-series-1) 28%, transparent); }
+  .c-analytics-dashboard .line-a { fill: none; stroke: var(--ds-series-1); stroke-width: 2; }
+  .c-analytics-dashboard .area-b { fill: color-mix(in srgb, var(--ds-series-2) 30%, transparent); }
+  .c-analytics-dashboard .line-b { fill: none; stroke: var(--ds-series-2); stroke-width: 2; }
+  .c-analytics-dashboard .cross { stroke: var(--ds-ink); stroke-width: 1; opacity: 0; }
+  .c-analytics-dashboard .chart.is-hover .cross { opacity: .35; }
+  .c-analytics-dashboard .tip { position: absolute; top: 0; z-index: 2; min-width: 150px; padding: var(--ds-space-2) var(--ds-space-3); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md); background: var(--ds-raised); box-shadow: var(--ds-shadow-md); font-size: var(--ds-text-xs); pointer-events: none; opacity: 0; transition: opacity var(--ds-dur-fast) var(--ds-ease); }
+  .c-analytics-dashboard .chart.is-hover .tip { opacity: 1; }
+  .c-analytics-dashboard .tip b { display: block; margin-bottom: 4px; color: var(--ds-ink); }
+  .c-analytics-dashboard .tip div { display: flex; align-items: center; gap: 6px; }
+  .c-analytics-dashboard .tip i { width: 8px; height: 8px; border-radius: 2px; background: var(--c); }
+  .c-analytics-dashboard .tip span { margin-left: auto; padding-left: var(--ds-space-3); color: var(--ds-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .c-analytics-dashboard .split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--ds-space-4); margin-top: var(--ds-space-4); }
+  .c-analytics-dashboard .bars { display: grid; gap: var(--ds-space-3); margin: 0; padding: 0; list-style: none; }
+  .c-analytics-dashboard .bars li { display: grid; grid-template-columns: 110px minmax(0, 1fr) 64px; align-items: center; gap: var(--ds-space-3); }
+  .c-analytics-dashboard .bars .track { height: 10px; border-radius: var(--ds-radius-pill); background: var(--ds-panel); overflow: hidden; }
+  .c-analytics-dashboard .bars .fill { display: block; height: 100%; width: var(--w); border-radius: inherit; background: var(--ds-series-1); transition: width var(--ds-dur-slow) var(--ds-ease); }
+  .c-analytics-dashboard .bars .n { text-align: right; color: var(--ds-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .c-analytics-dashboard .people { display: grid; gap: var(--ds-space-4); margin: 0; padding: 0; list-style: none; }
+  .c-analytics-dashboard .people li { display: flex; align-items: center; gap: var(--ds-space-3); }
+  .c-analytics-dashboard .av { display: grid; place-items: center; width: 34px; height: 34px; flex: none; border-radius: 50%; background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); font-size: var(--ds-text-xs); font-weight: 700; color: var(--ds-ink); }
+  .c-analytics-dashboard .people b { display: block; color: var(--ds-ink); font-weight: 600; }
+  .c-analytics-dashboard .people small { color: var(--ds-muted); font-size: var(--ds-text-xs); }
+  .c-analytics-dashboard .people .amt { margin-left: auto; color: var(--ds-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .c-analytics-dashboard table { width: 100%; border-collapse: collapse; }
+  .c-analytics-dashboard th, .c-analytics-dashboard td { padding: var(--ds-space-3) var(--ds-space-2); text-align: left; border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-analytics-dashboard th { font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-muted); }
+  .c-analytics-dashboard td.num, .c-analytics-dashboard th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .c-analytics-dashboard td code { font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); color: var(--ds-ink); }
+  .c-analytics-dashboard tr:last-child td { border-bottom: 0; }
+  .c-analytics-dashboard .table-wrap { overflow-x: auto; }
+
+  @container (max-width: 900px) {
+    .c-analytics-dashboard .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .c-analytics-dashboard .split { grid-template-columns: minmax(0, 1fr); }
+  }
+  @container (max-width: 520px) {
+    .c-analytics-dashboard .cards { grid-template-columns: minmax(0, 1fr); }
+    .c-analytics-dashboard .card { padding: var(--ds-space-4); }
+    .c-analytics-dashboard .chart svg { height: 200px; }
+    .c-analytics-dashboard .axis .yl { display: none; }
+    .c-analytics-dashboard .bars li { grid-template-columns: 84px minmax(0, 1fr) 52px; }
+    .c-analytics-dashboard .hide-sm { display: none; }
+  }
+</style>
+
+<section class="c-analytics-dashboard" aria-label="Analytics">
+  <div class="head">
+    <div>
+      <h2>Analytics</h2>
+      <p>Traffic and conversions for northwind.example</p>
+    </div>
+    <div class="seg" role="group" aria-label="Date range">
+      <button type="button" data-range="7" aria-pressed="false">7 days</button>
+      <button type="button" data-range="30" aria-pressed="true">30 days</button>
+      <button type="button" data-range="90" aria-pressed="false">90 days</button>
+    </div>
+  </div>
+
+  <div class="seg tabs" role="tablist" aria-label="Views">
+    <button type="button" role="tab" id="c-analytics-dashboard-t1" aria-controls="c-analytics-dashboard-p1" aria-selected="true">Overview</button>
+    <button type="button" role="tab" id="c-analytics-dashboard-t2" aria-controls="c-analytics-dashboard-p2" aria-selected="false" tabindex="-1">Content</button>
+  </div>
+
+  <div role="tabpanel" id="c-analytics-dashboard-p1" aria-labelledby="c-analytics-dashboard-t1">
+    <div class="cards" data-out="cards"></div>
+
+    <div class="card">
+      <div class="card-head">
+        <div><h3>Visitors</h3><p class="sub" data-out="chart-sub"></p></div>
+        <ul class="legend"><li><i style="--c: var(--ds-series-1)"></i>Desktop</li><li><i style="--c: var(--ds-series-2)"></i>Mobile</li></ul>
+      </div>
+      <div class="chart" data-out="chart"></div>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <div class="card-head"><div><h3>Signups by channel</h3><p class="sub">Where new accounts came from</p></div></div>
+        <ul class="bars" data-out="bars"></ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Recent conversions</h3><p class="sub" data-out="conv-sub"></p></div></div>
+        <ul class="people" data-out="people"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div role="tabpanel" id="c-analytics-dashboard-p2" aria-labelledby="c-analytics-dashboard-t2" hidden>
+    <div class="card">
+      <div class="card-head"><div><h3>Top pages</h3><p class="sub">Sorted by views in the selected range</p></div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Page</th><th class="num">Views</th><th class="num hide-sm">Avg. time</th><th class="num">Bounce</th></tr></thead>
+          <tbody data-out="pages"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  // Replace series() with your own daily numbers: [{ date, desktop, mobile }].
+  function series(days) {
+    const out = [];
+    const end = new Date(2026, 9, 31);
+    for (let i = days - 1; i >= 0; i -= 1) {
+      const d = new Date(end);
+      d.setDate(end.getDate() - i);
+      const t = 120 - i;
+      const wk = d.getDay() === 0 || d.getDay() === 6 ? 0.72 : 1;
+      out.push({
+        date: d,
+        desktop: Math.round((380 + t * 2.4 + Math.sin(t / 3.1) * 70 + Math.sin(t * 1.7) * 30) * wk),
+        mobile: Math.round((240 + t * 1.6 + Math.cos(t / 2.6) * 50 + Math.sin(t * 2.3) * 24) * (wk === 1 ? 0.9 : 1.15)),
+      });
+    }
+    return out;
+  }
+  const CHANNELS = [['Organic search', 0.38], ['Direct', 0.22], ['Newsletter', 0.17], ['LinkedIn', 0.14], ['Referral', 0.09]];
+  const PEOPLE = [['Astrid Nyborg', 'Team plan', 1490], ['Kasper Lind', 'Starter', 390], ['Rosa Ebbesen', 'Team plan', 1490], ['Theo Mikkelsen', 'Starter', 390], ['Signe Rask', 'Business', 4900]];
+  const PAGES = [['/', 0.31, 52, 41], ['/pricing', 0.18, 94, 28], ['/guides/onboarding', 0.13, 188, 22], ['/blog/quarterly-review', 0.11, 156, 47], ['/integrations', 0.08, 71, 35], ['/contact', 0.05, 43, 19]];
+
+  const fmt = new Intl.NumberFormat('en-GB');
+  const mon = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const sum = (a, k) => a.reduce((s, x) => s + x[k], 0);
+
+  document.querySelectorAll('.c-analytics-dashboard').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const out = (k) => root.querySelector('[data-out="' + k + '"]');
+    let range = 30;
+
+    function kpis(days) {
+      const cur = series(days);
+      const prev = series(days * 2).slice(0, days);
+      const v = (a) => sum(a, 'desktop') + sum(a, 'mobile');
+      const visits = v(cur);
+      const pv = v(prev);
+      const signups = Math.round(visits * 0.031);
+      const ps = Math.round(pv * 0.029);
+      const rev = signups * 112;
+      const pr = ps * 118;
+      const conv = (signups / visits) * 100;
+      const pc = (ps / pv) * 100;
+      const ch = (a, b) => ((a - b) / b) * 100;
+      return [
+        ['Visitors', fmt.format(visits), ch(visits, pv), 'Unique sessions'],
+        ['Signups', fmt.format(signups), ch(signups, ps), 'New accounts created'],
+        ['Conversion', conv.toFixed(2) + '%', ch(conv, pc), 'Signups per visitor'],
+        ['Revenue', 'DKK ' + fmt.format(rev), ch(rev, pr), 'New monthly recurring'],
+      ];
+    }
+
+    function drawChart(data) {
+      const W = 800;
+      const H = 260;
+      const pad = { l: 40, r: 8, t: 8, b: 26 };
+      const max = Math.max(...data.map((d) => d.desktop + d.mobile)) * 1.1;
+      const x = (i) => pad.l + (i / (data.length - 1)) * (W - pad.l - pad.r);
+      const y = (v) => H - pad.b - (v / max) * (H - pad.t - pad.b);
+      const line = (f) => data.map((d, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(f(d)).toFixed(1)).join('');
+      const area = (top, base) => line(top) + data.map((d, i) => 'L' + x(data.length - 1 - i).toFixed(1) + ' ' + y(base(data[data.length - 1 - i])).toFixed(1)).join('') + 'Z';
+      const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round((max * f) / 100) * 100);
+      const every = Math.ceil(data.length / 6);
+      const host = out('chart');
+      host.innerHTML =
+        '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Daily visitors, desktop and mobile, ' + mon(data[0].date) + ' to ' + mon(data[data.length - 1].date) + '">' +
+        '<g class="grid">' + ticks.map((t) => '<line x1="' + pad.l + '" x2="' + (W - pad.r) + '" y1="' + y(t) + '" y2="' + y(t) + '"/>').join('') + '</g>' +
+        '<path class="area-a" d="' + area((d) => d.desktop + d.mobile, (d) => d.mobile) + '"/>' +
+        '<path class="area-b" d="' + area((d) => d.mobile, () => 0) + '"/>' +
+        '<path class="line-a" vector-effect="non-scaling-stroke" d="' + line((d) => d.desktop + d.mobile) + '"/>' +
+        '<path class="line-b" vector-effect="non-scaling-stroke" d="' + line((d) => d.mobile) + '"/>' +
+        '<line class="cross" vector-effect="non-scaling-stroke" y1="' + pad.t + '" y2="' + (H - pad.b) + '"/>' +
+        '</svg>' +
+        // Labels are HTML, positioned in %, so they do not stretch with the SVG.
+        '<div class="axis" aria-hidden="true">' +
+        ticks.map((t) => '<span class="yl" style="top:' + ((y(t) / H) * 100).toFixed(2) + '%">' + (t >= 1000 ? t / 1000 + 'k' : t) + '</span>').join('') +
+        data.map((d, i) => (i % every === 0 ? '<span class="xl" style="left:' + ((x(i) / W) * 100).toFixed(2) + '%">' + mon(d.date) + '</span>' : '')).join('') +
+        '</div><div class="tip" aria-hidden="true"></div>';
+      const svg = host.querySelector('svg');
+      const cross = host.querySelector('.cross');
+      const tip = host.querySelector('.tip');
+      const move = (clientX) => {
+        const r = svg.getBoundingClientRect();
+        const px = ((clientX - r.left) / r.width) * W;
+        const i = Math.max(0, Math.min(data.length - 1, Math.round(((px - pad.l) / (W - pad.l - pad.r)) * (data.length - 1))));
+        const d = data[i];
+        cross.setAttribute('x1', x(i));
+        cross.setAttribute('x2', x(i));
+        tip.innerHTML = '<b>' + d.date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) + '</b>' +
+          '<div><i style="--c: var(--ds-series-1)"></i>Desktop<span>' + fmt.format(d.desktop) + '</span></div>' +
+          '<div><i style="--c: var(--ds-series-2)"></i>Mobile<span>' + fmt.format(d.mobile) + '</span></div>';
+        const left = (x(i) / W) * r.width;
+        tip.style.left = Math.min(Math.max(left + 12, 0), r.width - tip.offsetWidth) + 'px';
+        if (left + 12 + tip.offsetWidth > r.width) tip.style.left = Math.max(0, left - 12 - tip.offsetWidth) + 'px';
+        host.classList.add('is-hover');
+      };
+      svg.addEventListener('pointermove', (e) => move(e.clientX));
+      svg.addEventListener('pointerleave', () => host.classList.remove('is-hover'));
+    }
+
+    function render() {
+      const data = series(range);
+      out('cards').innerHTML = kpis(range).map(([label, val, ch, foot]) =>
+        '<div class="card kpi"><div class="top"><span>' + label + '</span><span class="delta' + (ch < 0 ? ' down' : '') + '">' + (ch < 0 ? '↓ ' : '↑ ') + Math.abs(ch).toFixed(1) + '%</span></div>' +
+        '<div class="val">' + esc(val) + '</div><p class="foot">' + foot + ', vs previous ' + range + ' days</p></div>').join('');
+      out('chart-sub').textContent = 'Daily sessions, ' + mon(data[0].date) + ' to ' + mon(data[data.length - 1].date);
+      drawChart(data);
+      const total = Math.round((sum(data, 'desktop') + sum(data, 'mobile')) * 0.031);
+      const top = CHANNELS[0][1];
+      out('bars').innerHTML = CHANNELS.map(([n, s]) => '<li><span>' + n + '</span><span class="track"><span class="fill" style="--w:' + ((s / top) * 100).toFixed(1) + '%"></span></span><span class="n">' + fmt.format(Math.round(total * s)) + '</span></li>').join('');
+      out('conv-sub').textContent = fmt.format(total) + ' signups in the last ' + range + ' days';
+      out('people').innerHTML = PEOPLE.map(([n, plan, amt]) => '<li><span class="av" aria-hidden="true">' + n.split(' ').map((p) => p[0]).join('') + '</span><div><b>' + esc(n) + '</b><small>' + plan + '</small></div><span class="amt">DKK ' + fmt.format(amt) + '</span></li>').join('');
+      const views = sum(data, 'desktop') + sum(data, 'mobile');
+      out('pages').innerHTML = PAGES.map(([p, s, t, b]) => '<tr><td><code>' + p + '</code></td><td class="num">' + fmt.format(Math.round(views * s * 1.6)) + '</td><td class="num hide-sm">' + Math.floor(t / 60) + 'm ' + String(t % 60).padStart(2, '0') + 's</td><td class="num">' + b + '%</td></tr>').join('');
+    }
+
+    root.querySelectorAll('[data-range]').forEach((b) => b.addEventListener('click', () => {
+      range = Number(b.dataset.range);
+      root.querySelectorAll('[data-range]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      render();
+    }));
+
+    const tabs = [...root.querySelectorAll('[role="tab"]')];
+    const select = (t) => {
+      tabs.forEach((x) => {
+        const on = x === t;
+        x.setAttribute('aria-selected', String(on));
+        x.tabIndex = on ? 0 : -1;
+        root.querySelector('#' + x.getAttribute('aria-controls')).hidden = !on;
+      });
+      t.focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); select(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]); }
+      });
+    });
+
+    render();
+  });
+})();
+</script>
