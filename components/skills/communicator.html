@@ -1,6 +1,6 @@
 <!--
 @title Communicator
-@description An agent skill that makes everything an AI writes for other people clear, true and well told. Download the folder or copy SKILL.md into your skills directory.
+@description An agent skill that makes everything an AI writes for other people clear, true and well told. Copy each markdown file into your skills folder; no download needed.
 @tags skill, writing, storytelling, communication, claude, agent, prompt
 @preview fill
 @height 900
@@ -57,8 +57,24 @@
   .c-communicator .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-5); font-size: var(--ds-text-sm); }
   .c-communicator .meta ul { margin: 0; padding-left: var(--ds-space-4); line-height: var(--ds-leading-body); }
   .c-communicator code { font-family: var(--ds-font-mono); font-size: 0.92em; }
-  .c-communicator details { border-top: var(--ds-hairline) solid var(--ds-line); padding-top: var(--ds-space-4); }
-  .c-communicator summary { cursor: pointer; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-communicator .files { display: grid; gap: var(--ds-space-3); }
+  .c-communicator .files h4 { margin: 0; }
+  .c-communicator .hint { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-communicator .hint a { color: var(--ds-ink); }
+  .c-communicator .tabs { display: flex; flex-wrap: wrap; gap: var(--ds-space-2); }
+  .c-communicator .tab {
+    padding: var(--ds-space-1) var(--ds-space-3);
+    border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-md);
+    background: var(--ds-raised); color: var(--ds-text);
+    font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); cursor: pointer;
+  }
+  .c-communicator .tab[aria-selected="true"] { background: var(--ds-ink); border-color: var(--ds-ink); color: var(--ds-surface); }
+  .c-communicator .tab:focus-visible { outline: 2px solid var(--ds-action); outline-offset: 2px; }
+  .c-communicator .panel { border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); overflow: hidden; }
+  .c-communicator .panel[hidden] { display: none; }
+  .c-communicator .bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-2); padding: var(--ds-space-2) var(--ds-space-3); background: var(--ds-raised); border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: var(--ds-text-sm); }
+  .c-communicator .bar code { color: var(--ds-ink); }
+  .c-communicator .panel pre { margin: 0; border-radius: 0; }
   .c-communicator pre {
     margin: var(--ds-space-3) 0 0; padding: var(--ds-space-4);
     max-height: 420px; overflow: auto;
@@ -70,6 +86,8 @@
     .c-communicator { padding: var(--ds-space-6) var(--ds-space-4); }
     .c-communicator .steps, .c-communicator .tests, .c-communicator .meta { grid-template-columns: minmax(0, 1fr); }
     .c-communicator td:first-child { width: 42%; }
+    .c-communicator .tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: var(--ds-space-1); }
+    .c-communicator .tab { flex: none; }
   }
 </style>
 
@@ -80,8 +98,8 @@
       <h3>Communicator</h3>
       <p class="lede">Makes everything an AI writes for other people clear, true and well told. The point comes first, a storyline carries the reader, and nothing is padded or invented. It applies to emails, proposals, reports, posts, decks and docs.</p>
       <div class="actions">
-        <a class="btn primary" href="https://www.fryland.co/kit/skills/communicator.zip" download>Download skill folder (.zip)</a>
-        <button class="btn" type="button" data-copy>Copy SKILL.md</button>
+        <button class="btn primary" type="button" data-jump>Get the files</button>
+        <button class="btn" type="button" data-copy-all>Copy all files as one text</button>
       </div>
     </header>
 
@@ -121,7 +139,7 @@
     <div class="meta">
       <div>
         <h4>Install</h4>
-        <p>Unzip into <code>~/.claude/skills/</code> for Claude Code, or into the skills folder of any client that reads the Agent Skills format. Then replace the house-rules section with your own.</p>
+        <p>Create a folder called <code>communicator</code> in <code>~/.claude/skills/</code> (Claude Code) or the skills folder of any client that reads the Agent Skills format. Copy each file below into it at the path shown. Then replace the house-rules section with your own.</p>
       </div>
       <div>
         <h4>How it was tested</h4>
@@ -132,9 +150,26 @@
       </div>
     </div>
 
-    <details>
-      <summary>Read SKILL.md</summary>
-      <pre data-skill>---
+    <div class="files" data-skill-dir="skills/communicator">
+      <h4>The files</h4>
+      <p class="hint">Pick a file, copy it, and save it under the path shown. SKILL.md alone works; the references add depth.</p>
+      <!-- skill-files:start -->
+      <div class="tabs" role="tablist" aria-label="Skill files">
+        <button class="tab" type="button" role="tab" aria-selected="true">SKILL.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">README.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">references/editing.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">references/examples.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">references/executive.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">references/explain.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">references/presentation.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">references/rubric.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">references/storyline.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">references/technical.md</button>
+        <button class="tab" type="button" role="tab" aria-selected="false">evals/cases.md</button>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/SKILL.md">
+        <div class="bar"><span>Save as <code>communicator/SKILL.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre>---
 name: communicator
 description: Makes anything written for other people clear, true and well told, in Danish or English. The point comes first, a storyline carries the reader, and nothing is padded. Use for every draft or final output meant for someone other than Frederik. That covers client emails, replies and messages, proposals, quotes (tilbud) and SOWs, reports, memos, meeting notes and agendas, strategy and decision documents, executive summaries, status updates, deck and slide text, workshop material, LinkedIn or blog posts, newsletters, case studies, and READMEs or documentation others will read. Also use when asked to make something clearer, shorter or more persuasive, to structure an argument, to "tell the story" or to "make it land". Not for code, commit messages, raw data, verbatim quotes, legal or contract wording that must stay exact, prompts for other agents, or chat replies to Frederik himself. For marketing page copy (landing, pricing, CTAs) copywriting leads and this skill supplies the storyline.
 ---
@@ -246,7 +281,541 @@ Preserve meaning, facts, numbers, intent, voice (for a light edit) and any legal
 - Any em-dash or en-dash left?
 
 For high-stakes deliverables (client proposals, board material, anything public) or when asked to assess quality, score with the [rubric](references/rubric.md) and fix the weakest dimension first. Calibration: [examples](references/examples.md).</pre>
-    </details>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/README.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/README.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># communicator
+
+An agent skill that makes everything an AI writes for other people clear, true and well told: the point first, a storyline that carries the reader, nothing padded, nothing invented.
+
+## Install
+
+Copy the `communicator` folder into your skills directory:
+
+- Claude Code: `~/.claude/skills/communicator/` (personal) or `.claude/skills/communicator/` (one project)
+- Any client that reads the Agent Skills format (`SKILL.md` with `name` and `description`) works the same way
+
+The agent loads `SKILL.md` when a task matches the description and opens the files in `references/` only when a task needs them.
+
+## Make it yours
+
+The section "House rules for Frederik's outputs" in `SKILL.md` holds one person's rules (no dashes, solo "I", Danish and English, markdown strategy docs). Replace it with your own. The "Neighbouring skills" paragraph names skills from the author's setup; drop the ones you do not have.
+
+## What is in the folder
+
+| File | Job |
+|---|---|
+| `SKILL.md` | Priority order, three private sentences, the storyline and its three tests, ten rules, mode picker, final check |
+| `references/storyline.md` | Arcs (SCQA, And-But-Therefore, before-turn-after), real tension, story devices, the reader as hero, shapes for proposals, case studies, posts and emails |
+| `references/explain.md`, `executive.md`, `technical.md`, `presentation.md` | One file per kind of output |
+| `references/editing.md` | Four editing passes, certainty language, AI-writing patterns |
+| `references/rubric.md` | Ten dimensions scored 1 to 3; a 1 on accuracy blocks delivery |
+| `references/examples.md` | Six before/afters that invent nothing |
+| `evals/cases.md` | Ten paired test cases, for you, not the agent |
+
+## Where it came from
+
+Synthesised from three deep-research reports (Claude, ChatGPT, Gemini) on how to make an AI communicate well. All three converged on answer-first structure, plain concrete language and correctness above brevity, drawing on Minto, Orwell, Zinsser, Tufte, Heath and Heath, and Diátaxis. This skill keeps that common core and makes the storyline central rather than an add-on for persuasion.
+
+## How it was tested
+
+- An adversarial review by a separate agent found 14 problems (contradictory rules, examples that invented facts, claim headings forced onto reference docs). All were fixed.
+- A blind A/B test on four tasks (client email, proposal opening, LinkedIn post, board note), same model with and without the skill: the skill won 4 of 4 after the fixes. Four cases is a small sample; run `evals/cases.md` on your own work before trusting it.
+
+License: MIT, like the rest of the kit.</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/references/editing.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/references/editing.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Editing
+
+Use when revising existing text, including your own first draft. Rules here are defaults. Break one sooner than write something awkward (Orwell's sixth rule).
+
+## Four passes, in order
+
+1. **Meaning audit.** List what must survive: claims, numbers, units, dates, people, qualifiers, exceptions, instructions, open questions, legal or mandatory wording.
+2. **Structure.** Find the central point, move it to the top, merge duplicate sections, move optional depth out. Do not polish sentences inside a broken structure.
+3. **Line edit.** The rules below.
+4. **Regression check.** Compare with the source: numbers, units, time windows, baselines, negations, scope, owners, dependencies, exceptions, caveats. Nothing lost, nothing invented. If something is ambiguous, flag it instead of guessing.
+
+## Edit depth
+
+- **Clean rewrite (default):** only the new text, same meaning.
+- **Light edit:** keep the author's voice and structure.
+- **Substantial rewrite:** reorder and compress; say what you moved or removed.
+- **Review requested:** the main weaknesses and highest-leverage fixes first, then a sample rewrite.
+
+Close with one or two lines on what changed only if useful.
+
+## Line editing
+
+1. Cut words that do no work: "in order to" to "to"; "at this point in time" to "now"; "it is important to note that" (delete).
+2. Short familiar words: utilise to use, facilitate to help, commence to start.
+3. Active voice when the actor matters: "The team approved the budget." Keep the passive when the actor is unknown or irrelevant, or standard phrasing needs it.
+4. Turn nouns back into verbs: "carry out an evaluation of" to "evaluate".
+5. Split a sentence that runs past about 25 words and makes the reader hold too much at once.
+6. Keep terms consistent.
+7. Put numbers in context: unit, period, comparison.
+8. Attach each caveat to the claim it qualifies, not in a pile at the end.
+
+Fix the structure, not just the word. Swapping a banned word for a synonym leaves the bloat in place.
+
+## Certainty language
+
+"The data shows" for observed values. "This suggests" for an interpretation. "I recommend" for a judgement. "Unknown" for missing information. Never turn a correlation into a cause, a proposal into a result, or a weak claim into "demonstrates" while removing hedges.
+
+## AI-writing patterns to remove
+
+One alone proves nothing; several together read as machine-written. These matter extra because Frederik's deliverables go out under his name.
+
+- **Staging instead of stating:** "It's not just X, it's Y"; "Here's the thing"; "The answer? Simple."; "No X, no Y, just Z". State the point.
+- **Echo closers:** a final line that restates the paragraph; "That's the real win."
+- **Forced triads:** lists of three for rhythm, not content.
+- **Inflation:** pivotal, transformative, a testament to, plays a crucial role, game-changer.
+- **Tell-tale vocabulary:** delve, tapestry, landscape (abstract), underscore, showcase, foster, intricate, navigate (figurative), robust, seamless, elevate. Use only when it is the most precise word.
+- **Vague authority:** "experts say", "studies show" without a source.
+- **Chat leftovers:** "Great question!", "I hope this helps", "Certainly!", offers to do more, a summary of what you just wrote.
+- **Formatting by default:** bold on every bullet, title-case headings, headings on a short answer, emoji bullets.
+- **Dashes:** any em-dash or en-dash (house rule: none at all).
+- **Trailing clauses:** sentences that run on into ", ensuring...", ", highlighting...", ", making it...".
+- **Hedge stacking:** "may potentially help to somewhat improve". Make one clear statement of uncertainty.
+
+## Jargon swaps (fix the meaning, not only the word)
+
+| Instead of | Write |
+|---|---|
+| leverage | use |
+| drive synergies | combine X and Y to cut cost by Z |
+| holistic approach | name the parts covered |
+| best-in-class | give the measure and the comparison |
+| going forward | from [date] |
+| align on | agree |
+| actionable insights | the findings, named |
+
+## After editing
+
+Read it once as the reader. If it now sounds clipped, robotic or condescending, restore the connecting words. Flow is part of clarity.</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/references/examples.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/references/examples.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Before and after
+
+Calibration examples with synthetic facts. Every "after" uses only facts from its "before" or its stated context; anything missing is a visible placeholder. Do not copy them mechanically.
+
+## 1. Client email with a buried ask
+
+**Before:** "Hi Anna, I hope you are well. I wanted to follow up on our conversation last week regarding the dashboard project. As discussed, we have been making good progress on the data side and the ERP integration is now largely in place. There are a few remaining questions around access rights, and it would be helpful to get clarity on these at some point. In particular, we would need someone from your side to grant read access to the invoice module, as without this we cannot complete the revenue view, which was planned for the end of the month."
+
+**After:** "Hi Anna, could someone on your side give me read access to the ERP invoice module by [date]? Without it I can't finish the revenue view planned for the end of the month. The rest of the integration is largely in place, and I have a few smaller access questions we can take at the same time."
+
+**Why:** The ask, its reason and its deadline were in the last sentence; now they lead. "Largely" and the open questions survive. The date is a placeholder because the source has none.
+
+## 2. Status update that hid a blocker
+
+**Before:** "Overall the project is progressing well. Content is complete. The data API has seen some delays. Testing is planned to follow once the API is available. We will review again on Tuesday."
+
+**After:** "Testing cannot start until the data API is delivered, and the API is delayed. Content is complete. Next review is Tuesday."
+
+**Why:** "Progressing well" contradicted the facts. The dependency is the news, so it leads. No percentage, owner or decision was invented.
+
+## 3. Proposal opening (SCQA)
+
+**Context given:** the client's project managers rebuild a weekly margin report by hand from three systems, and it reaches them on Wednesday.
+
+**Before:** "Fryland is a consultancy with experience in data, automation and AI. We offer a wide range of services that help companies become more data-driven. In this proposal we describe our approach to your reporting needs."
+
+**After:** "Every week your project managers rebuild the margin report by hand from three systems, and it reaches them on Wednesday. Until then they steer running jobs on last week's figures. The question is how to get them current margins when the week starts. I propose an automated report that pulls from the three systems you already use, ready by [day and time]."
+
+**Why:** Situation, complication, question, answer, in the client's terms. Credentials come later, if at all. "Last week's figures" follows from a Wednesday report; no timeline or price is invented.
+
+## 4. A result told as a story (post or case study)
+
+**Before:** "We implemented an automation solution that significantly improved efficiency in an installer's quoting process. Previously estimators retyped site-visit notes into the quoting system; now the notes are imported directly. Quotes go out the same day as the visit instead of 2 to 3 days later."
+
+**After:**
+"An installer's customers used to wait 2 to 3 days for a quote after the site visit.
+
+The estimators took notes on site, then sat down later and typed the same notes into the quoting system. The quote waited for that second sitting.
+
+Now the site notes go straight into the quoting system, and the quote leaves the same day as the visit.
+
+Often the fastest fix is to find the step where someone types what someone else already wrote."
+
+**Why:** Scene (customers waiting), tension (the second sitting), turn (notes go straight in), lesson. Every fact is from the source; "significantly improved efficiency" is replaced by what actually changed. The story gets four short paragraphs, not one line.
+
+## 5. Slide titles as a storyline
+
+**Before:** Background / Current state / Analysis / Options / Recommendation / Next steps
+
+**After:**
+1. Estimators spend [X hours a week] preparing quotes by hand
+2. [Y%] of that time is retyping data that already exists
+3. Automating the hand-off removes the retyping without changing tools
+4. A [length] pilot on one team proves it before wider rollout
+5. I need a pilot team and system access by [date]
+
+**Why:** Read alone, the titles make the whole argument. Each is a claim the slide body must prove. The analysis supplies the numbers; until then they stay placeholders.
+
+## 6. Technical step
+
+**Before:** "Next you'll want to make sure the environment is properly configured before running the sync, which can be done in a number of ways."
+
+**After:**
+"1. Set the API key: `export ERP_API_KEY=&lt;your key&gt;`.
+2. Run the sync in dry-run mode: `[sync command] --dry-run`. You should see [expected output]."
+
+**Why:** One action per step, the exact command, and a check that proves it worked. Command and output are placeholders until taken from the real tool.</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/references/executive.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/references/executive.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Executive mode
+
+Purpose: help senior people make or endorse a decision quickly, on the right evidence. Covers proposals, decision papers, business cases, steering-group and sponsor updates.
+
+## Structure (default, use loosely)
+
+1. **Answer first:** the recommendation or conclusion in one or two sentences, with what you need from the reader ("Approve...", "Decide between A and B by 15 May").
+2. **Why:** two to four reasons, each a full-sentence claim, not a topic label. They should not overlap and together should cover the case (MECE). Where causes genuinely overlap, say so rather than force them apart.
+3. **Evidence:** the key numbers behind each reason, with source or assumption.
+4. **Implications:** cost, time, risk, people, customers, regulation, as relevant.
+5. **Risks and alternatives:** what could go wrong, what else was considered and why not.
+6. **Next step:** owner, date, decision needed.
+
+If the reader lacks context or may resist, open with one or two lines of situation and complication (SCQA), then the answer.
+
+## Rules
+
+- Lead with the decision, not the process. "I ran 12 interviews" comes later, if at all.
+- Numbers with units and comparisons ("DKK 1.2m, 8% under budget"), not adjectives ("significant savings").
+- Separate what the data shows, what you infer, and what you recommend.
+- State confidence and the main uncertainty once, in one sentence.
+- One page or less for the core message; detail in an appendix.
+- No consulting jargon: leverage, synergies, holistic, move the needle, best-in-class.
+- Bad news first too, with the plan.
+- Status updates: what is done, what is blocked and by what, what is needed from the reader, when the next review is. Never "on track" when a dependency is blocked.
+
+## When not to force the pyramid
+
+- No recommendation yet: say so. "No recommendation yet. Here is what I know and what I will know by [date]."
+- Brainstorming or option generation.
+- Formats a client or regulator prescribes.
+
+## Skeleton
+
+**Recommendation:** ...
+**Why:** 1) ... 2) ... 3) ...
+**What it means:** ...
+**Risks:** ...
+**Decision needed:** ... by ... (owner)</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/references/explain.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/references/explain.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Explain mode (default)
+
+Purpose: help a reader understand something complex, quickly and correctly.
+
+## Procedure
+
+1. **Name the core idea in one sentence** a smart outsider would follow. If you cannot, find the missing step in your own understanding (the explain-it-simply test, in the spirit of Feynman); do not cover it with jargon.
+2. **Start from what the reader knows.** Anchor the new idea to a process, decision or object from their world.
+3. **Build in steps.** Each sentence follows from the one before. Introduce a new concept exactly where it is needed.
+4. **Give one concrete example** with specifics: who, what, a number. Generalise after the example, not before.
+5. **Use an analogy only if it maps correctly,** and say where it breaks if that matters.
+6. **End with the "so what":** why it matters to this reader or what they can now do.
+
+## Accuracy guard
+
+- Simplify the wording, never the truth. Keep "usually" and "in most cases" when they are true.
+- Keep a technical term if the reader will meet it elsewhere; define it once.
+- When the simple version leaves out something that matters, add one line: "In practice there are exceptions, such as..."
+
+## Shapes
+
+- **Quick answer:** 1 to 3 sentences: the answer and the key reason.
+- **Concept:** core idea, familiar anchor, how it works (3 to 5 steps), example, why it matters.
+- **Comparison:** the one-line difference first, then a table if there are more than two attributes.
+- **Summary of a long document:** the main conclusion, 3 to 5 key points, decisions or open questions, and one line on what was left out.
+
+## Common failures
+
+- Long background before the point.
+- Defining what the reader knows; not defining what they do not.
+- Several analogies piled up, or a cute one that is wrong.
+- Saying "it's complex" instead of explaining.
+- Narrating a table line by line right after showing it.</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/references/presentation.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/references/presentation.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Presentation mode
+
+Purpose: slides that carry one clear argument, with evidence, readable in seconds. Words and storyline only; visual styling follows `resources/taste/DESIGN-SYSTEM.md` and whichever deck tool Frederik picked (ask before picking one for a client deck).
+
+## Storyline first
+
+1. Write the governing message of the deck in one sentence.
+2. Write every slide title as a full-sentence claim (action title). Read the titles alone: they must tell the whole story in order. Use an arc from [storyline](storyline.md); SCQA is the usual opening.
+3. Give each slide one job: set up the problem, show evidence, explain a mechanism, compare options, or ask for a decision. If a slide needs two titles, split it.
+4. Only then build each slide body to prove its title.
+5. Check transitions: "Because of X, we should Y" beats a list of topics.
+
+## Slide rules
+
+- **Action titles:** "Personalised offers lifted conversion 18% in the pilot", not "Pilot results".
+- **The body proves the title:** a chart, table, diagram or a few short points. Anything else moves to notes or the appendix.
+- **No fixed word quotas.** A pre-read deck can carry more text than a talk deck. Never fix crowding by shrinking the font.
+- **Label units, baseline, period, source** where they matter.
+- **Highlight the one thing to notice.**
+
+## Charts (graphical integrity, after Tufte)
+
+| Question | Chart | Check |
+|---|---|---|
+| Change over time | Line | Interval, gaps, definition changes |
+| Compare categories | Bar or dot | Bars start at zero |
+| Before and after | Slope or paired values | Comparable cohorts and periods |
+| Part of a whole | Stacked bar or table | Denominator stated; few categories |
+| Relationship | Scatter | Do not imply causation |
+| Process | Flow diagram | Failure paths shown |
+
+Label data directly instead of legends. No 3D, gradients or decoration. Put the takeaway in the title and annotate the point that matters. For anything chart-heavy, also use the `dataviz` skill.
+
+Tufte himself criticised bullet-outline slides; for dense analytical content, recommend a written document as the main vehicle with slides as support. Action titles and one message per slide are consulting practice, not Tufte.
+
+## Output format for slide content
+
+For each slide: **Title** (action title), **Body** (evidence), **Visual** (type and what to highlight), **Notes** (what the speaker says, plus detail removed from the slide).
+
+## Common failures
+
+- Topic titles ("Background", "Results").
+- Bullet walls pasted from a document.
+- Several messages on one slide.
+- The conclusion appears only on the last slide.
+- A caveat in tiny text that reverses the claim.</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/references/rubric.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/references/rubric.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Quality rubric
+
+For high-stakes deliverables or when asked to assess quality. Scores are structured judgements, not measurements. Quote the evidence for each score. For everyday outputs, the final check in SKILL.md is enough; do not print scores unless asked.
+
+## Scale
+
+- **1 = Poor:** would mislead the reader or force a rewrite.
+- **2 = Acceptable:** usable, needs editing.
+- **3 = Excellent:** the reader would change nothing on this dimension.
+
+## Dimensions
+
+| # | Dimension | 3 looks like | 1 looks like |
+|---|---|---|---|
+| 1 | Accuracy | Facts, numbers and qualifications from the source kept; nothing invented; uncertainty stated | A fact changed, a caveat lost, a claim invented |
+| 2 | Clarity of message | Message (or what the reader will be able to do) stated plainly in the first two sentences or the title | No identifiable message, or it is buried past halfway |
+| 3 | Storyline | Headings or first sentences alone tell the argument; tension is real; ends on the so-what. (Reference, how-to and READMEs: headings match the reader's tasks) | Topic labels on an argument, no thread, ends on a recap |
+| 4 | Audience fit | Content, depth and words fit this reader's role and decision | Written for the author or a generic reader |
+| 5 | Comprehensibility | Every term known or defined once; sentences read in one pass | Undefined jargon; sentences that must be reread |
+| 6 | Actionability | Decision, ask, owner, date or instruction explicit where relevant | Reader cannot tell what to do |
+| 7 | Concision | No sentence can go without losing something this reader needs | Padding, preambles or recaps are a fifth of the text |
+| 8 | Hierarchy | Most important is most visible; detail in notes or appendix | Key points weigh the same as minor detail |
+| 9 | Level of detail | Enough to act or decide; no essential step, risk or assumption missing | Missing essentials, or full of detail nobody needs |
+| 10 | Voice | Sounds like a person; no AI patterns; no dashes; house rules met | Several AI patterns; sounds generated |
+
+Total out of 30. Any 1 on Accuracy means revise before delivering, whatever the total.
+
+## Anchors (Clarity)
+
+- **1:** "In today's rapidly evolving landscape, it is important to consider a variety of factors."
+- **2:** "I looked at three vendors. After comparing cost, risk and fit, Vendor B looks best."
+- **3:** "Choose Vendor B: it is DKK 1m cheaper over three years and the only one your security team has already approved."
+
+## Revision
+
+1. Fix any Accuracy 1 first.
+2. Then the lowest score:
+   - Message or hierarchy: write the message in one sentence and move it to the top.
+   - Storyline: rewrite headings as claims and run the skim test.
+   - Concision: delete restatements, preambles and closers.
+   - Comprehensibility: define or replace terms, split long sentences.
+   - Actionability: add the decision, owner and date.
+   - Voice: run the AI-pattern list in [editing](editing.md).
+3. Re-score only what changed. Stop when there are no 1s and most scores are 3. Never claim an improvement was measured unless it was.</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/references/storyline.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/references/storyline.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Storyline and story devices
+
+Use for anything that must persuade, change minds, be remembered or be retold: proposals, change memos, pitches, case studies, posts, talks, workshop openings. The story always serves the message. If it does not make the actual claim easier to grasp, believe or remember, cut it.
+
+## 1. Choose an arc
+
+Pick one. Each has the same engine: a starting point the reader recognises, a tension, and a resolution that is the message.
+
+| Arc | Shape | Best for |
+|---|---|---|
+| **SCQA** (Minto) | Situation (what we agree on), Complication (what changed), Question (what that raises), Answer | Proposals, decision papers, deck openings |
+| **And, But, Therefore** (Randy Olson, after the "but/therefore" rule of Trey Parker and Matt Stone) | "X is true AND Y. BUT Z changed. THEREFORE we do W." | One paragraph, an email opening, a post hook, an elevator pitch |
+| **Before, turn, after** | How it was, the moment or insight that changed it, how it is now, what it means | Case studies, results, retrospectives |
+| **Problem, cause, fix** | What hurts, why it really happens, what solves it and how we know | Diagnoses, audits, recommendations |
+| **Gap** | "We assumed X. The data shows Y." Then why, then what to do | Findings that contradict belief |
+
+Test the arc in three sentences before drafting. If the three sentences do not make you want to read on, the long version will not either.
+
+## 2. Make the tension real
+
+The complication is what makes the reader care. Name it concretely: the cost of doing nothing, the deadline, the risk, the customer who left. Real stakes only: lost contracts, a weekend of manual reconciliation, a regulator's question. No manufactured drama, no generic urgency ("in today's fast-moving world").
+
+If there is no genuine tension, do not invent one. Use answer-first instead.
+
+## 3. Story devices (SUCCESs, Heath and Heath)
+
+Options, not a checklist. Use the ones that serve the message.
+
+- **Simple:** one core message, sharp enough to guide a decision. Not a slogan that erases caveats.
+- **Unexpected:** open on the gap between what the reader assumes and what is true. Surprise only if it focuses attention on something relevant.
+- **Concrete:** one specific case, number, scene or person beats a category. "Mette in accounts spends Monday mornings re-keying 40 invoices" beats "manual processes create inefficiency".
+- **Credible:** a verifiable number, a detail the reader can check, a source. Not "experts say".
+- **Emotional:** connect to what this reader actually cares about: their customers, their team, their risk, their pride in the work.
+- **Story:** a short causal account (who, obstacle, action, result, meaning) that lets the reader picture the change.
+
+## 4. Make the reader the hero
+
+(After Donald Miller's StoryBrand.) In client work, the client (or their customer) is the one who changes; Frederik and the tool are the guide. Write "your team gets Monday mornings back", not "our solution delivers efficiency". Use details from their world: their systems, their people's roles, their numbers.
+
+## 5. Rules
+
+- **State the message before or right after the story.** Never leave the reader to infer it.
+- **Keep it short:** usually one paragraph, or one or two slides. Under about 15% of a decision document.
+- **One story per key message.** Several anecdotes dilute each other.
+- **Never invent** customer stories, quotes, names or results. Label hypothetical or composite cases ("Imagine a project manager who...").
+- **Analogies must map correctly.** Say where one breaks if a reader might over-apply it ("unlike a library, the cache can be out of date"). One analogy per idea.
+- **Busy decision-makers get the answer first,** story second. In executive material, confine narrative to framing the problem; keep decisions and actions direct.
+- **Beware the curse of knowledge.** A detail that excites the team may mean nothing to an outsider. Choose details the reader recognises.
+
+## 6. Shapes by format
+
+- **Proposal:** SCQA opening (their situation, the complication in their words, the question), then the answer, then how, then proof, then price and next step. Their problem fills the first page, not Frederik's credentials.
+- **Case study:** Before, turn, after. Open on the client's concrete problem, show the turn, give verified results with units and period, end on what it means for a reader like them.
+- **LinkedIn or blog post:** first line is the hook (a gap, a concrete scene or a surprising verified number). Then the scene, the tension and the turn, in short paragraphs. One idea, one story. End on the lesson, optionally followed by a real question; not a slogan or a stack of hashtags. A post that is only a claim and a question has no story: give it room.
+- **Talk or workshop:** the titles read alone tell the story; open with the tension, not the agenda.
+- **Email asking for something:** the ask and its date in the first sentence. Add one And-But-Therefore line of context only if the reader would otherwise refuse.
+
+## 7. Check
+
+- Can the reader state the point without retelling the anecdote?
+- Did the story improve understanding, belief or recall of the real claim?
+- Is every detail in it true, or labelled as hypothetical?
+- Is the tension real, specific and relevant to this reader?
+
+If any answer is no, cut or fix the story.</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/references/technical.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/references/technical.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Technical mode
+
+Purpose: explain technical things precisely and produce documentation people can act on.
+
+## First, choose the document type (Diátaxis)
+
+| Reader's need | Type | Shape |
+|---|---|---|
+| Learn by doing | Tutorial | A guided, safe path to one working result. Explain only what is needed to continue |
+| Get a task done | How-to | Goal, prerequisites, numbered steps (one action each), expected result, troubleshooting |
+| Look something up | Reference | Consistent entries (name, type, default, description). No narrative |
+| Understand why | Explanation | Context, design reasons, trade-offs, alternatives considered |
+
+Do not mix types in one section. Link to an explanation instead of embedding it in steps.
+
+## Rules
+
+- **Precision beats plainness when they conflict.** Exact term, version, parameter, command. Define a term once if the reader may not know it.
+- **One term per concept.** Do not alternate token, key and credential for the same thing; readers assume different words mean different things.
+- **Never drop essential detail to save length:** prerequisites, permissions, versions, limits, defaults, error behaviour, security notes, rollback.
+- **State assumptions:** environment, versions, what the reader must already have.
+- **One action per step,** starting with a verb, followed by the expected result ("You should see...").
+- **End procedures with a check:** the command to run and the output that proves it worked.
+- **Examples are complete and runnable,** or clearly marked as illustrative. No ellipses in code someone will paste.
+- **Support recovery:** name the likely errors and their fixes.
+- **Keep explanation next to the thing it explains,** not three sections away.
+
+## Explaining an architecture
+
+1. Purpose: what the system does, for whom, in one or two sentences.
+2. Components: 3 to 7, with one-line responsibilities.
+3. Flow: how a typical request or record moves through.
+4. Decisions and trade-offs: why it is built this way, what was given up.
+5. Constraints and risks: scale, security, compliance, known limits.
+
+Offer a diagram when there are more than three components or a non-linear flow (house style: `resources/taste/DESIGN-SYSTEM.md`).
+
+## Common failures
+
+- Marketing language in docs ("seamless", "powerful", "blazing fast").
+- Steps that hide two actions; missing prerequisites.
+- Explaining the obvious and skipping the hard part.
+- Shortening docs by deleting the edge cases people actually hit.</pre>
+      </div>
+      <div class="panel" role="tabpanel" data-path="communicator/evals/cases.md" hidden>
+        <div class="bar"><span>Save as <code>communicator/evals/cases.md</code></span><button class="btn" type="button" data-copy-file>Copy file</button></div>
+        <pre># Eval cases
+
+For Frederik, not loaded by the skill. Run each case twice with the same model: once without the skill, once with it. Judge blind (shuffle A and B). Each case lists what must survive and what counts as failure. Facts are synthetic.
+
+## E01 Buried ask in a client email
+**Input:** "Rewrite for the client: [paste example 1 'before' from references/examples.md]"
+**Must:** ask in the first sentence; deadline kept; no new facts; "I" not "we".
+**Fail:** greeting paragraph first; invented date; ask still last.
+
+## E02 Compress without losing causality
+**Input:** "Summarise in 2 sentences for the product owner: 'In April, app conversion rose from 4.0% to 4.5%. The pilot audience was not randomised and the April campaign coincided with a price change. The team cannot isolate the campaign effect.'"
+**Must:** +0.5 percentage points (12.5% relative if stated); explicit that the campaign effect is not isolated.
+**Fail:** "+0.5%"; credits the campaign; drops the caveat.
+
+## E03 Status with a blocker
+**Input:** "Status for the sponsor: content complete; data API delayed; testing cannot start before the API. Next review Tuesday. No owners or percentages given."
+**Must:** blocker and dependency lead; Tuesday kept; nothing invented.
+**Fail:** "on track"; invented owner or percentage.
+
+## E04 Decision with missing evidence
+**Input:** "Recommend A or B. A integrates easily but costs more. B is cheaper but needs manual reconciliation. Volumes and labour costs unknown."
+**Must:** conditional recommendation or a stated decision rule; names the missing data.
+**Fail:** confident winner without evidence.
+
+## E05 Proposal opening
+**Input:** "Write the first paragraph of a proposal to a mid-size Danish installer whose project managers rebuild a weekly margin report by hand from three systems and get it on Wednesday."
+**Must:** SCQA or ABT shape; their problem first; no Fryland credentials in the opening; no dashes.
+**Fail:** opens with "Fryland is..."; generic benefits; invented ROI.
+
+## E06 LinkedIn post from a dry result
+**Input:** "Turn into a LinkedIn post: 'Automated quote intake for an installer. Quotes now go out the same day as the site visit, previously 2 to 3 days.'"
+**Must:** hook in line one; one concrete scene; the 2 to 3 days kept; one lesson; no hashtag stack.
+**Fail:** "In today's fast-paced world"; invented percentage; ends on a slogan; em-dash.
+
+## E07 Deck storyline
+**Input:** "Slide titles for a 6-slide steering-group deck recommending a 4-week pilot of automated quoting."
+**Must:** titles are claims; read alone they argue the case; last slide is the ask.
+**Fail:** topic titles ("Background", "Next steps").
+
+## E08 Story must not displace evidence
+**Input:** "Make this memorable for the board: churn fell from 9% to 7% after onboarding calls were introduced; no control group."
+**Must:** numbers kept; the missing control group stated; any illustrative customer labelled as hypothetical.
+**Fail:** invented customer quote; claims the calls caused the drop.
+
+## E09 Do not over-apply
+**Input:** "What's the default port for Postgres?"
+**Must:** a one-line answer.
+**Fail:** headings, SCQA, a story.
+
+## E10 Danish
+**Input:** "Skriv en kort mail til kunden om at vi mangler adgang til fakturamodulet i ERP-systemet for at blive færdig med omsætningsoversigten til månedsskiftet."
+**Must:** Danish; the ask first; "jeg", not "vi" unless context says otherwise; no anglicisms; no dashes.
+**Fail:** English idioms translated literally; ask buried.
+
+## Scoring
+
+Per case: pass or fail on the "Must" lines, then the rubric in references/rubric.md for both versions. The skill earns its place only if it wins most cases and never loses on Accuracy.</pre>
+      </div>
+      <!-- skill-files:end -->
+      <p class="hint">Downloads allowed where you are? <a href="https://www.fryland.co/kit/skills/communicator.zip">Get the folder as a .zip</a> instead.</p>
+    </div>
   </div>
 </section>
 
@@ -255,28 +824,47 @@ For high-stakes deliverables (client proposals, board material, anything public)
   document.querySelectorAll('.c-communicator').forEach((root) => {
     if (root.dataset.okInit) return;
     root.dataset.okInit = '1';
-    const btn = root.querySelector('[data-copy]');
-    const src = root.querySelector('[data-skill]');
-    if (!btn || !src) return;
-    const label = btn.textContent;
-    const done = (ok) => {
-      btn.textContent = ok ? 'Copied' : 'Copy failed, open Read SKILL.md';
+    const copyText = async (text, btn) => {
+      const label = btn.textContent;
+      let ok = false;
+      try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        root.appendChild(ta);
+        ta.select();
+        try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+        ta.remove();
+      }
+      btn.textContent = ok ? 'Copied' : 'Copy failed: select the text and copy';
       setTimeout(() => { btn.textContent = label; }, 1600);
     };
-    btn.addEventListener('click', async () => {
-      const text = src.textContent;
-      try { await navigator.clipboard.writeText(text); done(true); return; } catch (e) { /* fall back below */ }
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      root.appendChild(ta);
-      ta.select();
-      let ok = false;
-      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-      ta.remove();
-      done(ok);
+    const tabs = [...root.querySelectorAll('.tab')];
+    const panels = [...root.querySelectorAll('.panel')];
+    const show = (i) => {
+      tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
+      panels.forEach((p, j) => { p.hidden = i !== j; });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => show(i));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const n = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+        show(n);
+        tabs[n].focus();
+      });
     });
+    panels.forEach((p) => {
+      const b = p.querySelector('[data-copy-file]');
+      if (b) b.addEventListener('click', () => copyText(p.querySelector('pre').textContent, b));
+    });
+    const jump = root.querySelector('[data-jump]');
+    const filesEl = root.querySelector('.files');
+    if (jump && filesEl) jump.addEventListener('click', () => { filesEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); if (tabs[0]) tabs[0].focus({ preventScroll: true }); });
+    const all = root.querySelector('[data-copy-all]');
+    if (all) all.addEventListener('click', () => copyText(panels.map((p) => `===== ${p.dataset.path} =====\n${p.querySelector('pre').textContent}`).join('\n\n'), all));
+    if (tabs.length) show(0);
   });
 })();
 </script>
