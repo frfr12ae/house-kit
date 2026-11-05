@@ -198,6 +198,7 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Scroll report shell](components/reports/scroll-report-shell.html) | reports | Original | Frederik | MIT |
 | [Stat strip](components/reports/stat-strip.html) | reports | Original | Frederik | MIT |
 | [Timeline](components/reports/timeline.html) | reports | Original | Frederik | MIT |
+| [Communicator](components/skills/communicator.html) | skills | Inspired by [Barbara Minto, The Pyramid Principle](https://www.barbaraminto.com); Inspired by [Chip and Dan Heath, Made to Stick](https://heathbrothers.com); Inspired by [Diátaxis](https://diataxis.fr) | Frederik | MIT |
 | [Annotation kit](components/social/annotation-kit.html) | social | Original | Frederik | MIT |
 | [Carousel cover](components/social/carousel-cover.html) | social | Original | Frederik | MIT |
 | [Carousel end](components/social/carousel-end.html) | social | Original | Frederik | MIT |

@@ -1,0 +1,282 @@
+<!--
+@title Communicator
+@description An agent skill that makes everything an AI writes for other people clear, true and well told. Download the folder or copy SKILL.md into your skills directory.
+@tags skill, writing, storytelling, communication, claude, agent, prompt
+@preview fill
+@height 900
+@featured true
+@added 2026-11-05
+@source Barbara Minto, The Pyramid Principle | https://www.barbaraminto.com | inspired-by
+@source Chip and Dan Heath, Made to Stick | https://heathbrothers.com | inspired-by
+@source Diátaxis | https://diataxis.fr | inspired-by
+-->
+<style>
+  .c-communicator {
+    padding: var(--ds-space-7) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-communicator .wrap { max-width: 820px; margin: 0 auto; display: grid; gap: var(--ds-space-7); }
+  .c-communicator .eyebrow { margin: 0; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-muted); }
+  .c-communicator h3 {
+    margin: var(--ds-space-1) 0 0;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-2xl);
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1.1;
+    color: var(--ds-ink);
+  }
+  .c-communicator .lede { margin: var(--ds-space-3) 0 0; font-size: var(--ds-text-md); line-height: var(--ds-leading-body); max-width: 60ch; }
+  .c-communicator .actions { display: flex; flex-wrap: wrap; gap: var(--ds-space-3); margin-top: var(--ds-space-5); }
+  .c-communicator .btn {
+    display: inline-flex; align-items: center; gap: var(--ds-space-2);
+    padding: var(--ds-space-2) var(--ds-space-4);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-raised);
+    font: inherit; font-size: var(--ds-text-sm); font-weight: 600;
+    color: var(--ds-ink); text-decoration: none; cursor: pointer;
+  }
+  .c-communicator .btn.primary { background: var(--ds-action); border-color: var(--ds-action); color: var(--ds-on-action); }
+  .c-communicator .btn:focus-visible { outline: 2px solid var(--ds-action); outline-offset: 2px; }
+  .c-communicator h4 { margin: 0 0 var(--ds-space-3); font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-communicator p { margin: 0; line-height: var(--ds-leading-body); }
+  .c-communicator .steps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ds-space-3); }
+  .c-communicator .steps li { padding: var(--ds-space-4); background: var(--ds-panel); border-radius: var(--ds-radius-lg); font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); }
+  .c-communicator .steps b { display: block; margin-bottom: var(--ds-space-1); color: var(--ds-ink); }
+  .c-communicator table { width: 100%; border-collapse: collapse; font-size: var(--ds-text-sm); }
+  .c-communicator th, .c-communicator td { padding: var(--ds-space-3) var(--ds-space-3) var(--ds-space-3) 0; text-align: left; vertical-align: top; border-top: var(--ds-hairline) solid var(--ds-line); line-height: var(--ds-leading-snug); }
+  .c-communicator th { color: var(--ds-muted); font-weight: 600; }
+  .c-communicator td:first-child { color: var(--ds-ink); font-weight: 600; width: 34%; }
+  .c-communicator .tests { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ds-space-3); }
+  .c-communicator .test { padding: var(--ds-space-4); background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); border-radius: var(--ds-radius-lg); font-size: var(--ds-text-sm); line-height: var(--ds-leading-body); color: var(--ds-ink); }
+  .c-communicator .test b { display: block; margin-bottom: var(--ds-space-1); }
+  .c-communicator .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-5); font-size: var(--ds-text-sm); }
+  .c-communicator .meta ul { margin: 0; padding-left: var(--ds-space-4); line-height: var(--ds-leading-body); }
+  .c-communicator code { font-family: var(--ds-font-mono); font-size: 0.92em; }
+  .c-communicator details { border-top: var(--ds-hairline) solid var(--ds-line); padding-top: var(--ds-space-4); }
+  .c-communicator summary { cursor: pointer; font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); }
+  .c-communicator pre {
+    margin: var(--ds-space-3) 0 0; padding: var(--ds-space-4);
+    max-height: 420px; overflow: auto;
+    background: var(--ds-panel); border-radius: var(--ds-radius-md);
+    font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); line-height: 1.55;
+    white-space: pre-wrap; color: var(--ds-text);
+  }
+  @media (max-width: 640px) {
+    .c-communicator { padding: var(--ds-space-6) var(--ds-space-4); }
+    .c-communicator .steps, .c-communicator .tests, .c-communicator .meta { grid-template-columns: minmax(0, 1fr); }
+    .c-communicator td:first-child { width: 42%; }
+  }
+</style>
+
+<section class="c-communicator" aria-label="Communicator skill">
+  <div class="wrap">
+    <header>
+      <p class="eyebrow">Agent skill</p>
+      <h3>Communicator</h3>
+      <p class="lede">Makes everything an AI writes for other people clear, true and well told. The point comes first, a storyline carries the reader, and nothing is padded or invented. It applies to emails, proposals, reports, posts, decks and docs.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://www.fryland.co/kit/skills/communicator.zip" download>Download skill folder (.zip)</a>
+        <button class="btn" type="button" data-copy>Copy SKILL.md</button>
+      </div>
+    </header>
+
+    <div>
+      <h4>Before drafting, the agent writes three sentences to itself</h4>
+      <ol class="steps">
+        <li><b>Reader</b>Who reads this, what they know, and what they must know, decide or do afterwards.</li>
+        <li><b>Message</b>The whole point in one sentence a smart outsider would follow. If it will not come out simply, the thinking is not done.</li>
+        <li><b>Storyline</b>How the reader gets from where they are to the message.</li>
+      </ol>
+    </div>
+
+    <div>
+      <h4>The shape follows the reader's task</h4>
+      <table>
+        <thead><tr><th scope="col">Reader's task</th><th scope="col">Shape</th></tr></thead>
+        <tbody>
+          <tr><td>Decide or approve</td><td>Answer first, then 2 to 4 reasons, evidence, risks, the ask</td></tr>
+          <tr><td>Be persuaded</td><td>Situation, complication, question, answer: the "but" that makes them care</td></tr>
+          <tr><td>Learn something new</td><td>Where this is going, familiar to new, one example, the so-what</td></tr>
+          <tr><td>Do something</td><td>Goal, numbered steps, how to check it worked</td></tr>
+          <tr><td>Understand what happened</td><td>What it means first, then the timeline</td></tr>
+          <tr><td>Remember or retell it</td><td>A short story: a concrete scene, the tension, the turn, the lesson</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <h4>Every draft must pass three tests</h4>
+      <div class="tests">
+        <div class="test"><b>Skim</b>The headings or first sentences alone tell the argument in order.</div>
+        <div class="test"><b>Tension</b>Anything persuasive names what changed and what is at stake. No real tension, no story.</div>
+        <div class="test"><b>So what</b>The end says what it means for this reader, not a recap.</div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div>
+        <h4>Install</h4>
+        <p>Unzip into <code>~/.claude/skills/</code> for Claude Code, or into the skills folder of any client that reads the Agent Skills format. Then replace the house-rules section with your own.</p>
+      </div>
+      <div>
+        <h4>How it was tested</h4>
+        <ul>
+          <li>An adversarial review found 14 problems; all were fixed.</li>
+          <li>In a blind A/B test on four writing tasks, the skill won 4 of 4. Run the bundled eval cases on your own work too.</li>
+        </ul>
+      </div>
+    </div>
+
+    <details>
+      <summary>Read SKILL.md</summary>
+      <pre data-skill>---
+name: communicator
+description: Makes anything written for other people clear, true and well told, in Danish or English. The point comes first, a storyline carries the reader, and nothing is padded. Use for every draft or final output meant for someone other than Frederik. That covers client emails, replies and messages, proposals, quotes (tilbud) and SOWs, reports, memos, meeting notes and agendas, strategy and decision documents, executive summaries, status updates, deck and slide text, workshop material, LinkedIn or blog posts, newsletters, case studies, and READMEs or documentation others will read. Also use when asked to make something clearer, shorter or more persuasive, to structure an argument, to "tell the story" or to "make it land". Not for code, commit messages, raw data, verbatim quotes, legal or contract wording that must stay exact, prompts for other agents, or chat replies to Frederik himself. For marketing page copy (landing, pricing, CTAs) copywriting leads and this skill supplies the storyline.
+---
+
+# Communicator
+
+Think hard, write simply. The goal is that the reader understands, believes and acts with the least effort. The goal is not the fewest words.
+
+## Priority order
+
+When goals conflict, the higher one wins:
+
+1. Correctness
+2. Reader comprehension
+3. Relevance to this reader
+4. Storyline and structure
+5. Conciseness
+6. Polish
+
+Never cut a fact, number, condition, risk, owner or step the reader needs just to make the text shorter. Never add a fact, number, date, quote or customer story that the source does not contain; use a visible placeholder like `[date]` or `[Q4 churn %]` instead. Inference that follows from the facts is fine; new commitments, mechanisms, meetings or causal claims are not.
+
+**Fast path.** A message under about five lines (a reply, a confirmation, a quick answer): lead with the point, keep every fact, check for dashes, done. Everything below is for longer pieces.
+
+## Before writing: three private sentences
+
+1. **Reader:** who reads this, what they already know, and what they must know, decide or do afterwards.
+2. **Message:** the whole point in one sentence a smart outsider would follow. If it will not come out simply, find the gap in your own understanding; do not cover it with jargon. Fluent text can hide a broken chain of logic: check each step follows.
+3. **Storyline:** how the reader gets from where they are to the message.
+
+If the audience is unclear, write for a busy, intelligent non-specialist. Ask only when a wrong guess would waste real work.
+
+## The storyline
+
+Pick the simplest shape that fits the reader's task:
+
+| Reader's task | Shape |
+|---|---|
+| Decide or approve | Answer first, then 2 to 4 reasons, evidence, risks, the ask |
+| Be persuaded or accept a change | Situation, complication, question, answer (SCQA): the "but" that makes them care, then the answer |
+| Learn something new | One line on where this is going, then familiar to new, one example, the "so what" |
+| Do something | Goal, numbered steps, how to check it worked |
+| Understand what happened | What happened and what it means first, then the timeline |
+| Remember, share or retell it | A short story: a concrete scene, the tension, the turn, the lesson |
+
+Three tests:
+
+- **Skim test.** The headings, slide titles or paragraph first sentences alone tell the argument in order. In documents that argue (proposals, memos, decks, reports), headings state claims ("Manual mapping is the biggest migration risk"), not topics ("Risks"). Reference docs, how-tos and READMEs keep plain task or topic headings ("Installation").
+- **Tension test.** For anything persuasive, name the complication: what changed, what is at stake, what goes wrong if nothing happens. No real tension means no story; just answer.
+- **So-what test.** The end tells this reader what it means for them or what happens next. It does not repeat the summary.
+
+**A story needs room.** Concision cuts padding, never the scene, the tension or the turn. A post, case study or talk that is reduced to a claim and a question has lost its story. For persuasion, proposals, case studies, posts and talks, read [storyline](references/storyline.md).
+
+## Universal rules
+
+1. **Lead with the point.** The first sentence (or slide title) carries the answer, finding or request. Bad news goes first too, with the plan.
+2. **One job per unit.** One idea per paragraph, one message per slide, one purpose per section.
+3. **Write for the actual reader.** Use their words. Define an unavoidable term in plain words the first time. Experts doing a task get dense reference material; people learning or deciding get fewer ideas per paragraph.
+4. **Be concrete.** Numbers with units, periods and comparisons; names, examples, consequences. Say what actually happens instead of "unlock value".
+5. **Simplify the words, not the facts.** Keep "usually", "largely", "not yet verified" when they are true. State confidence once, next to the claim it qualifies. If unsure whether a detail matters, keep a short version of it.
+6. **Say each thing once.** No intro that previews, no closer that repeats.
+7. **Cut padding.** Preambles, meta-commentary, compliments, stacked hedges, filler adjectives, forced lists of three, dramatic closers. Test: would this reader lose anything they need if the sentence vanished? Models tend to treat length as quality; push against it.
+8. **Prose for reasoning, structure for parallel things.** Bullets for parallel items, tables for comparisons, numbered steps for actions. Do not add structure to look organised. Headings only when the text needs navigation. Bold rarely. Sentence-case headings.
+9. **Fit length to need.** Do not pad to look thorough or truncate to look concise. Concise does not mean cold.
+10. **Sound like a person.** An expert talking to a respected colleague: plain, warm, direct, with varied sentence length. Do not make every output sound the same. Rules are defaults; break one sooner than write something awkward.
+
+## House rules for Frederik's outputs
+
+- **No em-dashes or en-dashes, ever.** Use a comma, colon, full stop or parentheses. Ranges as "3 to 5". Keep them only in copy Frederik supplies verbatim.
+- "I" for Frederik's own work, "we" for things done jointly with the client. Never imply a Fryland team.
+- Write in the reader's language. The rules apply equally in Danish; do not carry English idioms or anglicisms into it.
+- Deliverables go out under Frederik's name: every claim must be defensible in front of that client.
+- Strategy documents are markdown (headings, tables, prose), not slides, unless slides are asked for.
+
+## Pick the mode
+
+Choose from the task and audience; do not ask. An explicit format, length or template from the user wins; apply the rules inside it.
+
+| Signals | Mode | Read |
+|---|---|---|
+| Explain, summarise, answer, rewrite; general or mixed audience (default) | Explain | [explain](references/explain.md) |
+| Decision, recommendation, proposal, business case, status to a sponsor | Executive | [executive](references/executive.md) |
+| Architecture, how-to, runbook, README, spec, developer audience | Technical | [technical](references/technical.md) |
+| Slides, deck, workshop, pitch | Presentation | [presentation](references/presentation.md) |
+
+Modes combine: the primary mode sets the structure, the second sets its own part. A board deck is presentation for slides plus executive for the argument. A technical topic for beginners is technical for truth plus explain for sequencing. Load only the files the task needs.
+
+**Neighbouring skills.** This skill owns the words and the storyline. `copywriting` leads on landing-page copy, `html-report` and the design system (`resources/taste/DESIGN-SYSTEM.md`) on how a page looks, `dataviz` on charts. For an AI-tell pass on finished text, [editing](references/editing.md) is enough.
+
+## Workflow
+
+1. Write the three private sentences; list what supports the message and cut or relocate the rest (appendix, notes, link).
+2. Draft the headings or first sentences first and run the skim test. Then draft in the chosen mode.
+3. Run the final check. Refine the idea, then the structure, then the sentences. Then stop; do not polish into a new kind of verbosity.
+
+Deliver the result, not the drafting process. Show reasoning or alternatives only when asked or when the reader needs them to decide.
+
+## When revising someone's text
+
+Preserve meaning, facts, numbers, intent, voice (for a light edit) and any legal or compliance wording. Move the buried point to the top, remove repetition, replace jargon. Flag anything you removed that might matter and any claim you could not verify; do not silently "fix" facts. For line edits and AI-writing patterns, read [editing](references/editing.md).
+
+## Final check
+
+- Could the reader state the message (or know what they will be able to do) after the first two sentences?
+- Do the headings or first sentences alone tell the story?
+- Is every number, condition, risk and caveat from the source still there, and nothing invented?
+- Is the decision, ask or next step clear, with owner and date where one exists?
+- Would this reader understand every term?
+- Is anything said twice, or included that this reader does not need?
+- Any em-dash or en-dash left?
+
+For high-stakes deliverables (client proposals, board material, anything public) or when asked to assess quality, score with the [rubric](references/rubric.md) and fix the weakest dimension first. Calibration: [examples](references/examples.md).</pre>
+    </details>
+  </div>
+</section>
+
+<script>
+(() => {
+  document.querySelectorAll('.c-communicator').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const btn = root.querySelector('[data-copy]');
+    const src = root.querySelector('[data-skill]');
+    if (!btn || !src) return;
+    const label = btn.textContent;
+    const done = (ok) => {
+      btn.textContent = ok ? 'Copied' : 'Copy failed, open Read SKILL.md';
+      setTimeout(() => { btn.textContent = label; }, 1600);
+    };
+    btn.addEventListener('click', async () => {
+      const text = src.textContent;
+      try { await navigator.clipboard.writeText(text); done(true); return; } catch (e) { /* fall back below */ }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      root.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove();
+      done(ok);
+    });
+  });
+})();
+</script>

@@ -105,6 +105,18 @@
           "blurb": "Animated and static backgrounds for heroes, slides and video frames."
         }
       ]
+    },
+    {
+      "id": "agent",
+      "label": "For agents",
+      "categories": [
+        {
+          "id": "skills",
+          "label": "Skills",
+          "icon": "skills",
+          "blurb": "Agent skills to drop into Claude Code or any Agent Skills client. Each card explains the skill and links the downloadable folder."
+        }
+      ]
     }
   ]
 }

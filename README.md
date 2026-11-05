@@ -30,7 +30,8 @@ design-system/
   themes/nordic.css        demo brand theme
   themes/midnight.css      demo dark brand theme
   themes/ink.css, studio-dark.css   more demo brand themes
-components/<category>/     one self-contained .html file per component (12 categories)
+components/<category>/     one self-contained .html file per component
+skills/<name>/             downloadable agent skills (folder + .zip), shown in the Skills category
 LICENSES/                  upstream licenses for adapted code
 navigator/                 navigator code + registry.js (generated)
 scripts/build.mjs          regenerates registry.js and CREDITS.md, lints components
