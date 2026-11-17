@@ -1,6 +1,6 @@
-# Output Kit
+# House Kit
 
-Copy-paste templates for decks, reports, page sections, email, social posts, motion graphics, data viz, diagrams, forms and AI interfaces. Every component sits on one token design system, so a single theme file reskins the whole kit to any brand.
+A collection of blocks, components and elements to reuse across AI projects: decks, reports, page sections, email, social posts, motion graphics, data viz, diagrams, forms and agent interfaces. Every component sits on one token design system, so a single theme file reskins the whole kit to any brand. AI coding agents can search it through `navigator/registry.js` (see `AGENTS.md`).
 
 **Nothing to install.** Plain HTML, CSS and JavaScript. No package manager, no build step, no network calls, no web fonts. It works offline on a locked-down machine.
 
