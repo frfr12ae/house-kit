@@ -1,0 +1,195 @@
+<!--
+@title Hook exit codes
+@group Agent sessions
+@description When each hook runs, and why the exit code matters: one code sends the agent back to fix the failure, the other lets the task be marked done anyway.
+@tags hooks, exit code, tests, lint, ci, agents, automation
+@preview slide
+@added 2026-11-17
+@source Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026 | https://www.youtube.com/watch?v=vlfCjWuv4es | inspired-by
+-->
+<style>
+.c-agent-hook-exit-codes, .c-agent-hook-exit-codes *, .c-agent-hook-exit-codes *::before, .c-agent-hook-exit-codes *::after { box-sizing: border-box; }
+.c-agent-hook-exit-codes {
+  --k-bg: var(--ds-bg);
+  --k-panel: color-mix(in srgb, var(--ds-ink) 4%, var(--ds-panel));
+  --k-raised: color-mix(in srgb, var(--ds-ink) 7%, var(--ds-raised));
+  --k-code: var(--ds-surface);
+  --k-ink: var(--ds-ink);
+  --k-text: var(--ds-text);
+  --k-dim: var(--ds-muted);
+  --k-faint: color-mix(in srgb, var(--ds-muted) 45%, var(--ds-bg));
+  --k-line: var(--ds-line);
+  --k-path: var(--ds-highlight-line);
+  --k-pass: var(--ds-note-line);
+  --k-passfill: var(--ds-note-fill);
+  --k-fail: var(--ds-danger-line);
+  --k-failfill: var(--ds-danger-fill);
+  --k-human: var(--ds-info-line);
+  --k-data: var(--ds-series-1);
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  border-radius: var(--ds-radius-lg);
+  background-color: var(--k-bg);
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--ds-ink) 7%, transparent) 0.07cqi, transparent 0.09cqi);
+  background-size: 1.4cqi 1.4cqi;
+  color: var(--k-ink);
+  font-family: var(--ds-font-sans);
+}
+.c-agent-hook-exit-codes svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.c-agent-hook-exit-codes text { font-family: var(--ds-font-sans); }
+.c-agent-hook-exit-codes .serif { font-family: var(--ds-font-display); font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); }
+.c-agent-hook-exit-codes .mono, .c-agent-hook-exit-codes .mono text { font-family: var(--ds-font-mono); }
+.c-agent-hook-exit-codes .f-none { fill: none; }
+.c-agent-hook-exit-codes .f-bg { fill: var(--k-bg); }
+.c-agent-hook-exit-codes .f-panel { fill: var(--k-panel); }
+.c-agent-hook-exit-codes .f-raised { fill: var(--k-raised); }
+.c-agent-hook-exit-codes .f-code { fill: var(--k-code); }
+.c-agent-hook-exit-codes .f-ink { fill: var(--k-ink); }
+.c-agent-hook-exit-codes .f-text { fill: var(--k-text); }
+.c-agent-hook-exit-codes .f-dim { fill: var(--k-dim); }
+.c-agent-hook-exit-codes .f-faint { fill: var(--k-faint); }
+.c-agent-hook-exit-codes .f-line { fill: var(--k-line); }
+.c-agent-hook-exit-codes .f-path { fill: var(--k-path); }
+.c-agent-hook-exit-codes .f-pass { fill: var(--k-pass); }
+.c-agent-hook-exit-codes .f-passfill { fill: var(--k-passfill); }
+.c-agent-hook-exit-codes .f-fail { fill: var(--k-fail); }
+.c-agent-hook-exit-codes .f-failfill { fill: var(--k-failfill); }
+.c-agent-hook-exit-codes .f-human { fill: var(--k-human); }
+.c-agent-hook-exit-codes .f-data { fill: var(--k-data); }
+.c-agent-hook-exit-codes .s-bg { stroke: var(--k-bg); }
+.c-agent-hook-exit-codes .s-panel { stroke: var(--k-panel); }
+.c-agent-hook-exit-codes .s-raised { stroke: var(--k-raised); }
+.c-agent-hook-exit-codes .s-code { stroke: var(--k-code); }
+.c-agent-hook-exit-codes .s-ink { stroke: var(--k-ink); }
+.c-agent-hook-exit-codes .s-text { stroke: var(--k-text); }
+.c-agent-hook-exit-codes .s-dim { stroke: var(--k-dim); }
+.c-agent-hook-exit-codes .s-faint { stroke: var(--k-faint); }
+.c-agent-hook-exit-codes .s-line { stroke: var(--k-line); }
+.c-agent-hook-exit-codes .s-path { stroke: var(--k-path); }
+.c-agent-hook-exit-codes .s-pass { stroke: var(--k-pass); }
+.c-agent-hook-exit-codes .s-passfill { stroke: var(--k-passfill); }
+.c-agent-hook-exit-codes .s-fail { stroke: var(--k-fail); }
+.c-agent-hook-exit-codes .s-failfill { stroke: var(--k-failfill); }
+.c-agent-hook-exit-codes .s-human { stroke: var(--k-human); }
+.c-agent-hook-exit-codes .s-data { stroke: var(--k-data); }
+</style>
+
+<section class="c-agent-hook-exit-codes" aria-label="Hooks: exit 2 goes back to fix it, exit 1 is marked as completed. Lint on every edit, tests on every task, all tests at the end">
+  <svg viewBox="0 0 1600 900" role="img" aria-label="Hooks: exit 2 goes back to fix it, exit 1 is marked as completed. Lint on every edit, tests on every task, all tests at the end"></svg>
+</section>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent, text) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  const check = (p, x, y, s, state) => {
+    const g = el('g', {}, p);
+    if (state === 'done' || state === 'fail') {
+      el('rect', { x: x - s / 2, y: y - s / 2, width: s, height: s, rx: s * 0.18, class: state === 'done' ? 'f-pass' : 'f-fail' }, g);
+      const d = state === 'done'
+        ? `M${x - s * 0.25} ${y} l${s * 0.17} ${s * 0.17} l${s * 0.33} ${-s * 0.33}`
+        : `M${x - s * 0.2} ${y - s * 0.2} L${x + s * 0.2} ${y + s * 0.2} M${x + s * 0.2} ${y - s * 0.2} L${x - s * 0.2} ${y + s * 0.2}`;
+      el('path', { d, class: 'f-none s-bg', 'stroke-width': s * 0.12, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g);
+    } else {
+      el('rect', { x: x - s / 2, y: y - s / 2, width: s, height: s, rx: s * 0.18, class: 'f-bg ' + (state === 'bad' ? 's-fail' : 's-pass'), 'stroke-width': Math.max(1.5, s * 0.07) }, g);
+    }
+    return g;
+  };
+  const person = (p, x, y, r, tone) => {
+    tone = tone || 'human';
+    const g = el('g', {}, p);
+    el('circle', { cx: x, cy: y, r, class: 'f-bg s-' + tone, 'stroke-width': r * 0.12 }, g);
+    el('circle', { cx: x, cy: y - r * 0.2, r: r * 0.28, class: 'f-' + tone }, g);
+    el('path', { d: `M${x - r * 0.55} ${y + r * 0.62} a${r * 0.55} ${r * 0.5} 0 0 1 ${r * 1.1} 0`, class: 'f-' + tone }, g);
+    return g;
+  };
+  const spark = (p, x, y, r) => {
+    const g = el('g', { class: 's-path', 'stroke-width': r * 0.18, 'stroke-linecap': 'round' }, p);
+    for (let i = 0; i < 8; i++) {
+      const a = i * Math.PI / 4 + Math.PI / 8;
+      const l = i % 2 ? r * 0.72 : r;
+      el('line', { x1: x + Math.cos(a) * r * 0.2, y1: y + Math.sin(a) * r * 0.2, x2: x + Math.cos(a) * l, y2: y + Math.sin(a) * l }, g);
+    }
+    return g;
+  };
+  const chip = (p, x, y, verb, arg, o) => {
+    o = o || {};
+    const fs = o.fs || 20;
+    const pad = 10;
+    const w = (verb.length + (arg ? arg.length + 1 : 0) + (o.mark ? 2 : 0)) * fs * 0.6 + pad * 2;
+    const g = el('g', { class: 'mono' }, p);
+    el('rect', { x: x - w / 2, y: y - fs * 0.9, width: w, height: fs * 1.8, rx: 6, class: o.danger ? 'f-failfill s-fail' : 'f-raised s-line', 'stroke-width': 1 }, g);
+    const t = el('text', { x: x - w / 2 + pad, y: y + fs * 0.35, 'font-size': fs, class: o.danger ? 'f-fail' : 'f-ink' }, g, verb);
+    if (arg) el('tspan', { class: o.danger ? 'f-fail' : 'f-dim' }, t, ' ' + arg);
+    if (o.mark) el('tspan', { class: o.danger ? 'f-fail' : 'f-text' }, t, ' ' + o.mark);
+    return g;
+  };
+  const bubble = (p, x, y, txt, fs, anchor) => {
+    fs = fs || 22;
+    const w = txt.length * fs * 0.52 + 28;
+    const x0 = anchor === 'end' ? x - w : x;
+    el('rect', { x: x0, y: y - fs * 1.05, width: w, height: fs * 2, rx: 8, class: 'f-panel' }, p);
+    el('text', { x: x0 + 14, y: y + fs * 0.3, 'font-size': fs, class: 'f-ink' }, p, txt);
+  };
+  const wave = (x0, x1, yc, amp, waves) => {
+    let d = '';
+    for (let i = 0; i <= 160; i++) {
+      const t = i / 160;
+      const x = x0 + (x1 - x0) * t;
+      const y = yc - amp * Math.sin(Math.PI * Math.min(1, t * 1.05)) * Math.sin(t * Math.PI * 2 * waves);
+      d += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    return d;
+  };
+  const waveY = (x, x0, x1, yc, amp, waves) => {
+    const t = (x - x0) / (x1 - x0);
+    return yc - amp * Math.sin(Math.PI * Math.min(1, t * 1.05)) * Math.sin(t * Math.PI * 2 * waves);
+  };
+  const baseline = (p, x0, x1, y) => el('line', { x1: x0, y1: y, x2: x1, y2: y, class: 's-faint', 'stroke-width': 2, 'stroke-dasharray': '2 9', 'stroke-linecap': 'round' }, p);
+  const startNode = (p, x, y) => el('rect', { x: x - 7, y: y - 7, width: 14, height: 14, rx: 3, class: 'f-bg s-dim', 'stroke-width': 2 }, p);
+
+  document.querySelectorAll('.c-agent-hook-exit-codes').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const s = root.querySelector('svg');
+
+    const DATA = {
+      title: 'Hooks',
+      back: ['exit 2', 'goes back to fix it'], forward: ['exit 1', 'marked as completed'],
+      hooks: [['Every edit', 'lint', 'after-edit'], ['Every task', 'its tests', 'task-done'], ['The end', 'all tests', 'on-finish']],
+    };
+    el('text', { x: 800, y: 140, 'text-anchor': 'middle', class: 'serif f-ink', 'font-size': 84 }, s, DATA.title);
+    const y = 560;
+    baseline(s, 120, 1480, y);
+    startNode(s, 120, y);
+    el('path', { d: wave(120, 860, y, 70, 2.6), class: 'f-none s-path', 'stroke-width': 2.5 }, s);
+    check(s, 400, y, 42, 'done'); check(s, 640, y, 42, 'done'); check(s, 860, y, 42, 'fail'); check(s, 1100, y, 42, 'pending'); check(s, 1440, y, 48, 'pending');
+    el('path', { d: 'M850 530 C 820 410, 700 410, 655 520', class: 'f-none s-fail', 'stroke-width': 2.5, 'stroke-dasharray': '4 8', 'stroke-linecap': 'round' }, s);
+    el('path', { d: 'M645 505 L655 525 L672 510', class: 'f-none s-fail', 'stroke-width': 2.5 }, s);
+    el('path', { d: 'M875 530 C 920 400, 1060 400, 1095 525', class: 'f-none s-pass', 'stroke-width': 2.5, 'stroke-dasharray': '4 8', 'stroke-linecap': 'round' }, s);
+    el('path', { d: 'M1078 512 L1096 528 L1105 506', class: 'f-none s-pass', 'stroke-width': 2.5 }, s);
+    [[DATA.back, 740, 'f-fail'], [DATA.forward, 1060, 'f-pass']].forEach(([[code, what], x, cls]) => {
+      el('text', { x, y: 330, 'text-anchor': 'middle', 'font-size': 34, class: 'mono ' + cls }, s, code);
+      el('text', { x, y: 375, 'text-anchor': 'middle', 'font-size': 32, class: 'f-ink' }, s, what);
+    });
+    DATA.hooks.forEach(([a, b, c], i) => {
+      const x = 110 + i * 470;
+      el('rect', { x, y: 680, width: 440, height: 130, rx: 12, class: 'f-panel' }, s);
+      const t = el('text', { x: x + 28, y: 735, 'font-size': 30, class: 'f-ink' }, s, a);
+      el('tspan', { class: 'f-path' }, t, '  →  ');
+      el('tspan', { class: 'f-text' }, t, b);
+      el('text', { x: x + 28, y: 782, 'font-size': 22, class: 'mono f-human' }, s, c);
+    });
+
+  });
+})();
+</script>

@@ -47,6 +47,22 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Action title slide](components/decks/action-title-slide.html) | decks | Original | Frederik | MIT |
 | [Agenda slide](components/decks/agenda-slide.html) | decks | Original | Frederik | MIT |
 | [Agenda, notebook tabs](components/decks/agenda-tabs.html) | decks | Inspired by [frontend-slides style presets by Zara Zhang](https://github.com/zarazhangrui/frontend-slides) | Frederik | MIT |
+| [Before and after number](components/decks/agent-before-after-number.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Instruction file cleanup](components/decks/agent-config-diff.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Agent eval curve](components/decks/agent-eval-curve.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Agent fan-out cover](components/decks/agent-fanout-cover.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Guardrail order flow](components/decks/agent-guard-flow.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Old job to new owner map](components/decks/agent-handoff-map.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Hook exit codes](components/decks/agent-hook-exit-codes.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Agent loop handoff cards](components/decks/agent-loop-handoff.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [One prompt, many outcomes](components/decks/agent-outcome-tree.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Find, verify, post review pipeline](components/decks/agent-review-pipeline.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Sandbox process tree](components/decks/agent-sandbox-tree.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Parallel session board](components/decks/agent-session-board.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Agent session timeline](components/decks/agent-session-timeline.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Verification points](components/decks/agent-verification-points.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [People vs machine waffle](components/decks/agent-waffle-compare.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
+| [Yes or no decision split](components/decks/agent-yes-no-split.html) | decks | Inspired by [Lydia Hallie, "Rethinking Claude Code Best Practices", AI Engineer 2026](https://www.youtube.com/watch?v=vlfCjWuv4es) | Frederik | MIT |
 | [Annotated timeline chart](components/decks/annotated-timeline-chart.html) | decks | Original | Frederik | MIT |
 | [Before and after metrics](components/decks/before-after-metrics.html) | decks | Original | Frederik | MIT |
 | [Big number slide](components/decks/big-number-slide.html) | decks | Original | Frederik | MIT |

@@ -1,0 +1,47 @@
+/* loop: demo dark theme for agent and session diagrams. Green-black ground with a dot grid feel,
+   warm white type, coral for work in progress, green for pass, pink for blocked, lavender for people.
+   Look inspired by Lydia Hallie's talk "Rethinking Claude Code Best Practices" (AI Engineer, 2026). */
+:root {
+  /* ground and containers */
+  --ds-bg: #1B1F1B;
+  --ds-surface: #141414;
+  --ds-panel: #24241F;
+  --ds-raised: #2C2C26;
+
+  /* type */
+  --ds-ink: #F4F3EE;
+  --ds-text: #D6D5CE;
+  --ds-muted: #A09F97;
+  --ds-line: #3B3B34;
+
+  /* primary action (buttons, active states) */
+  --ds-action: #D47A60;
+  --ds-on-action: #141414;
+
+  /* semantic pairs: dark fill + mid-tone stroke */
+  --ds-info-fill: #23233A;      --ds-info-line: #B0B0F0;      /* people, reviewers */
+  --ds-neutral-fill: #24241F;   --ds-neutral-line: #8C8B84;   /* system, given */
+  --ds-note-fill: #1F3119;      --ds-note-line: #52C862;      /* pass, allowed */
+  --ds-highlight-fill: #3A241C; --ds-highlight-line: #C46A52; /* work in progress, the session line */
+  --ds-danger-fill: #40222B;    --ds-danger-line: #F05878;    /* blocked, failed */
+
+  /* data series, in order of use */
+  --ds-series-1: #6898C8;
+  --ds-series-2: #C46A52;
+  --ds-series-3: #52C862;
+  --ds-series-4: #B0B0F0;
+  --ds-series-5: #F05878;
+
+  /* type families and display personality */
+  --ds-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ds-font-display: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --ds-font-serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --ds-font-hand: "Bradley Hand", "Segoe Print", "Comic Sans MS", cursive;
+  --ds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ds-weight-display: 400;
+  --ds-tracking-display: -0.02em;
+
+  /* shape personality: 1 = house, 0 = square, 1.5 = soft */
+  --ds-radius-scale: 1;
+  color-scheme: dark;
+}
