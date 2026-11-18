@@ -1,0 +1,143 @@
+<!--
+@title Callout highlight
+@description A pull quote whose words warm from dim to full ink in turn, then one key phrase gets a highlighter mark and a short takeaway slides in. Use to land the one sentence of a section.
+@tags text, quote, callout, highlight, emphasis, words, pull-quote
+@preview center
+@height 420
+@replay true
+@added 2026-11-18
+@source HyperFrames mk-callout-highlight block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-callout-highlight,
+  .c-callout-highlight *,
+  .c-callout-highlight *::before,
+  .c-callout-highlight *::after { box-sizing: border-box; }
+  .c-callout-highlight {
+    width: min(760px, 100%);
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6);
+    container-type: inline-size;
+    background: var(--ds-panel);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-ink);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--ds-space-5);
+  }
+  .c-callout-highlight .rule {
+    width: 4px;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-line);
+    position: relative;
+    overflow: hidden;
+  }
+  .c-callout-highlight .rule::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--ds-ink);
+    transform-origin: top;
+    transform: scaleY(var(--p, 0));
+    transition: transform var(--ds-dur-base) linear;
+  }
+  .c-callout-highlight .body { display: grid; gap: var(--ds-space-5); min-width: 0; }
+  .c-callout-highlight .quote {
+    margin: 0;
+    font-size: clamp(22px, 5.4cqi, 40px);
+    line-height: 1.32;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+  .c-callout-highlight .w {
+    color: var(--ds-ink);
+    opacity: 1;
+    transition: opacity var(--ds-dur-base) var(--ds-ease);
+  }
+  /* the mark is a background on the inline phrase, so it follows the text when the phrase wraps */
+  .c-callout-highlight .key {
+    padding: 0 0.12em;
+    margin: 0 -0.12em;
+    border-radius: var(--ds-radius-sm);
+    background-image:
+      linear-gradient(var(--ds-highlight-line), var(--ds-highlight-line)),
+      linear-gradient(var(--ds-highlight-fill), var(--ds-highlight-fill));
+    background-repeat: no-repeat;
+    background-position: left 96%, left 60%;
+    background-size: 100% 3px, 100% 84%;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    transition: background-size var(--ds-dur-slow) var(--ds-ease-in-out);
+  }
+  .c-callout-highlight .note {
+    margin: 0;
+    padding-left: var(--ds-space-3);
+    border-left: 2px solid var(--ds-highlight-line);
+    font-size: var(--ds-text-md);
+    color: var(--ds-text);
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  }
+
+  .c-callout-highlight.is-armed .w { opacity: 0.26; }
+  .c-callout-highlight.is-armed .w.on { opacity: 1; }
+  .c-callout-highlight.is-armed .key { background-size: 0% 3px, 0% 84%; }
+  .c-callout-highlight.is-armed.is-marked .key { background-size: 100% 3px, 100% 84%; }
+  .c-callout-highlight.is-armed .note { opacity: 0; transform: translateX(-12px); }
+  .c-callout-highlight.is-armed.is-marked .note { opacity: 1; transform: none; transition-delay: var(--ds-dur-base); }
+  @media (prefers-reduced-motion: reduce) {
+    .c-callout-highlight .w, .c-callout-highlight .key, .c-callout-highlight .note { transition: none; }
+  }
+</style>
+
+<figure class="c-callout-highlight">
+  <div class="rule" aria-hidden="true"></div>
+  <div class="body">
+    <blockquote class="quote">Clients rarely ask for more data. They ask for <span class="key">one clear next step</span> they can act on today.</blockquote>
+    <p class="note">Lead every report with the decision, then the evidence.</p>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wrap = (node, words) => {
+    node.childNodes.forEach((c) => {
+      if (c.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        c.textContent.split(/(\s+)/).forEach((t) => {
+          if (!t) return;
+          if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(t)); return; }
+          const s = document.createElement('span');
+          s.className = 'w'; s.textContent = t; words.push(s); frag.appendChild(s);
+        });
+        c.replaceWith(frag);
+      } else if (c.nodeType === 1 && !c.classList.contains('key')) wrap(c, words);
+      else if (c.nodeType === 1) wrap(c, words);
+    });
+  };
+
+  document.querySelectorAll('.c-callout-highlight').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const quote = root.querySelector('.quote');
+    const words = [];
+    wrap(quote, words);
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const STEP = 190;
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        words.forEach((w, i) => setTimeout(() => {
+          w.classList.add('on');
+          root.style.setProperty('--p', ((i + 1) / words.length).toFixed(3));
+        }, i * STEP));
+        setTimeout(() => root.classList.add('is-marked'), words.length * STEP + 250);
+      }));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

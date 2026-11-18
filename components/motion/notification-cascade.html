@@ -1,0 +1,147 @@
+<!--
+@title Notification cascade
+@description Notification cards drop in one after another, each pushing the pile down, ending on a summary pill with the count.
+@tags notification, alert, stack, cascade, push, banner, motion
+@preview center
+@height 520
+@replay true
+@added 2026-11-18
+@source HyperFrames notification-cascade block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-notification-cascade,
+  .c-notification-cascade *,
+  .c-notification-cascade *::before,
+  .c-notification-cascade *::after { box-sizing: border-box; }
+  .c-notification-cascade {
+    width: min(460px, 100%);
+    margin: 0;
+    padding: var(--ds-space-5);
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-notification-cascade .bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--ds-space-4);
+    font-size: var(--ds-text-sm);
+    color: var(--ds-muted);
+  }
+  .c-notification-cascade .bar strong { font-size: var(--ds-text-md); color: var(--ds-ink); }
+  .c-notification-cascade .count {
+    padding: var(--ds-space-1) var(--ds-space-3);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-info-fill);
+    border: var(--ds-hairline) solid var(--ds-info-line);
+    color: var(--ds-ink);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .c-notification-cascade .stack { display: grid; margin: 0; padding: 0; list-style: none; }
+  .c-notification-cascade .slot {
+    display: grid;
+    grid-template-rows: 1fr;
+    padding-bottom: var(--ds-space-3);
+  }
+  .c-notification-cascade .slot > .inner { min-height: 0; overflow: hidden; margin-bottom: calc(var(--ds-space-3) * -1); padding-bottom: var(--ds-space-3); }
+  .c-notification-cascade .card {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    gap: var(--ds-space-3);
+    align-items: center;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    background: var(--ds-panel);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-sm);
+  }
+  .c-notification-cascade .tile {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-info-fill);
+    border: var(--ds-hairline) solid var(--ds-info-line);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+  }
+  .c-notification-cascade .tile--ok { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-notification-cascade .tile--key { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-notification-cascade .text { min-width: 0; display: grid; gap: 2px; }
+  .c-notification-cascade .title { font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-notification-cascade .msg { font-size: var(--ds-text-sm); color: var(--ds-text); line-height: var(--ds-leading-snug); }
+  .c-notification-cascade .when { align-self: start; font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+
+  .c-notification-cascade.is-armed .slot { grid-template-rows: 0fr; }
+  .c-notification-cascade.is-armed .card { opacity: 0; transform: translateY(-28px) scale(0.96); }
+  .c-notification-cascade.is-armed .count { opacity: 0; }
+  .c-notification-cascade.is-armed .slot.is-in { grid-template-rows: 1fr; transition: grid-template-rows var(--ds-dur-slow) var(--ds-ease); }
+  .c-notification-cascade.is-armed .slot.is-in .card {
+    opacity: 1;
+    transform: none;
+    transition: opacity var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease-spring);
+  }
+  .c-notification-cascade.is-armed .count.is-in { opacity: 1; transition: opacity var(--ds-dur-base) var(--ds-ease); }
+
+  @container (max-width: 380px) {
+    .c-notification-cascade .when { display: none; }
+    .c-notification-cascade .card { grid-template-columns: 40px minmax(0, 1fr); }
+  }
+</style>
+
+<section class="c-notification-cascade" aria-label="Notifications">
+  <div class="bar"><strong>Notifications</strong><span class="count" aria-live="polite">4 new</span></div>
+  <ul class="stack">
+    <li class="slot"><div class="inner"><div class="card">
+      <span class="tile tile--key" aria-hidden="true">PB</span>
+      <div class="text"><span class="title">Publish complete</span><span class="msg">Spring launch page is live on the shop.</span></div>
+      <span class="when">now</span>
+    </div></div></li>
+    <li class="slot"><div class="inner"><div class="card">
+      <span class="tile tile--ok" aria-hidden="true">RD</span>
+      <div class="text"><span class="title">Render done</span><span class="msg">4K export finished in 92 seconds.</span></div>
+      <span class="when">1m</span>
+    </div></div></li>
+    <li class="slot"><div class="inner"><div class="card">
+      <span class="tile" aria-hidden="true">QA</span>
+      <div class="text"><span class="title">Checks passed</span><span class="msg">All 38 checks are green on the main branch.</span></div>
+      <span class="when">2m</span>
+    </div></div></li>
+    <li class="slot"><div class="inner"><div class="card">
+      <span class="tile" aria-hidden="true">LV</span>
+      <div class="text"><span class="title">Launch video ready</span><span class="msg">Lena left a note on the final cut.</span></div>
+      <span class="when">3m</span>
+    </div></div></li>
+  </ul>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-notification-cascade').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    if (reduced) return;
+    // the newest notification sits on top, so the oldest (last in the list) lands first
+    const slots = Array.from(root.querySelectorAll('.slot')).reverse();
+    const count = root.querySelector('.count');
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        slots.forEach((slot, i) => setTimeout(() => slot.classList.add('is-in'), 150 + i * 650));
+        setTimeout(() => count.classList.add('is-in'), 150 + slots.length * 650);
+      }));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

@@ -173,22 +173,36 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Toggle switches](components/interactive/toggle-switch.html) | interactive | Original | Frederik | MIT |
 | [Tooltips](components/interactive/tooltip.html) | interactive | Original | Frederik | MIT |
 | [Bar grow](components/motion/bar-grow.html) | motion | Original | Frederik | MIT |
+| [Bar race](components/motion/bar-race.html) | motion | Inspired by [HyperFrames bar-chart-race block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Callout highlight](components/motion/callout-highlight.html) | motion | Inspired by [HyperFrames mk-callout-highlight block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
 | [Caption highlight](components/motion/caption-highlight.html) | motion | Original | Frederik | MIT |
+| [CLI cascade](components/motion/cli-cascade.html) | motion | Inspired by [21st.dev video block "CLI Cascade" (look only; code written from scratch)](https://21st.dev/@21st/components/cli-cascade) | Frederik | MIT |
 | [CLI install](components/motion/cli-install.html) | motion | Inspired by [21st.dev One Command Install](https://21st.dev/@21st/components/mg-code-install) | Frederik | MIT |
+| [Code diff](components/motion/code-diff.html) | motion | Inspired by [HyperFrames code-diff block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Code walkthrough](components/motion/code-walkthrough.html) | motion | Inspired by [HyperFrames code-highlight block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
 | [Count-up numbers](components/motion/count-up.html) | motion | Original | Frederik | MIT |
+| [Flight map](components/motion/flight-map.html) | motion | Inspired by [HyperFrames world-map and nyc-paris-flight blocks by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Flowchart draw](components/motion/flowchart-draw.html) | motion | Inspired by [HyperFrames flowchart block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
 | [Hard-cut text](components/motion/hard-cut-text.html) | motion | Original | Frederik | MIT |
 | [Ink fill loader](components/motion/ink-fill-loader.html) | motion | Original | Frederik | MIT |
 | [Line draw](components/motion/line-draw.html) | motion | Original | Frederik | MIT |
 | [Lower third](components/motion/lower-third.html) | motion | Original | Frederik | MIT |
 | [Marquee ticker](components/motion/marquee.html) | motion | Original | Frederik | MIT |
+| [Message stack](components/motion/message-stack.html) | motion | Inspired by [HyperFrames thread-message-stack block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Notification cascade](components/motion/notification-cascade.html) | motion | Inspired by [HyperFrames notification-cascade block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
 | [Pen circles the number](components/motion/pen-annotate.html) | motion | Inspired by [21st.dev video block "Pen Circles the Number" (look only; code written from scratch)](https://21st.dev/@21st/components/pen-annotate) | Frederik | MIT |
+| [Post card](components/motion/post-card.html) | motion | Inspired by [HyperFrames x-post block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
 | [Progress rings](components/motion/progress-ring.html) | motion | Original | Frederik | MIT |
+| [Progress stat](components/motion/progress-stat.html) | motion | Inspired by [HyperFrames mk-progress-stat block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
+| [Split flap](components/motion/split-flap.html) | motion | Inspired by [HyperFrames split-flap-board block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
 | [Stagger cards](components/motion/stagger-cards.html) | motion | Original | Frederik | MIT |
 | [Strike word](components/motion/strike-word.html) | motion | Inspired by [21st.dev video block "Strike Word" (look only; code written from scratch)](https://21st.dev/@21st/components/strike-word) | Frederik | MIT |
 | [Table fill](components/motion/table-fill.html) | motion | Inspired by [21st.dev Table Fill](https://21st.dev/@21st/components/table-fill) | Frederik | MIT |
 | [Table loupe](components/motion/table-loupe.html) | motion | Inspired by [21st.dev video block "Loupe Over Table" (look only; code written from scratch)](https://21st.dev/@21st/components/mg-pr-loupe) | Frederik | MIT |
 | [Text reveal](components/motion/text-reveal.html) | motion | Original | Frederik | MIT |
+| [Time bars](components/motion/time-bars.html) | motion | Inspired by [21st.dev video block "Time Race Bars" (look only; code written from scratch)](https://21st.dev/@21st/components/mg-ba-time-bars) | Frederik | MIT |
 | [Typewriter terminal](components/motion/typewriter-terminal.html) | motion | Original | Frederik | MIT |
+| [Weight wave](components/motion/weight-wave.html) | motion | Inspired by [HyperFrames weight-wave block by HeyGen (look only; code written from scratch)](https://github.com/heygen-com/hyperframes) | Frederik | MIT |
 | [Browser mockup](components/pages/browser-mockup.html) | pages | Inspired by [21st.dev Browser URL Load](https://21st.dev/@21st/components/mg-dev-browser) | Frederik | MIT |
 | [CTA band](components/pages/cta-band.html) | pages | Original | Frederik | MIT |
 | [FAQ accordion](components/pages/faq.html) | pages | Original | Frederik | MIT |

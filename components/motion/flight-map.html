@@ -1,0 +1,204 @@
+<!--
+@title Flight map
+@description A dot-grid world map where arcs draw between a few cities in sequence and the pins pulse as they are reached. Use for routes, expansion or a global footprint.
+@tags map, world, route, flight, arcs, geography, travel, footprint
+@preview center
+@height 460
+@replay true
+@added 2026-11-18
+@source HyperFrames world-map and nyc-paris-flight blocks by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-flight-map,
+  .c-flight-map *,
+  .c-flight-map *::before,
+  .c-flight-map *::after { box-sizing: border-box; }
+  .c-flight-map {
+    width: min(900px, 100%);
+    margin: 0;
+    padding: var(--ds-space-6);
+    container: c-flight-map / inline-size;
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-flight-map .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--ds-space-2) var(--ds-space-4); margin-bottom: var(--ds-space-4); }
+  .c-flight-map .title { font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-flight-map .sub { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-flight-map .stage { position: relative; aspect-ratio: 360 / 148; }
+  .c-flight-map svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .c-flight-map .land { fill: var(--ds-neutral-line); opacity: 0.55; }
+  .c-flight-map .arc {
+    fill: none;
+    stroke: var(--ds-series-1);
+    stroke-width: 1.3;
+    stroke-linecap: round;
+  }
+  .c-flight-map .pin {
+    position: absolute;
+    width: 12px; height: 12px;
+    margin: -6px 0 0 -6px;
+    border-radius: 50%;
+    background: var(--ds-series-1);
+    border: 2px solid var(--ds-surface);
+    z-index: 1;
+  }
+  .c-flight-map .pin.is-hub { background: var(--ds-series-2); }
+  .c-flight-map .pin::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    border: var(--ds-stroke) solid var(--ds-series-1);
+    animation: c-flight-map-pulse 1900ms var(--ds-ease) infinite;
+  }
+  .c-flight-map .pin.is-hub::after { border-color: var(--ds-series-2); }
+  .c-flight-map .name {
+    position: absolute;
+    z-index: 2;
+    padding: 1px var(--ds-space-2);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-info-fill);
+    border: var(--ds-hairline) solid var(--ds-info-line);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .c-flight-map .name.l { transform: translate(calc(-100% - 12px), -50%); }
+  .c-flight-map .name.r { transform: translate(12px, -50%); }
+  .c-flight-map .name.t { transform: translate(-50%, calc(-100% - 12px)); }
+  .c-flight-map .name.b { transform: translate(-50%, 12px); }
+  .c-flight-map .legend { display: none; margin: var(--ds-space-4) 0 0; padding: 0; list-style: none; flex-wrap: wrap; gap: var(--ds-space-2); }
+  .c-flight-map .legend li { padding: 1px var(--ds-space-2); border-radius: var(--ds-radius-pill); background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); color: var(--ds-ink); font-size: var(--ds-text-xs); font-weight: 600; }
+  @container c-flight-map (max-width: 520px) {
+    .c-flight-map .name { display: none; }
+    .c-flight-map .legend { display: flex; }
+    .c-flight-map .pin { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+  }
+  @keyframes c-flight-map-pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    80%, 100% { transform: scale(2.8); opacity: 0; }
+  }
+
+  .c-flight-map.is-armed .arc { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .c-flight-map.is-armed .pin,
+  .c-flight-map.is-armed .name { opacity: 0; }
+  .c-flight-map.is-armed .land { opacity: 0; }
+  .c-flight-map.is-armed.is-in .land { opacity: 0.55; transition: opacity var(--ds-dur-slow) var(--ds-ease); }
+  .c-flight-map.is-armed.is-in .arc {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset calc(var(--ds-dur-story) * 0.9) var(--ds-ease-in-out);
+    transition-delay: calc(var(--ds-dur-slow) + var(--ds-dur-story) * 0.75 * var(--i));
+  }
+  .c-flight-map.is-armed.is-in .pin,
+  .c-flight-map.is-armed.is-in .name {
+    opacity: 1;
+    transition: opacity var(--ds-dur-base) var(--ds-ease);
+    transition-delay: calc(var(--ds-dur-slow) + var(--ds-dur-story) * 0.75 * var(--i));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-flight-map .pin::after { animation: none; opacity: 0; }
+  }
+</style>
+
+<figure class="c-flight-map">
+  <div class="head">
+    <span class="title">Route network</span>
+    <span class="sub">Five stops, four legs</span>
+  </div>
+  <div class="stage" role="img" aria-label="World map with a route from New York to Paris, Dubai, Singapore and Sydney">
+    <svg viewBox="0 15 360 148" aria-hidden="true"><g class="dots"></g><g class="arcs"></g></svg>
+  </div>
+  <ol class="legend" aria-label="Route order"><li>New York</li><li>Paris</li><li>Dubai</li><li>Singapore</li><li>Sydney</li></ol>
+</figure>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // rough continent outlines as [lon, lat]; only used to place dots, nothing is fetched
+  const LAND = [
+    [[-168,66],[-141,70],[-110,72],[-82,70],[-62,60],[-56,50],[-66,44],[-76,35],[-81,25],[-90,29],[-97,26],[-97,19],[-88,16],[-83,10],[-78,8],[-86,11],[-96,16],[-106,23],[-112,29],[-117,32],[-124,40],[-125,49],[-135,58],[-150,60],[-165,60]],
+    [[-55,60],[-45,60],[-20,70],[-20,82],[-60,82],[-70,76]],
+    [[-78,8],[-62,11],[-50,2],[-35,-6],[-40,-22],[-48,-28],[-58,-38],[-66,-46],[-70,-54],[-75,-48],[-72,-30],[-70,-18],[-81,-5],[-80,0]],
+    [[-10,36],[-9,43],[-2,48],[-5,50],[5,53],[8,57],[10,59],[5,62],[15,69],[28,71],[40,67],[60,69],[80,73],[110,77],[140,72],[170,70],[180,66],[170,60],[160,55],[142,52],[140,45],[130,40],[122,38],[122,30],[110,20],[106,10],[100,2],[98,10],[92,20],[80,12],[77,8],[72,20],[67,25],[57,25],[56,17],[43,13],[35,28],[34,31],[27,37],[22,37],[18,40],[12,44],[3,43],[-5,36]],
+    [[-17,21],[-10,35],[10,37],[32,31],[34,28],[43,12],[51,11],[41,-2],[40,-15],[35,-25],[20,-35],[18,-34],[12,-17],[9,-1],[9,4],[-8,4],[-17,14]],
+    [[114,-22],[122,-18],[130,-12],[137,-12],[142,-11],[146,-19],[153,-26],[150,-37],[140,-38],[131,-31],[115,-34]],
+    [[-5,50],[2,51],[0,58],[-6,58]],
+    [[130,32],[135,34],[141,38],[142,44],[140,41],[131,34]],
+    [[95,5],[104,-5],[106,-6],[98,0]],
+    [[109,1],[117,7],[119,1],[116,-4],[110,-3]],
+    [[172,-35],[178,-38],[174,-41],[167,-46],[170,-43]]
+  ];
+  const inside = (x, y, poly) => {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i], [xj, yj] = poly[j];
+      if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c;
+    }
+    return c;
+  };
+  // name, lon, lat, label side
+  const CITIES = [
+    ['New York', -74, 40.7, 'l'],
+    ['Paris', 2.3, 48.9, 't'],
+    ['Dubai', 55.3, 25.2, 'b'],
+    ['Singapore', 103.8, 1.35, 'l'],
+    ['Sydney', 151.2, -33.9, 'l']
+  ];
+  const X0 = 15, H = 148;
+  const px = (lon) => lon + 180, py = (lat) => 90 - lat;
+
+  document.querySelectorAll('.c-flight-map').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const stage = root.querySelector('.stage');
+    const dots = root.querySelector('.dots');
+    const arcs = root.querySelector('.arcs');
+
+    for (let lon = -180; lon < 180; lon += 3) {
+      for (let lat = 82; lat > -56; lat -= 3) {
+        if (!LAND.some((p) => inside(lon, lat, p))) continue;
+        const c = document.createElementNS(NS, 'circle');
+        c.setAttribute('class', 'land');
+        c.setAttribute('cx', px(lon)); c.setAttribute('cy', py(lat)); c.setAttribute('r', 0.95);
+        dots.appendChild(c);
+      }
+    }
+
+    const pts = CITIES.map(([, lon, lat]) => [px(lon), py(lat)]);
+    CITIES.forEach(([name, , , side], i) => {
+      const [x, y] = pts[i];
+      const left = (x / 360) * 100 + '%', top = ((y - X0) / H) * 100 + '%';
+      const pin = document.createElement('span');
+      pin.className = 'pin' + (i === 1 ? ' is-hub' : '');
+      pin.style.left = left; pin.style.top = top; pin.style.setProperty('--i', i);
+      const tag = document.createElement('span');
+      tag.className = 'name ' + side; tag.textContent = name;
+      tag.style.left = left; tag.style.top = top; tag.style.setProperty('--i', i);
+      stage.append(pin, tag);
+    });
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
+      const dist = Math.hypot(x2 - x1, y2 - y1);
+      const cx = (x1 + x2) / 2, cy = (y1 + y2) / 2 - dist * 0.28;
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('class', 'arc');
+      p.setAttribute('pathLength', '1');
+      p.setAttribute('d', `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+      p.style.setProperty('--i', i);
+      arcs.appendChild(p);
+    }
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

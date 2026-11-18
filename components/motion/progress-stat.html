@@ -1,0 +1,139 @@
+<!--
+@title Progress stat
+@description One hero percentage counts up while a labelled linear track fills past milestone ticks, with a caption naming what is left. Set the value in data-value and the milestones in data-marks.
+@tags kpi, progress, goal, stat, milestone, percentage, track, number
+@preview center
+@height 380
+@replay true
+@added 2026-11-18
+@source HyperFrames mk-progress-stat block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-progress-stat,
+  .c-progress-stat *,
+  .c-progress-stat *::before,
+  .c-progress-stat *::after { box-sizing: border-box; }
+  .c-progress-stat {
+    container-type: inline-size;
+    width: min(680px, 100%);
+    padding: var(--ds-space-8) var(--ds-space-6) var(--ds-space-7);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    margin: 0;
+  }
+  .c-progress-stat .num {
+    display: block;
+    font-family: var(--ds-font-display);
+    font-size: clamp(64px, 24cqi, 148px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-progress-stat .num small { font-size: 0.42em; letter-spacing: 0; margin-left: 0.06em; color: var(--ds-muted); }
+  .c-progress-stat .label { display: block; margin-top: var(--ds-space-3); font-size: var(--ds-text-lg); font-weight: 600; color: var(--ds-ink); }
+  .c-progress-stat .track {
+    position: relative;
+    margin-top: var(--ds-space-6);
+    height: 12px;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-panel);
+    border: 1px solid var(--ds-line);
+  }
+  .c-progress-stat .fill {
+    position: absolute;
+    inset: 0;
+    width: 0;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-series-1);
+  }
+  .c-progress-stat .marks { position: relative; height: 44px; margin-top: var(--ds-space-2); }
+  .c-progress-stat .mark {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-1);
+    font-size: var(--ds-text-xs);
+    color: var(--ds-muted);
+    white-space: nowrap;
+  }
+  .c-progress-stat .mark:first-child { transform: none; justify-items: start; }
+  .c-progress-stat .mark:last-child { transform: translateX(-100%); justify-items: end; }
+  .c-progress-stat .mark::before {
+    content: "";
+    width: 2px;
+    height: 10px;
+    background: var(--ds-line);
+    transition: background-color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-progress-stat .mark.hit { color: var(--ds-ink); font-weight: 600; }
+  .c-progress-stat .mark.hit::before { background: var(--ds-series-1); }
+  .c-progress-stat .caption { display: block; margin-top: var(--ds-space-2); font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-progress-stat.is-armed:not(.is-in) .caption { opacity: 0; transform: translateY(6px); }
+  .c-progress-stat.is-in .caption { opacity: 1; transform: none; transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease); transition-delay: calc(var(--ds-dur-story) * 1.5); }
+</style>
+
+<figure class="c-progress-stat" data-value="73" data-marks="0,25,50,75,100" data-unit="%">
+  <span class="num" aria-hidden="true">0<small>%</small></span>
+  <span class="label">Of the annual subscription goal</span>
+  <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="73" aria-label="Annual subscription goal">
+    <div class="fill"></div>
+  </div>
+  <div class="marks" aria-hidden="true"></div>
+  <span class="caption">Next milestone at 75%, 2 points away</span>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+
+  document.querySelectorAll('.c-progress-stat').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const value = Number(root.dataset.value);
+    const unit = root.dataset.unit || '';
+    const marks = root.dataset.marks.split(',').map(Number);
+    const num = root.querySelector('.num');
+    const fill = root.querySelector('.fill');
+    const wrap = root.querySelector('.marks');
+    const els = marks.map((m) => {
+      const el = document.createElement('span');
+      el.className = 'mark';
+      el.style.left = m + '%';
+      el.textContent = m + unit;
+      wrap.appendChild(el);
+      return el;
+    });
+
+    function show(v) {
+      num.firstChild.nodeValue = Math.round(v);
+      fill.style.width = v + '%';
+      els.forEach((el, i) => el.classList.toggle('hit', v > 0 && v >= marks[i]));
+    }
+    num.firstChild.nodeValue = '0';
+    if (reduced) { show(value); return; }
+    show(0);
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        root.classList.add('is-in');
+        const t0 = performance.now() + 250, dur = 2200;
+        (function frame(now) {
+          const t = Math.max(0, Math.min((now - t0) / dur, 1));
+          show(value * ease(t));
+          if (t < 1) requestAnimationFrame(frame);
+        })(performance.now());
+      }));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

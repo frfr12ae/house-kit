@@ -1,0 +1,179 @@
+<!--
+@title Flowchart draw
+@description A small decision flow that builds step by step: boxes pop in and elbow connectors draw to the next one, ending on the one decision that matters. Lays out in a row on wide screens and a stack on narrow ones.
+@tags flowchart, diagram, process, decision, connectors, steps
+@preview center
+@height 420
+@replay true
+@added 2026-11-18
+@source HyperFrames flowchart block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-flowchart-draw,
+  .c-flowchart-draw *,
+  .c-flowchart-draw *::before,
+  .c-flowchart-draw *::after { box-sizing: border-box; }
+  .c-flowchart-draw {
+    --u: calc(var(--ds-dur-slow) * 0.85);
+    position: relative;
+    width: min(860px, 100%);
+    margin: 0;
+    padding: var(--ds-space-7) var(--ds-space-6);
+    container-type: inline-size;
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-flowchart-draw .grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-7);
+    justify-items: center;
+  }
+  .c-flowchart-draw .wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .c-flowchart-draw .wire {
+    fill: none;
+    stroke: var(--ds-muted);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .c-flowchart-draw .wire.is-yes { stroke: var(--ds-highlight-line); stroke-width: 3; }
+  .c-flowchart-draw .node {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 220px);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    border: var(--ds-hairline) solid var(--ds-neutral-line);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-neutral-fill);
+    color: var(--ds-ink);
+    display: grid;
+    gap: 2px;
+  }
+  .c-flowchart-draw .node .tag { font-size: var(--ds-text-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-ink); opacity: 0.72; }
+  .c-flowchart-draw .node .txt { font-size: var(--ds-text-md); font-weight: 600; line-height: 1.25; }
+  .c-flowchart-draw .node.is-info { background: var(--ds-info-fill); border-color: var(--ds-info-line); }
+  .c-flowchart-draw .node.is-key { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); border-width: 2px; }
+  .c-flowchart-draw .n1 { grid-row: 1; } .c-flowchart-draw .n2 { grid-row: 2; } .c-flowchart-draw .n3 { grid-row: 3; }
+  .c-flowchart-draw .n4 { grid-row: 4; } .c-flowchart-draw .n5 { grid-row: 5; }
+  .c-flowchart-draw .lbl {
+    position: absolute;
+    z-index: 2;
+    padding: 1px var(--ds-space-2);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    color: var(--ds-ink);
+    transform: translate(-50%, -50%);
+  }
+  @container (min-width: 640px) {
+    .c-flowchart-draw .grid { grid-template-columns: repeat(4, 1fr); gap: var(--ds-space-6); align-items: center; }
+    .c-flowchart-draw .n1 { grid-column: 1; grid-row: 1 / 3; }
+    .c-flowchart-draw .n2 { grid-column: 2; grid-row: 1 / 3; }
+    .c-flowchart-draw .n3 { grid-column: 3; grid-row: 1 / 3; }
+    .c-flowchart-draw .n4 { grid-column: 4; grid-row: 1; }
+    .c-flowchart-draw .n5 { grid-column: 4; grid-row: 2; }
+  }
+
+  /* each part waits for its step; the hidden state carries no transition */
+  .c-flowchart-draw.is-armed .node { opacity: 0; transform: translateY(8px) scale(0.96); }
+  .c-flowchart-draw.is-armed .wire { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .c-flowchart-draw.is-armed .lbl { opacity: 0; }
+  .c-flowchart-draw.is-armed.is-in .node {
+    opacity: 1; transform: none;
+    transition: opacity var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease-spring);
+    transition-delay: calc(var(--u) * var(--i));
+  }
+  .c-flowchart-draw.is-armed.is-in .wire {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset var(--u) var(--ds-ease-in-out);
+    transition-delay: calc(var(--u) * var(--i));
+  }
+  .c-flowchart-draw.is-armed.is-in .lbl {
+    opacity: 1;
+    transition: opacity var(--ds-dur-base) var(--ds-ease);
+    transition-delay: calc(var(--u) * var(--i) + var(--u) * 0.6);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-flowchart-draw .node, .c-flowchart-draw .wire, .c-flowchart-draw .lbl { transition: none !important; }
+  }
+</style>
+
+<figure class="c-flowchart-draw" aria-label="Flowchart: request received, check scope, budget decision, then approve or send back">
+  <div class="grid">
+    <svg class="wires" aria-hidden="true"></svg>
+    <div class="node n1" style="--i:0"><span class="tag">Given</span><span class="txt">Request received</span></div>
+    <div class="node n2 is-info" style="--i:2"><span class="tag">Process</span><span class="txt">Check scope and effort</span></div>
+    <div class="node n3 is-key" style="--i:4"><span class="tag">Decision</span><span class="txt">Fits the budget?</span></div>
+    <div class="node n4 is-info" style="--i:6"><span class="tag">Yes</span><span class="txt">Approve and schedule</span></div>
+    <div class="node n5" style="--i:6"><span class="tag">No</span><span class="txt">Send back with options</span></div>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // [from, to, step index the wire starts on, label]
+  const LINKS = [['n1', 'n2', 1, ''], ['n2', 'n3', 3, ''], ['n3', 'n4', 5, 'Yes'], ['n3', 'n5', 5, 'No']];
+
+  document.querySelectorAll('.c-flowchart-draw').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const grid = root.querySelector('.grid');
+    const svg = root.querySelector('.wires');
+    const labels = [];
+
+    const rect = (el) => {
+      const g = grid.getBoundingClientRect(), r = el.getBoundingClientRect();
+      return { l: r.left - g.left, t: r.top - g.top, w: r.width, h: r.height };
+    };
+    const layout = () => {
+      svg.replaceChildren();
+      labels.forEach((l) => l.remove());
+      labels.length = 0;
+      LINKS.forEach(([a, b, step, text]) => {
+        const A = rect(grid.querySelector('.' + a)), B = rect(grid.querySelector('.' + b));
+        let d, mid;
+        if (B.l > A.l + A.w * 0.6) {
+          const x1 = A.l + A.w, y1 = A.t + A.h / 2, x2 = B.l, y2 = B.t + B.h / 2, mx = (x1 + x2) / 2;
+          d = `M${x1},${y1} H${mx} V${y2} H${x2}`;
+          mid = [x2 - 14, y2];
+        } else {
+          const x1 = A.l + A.w / 2, y1 = A.t + A.h, x2 = B.l + B.w / 2, y2 = B.t, my = (y1 + y2) / 2;
+          d = `M${x1},${y1} V${my} H${x2} V${y2}`;
+          mid = [x2, y2 - 12];
+        }
+        const p = document.createElementNS(NS, 'path');
+        p.setAttribute('class', 'wire' + (b === 'n4' ? ' is-yes' : ''));
+        p.setAttribute('pathLength', '1');
+        p.setAttribute('d', d);
+        p.style.setProperty('--i', step);
+        svg.appendChild(p);
+        if (text) {
+          const s = document.createElement('span');
+          s.className = 'lbl'; s.textContent = text;
+          s.style.left = mid[0] + 'px'; s.style.top = mid[1] + 'px';
+          s.style.setProperty('--i', step);
+          grid.appendChild(s); labels.push(s);
+        }
+      });
+    };
+    layout();
+    new ResizeObserver(layout).observe(grid);
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

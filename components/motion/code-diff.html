@@ -1,0 +1,118 @@
+<!--
+@title Code diff
+@description An edit shown as a diff: removed lines strike through and fade, added lines slide in, with +/- gutter marks. Edit the lines in the markup; mark each with del, add or ctx.
+@tags code, diff, git, patch, refactor, before after, changes, developer
+@preview center
+@height 420
+@replay true
+@added 2026-11-18
+@source HyperFrames code-diff block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-code-diff,
+  .c-code-diff *,
+  .c-code-diff *::before,
+  .c-code-diff *::after { box-sizing: border-box; }
+  .c-code-diff {
+    --k: color-mix(in srgb, var(--ds-info-line) 50%, var(--ds-ink));
+    --s: color-mix(in srgb, var(--ds-note-line) 50%, var(--ds-ink));
+    --n: color-mix(in srgb, var(--ds-highlight-line) 50%, var(--ds-ink));
+    --step: calc(var(--ds-dur-base) * 1.4);
+    container-type: inline-size;
+    width: min(640px, 100%);
+    max-width: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-lg);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-code-diff .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-3); padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-panel); border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-code-diff .file { font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-ink); }
+  .c-code-diff .stat { display: flex; gap: var(--ds-space-2); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-ink); white-space: nowrap; }
+  .c-code-diff .stat span { padding: 1px var(--ds-space-2); border: var(--ds-hairline) solid; border-radius: var(--ds-radius-pill); }
+  .c-code-diff .stat .rm { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-code-diff .stat .ad { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-code-diff .code { margin: 0; padding: var(--ds-space-3) 0; font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); line-height: 1.85; overflow-x: auto; }
+  .c-code-diff .ln {
+    display: grid;
+    grid-template-columns: 3ch 3ch 1fr;
+    gap: var(--ds-space-2);
+    min-width: max-content;
+    width: 100%;
+    padding: 0 var(--ds-space-4) 0 var(--ds-space-3);
+    border-left: 3px solid transparent;
+    white-space: pre;
+    color: var(--ds-text);
+  }
+  .c-code-diff .no { text-align: right; color: var(--ds-muted); font-variant-numeric: tabular-nums; user-select: none; }
+  .c-code-diff .sg { text-align: center; font-weight: 700; color: var(--ds-muted); user-select: none; }
+  .c-code-diff .del { background: var(--ds-danger-fill); border-left-color: var(--ds-danger-line); opacity: 0.62; }
+  .c-code-diff .add { background: var(--ds-note-fill); border-left-color: var(--ds-note-line); }
+  .c-code-diff .del .sg,
+  .c-code-diff .add .sg { color: var(--ds-ink); }
+  .c-code-diff .tx { justify-self: start; background: linear-gradient(currentColor, currentColor) no-repeat 0 58% / 0 1.5px; }
+  .c-code-diff .del .tx { background-size: 100% 1.5px; }
+  .c-code-diff .k { color: var(--k); font-weight: 600; }
+  .c-code-diff .s { color: var(--s); }
+  .c-code-diff .n { color: var(--n); }
+  .c-code-diff .c { color: var(--ds-muted); }
+  .c-code-diff .sp { height: 0.9em; }
+
+  /* armed: removed lines sit normal, added lines wait off to the left; is-in plays the edit */
+  .c-code-diff.is-armed .del { opacity: 1; }
+  .c-code-diff.is-armed .del .tx { background-size: 0 1.5px; }
+  .c-code-diff.is-armed .add { opacity: 0; transform: translateX(-18px); }
+  .c-code-diff.is-in .del,
+  .c-code-diff.is-in .add { transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease); transition-delay: calc(var(--d) * var(--step) + var(--ds-dur-base)); }
+  .c-code-diff.is-in .del .tx { transition: background-size var(--ds-dur-slow) var(--ds-ease-in-out); transition-delay: calc(var(--d) * var(--step)); }
+  .c-code-diff.is-in .del .tx { background-size: 100% 1.5px; }
+  .c-code-diff.is-in .del { opacity: 0.62; transform: none; }
+  .c-code-diff.is-in .add { opacity: 1; transform: none; }
+
+  @container (max-width: 440px) {
+    .c-code-diff .ln { grid-template-columns: 2ch 1fr; min-width: 0; padding: 0 var(--ds-space-3) 0 var(--ds-space-2); white-space: pre-wrap; overflow-wrap: anywhere; }
+    .c-code-diff .no { display: none; }
+    .c-code-diff .stat { display: none; }
+  }
+</style>
+
+<figure class="c-code-diff" aria-label="Code diff of pricing.js: four lines removed, four added">
+  <div class="bar"><span class="file">pricing.js</span><span class="stat" aria-hidden="true"><span class="rm">4 removed</span><span class="ad">4 added</span></span></div>
+  <div class="code" role="group" aria-label="Diff lines">
+    <div class="ln ctx"><span class="no">1</span><span class="sg"> </span><span class="tx"><span class="c">// pricing.js</span></span></div>
+    <div class="ln ctx"><span class="no">2</span><span class="sg"> </span><span class="tx"><span class="k">import</span> { TAX_RATE } <span class="k">from</span> <span class="s">"./config"</span>;</span></div>
+    <div class="ln del" style="--d: 0"><span class="no">3</span><span class="sg">-</span><span class="tx"><span class="k">const</span> VAT = <span class="n">1.2</span>;</span></div>
+    <div class="ln add" style="--d: 1"><span class="no">3</span><span class="sg">+</span><span class="tx"><span class="k">const</span> VAT = <span class="n">1</span> + TAX_RATE;</span></div>
+    <div class="ln ctx sp"></div>
+    <div class="ln ctx"><span class="no">5</span><span class="sg"> </span><span class="tx"><span class="k">export function</span> priceOf(cart) {</span></div>
+    <div class="ln del" style="--d: 2"><span class="no">6</span><span class="sg">-</span><span class="tx">  <span class="k">let</span> sum = <span class="n">0</span>;</span></div>
+    <div class="ln del" style="--d: 3"><span class="no">7</span><span class="sg">-</span><span class="tx">  <span class="k">for</span> (<span class="k">const</span> l <span class="k">of</span> cart) sum += l.p;</span></div>
+    <div class="ln del" style="--d: 4"><span class="no">8</span><span class="sg">-</span><span class="tx">  <span class="k">return</span> sum * VAT;</span></div>
+    <div class="ln add" style="--d: 5"><span class="no">6</span><span class="sg">+</span><span class="tx">  <span class="k">const</span> net = cart.reduce(</span></div>
+    <div class="ln add" style="--d: 6"><span class="no">7</span><span class="sg">+</span><span class="tx">    (s, l) =&gt; s + l.price * l.qty, <span class="n">0</span>);</span></div>
+    <div class="ln add" style="--d: 7"><span class="no">8</span><span class="sg">+</span><span class="tx">  <span class="k">return</span> round2(net * VAT);</span></div>
+    <div class="ln ctx"><span class="no">9</span><span class="sg"> </span><span class="tx">}</span></div>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-code-diff').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    if (reduced) return; // the markup already shows the finished diff
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

@@ -1,0 +1,131 @@
+<!--
+@title Weight wave
+@description A headline whose letters swell in weight, lift and brighten as a crest travels across it, then settle bolder than they began. Use for one emphasis line or a title card.
+@tags text, kinetic, headline, weight, wave, typography, title
+@preview center
+@height 360
+@replay true
+@added 2026-11-18
+@source HyperFrames weight-wave block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-weight-wave,
+  .c-weight-wave *,
+  .c-weight-wave *::before,
+  .c-weight-wave *::after { box-sizing: border-box; }
+  .c-weight-wave {
+    width: min(900px, 100%);
+    margin: 0;
+    padding: var(--ds-space-8) var(--ds-space-6);
+    container-type: inline-size;
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-ink);
+    text-align: center;
+  }
+  .c-weight-wave .kicker {
+    margin: 0 0 var(--ds-space-4);
+    font-size: var(--ds-text-sm);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-muted);
+  }
+  .c-weight-wave .line {
+    margin: 0;
+    font-size: clamp(26px, 7cqi, 64px);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    color: var(--ds-ink);
+  }
+  .c-weight-wave .wd { display: inline-block; white-space: nowrap; margin: 0 0.14em; }
+  /* the ghost glyph is always the heaviest weight, so a letter never changes the width of its cell */
+  .c-weight-wave .ch { display: inline-grid; justify-items: center; }
+  .c-weight-wave .ch > * { grid-area: 1 / 1; font-style: normal; }
+  .c-weight-wave .ch .g { font-weight: 900; visibility: hidden; }
+  .c-weight-wave .ch .v {
+    font-weight: var(--w, 650);
+    opacity: var(--o, 1);
+    transform: translateY(var(--y, 0)) scale(var(--s, 1));
+    transform-origin: 50% 80%;
+  }
+</style>
+
+<figure class="c-weight-wave">
+  <p class="kicker">Principle three</p>
+  <h2 class="line" aria-label="Weight carries the message">Weight carries the message</h2>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const REST = 330, PEAK = 900, END = 650, CREST = 3.2, PASSES = 2, PASS_MS = 1700, SETTLE_MS = 700;
+  const ease = (t) => t * t * (3 - 2 * t);
+
+  document.querySelectorAll('.c-weight-wave').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const line = root.querySelector('.line');
+    const text = line.getAttribute('aria-label');
+    line.textContent = '';
+    const chars = [];
+    text.split(' ').forEach((word) => {
+      const wd = document.createElement('span');
+      wd.className = 'wd';
+      wd.setAttribute('aria-hidden', 'true');
+      [...word].forEach((c) => {
+        const ch = document.createElement('span');
+        ch.className = 'ch';
+        ch.innerHTML = '<i class="g"></i><i class="v"></i>';
+        ch.firstChild.textContent = c;
+        ch.lastChild.textContent = c;
+        wd.appendChild(ch);
+        chars.push(ch.lastChild);
+      });
+      line.appendChild(wd);
+    });
+    const n = chars.length;
+
+    const paint = (base, crestAt, amp) => {
+      chars.forEach((el, i) => {
+        const d = Math.abs(i - crestAt) / CREST;
+        const k = d < 1 ? ease(1 - d) * amp : 0;
+        el.style.setProperty('--w', Math.round(base + (PEAK - base) * k));
+        el.style.setProperty('--s', (1 + 0.1 * k).toFixed(3));
+        el.style.setProperty('--y', (-0.06 * k).toFixed(3) + 'em');
+        el.style.setProperty('--o', (0.55 + 0.45 * Math.max(k, base > REST ? 1 : 0)).toFixed(3));
+      });
+    };
+
+    if (reduced) { paint(END, -99, 0); return; }
+
+    paint(REST, -99, 0);
+    let started = false;
+    const run = () => {
+      const t0 = performance.now();
+      const total = PASSES * PASS_MS;
+      const frame = (now) => {
+        const t = now - t0;
+        if (t < total) {
+          const p = (t % PASS_MS) / PASS_MS;
+          const crestAt = -CREST + ease(p) * (n + CREST * 2);
+          paint(REST, crestAt, 1);
+          requestAnimationFrame(frame);
+        } else {
+          const q = Math.min(1, (t - total) / SETTLE_MS);
+          paint(REST + (END - REST) * ease(q), n + CREST * 2, 0);
+          if (q < 1) requestAnimationFrame(frame);
+        }
+      };
+      requestAnimationFrame(frame);
+    };
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting) || started) return;
+      started = true; io.disconnect(); run();
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

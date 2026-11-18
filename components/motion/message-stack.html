@@ -1,0 +1,139 @@
+<!--
+@title Message stack
+@description Chat messages arrive one at a time, each preceded by a typing indicator, and the thread scrolls up as it grows. A timed reveal, not a static thread.
+@tags chat, messages, typing, stack, conversation, motion
+@preview center
+@height 560
+@replay true
+@added 2026-11-18
+@source HyperFrames thread-message-stack block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-message-stack,
+  .c-message-stack *,
+  .c-message-stack *::before,
+  .c-message-stack *::after { box-sizing: border-box; }
+  .c-message-stack {
+    width: min(460px, 100%);
+    height: 460px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--ds-space-2);
+    padding: var(--ds-space-5) var(--ds-space-4);
+    overflow: hidden;
+    background: var(--ds-surface);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--ds-ink) 12%);
+    mask-image: linear-gradient(to bottom, transparent 0, var(--ds-ink) 12%);
+  }
+  .c-message-stack .row { display: flex; align-items: flex-end; gap: var(--ds-space-2); flex: none; }
+  .c-message-stack .row--out { justify-content: flex-end; }
+  .c-message-stack .who { margin: 0 0 2px var(--ds-space-8); font-size: var(--ds-text-xs); color: var(--ds-muted); flex: none; }
+  .c-message-stack .avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ds-neutral-fill);
+    border: var(--ds-hairline) solid var(--ds-neutral-line);
+    color: var(--ds-ink);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+  }
+  .c-message-stack .bubble {
+    max-width: 78%;
+    padding: var(--ds-space-3) var(--ds-space-4);
+    border-radius: var(--ds-radius-lg);
+    font-size: var(--ds-text-md);
+    line-height: var(--ds-leading-snug);
+    overflow-wrap: anywhere;
+  }
+  .c-message-stack .row--in .bubble { background: var(--ds-panel); color: var(--ds-ink); border-bottom-left-radius: var(--ds-radius-sm); }
+  .c-message-stack .row--out .bubble { background: var(--ds-action); color: var(--ds-on-action); border-bottom-right-radius: var(--ds-radius-sm); }
+  .c-message-stack .dots { display: inline-flex; gap: 5px; align-items: center; height: 1.3em; }
+  .c-message-stack .dots i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.45;
+    animation: c-message-stack-dot 900ms var(--ds-ease-in-out) infinite;
+  }
+  .c-message-stack .dots i:nth-child(2) { animation-delay: 150ms; }
+  .c-message-stack .dots i:nth-child(3) { animation-delay: 300ms; }
+  .c-message-stack .row--in .dots { color: var(--ds-muted); }
+  .c-message-stack .row--out .dots { color: var(--ds-on-action); }
+  .c-message-stack .row.is-new { animation: c-message-stack-in var(--ds-dur-slow) var(--ds-ease-spring) both; }
+  .c-message-stack .read { align-self: flex-end; margin: 0 var(--ds-space-1); font-size: var(--ds-text-xs); color: var(--ds-muted); }
+  @keyframes c-message-stack-dot { 0%, 70%, 100% { transform: translateY(0); opacity: 0.35; } 35% { transform: translateY(-4px); opacity: 1; } }
+  @keyframes c-message-stack-in { from { opacity: 0; transform: translateY(18px) scale(0.94); } to { opacity: 1; transform: none; } }
+
+  .c-message-stack.is-armed .row { display: none; }
+  .c-message-stack.is-armed .row.is-shown { display: flex; }
+
+  @media (max-width: 400px) {
+    .c-message-stack { padding: var(--ds-space-4) var(--ds-space-3); }
+    .c-message-stack .bubble { max-width: 84%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-message-stack .dots i { animation: none; }
+  }
+</style>
+
+<section class="c-message-stack" aria-label="Conversation">
+  <div class="row row--in"><span class="avatar" aria-hidden="true">JL</span><div class="bubble">Did the supplier confirm the delivery date?</div></div>
+  <div class="row row--out"><div class="bubble">Yes, Thursday morning.</div></div>
+  <div class="row row--in"><span class="avatar" aria-hidden="true">JL</span><div class="bubble">Perfect. Can you send the dock details to the warehouse?</div></div>
+  <div class="row row--out"><div class="bubble">Already did, they replied with a gate code.</div></div>
+  <div class="row row--in"><span class="avatar" aria-hidden="true">JL</span><div class="bubble">You are a lifesaver. Coffee is on me tomorrow.</div></div>
+  <div class="row row--out"><div class="bubble">Deal. Oat flat white.</div></div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-message-stack').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    if (reduced) return;
+    const rows = Array.from(root.querySelectorAll('.row'));
+    const timers = [];
+    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+    root.classList.add('is-armed');
+    const typing = (side) => {
+      const t = document.createElement('div');
+      t.className = 'row row--' + side + ' is-shown is-new';
+      t.innerHTML = (side === 'in' ? '<span class="avatar" aria-hidden="true">JL</span>' : '') + '<div class="bubble"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>';
+      return t;
+    };
+    const play = () => {
+      let at = 300;
+      rows.forEach((row) => {
+        const side = row.classList.contains('row--in') ? 'in' : 'out';
+        const dots = typing(side);
+        later(() => root.appendChild(dots), at);
+        at += side === 'in' ? 1000 : 750;
+        later(() => {
+          dots.remove();
+          row.classList.add('is-shown', 'is-new');
+          root.appendChild(row);
+        }, at);
+        at += 450;
+      });
+    };
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(play));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

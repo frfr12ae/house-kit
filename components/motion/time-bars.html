@@ -1,0 +1,180 @@
+<!--
+@title Time bars
+@description Before and after race: a slow hatched bar crawls in stages while the accent bar finishes first, both clocks scroll through their steps, a done tick lands and the speed-up headline rises in.
+@tags before after, comparison, speed, race, progress, time saved, benchmark, bars
+@preview center
+@height 420
+@replay true
+@added 2026-11-18
+@source 21st.dev video block "Time Race Bars" (look only; code written from scratch) | https://21st.dev/@21st/components/mg-ba-time-bars | inspired-by
+-->
+<style>
+  .c-time-bars,
+  .c-time-bars *,
+  .c-time-bars *::before,
+  .c-time-bars *::after { box-sizing: border-box; }
+  .c-time-bars {
+    --clock: 40px;
+    container-type: inline-size;
+    width: min(680px, 100%);
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    margin: 0;
+  }
+  .c-time-bars .head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--ds-space-1) var(--ds-space-4); margin-bottom: var(--ds-space-6); }
+  .c-time-bars .task { font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-time-bars .ctx { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-time-bars .lane { margin-bottom: var(--ds-space-5); }
+  .c-time-bars .lane-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-3); margin-bottom: var(--ds-space-2); }
+  .c-time-bars .who { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); display: flex; align-items: center; gap: var(--ds-space-2); }
+  .c-time-bars .who::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--ds-neutral-line); }
+  .c-time-bars .lane.fast .who::before { background: var(--ds-series-1); }
+  .c-time-bars .clock {
+    height: var(--clock);
+    overflow: hidden;
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-xl);
+    font-weight: 700;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    padding: 0 var(--ds-space-1);
+  }
+  .c-time-bars .clock-in { transition: transform var(--ds-dur-base) var(--ds-ease); }
+  .c-time-bars .clock-in div { height: var(--clock); line-height: var(--clock); white-space: nowrap; }
+  .c-time-bars .rail {
+    position: relative;
+    height: 22px;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-panel);
+    border: 1px solid var(--ds-line);
+    overflow: hidden;
+  }
+  .c-time-bars .bar {
+    position: absolute;
+    inset: 0;
+    width: 0;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-series-1);
+  }
+  .c-time-bars .slow .bar {
+    background: repeating-linear-gradient(135deg, var(--ds-neutral-line) 0 6px, color-mix(in srgb, var(--ds-neutral-line) 55%, var(--ds-panel)) 6px 12px);
+    transition: width var(--ds-dur-slow) var(--ds-ease-in-out);
+  }
+  .c-time-bars .fast .bar { transition: width calc(var(--ds-dur-story) * 1.2) var(--ds-ease-in-out); }
+  .c-time-bars .tick {
+    margin-top: var(--ds-space-2);
+    display: inline-block;
+    padding: 2px var(--ds-space-3);
+    border-radius: var(--ds-radius-pill);
+    font-size: var(--ds-text-xs);
+    font-weight: 700;
+    color: var(--ds-ink);
+    background: var(--ds-neutral-fill);
+    border: 1px solid var(--ds-neutral-line);
+    opacity: 0;
+    transform: scale(0.85);
+    transform-origin: left center;
+    transition: opacity var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-time-bars .fast .tick { background: var(--ds-info-fill); border-color: var(--ds-info-line); }
+  .c-time-bars .tick.on { opacity: 1; transform: none; }
+  .c-time-bars .result {
+    margin-top: var(--ds-space-6);
+    font-family: var(--ds-font-display);
+    font-size: clamp(40px, 13cqi, 76px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--ds-ink);
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease);
+  }
+  .c-time-bars .result.on { opacity: 1; transform: none; }
+  @container (max-width: 460px) {
+    .c-time-bars { --clock: 32px; }
+    .c-time-bars .clock { font-size: var(--ds-text-lg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-time-bars .tick, .c-time-bars .result { transition: none; }
+  }
+</style>
+
+<figure class="c-time-bars"
+  data-old="0 min|18 min|42 min|1 h 05 min|1 h 37 min|2 h 10 min|2 h 48 min|3 h 20 min"
+  data-new="0 min|1 min|2 min|3 min|4 min">
+  <div class="head">
+    <span class="task">Monthly board report</span>
+    <span class="ctx">Start to finish, same data</span>
+  </div>
+  <div class="lane slow">
+    <div class="lane-head"><span class="who">By hand</span><div class="clock" aria-hidden="true"><div class="clock-in"></div></div></div>
+    <div class="rail"><div class="bar"></div></div>
+    <span class="tick">Finally done</span>
+  </div>
+  <div class="lane fast">
+    <div class="lane-head"><span class="who">With the template</span><div class="clock" aria-hidden="true"><div class="clock-in"></div></div></div>
+    <div class="rail"><div class="bar"></div></div>
+    <span class="tick">Done</span>
+  </div>
+  <div class="result">50x faster</div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.c-time-bars').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const oldSteps = root.dataset.old.split('|');
+    const newSteps = root.dataset.new.split('|');
+    const slow = root.querySelector('.slow'), fast = root.querySelector('.fast');
+    const clocks = [slow, fast].map((lane, i) => {
+      const inner = lane.querySelector('.clock-in');
+      (i ? newSteps : oldSteps).forEach((s) => { const d = document.createElement('div'); d.textContent = s; inner.appendChild(d); });
+      return inner;
+    });
+    const setClock = (i, k) => { clocks[i].style.transform = `translateY(calc(var(--clock) * ${-k}))`; };
+    const bar = (lane, p) => { lane.querySelector('.bar').style.width = p + '%'; };
+    const tick = (lane, on) => lane.querySelector('.tick').classList.toggle('on', on);
+    const result = root.querySelector('.result');
+    root.setAttribute('aria-label', 'By hand took ' + oldSteps[oldSteps.length - 1] + ', with the template ' + newSteps[newSteps.length - 1] + ': 50x faster');
+
+    function end() {
+      setClock(0, oldSteps.length - 1); setClock(1, newSteps.length - 1);
+      bar(slow, 100); bar(fast, 100); tick(slow, true); tick(fast, true); result.classList.add('on');
+    }
+    setClock(0, 0); setClock(1, 0);
+    if (reduced) {
+      root.querySelectorAll('.clock-in, .bar').forEach((e) => { e.style.transition = 'none'; });
+      end(); return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const at = (ms, fn) => setTimeout(fn, ms);
+        // slow bar crawls in stages, one per counter step
+        const crawl = [0.09, 0.12, 0.31, 0.34, 0.54, 0.57, 0.8, 1];
+        oldSteps.forEach((_, k) => {
+          if (k === 0) return;
+          const ms = 300 + (k * 2900) / (oldSteps.length - 1);
+          at(ms, () => { setClock(0, k); bar(slow, k === oldSteps.length - 1 ? 100 : crawl[Math.min(k - 1, crawl.length - 2)] * 100); });
+        });
+        // fast bar finishes first
+        at(300, () => bar(fast, 100));
+        newSteps.forEach((_, k) => { if (k) at(300 + (k * 1100) / (newSteps.length - 1), () => setClock(1, k)); });
+        at(1650, () => tick(fast, true));
+        at(3300, () => tick(slow, true));
+        at(3500, () => result.classList.add('on'));
+      }));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

@@ -1,0 +1,161 @@
+<!--
+@title Split flap
+@description Departure-board cells flip through the alphabet one letter at a time until two short lines of text resolve. Set the lines in data-lines, up to the board width.
+@tags split flap, board, departure, mechanical, flip, text, reveal, title, status
+@preview center
+@height 360
+@replay true
+@added 2026-11-18
+@source HyperFrames split-flap-board block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-split-flap,
+  .c-split-flap *,
+  .c-split-flap *::before,
+  .c-split-flap *::after { box-sizing: border-box; }
+  .c-split-flap {
+    container-type: inline-size;
+    width: min(680px, 100%);
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    margin: 0;
+  }
+  .c-split-flap .cap { display: block; margin-bottom: var(--ds-space-4); font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-muted); }
+  .c-split-flap .board { display: grid; gap: var(--ds-space-3); }
+  .c-split-flap .line { display: flex; gap: 3px; justify-content: center; }
+  .c-split-flap .cell {
+    --step: 60ms;
+    position: relative;
+    flex: 1 1 0;
+    max-width: 52px;
+    aspect-ratio: 5 / 7;
+    min-width: 0;
+    font-family: var(--ds-font-mono);
+    font-size: clamp(16px, 7.2cqi, 40px);
+    font-weight: 700;
+    color: var(--ds-ink);
+    perspective: 300px;
+  }
+  .c-split-flap .half {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 50%;
+    overflow: hidden;
+    background: var(--ds-panel);
+    display: block;
+    backface-visibility: hidden;
+  }
+  .c-split-flap .half i {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 200%;
+    display: grid;
+    place-items: center;
+    font-style: normal;
+    line-height: 1;
+  }
+  .c-split-flap .t { top: 0; border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0; border-bottom: 1px solid var(--ds-line); transform-origin: bottom; }
+  .c-split-flap .t i { top: 0; }
+  .c-split-flap .b { bottom: 0; border-radius: 0 0 var(--ds-radius-sm) var(--ds-radius-sm); transform-origin: top; }
+  .c-split-flap .b i { bottom: 0; }
+  .c-split-flap .fl { opacity: 0; }
+  .c-split-flap .fl.t { z-index: 2; }
+  .c-split-flap .fl.b { z-index: 2; }
+  .c-split-flap .cell.go .fl.t { animation: c-split-flap-top var(--step) linear forwards; }
+  .c-split-flap .cell.go .fl.b { animation: c-split-flap-bot var(--step) linear forwards; }
+  @keyframes c-split-flap-top {
+    0% { opacity: 1; transform: rotateX(0); }
+    50%, 100% { opacity: 1; transform: rotateX(-90deg); }
+  }
+  @keyframes c-split-flap-bot {
+    0%, 50% { opacity: 1; transform: rotateX(90deg); }
+    100% { opacity: 1; transform: rotateX(0); }
+  }
+  @container (max-width: 460px) {
+    .c-split-flap .line { gap: 2px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-split-flap .cell.go .fl.t, .c-split-flap .cell.go .fl.b { animation: none; opacity: 0; }
+  }
+</style>
+
+<section class="c-split-flap" data-lines="NOW BOARDING|GATE 14 OPEN" data-width="12" aria-label="Now boarding, gate 14 open">
+  <span class="cap" aria-hidden="true">Departures</span>
+  <div class="board" aria-hidden="true"></div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DRUM = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const STEP = 60;
+
+  document.querySelectorAll('.c-split-flap').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const width = Number(root.dataset.width) || 12;
+    const lines = root.dataset.lines.split('|');
+    const board = root.querySelector('.board');
+    const cells = [];
+
+    lines.forEach((text, li) => {
+      const line = document.createElement('div');
+      line.className = 'line';
+      const padded = text.toUpperCase().padEnd(width, ' ').slice(0, width);
+      [...padded].forEach((ch, ci) => {
+        const el = document.createElement('span');
+        el.className = 'cell';
+        el.innerHTML = '<span class="half t"><i></i></span><span class="half b"><i></i></span><span class="half t fl"><i></i></span><span class="half b fl"><i></i></span>';
+        line.appendChild(el);
+        const target = Math.max(0, DRUM.indexOf(ch));
+        cells.push({ el, target, idx: 0, delay: li * 8 + ci * 1.2, ti: el.querySelector('.t i'), bi: el.querySelector('.b i'), fti: el.querySelector('.fl.t i'), fbi: el.querySelector('.fl.b i') });
+      });
+      board.appendChild(line);
+    });
+
+    const put = (c, top, bot, ft, fb) => {
+      c.ti.textContent = DRUM[top].trim(); c.bi.textContent = DRUM[bot].trim();
+      c.fti.textContent = DRUM[ft].trim(); c.fbi.textContent = DRUM[fb].trim();
+    };
+    function settle(c) {
+      put(c, c.target, c.target, c.target, c.target);
+      c.el.classList.remove('go');
+      c.el.classList.add('set');
+    }
+    if (reduced) { cells.forEach(settle); return; }
+    cells.forEach((c) => put(c, 0, 0, 0, 0));
+
+    function run() {
+      let tick = 0;
+      const timer = setInterval(() => {
+        let busy = false;
+        cells.forEach((c) => {
+          if (c.idx === c.target) return;
+          busy = true;
+          if (tick < c.delay) return;
+          const from = c.idx, to = (from + 1) % DRUM.length;
+          c.idx = to;
+          put(c, to, from, from, to);
+          c.el.classList.remove('go');
+          void c.el.offsetWidth;
+          c.el.classList.add('go');
+          if (to === c.target) setTimeout(() => settle(c), STEP);
+        });
+        tick++;
+        if (!busy) clearInterval(timer);
+      }, STEP);
+    }
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      setTimeout(run, 400);
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

@@ -1,0 +1,168 @@
+<!--
+@title Bar race
+@description Ranked horizontal bars grow and overtake each other as a series moves through periods, the scale rescales as values climb and the lead bar takes the accent. Set the data in data-periods and data-series.
+@tags chart, bar, race, ranking, leaderboard, time series, overtake, dataviz
+@preview center
+@height 460
+@replay true
+@added 2026-11-18
+@source HyperFrames bar-chart-race block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-bar-race,
+  .c-bar-race *,
+  .c-bar-race *::before,
+  .c-bar-race *::after { box-sizing: border-box; }
+  .c-bar-race {
+    --row: 40px;
+    container-type: inline-size;
+    width: min(680px, 100%);
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    margin: 0;
+  }
+  .c-bar-race .head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-4); margin-bottom: var(--ds-space-5); }
+  .c-bar-race .titles { display: grid; gap: var(--ds-space-1); min-width: 0; }
+  .c-bar-race .title { font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-bar-race .sub { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-bar-race .period {
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-text-3xl);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .c-bar-race .board { position: relative; height: calc(var(--row) * var(--n)); }
+  .c-bar-race .row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: var(--row);
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    align-items: center;
+    gap: var(--ds-space-3);
+    transition: transform var(--ds-dur-slow) var(--ds-ease-in-out);
+  }
+  .c-bar-race .name { font-size: var(--ds-text-sm); font-weight: 600; color: var(--ds-ink); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-bar-race .track { display: flex; align-items: center; gap: var(--ds-space-2); min-width: 0; }
+  .c-bar-race .bar {
+    height: 26px;
+    flex: none;
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-neutral-line);
+    transition: background-color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-bar-race .row.lead .bar { background: var(--ds-series-1); }
+  .c-bar-race .val { font-size: var(--ds-text-sm); font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .c-bar-race .axis { display: flex; justify-content: space-between; margin: var(--ds-space-3) 0 0 calc(76px + var(--ds-space-3)); font-size: var(--ds-text-xs); color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-bar-race .axis span { padding-top: var(--ds-space-2); border-top: 1px solid var(--ds-line); flex: 1; }
+  .c-bar-race .axis span:last-child { flex: none; text-align: right; }
+  .c-bar-race.is-armed:not(.is-in) .board,
+  .c-bar-race.is-armed:not(.is-in) .period { opacity: 0; }
+  .c-bar-race.is-in .board,
+  .c-bar-race.is-in .period { opacity: 1; transition: opacity var(--ds-dur-base) var(--ds-ease); }
+  @container (max-width: 460px) {
+    .c-bar-race .row { grid-template-columns: 56px 1fr; gap: var(--ds-space-2); }
+    .c-bar-race .axis { margin-left: calc(56px + var(--ds-space-2)); }
+    .c-bar-race .period { font-size: var(--ds-text-2xl); }
+  }
+</style>
+
+<figure class="c-bar-race"
+  data-periods="2020,2021,2022,2023,2024"
+  data-series="Northwind: 42, 58, 71, 96, 118
+Cobalt: 30, 46, 68, 92, 126
+Ferry: 55, 62, 66, 70, 74
+Marlow: 18, 33, 52, 61, 88
+Aster: 25, 28, 44, 58, 63
+Pell: 12, 20, 39, 47, 55"
+  data-prefix="" data-suffix="k" data-step="1000">
+  <div class="head">
+    <div class="titles">
+      <span class="title">Active subscribers by service</span>
+      <span class="sub">Ranked live, in thousands</span>
+    </div>
+    <span class="period" aria-live="polite">2020</span>
+  </div>
+  <div class="board" role="img" aria-label="Bar race of six services, ranked by subscribers from 2020 to 2024"></div>
+  <div class="axis" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+  document.querySelectorAll('.c-bar-race').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const periods = root.dataset.periods.split(',').map((s) => s.trim());
+    const series = root.dataset.series.split('\n').map((l) => l.trim()).filter(Boolean).map((l) => {
+      const [name, vals] = l.split(':');
+      return { name: name.trim(), v: vals.split(',').map(Number) };
+    });
+    const prefix = root.dataset.prefix || '', suffix = root.dataset.suffix || '';
+    const stepMs = Number(root.dataset.step) || 1000;
+    const board = root.querySelector('.board');
+    const label = root.querySelector('.period');
+    const axis = root.querySelectorAll('.axis span');
+    root.style.setProperty('--n', series.length);
+
+    series.forEach((s) => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = '<span class="name"></span><div class="track"><span class="bar"></span><span class="val"></span></div>';
+      row.querySelector('.name').textContent = s.name;
+      board.appendChild(row);
+      s.row = row; s.bar = row.querySelector('.bar'); s.val = row.querySelector('.val');
+    });
+
+    const last = periods.length - 1;
+    const rowH = () => parseFloat(getComputedStyle(root).getPropertyValue('--row')) || 40;
+
+    function draw(pos) {
+      const i = Math.min(Math.floor(pos), last), f = i < last ? pos - i : 0;
+      const cur = series.map((s) => s.v[i] + (i < last ? (s.v[i + 1] - s.v[i]) * ease(f) : 0));
+      const max = Math.max(...cur) * 1.12;
+      const step = Math.pow(10, Math.floor(Math.log10(max / 3)));
+      const tick = Math.ceil(max / 3 / step) * step;
+      axis.forEach((a, k) => { a.textContent = prefix + Math.round(tick * k) + suffix; });
+      const order = cur.map((v, k) => k).sort((a, b) => cur[b] - cur[a]);
+      const scale = (tick * 3);
+      series.forEach((s, k) => {
+        const rank = order.indexOf(k);
+        s.row.style.transform = `translateY(${rank * rowH()}px)`;
+        s.row.classList.toggle('lead', rank === 0);
+        s.bar.style.width = `calc((100% - 5.5em) * ${(cur[k] / scale).toFixed(4)})`;
+        s.val.textContent = prefix + Math.round(cur[k]) + suffix;
+      });
+      label.textContent = periods[Math.round(pos) > last ? last : Math.round(pos)];
+    }
+
+    if (reduced) { draw(last); return; }
+    draw(0);
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        root.classList.add('is-in');
+        const t0 = performance.now() + 500;
+        const total = last * stepMs;
+        (function frame(now) {
+          const t = Math.max(0, Math.min(now - t0, total));
+          draw(t / stepMs);
+          if (t < total) requestAnimationFrame(frame);
+        })(performance.now());
+      }));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

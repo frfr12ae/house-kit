@@ -1,0 +1,150 @@
+<!--
+@title CLI cascade
+@description A cascade of stacked command cards: each runs in turn with a spinner, then turns to a check and prints its output. Edit the cards in the markup.
+@tags terminal, cli, pipeline, steps, commands, build, deploy, checks, cascade, developer
+@preview center
+@height 560
+@replay true
+@added 2026-11-18
+@source 21st.dev video block "CLI Cascade" (look only; code written from scratch) | https://21st.dev/@21st/components/cli-cascade | inspired-by
+-->
+<style>
+  .c-cli-cascade,
+  .c-cli-cascade *,
+  .c-cli-cascade *::before,
+  .c-cli-cascade *::after { box-sizing: border-box; }
+  .c-cli-cascade {
+    container-type: inline-size;
+    width: min(620px, 100%);
+    max-width: 100%;
+    margin: 0;
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-cli-cascade .head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); margin-bottom: var(--ds-space-4); }
+  .c-cli-cascade .head b { font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-cli-cascade .head span { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-cli-cascade .stack { position: relative; display: grid; gap: var(--ds-space-3); margin: 0; padding: 0; list-style: none; }
+  .c-cli-cascade .stack::before { content: ""; position: absolute; left: 21px; top: 24px; bottom: 24px; width: 2px; background: var(--ds-line); }
+  .c-cli-cascade .card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: start;
+    background: var(--ds-raised);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-md);
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease), border-color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-cli-cascade .state { position: relative; display: grid; place-items: center; width: 44px; height: 46px; }
+  .c-cli-cascade .state > * { grid-area: 1 / 1; }
+  .c-cli-cascade .tick { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); transition: opacity var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-base) var(--ds-ease-spring); }
+  .c-cli-cascade .tick svg { width: 12px; height: 12px; fill: none; stroke: var(--ds-ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .c-cli-cascade .spin { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--ds-info-fill); border-top-color: var(--ds-info-line); opacity: 0; animation: c-cli-cascade-spin 800ms linear infinite; }
+  .c-cli-cascade .main { min-width: 0; padding: var(--ds-space-3) 0; }
+  .c-cli-cascade .cmd { margin: 0; font-family: var(--ds-font-mono); font-size: var(--ds-text-sm); line-height: 22px; color: var(--ds-ink); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-cli-cascade .cmd i { font-style: normal; color: var(--ds-muted); font-weight: 400; }
+  .c-cli-cascade .out { display: grid; gap: 2px; margin: var(--ds-space-2) 0 0; padding: 0; list-style: none; font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); line-height: 1.6; color: var(--ds-muted); }
+  .c-cli-cascade .out li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity var(--ds-dur-base) var(--ds-ease), transform var(--ds-dur-base) var(--ds-ease); transition-delay: calc(var(--k, 0) * var(--ds-dur-fast)); }
+  .c-cli-cascade .out b { color: var(--ds-ink); font-weight: 700; }
+  .c-cli-cascade .time { align-self: start; margin: var(--ds-space-3) var(--ds-space-4) 0 var(--ds-space-3); padding: 1px var(--ds-space-2); border: var(--ds-hairline) solid var(--ds-neutral-line); border-radius: var(--ds-radius-pill); background: var(--ds-neutral-fill); font-size: 11px; font-weight: 600; color: var(--ds-ink); font-variant-numeric: tabular-nums; white-space: nowrap; transition: opacity var(--ds-dur-base) var(--ds-ease); }
+  .c-cli-cascade .total { display: flex; align-items: center; gap: var(--ds-space-3); margin: var(--ds-space-4) 0 0; padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-note-fill); border: var(--ds-hairline) solid var(--ds-note-line); border-radius: var(--ds-radius-lg); font-size: var(--ds-text-sm); color: var(--ds-ink); transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease); }
+  .c-cli-cascade .total b { font-weight: 700; }
+
+  /* armed: every card waits above its place; a card is run (spinner, no output) and then done (default look) */
+  .c-cli-cascade.is-armed .card { opacity: 0; transform: translateY(-14px); }
+  .c-cli-cascade.is-armed .card.is-run,
+  .c-cli-cascade.is-armed .card.is-done { opacity: 1; transform: none; }
+  .c-cli-cascade.is-armed .card.is-run { border-color: var(--ds-info-line); }
+  .c-cli-cascade.is-armed .card.is-run .spin { opacity: 1; }
+  .c-cli-cascade.is-armed .card.is-run .tick { opacity: 0; transform: scale(0.4); }
+  .c-cli-cascade.is-armed .card.is-run .out li,
+  .c-cli-cascade.is-armed .card.is-run .time,
+  .c-cli-cascade.is-armed .card:not(.is-done):not(.is-run) .out li { opacity: 0; transform: translateX(-8px); }
+  .c-cli-cascade.is-armed .card.is-run .time,
+  .c-cli-cascade.is-armed .card:not(.is-done):not(.is-run) .time { opacity: 0; }
+  .c-cli-cascade.is-armed .card:not(.is-done):not(.is-run) .tick { opacity: 0; }
+  .c-cli-cascade.is-armed:not(.is-complete) .total { opacity: 0; transform: translateY(-8px); }
+  @keyframes c-cli-cascade-spin { to { transform: rotate(360deg); } }
+
+  @container (max-width: 440px) {
+    .c-cli-cascade .head { flex-direction: column; gap: var(--ds-space-1); }
+    .c-cli-cascade .card { grid-template-columns: 40px minmax(0, 1fr); }
+    .c-cli-cascade .stack::before { left: 19px; }
+    .c-cli-cascade .state { width: 40px; }
+    .c-cli-cascade .time { grid-column: 2; justify-self: start; margin: 0 0 var(--ds-space-3); }
+    .c-cli-cascade .main { padding-bottom: var(--ds-space-2); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c-cli-cascade .spin { animation: none; }
+  }
+</style>
+
+<figure class="c-cli-cascade" aria-label="Four commands run in sequence and all pass">
+  <div class="head"><b>Release pipeline</b><span>Four steps, run in order</span></div>
+  <ol class="stack">
+    <li class="card">
+      <span class="state" aria-hidden="true"><i class="spin"></i><i class="tick"><svg viewBox="0 0 12 12"><path d="M2.5 6.4l2.3 2.3 4.7-5"/></svg></i></span>
+      <div class="main">
+        <p class="cmd"><i>$ </i>git pull --rebase</p>
+        <ul class="out"><li style="--k: 1"><b>&#10003;</b> Fast-forwarded 3 commits</li></ul>
+      </div>
+      <span class="time">0.8s</span>
+    </li>
+    <li class="card">
+      <span class="state" aria-hidden="true"><i class="spin"></i><i class="tick"><svg viewBox="0 0 12 12"><path d="M2.5 6.4l2.3 2.3 4.7-5"/></svg></i></span>
+      <div class="main">
+        <p class="cmd"><i>$ </i>npm ci</p>
+        <ul class="out"><li style="--k: 1"><b>&#10003;</b> Installed 214 packages</li><li style="--k: 2"><b>&#10003;</b> 0 vulnerabilities found</li></ul>
+      </div>
+      <span class="time">3.1s</span>
+    </li>
+    <li class="card">
+      <span class="state" aria-hidden="true"><i class="spin"></i><i class="tick"><svg viewBox="0 0 12 12"><path d="M2.5 6.4l2.3 2.3 4.7-5"/></svg></i></span>
+      <div class="main">
+        <p class="cmd"><i>$ </i>npm run build</p>
+        <ul class="out"><li style="--k: 1"><b>&#10003;</b> Compiled 38 pages</li><li style="--k: 2"><b>&#10003;</b> Wrote dist/ (1.2 MB)</li></ul>
+      </div>
+      <span class="time">4.2s</span>
+    </li>
+    <li class="card">
+      <span class="state" aria-hidden="true"><i class="spin"></i><i class="tick"><svg viewBox="0 0 12 12"><path d="M2.5 6.4l2.3 2.3 4.7-5"/></svg></i></span>
+      <div class="main">
+        <p class="cmd"><i>$ </i>npm test</p>
+        <ul class="out"><li style="--k: 1"><b>&#10003;</b> 42 passed, 0 failed</li></ul>
+      </div>
+      <span class="time">3.2s</span>
+    </li>
+  </ol>
+  <p class="total"><b>&#10003; All 4 steps passed</b> in 11.3s</p>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-cli-cascade').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    if (reduced) return; // the markup already holds the finished pipeline
+    const cs = getComputedStyle(root);
+    const base = parseFloat(cs.getPropertyValue('--ds-dur-base')) || 260;
+    const story = parseFloat(cs.getPropertyValue('--ds-dur-story')) || 1400;
+    const cards = [...root.querySelectorAll('.card')];
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      let t = base;
+      cards.forEach((card) => {
+        setTimeout(() => card.classList.add('is-run'), t);
+        t += story * 0.55;
+        setTimeout(() => { card.classList.remove('is-run'); card.classList.add('is-done'); }, t);
+        t += story * 0.45;
+      });
+      setTimeout(() => root.classList.add('is-complete'), t);
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

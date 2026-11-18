@@ -1,0 +1,145 @@
+<!--
+@title Code walkthrough
+@description A code block where a highlight band steps through the lines, one short note per step. Set data-from and data-to on each note to choose the lines it covers.
+@tags code, walkthrough, highlight, explain, steps, tutorial, line, annotation, developer
+@preview center
+@height 520
+@replay true
+@added 2026-11-18
+@source HyperFrames code-highlight block by HeyGen (look only; code written from scratch) | https://github.com/heygen-com/hyperframes | inspired-by
+-->
+<style>
+  .c-code-walkthrough,
+  .c-code-walkthrough *,
+  .c-code-walkthrough *::before,
+  .c-code-walkthrough *::after { box-sizing: border-box; }
+  .c-code-walkthrough {
+    --k: color-mix(in srgb, var(--ds-info-line) 50%, var(--ds-ink));
+    --s: color-mix(in srgb, var(--ds-note-line) 50%, var(--ds-ink));
+    --n: color-mix(in srgb, var(--ds-highlight-line) 50%, var(--ds-ink));
+    container-type: inline-size;
+    width: min(600px, 100%);
+    max-width: 100%;
+    margin: 0;
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-code-walkthrough .card { overflow: hidden; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: var(--ds-radius-lg); box-shadow: var(--ds-shadow-lg); }
+  .c-code-walkthrough .bar { padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-panel); border-bottom: var(--ds-hairline) solid var(--ds-line); font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); font-weight: 600; color: var(--ds-ink); }
+  .c-code-walkthrough .code { position: relative; margin: 0; padding: var(--ds-space-3) 0; font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); line-height: 26px; overflow-x: auto; }
+  .c-code-walkthrough .band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 0;
+    background: var(--ds-info-fill);
+    border-left: 3px solid var(--ds-info-line);
+    opacity: 0;
+    transition: transform var(--ds-dur-slow) var(--ds-ease-in-out), height var(--ds-dur-slow) var(--ds-ease-in-out), opacity var(--ds-dur-base) var(--ds-ease);
+    pointer-events: none;
+  }
+  .c-code-walkthrough .band.on { opacity: 1; }
+  .c-code-walkthrough .ln { position: relative; display: grid; grid-template-columns: 3ch 1fr; gap: var(--ds-space-4); min-width: max-content; padding: 0 var(--ds-space-4) 0 var(--ds-space-3); white-space: pre; color: var(--ds-text); }
+  .c-code-walkthrough .no { text-align: right; color: var(--ds-muted); font-variant-numeric: tabular-nums; user-select: none; }
+  .c-code-walkthrough .ln.on { color: var(--ds-ink); }
+  .c-code-walkthrough .k { color: var(--k); font-weight: 600; }
+  .c-code-walkthrough .s { color: var(--s); }
+  .c-code-walkthrough .n { color: var(--n); }
+  .c-code-walkthrough .c { color: var(--ds-muted); }
+
+  .c-code-walkthrough .notes { display: grid; gap: var(--ds-space-2); margin: var(--ds-space-4) 0 0; padding: 0; list-style: none; }
+  .c-code-walkthrough .notes li {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    align-items: start;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-2) var(--ds-space-3);
+    border: var(--ds-hairline) solid transparent;
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-sm);
+    line-height: 1.45;
+    color: var(--ds-muted);
+    transition: background var(--ds-dur-base) var(--ds-ease), border-color var(--ds-dur-base) var(--ds-ease), color var(--ds-dur-base) var(--ds-ease);
+  }
+  .c-code-walkthrough .notes b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ds-neutral-fill); border: var(--ds-hairline) solid var(--ds-neutral-line); color: var(--ds-ink); font-size: var(--ds-text-xs); font-variant-numeric: tabular-nums; transition: background var(--ds-dur-base) var(--ds-ease), border-color var(--ds-dur-base) var(--ds-ease); }
+  .c-code-walkthrough .notes span { padding-top: 2px; }
+  .c-code-walkthrough .notes li.on { background: var(--ds-info-fill); border-color: var(--ds-info-line); color: var(--ds-ink); }
+  .c-code-walkthrough .notes li.on b { background: var(--ds-info-fill); border-color: var(--ds-info-line); }
+  .c-code-walkthrough .notes li.done { color: var(--ds-text); }
+  .c-code-walkthrough .notes code { font-family: var(--ds-font-mono); font-size: 0.92em; }
+
+  @container (max-width: 440px) {
+    .c-code-walkthrough .ln { grid-template-columns: 2ch 1fr; min-width: 0; gap: var(--ds-space-2); padding: 0 var(--ds-space-2); white-space: pre-wrap; overflow-wrap: anywhere; }
+    .c-code-walkthrough .notes li { padding: var(--ds-space-2); gap: var(--ds-space-2); }
+  }
+</style>
+
+<figure class="c-code-walkthrough" aria-label="Line by line walkthrough of loadConfig">
+  <div class="card">
+    <div class="bar">loadConfig.js</div>
+    <div class="code">
+      <div class="band" aria-hidden="true"></div>
+      <div class="ln"><span class="no">1</span><span><span class="k">async function</span> loadConfig(path) {</span></div>
+      <div class="ln"><span class="no">2</span><span>  <span class="k">const</span> raw = <span class="k">await</span> readFile(path);</span></div>
+      <div class="ln"><span class="no">3</span><span>  <span class="k">const</span> cfg = JSON.parse(raw);</span></div>
+      <div class="ln"><span class="no">4</span><span>  <span class="k">if</span> (!cfg.port) {</span></div>
+      <div class="ln"><span class="no">5</span><span>    cfg.port = <span class="n">8080</span>;  <span class="c">// default</span></span></div>
+      <div class="ln"><span class="no">6</span><span>  }</span></div>
+      <div class="ln"><span class="no">7</span><span>  <span class="k">return</span> Object.freeze(cfg);</span></div>
+      <div class="ln"><span class="no">8</span><span>}</span></div>
+    </div>
+  </div>
+  <ol class="notes">
+    <li data-from="1" data-to="1"><b>1</b><span>The loader is <code>async</code> because reading a file is.</span></li>
+    <li data-from="2" data-to="2"><b>2</b><span>Read the file once. Every later step works on this string.</span></li>
+    <li data-from="3" data-to="3"><b>3</b><span>Parse it. Bad JSON throws here, before anything runs.</span></li>
+    <li data-from="4" data-to="6"><b>4</b><span>Fill the one default we need: port <code>8080</code>.</span></li>
+    <li data-from="7" data-to="7"><b>5</b><span>Freeze and return, so callers cannot change the settings.</span></li>
+  </ol>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-code-walkthrough').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const band = root.querySelector('.band');
+    const lines = [...root.querySelectorAll('.code .ln')];
+    const notes = [...root.querySelectorAll('.notes li')];
+
+    const show = (i) => {
+      const n = notes[i];
+      const a = lines[+n.dataset.from - 1], b = lines[+n.dataset.to - 1];
+      band.style.transform = `translateY(${a.offsetTop}px)`;
+      band.style.height = (b.offsetTop + b.offsetHeight - a.offsetTop) + 'px';
+      band.classList.add('on');
+      lines.forEach((l, k) => l.classList.toggle('on', k >= +n.dataset.from - 1 && k <= +n.dataset.to - 1));
+      notes.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); });
+    };
+
+    if (reduced) { show(notes.length - 1); return; }
+
+    const story = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
+    const run = () => {
+      notes.forEach((_, i) => setTimeout(() => show(i), 300 + i * story * 1.25));
+    };
+    // the band should not have to slide in from nowhere: place it on step one without a transition
+    band.style.transition = 'none';
+    show(0);
+    band.classList.remove('on');
+    notes[0].classList.remove('on');
+    lines[0].classList.remove('on');
+    requestAnimationFrame(() => { band.style.transition = ''; });
+    addEventListener('resize', () => { const i = notes.findIndex((m) => m.classList.contains('on')); if (i >= 0) show(i); });
+
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      run();
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>
