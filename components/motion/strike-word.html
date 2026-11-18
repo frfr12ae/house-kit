@@ -1,0 +1,111 @@
+<!--
+@title Strike word
+@description A headline lands, one word in serif italic is struck out with a line, and the replacement rises underneath. Use it for stop-this-do-that statements and myth versus truth openers.
+@tags strike, strikethrough, headline, kinetic type, contrast, replace, text
+@preview center
+@height 360
+@replay true
+@added 2026-11-18
+@source 21st.dev video block "Strike Word" (look only; code written from scratch) | https://21st.dev/@21st/components/strike-word | inspired-by
+-->
+<style>
+  .c-strike-word,
+  .c-strike-word *,
+  .c-strike-word *::before,
+  .c-strike-word *::after { box-sizing: border-box; }
+  .c-strike-word {
+    width: min(860px, 100%);
+    margin: 0;
+    padding: var(--ds-space-9) var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-display);
+    color: var(--ds-ink);
+    text-align: center;
+    container-type: inline-size;
+  }
+  .c-strike-word .stack {
+    display: grid;
+    gap: var(--ds-space-3);
+    justify-items: center;
+    font-size: clamp(var(--ds-text-xl), 9cqi, var(--ds-text-display));
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: var(--ds-leading-tight);
+  }
+  .c-strike-word .first { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 0.26em; }
+  .c-strike-word .lead { display: inline-block; }
+  .c-strike-word .struck {
+    position: relative;
+    display: inline-block;
+    font-family: var(--ds-font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    color: var(--ds-muted);
+  }
+  .c-strike-word .struck::after {
+    content: "";
+    position: absolute;
+    left: -0.04em;
+    right: -0.04em;
+    top: 54%;
+    height: 0.085em;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-danger-line);
+    transform-origin: left center;
+  }
+  .c-strike-word .replacement { margin: 0; display: inline-block; color: var(--ds-info-line); }
+
+  /* the armed state carries no transition, so arming never animates; only the move to .is-in does */
+  .c-strike-word.is-armed .lead,
+  .c-strike-word.is-armed .struck { opacity: 0; transform: translateY(0.4em); }
+  .c-strike-word.is-armed .struck { color: var(--ds-ink); }
+  .c-strike-word.is-armed .struck::after { transform: scaleX(0); }
+  .c-strike-word.is-armed .replacement { opacity: 0; transform: translateY(0.45em); filter: blur(0.08em); }
+  .c-strike-word.is-armed.is-in .lead {
+    opacity: 1; transform: none;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease-spring);
+  }
+  .c-strike-word.is-armed.is-in .struck {
+    opacity: 1; transform: none; color: var(--ds-muted);
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease-spring), color var(--ds-dur-slow) var(--ds-ease);
+    transition-delay: var(--ds-dur-fast), var(--ds-dur-fast), calc(var(--ds-dur-story) * 0.9);
+  }
+  .c-strike-word.is-armed.is-in .struck::after {
+    transform: scaleX(1);
+    transition: transform var(--ds-dur-slow) var(--ds-ease-in-out);
+    transition-delay: calc(var(--ds-dur-story) * 0.7);
+  }
+  .c-strike-word.is-armed.is-in .replacement {
+    opacity: 1; transform: none; filter: none;
+    transition: opacity var(--ds-dur-slow) var(--ds-ease), transform var(--ds-dur-slow) var(--ds-ease-spring), filter var(--ds-dur-slow) var(--ds-ease);
+    transition-delay: calc(var(--ds-dur-story) * 1.3);
+  }
+</style>
+
+<figure class="c-strike-word">
+  <div class="stack">
+    <p class="first"><span class="lead">Stop reporting</span> <s class="struck">activity.</s></p>
+    <p class="replacement">Report outcomes.</p>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.c-strike-word').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    if (reduced) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>

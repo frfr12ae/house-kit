@@ -1,0 +1,209 @@
+<!--
+@title Table loupe
+@description A magnifying loupe glides over a dense data table and settles on the one row that matters, enlarging it. Mark the row with data-target.
+@tags table, loupe, magnifier, zoom, highlight, spotlight, row, data, callout
+@preview center
+@height 520
+@replay true
+@added 2026-11-18
+@source 21st.dev video block "Loupe Over Table" (look only; code written from scratch) | https://21st.dev/@21st/components/mg-pr-loupe | inspired-by
+-->
+<style>
+  .c-table-loupe,
+  .c-table-loupe *,
+  .c-table-loupe *::before,
+  .c-table-loupe *::after { box-sizing: border-box; }
+  .c-table-loupe {
+    --lens: 190px;
+    --zoom: 1.9;
+    container-type: inline-size;
+    width: min(760px, 100%);
+    margin: 0;
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+  }
+  .c-table-loupe .head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); margin-bottom: var(--ds-space-4); }
+  .c-table-loupe .head b { font-size: var(--ds-text-lg); color: var(--ds-ink); }
+  .c-table-loupe .head span { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-table-loupe .stage { position: relative; }
+  .c-table-loupe .sheet {
+    padding: var(--ds-space-4) var(--ds-space-5);
+    border: var(--ds-hairline) solid var(--ds-line);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-surface);
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-table-loupe .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 1.2fr) minmax(0, 0.9fr);
+    align-items: center;
+    gap: var(--ds-space-3);
+    height: 34px;
+    padding: 0 var(--ds-space-2);
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+    font-size: var(--ds-text-xs);
+    color: var(--ds-text);
+    white-space: nowrap;
+  }
+  .c-table-loupe .row:last-child { border-bottom: 0; }
+  .c-table-loupe .row.th { height: 30px; color: var(--ds-muted); font-weight: 600; }
+  .c-table-loupe .row > span { overflow: hidden; text-overflow: ellipsis; }
+  .c-table-loupe .ws { display: flex; align-items: center; gap: var(--ds-space-2); font-weight: 600; color: var(--ds-ink); }
+  .c-table-loupe .ws i { flex: none; width: 10px; height: 10px; border-radius: calc(3px * var(--ds-radius-scale, 1)); background: var(--c, var(--ds-series-4)); }
+  .c-table-loupe .muted { color: var(--ds-muted); }
+  .c-table-loupe .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .c-table-loupe .delta { display: flex; align-items: center; gap: var(--ds-space-2); font-variant-numeric: tabular-nums; }
+  .c-table-loupe .delta b { display: block; flex: none; width: calc(var(--v) * 1.6px); height: 5px; border-radius: var(--ds-radius-pill); background: var(--ds-note-line); }
+  .c-table-loupe .delta.neg b { background: var(--ds-danger-line); }
+  .c-table-loupe .pill { justify-self: start; padding: 1px var(--ds-space-2); border: var(--ds-hairline) solid var(--ds-neutral-line); border-radius: var(--ds-radius-pill); background: var(--ds-neutral-fill); color: var(--ds-ink); font-size: 11px; font-weight: 600; }
+  .c-table-loupe .pill.review { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-table-loupe .pill.risk { background: var(--ds-danger-fill); border-color: var(--ds-danger-line); }
+  .c-table-loupe .pill.up { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-table-loupe .row.is-target { font-weight: 700; }
+
+  /* the loupe: a lens holding an enlarged clone of the sheet, a rim and a handle */
+  .c-table-loupe .loupe {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: var(--lens);
+    height: var(--lens);
+    pointer-events: none;
+    will-change: transform;
+  }
+  .c-table-loupe .handle {
+    position: absolute;
+    left: 82%;
+    top: 82%;
+    width: 46%;
+    height: 14%;
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-ink);
+    transform: rotate(45deg);
+    transform-origin: 0 50%;
+    box-shadow: var(--ds-shadow-md);
+  }
+  .c-table-loupe .lens {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--ds-surface);
+    box-shadow: var(--ds-shadow-lg);
+  }
+  .c-table-loupe .lens .sheet { position: absolute; left: 0; top: 0; transform-origin: 0 0; box-shadow: none; }
+  .c-table-loupe .lens .is-target { background: var(--ds-highlight-fill); box-shadow: inset 3px 0 0 var(--ds-highlight-line); }
+  .c-table-loupe .rim { position: absolute; inset: 0; border-radius: 50%; border: 6px solid var(--ds-ink); }
+  .c-table-loupe .note {
+    margin: var(--ds-space-4) 0 0;
+    font-size: var(--ds-text-sm);
+    color: var(--ds-muted);
+  }
+  .c-table-loupe .note b { color: var(--ds-ink); }
+
+  @container (max-width: 520px) {
+    .c-table-loupe .head { flex-direction: column; gap: var(--ds-space-1); }
+    .c-table-loupe .stage { --lens: 130px; --zoom: 1.7; }
+    .c-table-loupe .sheet { padding: var(--ds-space-2) var(--ds-space-3); }
+    .c-table-loupe .row { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.3fr) minmax(0, 1fr); }
+    .c-table-loupe .delta b { width: calc(var(--v) * 0.7px); }
+    .c-table-loupe .row > :nth-child(2),
+    .c-table-loupe .row > :nth-child(3),
+    .c-table-loupe .row > :nth-child(4) { display: none; }
+  }
+</style>
+
+<figure class="c-table-loupe">
+  <div class="head"><b>Usage ledger, October</b><span>Tokens in millions, change vs September</span></div>
+  <div class="stage">
+    <div class="sheet" role="table" aria-label="Usage per workspace in October">
+      <div class="row th" role="row"><span role="columnheader">Workspace</span><span role="columnheader">Owner</span><span role="columnheader">Plan</span><span role="columnheader" class="num">Tokens</span><span role="columnheader">Change</span><span role="columnheader">Status</span></div>
+      <div class="row" role="row"><span class="ws" role="cell"><i style="--c: var(--ds-series-1)"></i>Northwind Studio</span><span class="muted" role="cell">Ava Patel</span><span class="muted" role="cell">Team</span><span class="num" role="cell">1.84</span><span class="delta" role="cell" style="--v: 12"><b></b>+12%</span><span class="pill" role="cell">Active</span></div>
+      <div class="row" role="row"><span class="ws" role="cell"><i style="--c: var(--ds-series-3)"></i>Quarry and Co</span><span class="muted" role="cell">Leo Martins</span><span class="muted" role="cell">Pro</span><span class="num" role="cell">0.62</span><span class="delta" role="cell" style="--v: 4"><b></b>+4%</span><span class="pill" role="cell">Active</span></div>
+      <div class="row" role="row"><span class="ws" role="cell"><i style="--c: var(--ds-series-4)"></i>Ostra Health</span><span class="muted" role="cell">Mina Okafor</span><span class="muted" role="cell">Enterprise</span><span class="num" role="cell">3.07</span><span class="delta" role="cell" style="--v: 9"><b></b>+9%</span><span class="pill" role="cell">Active</span></div>
+      <div class="row" role="row"><span class="ws" role="cell"><i style="--c: var(--ds-series-2)"></i>Fieldnote</span><span class="muted" role="cell">Jonas Berg</span><span class="muted" role="cell">Team</span><span class="num" role="cell">1.12</span><span class="delta neg" role="cell" style="--v: 3"><b></b>-3%</span><span class="pill review" role="cell">Review</span></div>
+      <div class="row" role="row"><span class="ws" role="cell"><i style="--c: var(--ds-series-1)"></i>Bramble Labs</span><span class="muted" role="cell">Iris Chen</span><span class="muted" role="cell">Pro</span><span class="num" role="cell">0.31</span><span class="delta" role="cell" style="--v: 22"><b></b>+22%</span><span class="pill" role="cell">Active</span></div>
+      <div class="row is-target" role="row" data-target><span class="ws" role="cell"><i style="--c: var(--ds-series-3)"></i>Halcyon Labs</span><span class="muted" role="cell">Sofia Reyes</span><span class="muted" role="cell">Enterprise</span><span class="num" role="cell">2.41</span><span class="delta" role="cell" style="--v: 38"><b></b>+38%</span><span class="pill up" role="cell">Expanding</span></div>
+      <div class="row" role="row"><span class="ws" role="cell"><i style="--c: var(--ds-series-5)"></i>Tidewater</span><span class="muted" role="cell">Noah Kim</span><span class="muted" role="cell">Pro</span><span class="num" role="cell">0.48</span><span class="delta neg" role="cell" style="--v: 6"><b></b>-6%</span><span class="pill risk" role="cell">At risk</span></div>
+      <div class="row" role="row"><span class="ws" role="cell"><i style="--c: var(--ds-series-4)"></i>Lattice Bank</span><span class="muted" role="cell">Ben Adler</span><span class="muted" role="cell">Enterprise</span><span class="num" role="cell">4.88</span><span class="delta" role="cell" style="--v: 5"><b></b>+5%</span><span class="pill" role="cell">Active</span></div>
+      <div class="row" role="row"><span class="ws" role="cell"><i style="--c: var(--ds-series-2)"></i>Umber and Oak</span><span class="muted" role="cell">Theo Grant</span><span class="muted" role="cell">Pro</span><span class="num" role="cell">0.18</span><span class="delta" role="cell" style="--v: 31"><b></b>+31%</span><span class="pill" role="cell">Active</span></div>
+    </div>
+  </div>
+  <figcaption class="note"><b>Halcyon Labs is up 38%</b>, the fastest-growing Enterprise account this month.</figcaption>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+  document.querySelectorAll('.c-table-loupe').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    const stage = root.querySelector('.stage');
+    const sheet = stage.querySelector('.sheet');
+    const target = sheet.querySelector('[data-target]') || sheet.querySelector('.row:not(.th)');
+
+    const loupe = document.createElement('div');
+    loupe.className = 'loupe';
+    loupe.setAttribute('aria-hidden', 'true');
+    loupe.innerHTML = '<div class="handle"></div><div class="lens"></div><div class="rim"></div>';
+    const clone = sheet.cloneNode(true);
+    clone.removeAttribute('role');
+    clone.removeAttribute('aria-label');
+    clone.querySelectorAll('[role]').forEach((el) => el.removeAttribute('role'));
+    loupe.querySelector('.lens').appendChild(clone);
+    stage.appendChild(loupe);
+
+    // where the lens should look, in stage pixels: start near the top left, end on the target row's change column
+    let from = [0, 0], to = [0, 0], lens = 0, zoom = 1;
+    const measure = () => {
+      const cs = getComputedStyle(stage);
+      lens = loupe.offsetWidth;
+      zoom = parseFloat(cs.getPropertyValue('--zoom')) || 1.9;
+      clone.style.width = sheet.offsetWidth + 'px';
+      const cell = target.querySelector('.delta') || target;
+      // centre on the value text (the cell's last text node), so the number is whole inside the lens
+      const range = document.createRange();
+      const text = [...cell.childNodes].reverse().find((n) => n.nodeType === 3 && n.textContent.trim());
+      if (text) range.selectNodeContents(text); else range.selectNodeContents(cell);
+      const s = stage.getBoundingClientRect(), c = range.getBoundingClientRect(), r = target.getBoundingClientRect();
+      to = [c.left - s.left + c.width / 2, r.top - s.top + r.height / 2];
+      from = [lens * 0.6, lens * 0.55];
+    };
+    const place = (x, y) => {
+      loupe.style.transform = `translate(${x - lens / 2}px, ${y - lens / 2}px)`;
+      clone.style.transform = `translate(${lens / 2 - x * zoom}px, ${lens / 2 - y * zoom}px) scale(${zoom})`;
+    };
+
+    let progress = reduced ? 1 : 0;
+    const draw = () => {
+      measure();
+      const k = ease(progress);
+      place(from[0] + (to[0] - from[0]) * k, from[1] + (to[1] - from[1]) * k);
+    };
+    draw();
+    addEventListener('resize', draw);
+    if (reduced) return;
+
+    const run = () => {
+      const story = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
+      const total = story * 1.6, delay = 300;
+      const begin = performance.now() + delay;
+      const tick = (now) => {
+        progress = Math.max(0, Math.min(1, (now - begin) / total));
+        draw();
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      run();
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+})();
+</script>

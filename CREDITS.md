@@ -181,9 +181,12 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Line draw](components/motion/line-draw.html) | motion | Original | Frederik | MIT |
 | [Lower third](components/motion/lower-third.html) | motion | Original | Frederik | MIT |
 | [Marquee ticker](components/motion/marquee.html) | motion | Original | Frederik | MIT |
+| [Pen circles the number](components/motion/pen-annotate.html) | motion | Inspired by [21st.dev video block "Pen Circles the Number" (look only; code written from scratch)](https://21st.dev/@21st/components/pen-annotate) | Frederik | MIT |
 | [Progress rings](components/motion/progress-ring.html) | motion | Original | Frederik | MIT |
 | [Stagger cards](components/motion/stagger-cards.html) | motion | Original | Frederik | MIT |
+| [Strike word](components/motion/strike-word.html) | motion | Inspired by [21st.dev video block "Strike Word" (look only; code written from scratch)](https://21st.dev/@21st/components/strike-word) | Frederik | MIT |
 | [Table fill](components/motion/table-fill.html) | motion | Inspired by [21st.dev Table Fill](https://21st.dev/@21st/components/table-fill) | Frederik | MIT |
+| [Table loupe](components/motion/table-loupe.html) | motion | Inspired by [21st.dev video block "Loupe Over Table" (look only; code written from scratch)](https://21st.dev/@21st/components/mg-pr-loupe) | Frederik | MIT |
 | [Text reveal](components/motion/text-reveal.html) | motion | Original | Frederik | MIT |
 | [Typewriter terminal](components/motion/typewriter-terminal.html) | motion | Original | Frederik | MIT |
 | [Browser mockup](components/pages/browser-mockup.html) | pages | Inspired by [21st.dev Browser URL Load](https://21st.dev/@21st/components/mg-dev-browser) | Frederik | MIT |

@@ -1,0 +1,230 @@
+<!--
+@title Pen circles the number
+@description A hand-drawn pen stroke circles the key number on a chart card, arrows to the best bar and writes a short note beside it. Edit the metric, bars and note in the markup.
+@tags annotation, pen, handwriting, circle, callout, chart, metric, arrow
+@preview center
+@height 460
+@replay true
+@added 2026-11-18
+@source 21st.dev video block "Pen Circles the Number" (look only; code written from scratch) | https://21st.dev/@21st/components/pen-annotate | inspired-by
+-->
+<style>
+  .c-pen-annotate,
+  .c-pen-annotate *,
+  .c-pen-annotate *::before,
+  .c-pen-annotate *::after { box-sizing: border-box; }
+  .c-pen-annotate {
+    width: min(720px, 100%);
+    margin: 0;
+    padding: var(--ds-space-6);
+    background: var(--ds-surface);
+    border-radius: var(--ds-radius-xl);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-text);
+    container-type: inline-size;
+  }
+  .c-pen-annotate .head { display: grid; gap: var(--ds-space-1); margin-bottom: var(--ds-space-6); }
+  .c-pen-annotate .title { font-size: var(--ds-text-md); font-weight: 700; color: var(--ds-ink); }
+  .c-pen-annotate .sub { font-size: var(--ds-text-sm); color: var(--ds-muted); }
+  .c-pen-annotate .stage { position: relative; display: grid; gap: var(--ds-space-7); align-items: end; }
+  .c-pen-annotate .side { display: grid; gap: var(--ds-space-5); align-content: start; justify-items: start; padding: var(--ds-space-3); }
+  .c-pen-annotate .metric {
+    padding: var(--ds-space-2) var(--ds-space-4);
+    font-family: var(--ds-font-display);
+    font-size: clamp(var(--ds-text-xl), 17cqi, var(--ds-text-3xl));
+    font-weight: var(--ds-weight-display);
+    letter-spacing: var(--ds-tracking-display);
+    line-height: 1;
+    color: var(--ds-ink);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .c-pen-annotate .note {
+    margin-left: var(--ds-space-2);
+    padding: var(--ds-space-1) var(--ds-space-4);
+    background: var(--ds-note-fill);
+    border: var(--ds-hairline) solid var(--ds-note-line);
+    border-radius: var(--ds-radius-md);
+    font-family: var(--ds-font-hand);
+    font-size: var(--ds-text-xl);
+    line-height: var(--ds-leading-snug);
+    color: var(--ds-ink);
+    white-space: nowrap;
+    transform: rotate(-4deg);
+    transform-origin: left center;
+  }
+  .c-pen-annotate .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--ds-space-2);
+    height: 180px;
+    padding-top: var(--ds-space-5);
+    border-bottom: var(--ds-hairline) solid var(--ds-line);
+  }
+  .c-pen-annotate .bars i {
+    flex: 1;
+    height: var(--h);
+    background: color-mix(in srgb, var(--ds-ink) 12%, transparent);
+    border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0;
+    transform-origin: bottom;
+  }
+  .c-pen-annotate .bars i:last-child { background: var(--ds-series-1); }
+  .c-pen-annotate .pen {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    fill: none;
+    stroke: var(--ds-note-line);
+    stroke-width: calc(var(--ds-stroke) * 2);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  @container (min-width: 520px) {
+    .c-pen-annotate .stage { grid-template-columns: 1fr 1.5fr; gap: var(--ds-space-8); }
+    .c-pen-annotate .side { align-self: center; }
+  }
+
+  /* the armed state carries no transition, so arming never animates; only the move to .is-in does */
+  .c-pen-annotate.is-armed .bars i { transform: scaleY(0); }
+  .c-pen-annotate.is-armed .pen path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .c-pen-annotate.is-armed .note { clip-path: inset(0 100% 0 0); }
+  .c-pen-annotate.is-armed.is-in .bars i {
+    transform: scaleY(1);
+    transition: transform var(--ds-dur-slow) var(--ds-ease);
+    transition-delay: calc(var(--i) * 70ms);
+  }
+  .c-pen-annotate.is-armed.is-in .pen .loop {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset calc(var(--ds-dur-story) * 0.8) var(--ds-ease-in-out);
+    transition-delay: calc(var(--ds-dur-story) * 0.5);
+  }
+  .c-pen-annotate.is-armed.is-in .pen .shaft {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset calc(var(--ds-dur-story) * 0.5) var(--ds-ease-in-out);
+    transition-delay: calc(var(--ds-dur-story) * 1.4);
+  }
+  .c-pen-annotate.is-armed.is-in .pen .head-tip {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset var(--ds-dur-base) var(--ds-ease);
+    transition-delay: calc(var(--ds-dur-story) * 1.9);
+  }
+  .c-pen-annotate.is-armed.is-in .note {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path calc(var(--ds-dur-story) * 0.7) var(--ds-ease-in-out);
+    transition-delay: calc(var(--ds-dur-story) * 2.1);
+  }
+</style>
+
+<figure class="c-pen-annotate">
+  <div class="head">
+    <span class="title">Weekly signups</span>
+    <span class="sub">Last 7 weeks</span>
+  </div>
+  <div class="stage">
+    <div class="side">
+      <span class="metric" data-to="128" data-prefix="+" data-suffix="%">+128%</span>
+      <span class="note">best week yet!</span>
+    </div>
+    <div class="bars" role="img" aria-label="Bar chart of weekly signups over seven weeks, rising to a peak of plus 128 percent in the last week">
+      <i style="--h: 30%; --i: 0"></i>
+      <i style="--h: 38%; --i: 1"></i>
+      <i style="--h: 35%; --i: 2"></i>
+      <i style="--h: 45%; --i: 3"></i>
+      <i style="--h: 52%; --i: 4"></i>
+      <i style="--h: 60%; --i: 5"></i>
+      <i style="--h: 90%; --i: 6"></i>
+    </div>
+    <svg class="pen" aria-hidden="true">
+      <path class="loop" pathLength="1" d=""/>
+      <path class="shaft" pathLength="1" d=""/>
+      <path class="head-tip" pathLength="1" d=""/>
+    </svg>
+  </div>
+</figure>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const f1 = (n) => n.toFixed(1);
+
+  function draw(root) {
+    const stage = root.querySelector('.stage');
+    const s = stage.getBoundingClientRect();
+    const m = root.querySelector('.metric').getBoundingClientRect();
+    const b = root.querySelector('.bars i:last-child').getBoundingClientRect();
+    const svg = root.querySelector('.pen');
+    svg.setAttribute('viewBox', `0 0 ${f1(s.width)} ${f1(s.height)}`);
+
+    const cx = m.left + m.width / 2 - s.left;
+    const cy = m.top + m.height / 2 - s.top;
+    const rx = m.width / 2 + 14;
+    const ry = m.height / 2 + 8;
+    const turns = 1.08, end = -0.3, n = 64;
+    const a0 = end - turns * 2 * Math.PI;
+    const pts = [];
+    for (let i = 0; i <= n; i++) {
+      const t = i / n;
+      const a = a0 + t * turns * 2 * Math.PI;
+      const k = 0.96 + 0.1 * t;
+      pts.push([cx + rx * k * Math.cos(a), cy + ry * k * Math.sin(a)]);
+    }
+    root.querySelector('.loop').setAttribute('d', 'M' + pts.map((p) => `${f1(p[0])},${f1(p[1])}`).join(' L'));
+
+    const E = pts[pts.length - 1];
+    const T = [b.left + b.width / 2 - s.left, b.top - s.top - 10];
+    const c1 = [E[0] + 48, E[1] - 34];
+    const c2 = [T[0] - 12, T[1] - 64];
+    root.querySelector('.shaft').setAttribute('d', `M${f1(E[0])},${f1(E[1])} C${f1(c1[0])},${f1(c1[1])} ${f1(c2[0])},${f1(c2[1])} ${f1(T[0])},${f1(T[1])}`);
+
+    const len = Math.hypot(T[0] - c2[0], T[1] - c2[1]) || 1;
+    const d = [(T[0] - c2[0]) / len, (T[1] - c2[1]) / len];
+    const rot = (v, a) => [v[0] * Math.cos(a) - v[1] * Math.sin(a), v[0] * Math.sin(a) + v[1] * Math.cos(a)];
+    const r1 = rot(d, 0.5), r2 = rot(d, -0.5);
+    const barb = 13;
+    root.querySelector('.head-tip').setAttribute('d', `M${f1(T[0] - r1[0] * barb)},${f1(T[1] - r1[1] * barb)} L${f1(T[0])},${f1(T[1])} L${f1(T[0] - r2[0] * barb)},${f1(T[1] - r2[1] * barb)}`);
+  }
+
+  function count(root) {
+    const el = root.querySelector('.metric');
+    const to = parseFloat(el.dataset.to);
+    const fmt = (v) => (el.dataset.prefix || '') + Math.round(v) + (el.dataset.suffix || '');
+    const ms = parseFloat(getComputedStyle(root).getPropertyValue('--ds-dur-story')) || 1400;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / ms);
+      el.textContent = fmt(to * ease(t));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  document.querySelectorAll('.c-pen-annotate').forEach((root) => {
+    if (root.dataset.okInit) return;
+    root.dataset.okInit = '1';
+    draw(root);
+    let queued = false;
+    new ResizeObserver(() => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; draw(root); });
+    }).observe(root.querySelector('.stage'));
+
+    if (reduced) return;
+    const metric = root.querySelector('.metric');
+    metric.style.minWidth = metric.getBoundingClientRect().width + 'px';
+    metric.style.textAlign = 'center';
+    metric.textContent = (metric.dataset.prefix || '') + '0' + (metric.dataset.suffix || '');
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      requestAnimationFrame(() => requestAnimationFrame(() => { root.classList.add('is-in'); count(root); }));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+})();
+</script>
