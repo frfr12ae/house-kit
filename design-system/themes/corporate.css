@@ -1,0 +1,39 @@
+/* corporate: demo brand theme in the style of banks, consultancies and enterprise software.
+   Cool grey paper, deep navy ink, one institutional blue, restrained corners. Not modelled on any one company. */
+:root {
+  --ds-bg: #F4F6F9;
+  --ds-surface: #FFFFFF;
+  --ds-panel: #EAEEF4;
+  --ds-raised: #FFFFFF;
+
+  --ds-ink: #0A1F44;
+  --ds-text: #24324D;
+  --ds-muted: #53607A;
+  --ds-line: #D5DCE6;
+
+  --ds-action: #0B4FA8;
+  --ds-on-action: #FFFFFF;
+
+  --ds-info-fill: #EAF1FB;      --ds-info-line: #0B4FA8;
+  --ds-neutral-fill: #EAEEF4;   --ds-neutral-line: #8A94A6;
+  --ds-note-fill: #E8F4EC;      --ds-note-line: #3C8D5A;
+  --ds-highlight-fill: #FBF3E2; --ds-highlight-line: #C08A1E;
+  --ds-danger-fill: #FBEAE8;    --ds-danger-line: #B42318;
+
+  --ds-series-1: #0B4FA8;
+  --ds-series-2: #2E9C9C;
+  --ds-series-3: #C08A1E;
+  --ds-series-4: #8A94A6;
+  --ds-series-5: #B42318;
+
+  --ds-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --ds-font-display: var(--ds-font-sans);
+  --ds-font-serif: Georgia, "Times New Roman", serif;
+  --ds-font-hand: "Bradley Hand", "Segoe Print", cursive;
+  --ds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ds-weight-display: 700;
+  --ds-tracking-display: -0.015em;
+
+  --ds-radius-scale: 0.6;
+  color-scheme: light;
+}

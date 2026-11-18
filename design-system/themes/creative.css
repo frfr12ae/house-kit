@@ -1,0 +1,39 @@
+/* creative: demo brand theme in the style of studios and agencies. Warm cream paper,
+   vermilion action, a serif display face, soft round corners. Not modelled on any one company. */
+:root {
+  --ds-bg: #FFF6EC;
+  --ds-surface: #FFFDF8;
+  --ds-panel: #FBEBD8;
+  --ds-raised: #FFFFFF;
+
+  --ds-ink: #1A1410;
+  --ds-text: #3A2E26;
+  --ds-muted: #6A5A4E;
+  --ds-line: #EAD9C6;
+
+  --ds-action: #FF4F2E;
+  --ds-on-action: #1A1410;
+
+  --ds-info-fill: #F1EAFE;      --ds-info-line: #7C3AED;
+  --ds-neutral-fill: #FBEBD8;   --ds-neutral-line: #8A7A6D;
+  --ds-note-fill: #E3F5F1;      --ds-note-line: #1F9D8B;
+  --ds-highlight-fill: #FFEFE9; --ds-highlight-line: #FF4F2E;
+  --ds-danger-fill: #FCE8E8;    --ds-danger-line: #C0262D;
+
+  --ds-series-1: #FF4F2E;
+  --ds-series-2: #7C3AED;
+  --ds-series-3: #F2B705;
+  --ds-series-4: #1F9D8B;
+  --ds-series-5: #8A7A6D;
+
+  --ds-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --ds-font-display: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --ds-font-serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --ds-font-hand: "Bradley Hand", "Segoe Print", cursive;
+  --ds-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ds-weight-display: 700;
+  --ds-tracking-display: -0.025em;
+
+  --ds-radius-scale: 1.6;
+  color-scheme: light;
+}

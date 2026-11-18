@@ -1,0 +1,39 @@
+/* tech: demo brand theme in the style of developer-tool and SaaS sites. Crisp cool white,
+   electric indigo action, tight type, small corners. Not modelled on any one company. */
+:root {
+  --ds-bg: #F7F8FA;
+  --ds-surface: #FFFFFF;
+  --ds-panel: #EEF0F4;
+  --ds-raised: #FFFFFF;
+
+  --ds-ink: #0B0D12;
+  --ds-text: #2B2F38;
+  --ds-muted: #575E6B;
+  --ds-line: #DDE1E8;
+
+  --ds-action: #4F46E5;
+  --ds-on-action: #FFFFFF;
+
+  --ds-info-fill: #EEF0FF;      --ds-info-line: #4F46E5;
+  --ds-neutral-fill: #EEF0F4;   --ds-neutral-line: #7A8291;
+  --ds-note-fill: #E7F7EE;      --ds-note-line: #16A34A;
+  --ds-highlight-fill: #E6F7FB; --ds-highlight-line: #0EA5C6;
+  --ds-danger-fill: #FDECEC;    --ds-danger-line: #DC2626;
+
+  --ds-series-1: #4F46E5;
+  --ds-series-2: #0EA5C6;
+  --ds-series-3: #16A34A;
+  --ds-series-4: #7A8291;
+  --ds-series-5: #DC2626;
+
+  --ds-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --ds-font-display: var(--ds-font-sans);
+  --ds-font-serif: "Iowan Old Style", Georgia, serif;
+  --ds-font-hand: "Bradley Hand", "Segoe Print", cursive;
+  --ds-font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --ds-weight-display: 650;
+  --ds-tracking-display: -0.035em;
+
+  --ds-radius-scale: 0.75;
+  color-scheme: light;
+}
