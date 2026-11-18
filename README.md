@@ -27,9 +27,8 @@ design-system/
   tokens.css               spacing, type scale, radii, shadows, motion (theme-independent)
   base.css                 optional minimal reset
   themes/house.css         default theme; copy it to make a brand theme
-  themes/nordic.css        demo brand theme
-  themes/midnight.css      demo dark brand theme
-  themes/ink.css, studio-dark.css   more demo brand themes
+  themes/ink.css, loop.css  more demo brand themes
+  themes/tech.css, creative.css, corporate.css   archetype themes
 components/<category>/     one self-contained .html file per component
 skills/<name>/             downloadable agent skills (folder + .zip), shown in the Skills category
 LICENSES/                  upstream licenses for adapted code
