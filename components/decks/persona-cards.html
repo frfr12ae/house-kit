@@ -1,0 +1,106 @@
+<!--
+@title Persona cards
+@group Storyline
+@description Three customer personas side by side, each with a portrait mark, a defining quote, goals, frustrations and a preferred channel.
+@tags slide, persona, customer, segments, user research, goals, frustrations
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Original
+-->
+<style>
+  .c-persona-cards {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-persona-cards .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-persona-cards .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-persona-cards h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-persona-cards .body { min-height: 0; padding: 2.2cqi 0 1.8cqi; }
+  .c-persona-cards .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-persona-cards .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-persona-cards .body { display: grid; }
+  .c-persona-cards .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2cqi; margin: 0; padding: 0; list-style: none; }
+  .c-persona-cards .card { display: flex; flex-direction: column; gap: 1.2cqi; min-height: 0; padding: 1.6cqi 1.8cqi; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-persona-cards .id { display: flex; align-items: center; gap: 1.2cqi; }
+  .c-persona-cards .av { flex: none; display: grid; place-items: center; width: 4.6cqi; height: 4.6cqi; border-radius: 50%; font-size: 1.5cqi; font-weight: 700; color: var(--ds-ink); border: var(--ds-hairline) solid var(--ds-neutral-line); background: var(--ds-neutral-fill); }
+  .c-persona-cards .a .av { background: var(--ds-info-fill); border-color: var(--ds-info-line); }
+  .c-persona-cards .b .av { background: var(--ds-note-fill); border-color: var(--ds-note-line); }
+  .c-persona-cards .c .av { background: var(--ds-highlight-fill); border-color: var(--ds-highlight-line); }
+  .c-persona-cards .id h2 { margin: 0; font-size: 1.8cqi; font-weight: 700; line-height: 1.15; color: var(--ds-ink); }
+  .c-persona-cards .id p { margin: 0.2cqi 0 0; font-size: 1.15cqi; line-height: 1.3; color: var(--ds-muted); }
+  .c-persona-cards blockquote { margin: 0; padding: 0 0 0 1.2cqi; border-left: 0.3cqi solid var(--ds-line); font-family: var(--ds-font-serif); font-size: 1.45cqi; font-style: italic; line-height: 1.35; color: var(--ds-ink); }
+  .c-persona-cards .sec h3 { margin: 0 0 0.3cqi; font-size: 1cqi; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-text); }
+  .c-persona-cards .sec p { margin: 0; font-size: 1.25cqi; line-height: 1.4; }
+  .c-persona-cards .chan { margin-top: auto; display: flex; align-items: baseline; justify-content: space-between; gap: 1cqi; padding-top: 1cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.1cqi; color: var(--ds-muted); }
+  .c-persona-cards .chan b { font-size: 1.25cqi; font-weight: 700; color: var(--ds-ink); }
+</style>
+
+
+<section class="c-persona-cards" aria-label="Three customer personas">
+  <div class="inner">
+    <div class="top">
+      <p class="kicker">Customers</p>
+      <h1>Three kinds of pet owners want the same thing: less worry, delivered in their own way</h1>
+    </div>
+    <div class="body">
+      <ul class="cards">
+      <li class="card a">
+        <div class="id"><span class="av">SK</span><div><h2>Sofie, 29</h2><p>First-time dog owner, Copenhagen</p></div></div>
+        <blockquote>"I just want someone to tell me what is normal and what is not."</blockquote>
+        <div class="sec"><h3>Goals</h3><p>Feel confident about daily care and get quick answers.</p></div>
+        <div class="sec"><h3>Frustrations</h3><p>Clinic phone lines close at 16:00, and advice online contradicts itself.</p></div>
+        <div class="chan"><span>Prefers</span><b>App chat</b></div>
+      </li>
+      <li class="card b">
+        <div class="id"><span class="av">TH</span><div><h2>Thomas, 46</h2><p>Two cats and a busy job, Aarhus</p></div></div>
+        <blockquote>"If it takes more than two taps, I will do it next week."</blockquote>
+        <div class="sec"><h3>Goals</h3><p>Keep vaccinations on time without having to remember them.</p></div>
+        <div class="sec"><h3>Frustrations</h3><p>Paper records, missed reminders and surprise bills.</p></div>
+        <div class="chan"><span>Prefers</span><b>Email and text reminders</b></div>
+      </li>
+      <li class="card c">
+        <div class="id"><span class="av">IM</span><div><h2>Ingrid, 67</h2><p>Retired, senior dog, Odense</p></div></div>
+        <blockquote>"He is family. I will pay for the best, but I want to understand it."</blockquote>
+        <div class="sec"><h3>Goals</h3><p>Manage long-term conditions and see costs before they happen.</p></div>
+        <div class="sec"><h3>Frustrations</h3><p>Long travel to clinics and jargon in the invoices.</p></div>
+        <div class="chan"><span>Prefers</span><b>Phone call, then home visit</b></div>
+      </li>
+      </ul>
+    </div>
+    <div class="foot"><span>Source: 24 owner interviews and a survey of 1,200 owners, September 2026. Fictional personas.</span><span class="page">6</span></div>
+  </div>
+</section>

@@ -1,0 +1,90 @@
+<!--
+@title Launch sequence heat grid
+@group Exhibits
+@description A markets by quarters heat grid showing each market moving through prep, pilot, live and scale, with the go-live quarter ringed and listed at the right.
+@tags slide, heat grid, launch, rollout, markets, timing, sequence, waves, exhibit
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-launch-sequence {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-launch-sequence .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-launch-sequence .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-launch-sequence h1 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-launch-sequence .exhibit { position: relative; min-height: 0; }
+  .c-launch-sequence .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-launch-sequence .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-launch-sequence .exhibit { display: grid; grid-template-rows: auto repeat(8, minmax(0, 1fr)) auto; row-gap: 0.4cqi; }
+  .c-launch-sequence .row { display: grid; grid-template-columns: 14cqi repeat(8, minmax(0, 1fr)) 7.5cqi; column-gap: 0.4cqi; align-items: stretch; min-height: 0; }
+  .c-launch-sequence .row.hd { align-items: end; padding-bottom: 0.2cqi; }
+  .c-launch-sequence .hd span { text-align: center; font-size: 1.05cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-launch-sequence .hd span:first-child { text-align: left; }
+  .c-launch-sequence .hd span:last-child { text-align: right; }
+  .c-launch-sequence .mk { margin: 0; display: flex; align-items: baseline; gap: 0.8cqi; align-self: center; font-size: 1.25cqi; color: var(--ds-ink); }
+  .c-launch-sequence .mk span { font-size: 0.95cqi; color: var(--ds-muted); }
+  .c-launch-sequence .c { position: relative; display: grid; place-items: center; border-radius: calc(0.4cqi * var(--ds-radius-scale, 1)); font-size: 1.05cqi; font-weight: 600; color: var(--ds-ink); }
+  .c-launch-sequence .c.s0 { background: color-mix(in srgb, var(--ds-line) 35%, transparent); }
+  .c-launch-sequence .c.s1 { background: var(--ds-neutral-fill); box-shadow: inset 0 0 0 1px var(--ds-neutral-line); }
+  .c-launch-sequence .c.s2 { background: var(--ds-info-fill); box-shadow: inset 0 0 0 1px var(--ds-info-line); }
+  .c-launch-sequence .c.s3 { background: color-mix(in srgb, var(--ds-info-line) 45%, var(--ds-surface)); }
+  .c-launch-sequence .c.s4 { background: color-mix(in srgb, var(--ds-info-line) 78%, var(--ds-surface)); }
+  .c-launch-sequence .c.go { box-shadow: 0 0 0 0.22cqi var(--ds-surface), 0 0 0 0.45cqi var(--ds-highlight-line); z-index: 1; }
+  .c-launch-sequence .c i { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .c-launch-sequence .gl { margin: 0; align-self: center; text-align: right; font-size: 1.2cqi; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-launch-sequence .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5cqi 1.6cqi; padding-top: 0.8cqi; font-size: 1cqi; color: var(--ds-muted); }
+  .c-launch-sequence .legend span { display: inline-flex; align-items: center; gap: 0.6cqi; }
+  .c-launch-sequence .legend .c { width: 2.4cqi; height: 1.5cqi; }
+</style>
+
+<section class="c-launch-sequence" aria-label="Slide 14: market launch sequence by quarter from Q1 2026 to Q4 2027">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">International expansion · Launch sequence</p>
+      <h1>Four markets go live in 2026 and four follow in 2027, with Spain last in Q4 2027</h1>
+    </div>
+    <div class="exhibit">
+<div class="row hd"><span>Market</span><span>Q1 26</span><span>Q2 26</span><span>Q3 26</span><span>Q4 26</span><span>Q1 27</span><span>Q2 27</span><span>Q3 27</span><span>Q4 27</span><span>Go-live</span></div><div class="row"><p class="mk"><b>Denmark</b><span>Home market</span></p><span class="c s3 go">Live</span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><p class="gl">Q1 2026</p></div><div class="row"><p class="mk"><b>Sweden</b><span>Wave 1</span></p><span class="c s2">Pilot</span><span class="c s3 go">Live</span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><p class="gl">Q2 2026</p></div><div class="row"><p class="mk"><b>Norway</b><span>Wave 1</span></p><span class="c s1">Prep</span><span class="c s2">Pilot</span><span class="c s3 go">Live</span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><p class="gl">Q3 2026</p></div><div class="row"><p class="mk"><b>Germany</b><span>Wave 2</span></p><span class="c s0"></span><span class="c s1">Prep</span><span class="c s2">Pilot</span><span class="c s3 go">Live</span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><p class="gl">Q4 2026</p></div><div class="row"><p class="mk"><b>Netherlands</b><span>Wave 2</span></p><span class="c s0"></span><span class="c s0"></span><span class="c s1">Prep</span><span class="c s2">Pilot</span><span class="c s3 go">Live</span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><p class="gl">Q1 2027</p></div><div class="row"><p class="mk"><b>United Kingdom</b><span>Wave 3</span></p><span class="c s0"></span><span class="c s0"></span><span class="c s0"></span><span class="c s1">Prep</span><span class="c s2">Pilot</span><span class="c s3 go">Live</span><span class="c s4"><i>Scale</i></span><span class="c s4"><i>Scale</i></span><p class="gl">Q2 2027</p></div><div class="row"><p class="mk"><b>France</b><span>Wave 3</span></p><span class="c s0"></span><span class="c s0"></span><span class="c s0"></span><span class="c s0"></span><span class="c s1">Prep</span><span class="c s2">Pilot</span><span class="c s3 go">Live</span><span class="c s4"><i>Scale</i></span><p class="gl">Q3 2027</p></div><div class="row"><p class="mk"><b>Spain</b><span>Wave 3</span></p><span class="c s0"></span><span class="c s0"></span><span class="c s0"></span><span class="c s0"></span><span class="c s0"></span><span class="c s1">Prep</span><span class="c s2">Pilot</span><span class="c s3 go">Live</span><p class="gl">Q4 2027</p></div><div class="legend"><span><span class="c s1"></span>Prep</span><span><span class="c s2"></span>Pilot</span><span><span class="c s3"></span>Live, ramping</span><span><span class="c s4"></span>Scale, steady state</span><span><span class="c s3 go"></span>Go-live quarter</span></div>
+    </div>
+    <div class="foot">
+      <span>Source: expansion programme plan, version 6, October 2026; go-live is the first quarter with commercial customers. Illustrative plan.</span>
+      <span class="page">14</span>
+    </div>
+  </div>
+</section>

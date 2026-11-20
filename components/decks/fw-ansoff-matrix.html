@@ -1,0 +1,115 @@
+<!--
+@title Ansoff growth matrix
+@group Frameworks
+@description The Ansoff product and market matrix with four growth strategies, one example initiative each, a revenue gain and a risk level, and one strategy highlighted as the priority.
+@tags slide, ansoff, growth strategy, product market matrix, penetration, diversification, framework, strategy
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Ansoff matrix by Igor Ansoff | https://en.wikipedia.org/wiki/Ansoff_matrix | inspired-by
+-->
+<style>
+  .c-fw-ansoff-matrix {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-ansoff-matrix .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-ansoff-matrix .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-ansoff-matrix h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-ansoff-matrix .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-ansoff-matrix .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-ansoff-matrix .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-ansoff-matrix .am { height: 100%; display: grid; grid-template-columns: 4.4cqi minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr); gap: 1.1cqi; }
+  .c-fw-ansoff-matrix .ch { align-self: end; padding-left: 0.4cqi; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-ansoff-matrix .rh { display: grid; place-items: center; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-ansoff-matrix .rh span { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+  .c-fw-ansoff-matrix .ac { min-height: 0; padding: 1.3cqi 1.8cqi; display: flex; flex-direction: column; border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); background: var(--ds-panel); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-line); }
+  .c-fw-ansoff-matrix .ac.pri { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-fw-ansoff-matrix .at { display: flex; align-items: center; justify-content: space-between; gap: 1cqi; }
+  .c-fw-ansoff-matrix .at h2 { margin: 0; font-size: 1.9cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-fw-ansoff-matrix .tg { padding: 0.2cqi 0.8cqi; border-radius: var(--ds-radius-pill); background: var(--ds-surface); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); font-size: 0.95cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-fw-ansoff-matrix .ds { margin: 0.4cqi 0 0; font-size: 1.2cqi; line-height: 1.35; color: var(--ds-muted); }
+  .c-fw-ansoff-matrix .in { margin: 0.9cqi 0 0; font-size: 1.4cqi; line-height: 1.35; font-weight: 600; color: var(--ds-ink); }
+  .c-fw-ansoff-matrix .mt { margin-top: auto; padding-top: 0.8cqi; display: flex; justify-content: space-between; align-items: center; font-size: 1.15cqi; color: var(--ds-text); border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-fw-ansoff-matrix .mt b { color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-fw-ansoff-matrix .mt span { display: inline-flex; align-items: center; gap: 0.6cqi; }
+  .c-fw-ansoff-matrix .rk { display: inline-flex; gap: 0.3cqi; }
+  .c-fw-ansoff-matrix .rk i { display: block; width: 1cqi; height: 1cqi; border-radius: 50%; box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-muted); }
+  .c-fw-ansoff-matrix .rk i.on { background: var(--ds-ink); box-shadow: none; }
+</style>
+
+<section class="c-fw-ansoff-matrix" aria-label="Ansoff matrix with four growth strategies for Halden Cycles">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Growth options · Halden Cycles</p>
+      <h1>Product development adds the most revenue, EUR 32m, at medium risk</h1>
+    </div>
+    <div class="body">
+      <div class="am">
+        <div></div>
+        <div class="ch">Existing products</div>
+        <div class="ch">New products</div>
+        <div class="rh"><span>New markets</span></div>
+        <div class="ac " style="grid-area:2 / 2">
+        <div class="at"><h2>Market development</h2></div>
+        <p class="ds">Today's e-bikes in new countries</p>
+        <p class="in">Launch in the Netherlands and Belgium through 40 partner dealers</p>
+        <div class="mt"><span>Revenue gain <b>EUR 26m</b></span><span>Risk <span class="rk" role="img" aria-label="Risk medium"><i class="on"></i><i class="on"></i><i class=""></i></span></span></div>
+      </div>
+        <div class="ac " style="grid-area:2 / 3">
+        <div class="at"><h2>Diversification</h2></div>
+        <p class="ds">New products in new markets</p>
+        <p class="in">Battery-swap service for delivery fleets abroad</p>
+        <div class="mt"><span>Revenue gain <b>EUR 9m</b></span><span>Risk <span class="rk" role="img" aria-label="Risk high"><i class="on"></i><i class="on"></i><i class="on"></i></span></span></div>
+      </div>
+        <div class="rh"><span>Existing markets</span></div>
+        <div class="ac " style="grid-area:3 / 2">
+        <div class="at"><h2>Market penetration</h2></div>
+        <p class="ds">More of today's e-bikes to today's customers</p>
+        <p class="in">Dealer loyalty scheme and employer leasing partnerships</p>
+        <div class="mt"><span>Revenue gain <b>EUR 14m</b></span><span>Risk <span class="rk" role="img" aria-label="Risk low"><i class="on"></i><i class=""></i><i class=""></i></span></span></div>
+      </div>
+        <div class="ac pri" style="grid-area:3 / 3">
+        <div class="at"><h2>Product development</h2><span class="tg">Priority</span></div>
+        <p class="ds">New products for the current Nordic customer</p>
+        <p class="in">Cargo-bike range and an e-bike subscription</p>
+        <div class="mt"><span>Revenue gain <b>EUR 32m</b></span><span>Risk <span class="rk" role="img" aria-label="Risk medium"><i class="on"></i><i class="on"></i><i class=""></i></span></span></div>
+      </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: strategy team estimates of revenue gain by 2029 at run rate; risk is a team judgement. Illustrative figures.</span><span class="page">8</span></div>
+  </div>
+</section>

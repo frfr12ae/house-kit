@@ -1,0 +1,98 @@
+<!--
+@title Balanced scorecard
+@group Frameworks
+@description A balanced scorecard with a vision panel and four perspectives, each with two objectives, a measure and a target, read from learning up to financial results.
+@tags slide, balanced scorecard, kaplan norton, kpi, objectives, measures, targets, performance, framework, strategy
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source The balanced scorecard by Robert Kaplan and David Norton | https://hbr.org/1992/01/the-balanced-scorecard-measures-that-drive-performance-2 | inspired-by
+-->
+<style>
+  .c-fw-balanced-scorecard {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-balanced-scorecard .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-balanced-scorecard .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-balanced-scorecard h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-balanced-scorecard .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-balanced-scorecard .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-balanced-scorecard .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-balanced-scorecard .sc { height: 100%; display: grid; grid-template-columns: 17cqi minmax(0, 1fr); gap: 2cqi; }
+  .c-fw-balanced-scorecard .vi { display: flex; flex-direction: column; padding: 1.6cqi 1.6cqi; border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-fw-balanced-scorecard .vi h2 { margin: 0; font-size: 1.05cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-balanced-scorecard .vi .vt { margin: 0.8cqi 0 0; font-size: 1.7cqi; font-weight: 700; line-height: 1.25; color: var(--ds-ink); }
+  .c-fw-balanced-scorecard .vi .ce { margin-top: auto; display: flex; gap: 1cqi; align-items: stretch; font-size: 1.05cqi; line-height: 1.35; color: var(--ds-text); }
+  .c-fw-balanced-scorecard .vi svg { flex: none; width: 1.6cqi; height: auto; fill: none; stroke: var(--ds-ink); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .c-fw-balanced-scorecard .gr { min-height: 0; display: grid; grid-template-rows: auto repeat(4, minmax(0, 1fr)); gap: 0.8cqi; }
+  .c-fw-balanced-scorecard .rw { display: grid; grid-template-columns: 15cqi minmax(0, 1fr) minmax(0, 1.1fr) 10.5cqi; padding-right: 1.4cqi; }
+  .c-fw-balanced-scorecard .hd { font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); padding-bottom: 0.2cqi; }
+  .c-fw-balanced-scorecard .pl { display: grid; grid-template-columns: 15cqi minmax(0, 1fr) minmax(0, 1.1fr) 10.5cqi; grid-template-rows: 1fr 1fr; padding: 0 1.4cqi 0 0; border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); background: var(--ds-panel); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-line); }
+  .c-fw-balanced-scorecard .pn { grid-row: 1 / 3; margin-right: 1.4cqi; padding: 1cqi 1.4cqi; display: flex; flex-direction: column; justify-content: center; border-right: var(--ds-hairline) solid var(--ds-line); }
+  .c-fw-balanced-scorecard .pn b { font-size: 1.4cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-fw-balanced-scorecard .pn span { margin-top: 0.3cqi; font-size: 1cqi; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-balanced-scorecard .c { display: flex; align-items: center; padding-right: 1.4cqi; font-size: 1.2cqi; line-height: 1.25; color: var(--ds-ink); }
+  .c-fw-balanced-scorecard .c.o { font-weight: 600; }
+  .c-fw-balanced-scorecard .c.t { padding-right: 0; justify-content: flex-end; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .c-fw-balanced-scorecard .pl .l2 { border-top: var(--ds-hairline) solid var(--ds-line); }
+</style>
+
+<section class="c-fw-balanced-scorecard" aria-label="Balanced scorecard with four perspectives, objectives, measures and targets">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Performance management · Halden Cycles</p>
+      <h1>Eight measures tie people and process to customer results and profit</h1>
+    </div>
+    <div class="body">
+      <div class="sc">
+        <div class="vi">
+          <h2>Vision</h2>
+          <p class="vt">The first choice for every urban trip in Northern Europe by 2030</p>
+          <div class="ce"><svg viewBox="0 0 10 40" aria-hidden="true"><path d="M5 38V4M1.5 8L5 3.5L8.5 8"/></svg><span>Read from the bottom: skills drive process, process drives customers, customers drive profit.</span></div>
+        </div>
+        <div class="gr">
+          <div class="rw hd"><span></span><span>Objective</span><span>Measure</span><span style="text-align:right">Target</span></div>
+          <div class="pl"><div class="pn"><b>Financial</b><span>How do we look to owners?</span></div><div class="c o">Grow revenue</div><div class="c">Revenue growth</div><div class="c t">+8% a year</div><div class="c o l2">Lift profit</div><div class="c l2">EBIT margin</div><div class="c t l2">10% by 2028</div></div>
+          <div class="pl"><div class="pn"><b>Customer</b><span>How do customers see us?</span></div><div class="c o">Be the premium choice</div><div class="c">Net promoter score</div><div class="c t">65, now 58</div><div class="c o l2">Deliver faster</div><div class="c l2">Weeks from order to delivery</div><div class="c t l2">4, now 9</div></div>
+          <div class="pl"><div class="pn"><b>Internal processes</b><span>Where must we excel?</span></div><div class="c o">Raise first-time quality</div><div class="c">Warranty claims per 1,000 bikes</div><div class="c t">Below 18</div><div class="c o l2">Plan supply reliably</div><div class="c l2">On-time supplier deliveries</div><div class="c t l2">95%</div></div>
+          <div class="pl"><div class="pn"><b>Learning and growth</b><span>Can we improve?</span></div><div class="c o">Build software skills</div><div class="c">Software engineers hired</div><div class="c t">25 by 2027</div><div class="c o l2">Keep key people</div><div class="c l2">Voluntary staff turnover</div><div class="c t l2">Under 8%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: strategy plan 2027 to 2029; current values from FY2026 reporting. Illustrative figures.</span><span class="page">11</span></div>
+  </div>
+</section>

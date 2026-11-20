@@ -70,13 +70,17 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Chapter, full bleed](components/decks/chapter-fullbleed.html) | decks | Original | Frederik | MIT |
 | [Chart with insight callout](components/decks/chart-insight-callout.html) | decks | Inspired by [StrategyU slide layouts](https://strategyu.co/slide-layouts) | Frederik | MIT |
 | [Chart slide](components/decks/chart-slide.html) | decks | Original | Frederik | MIT |
+| [Chevron roadmap](components/decks/chevron-roadmap.html) | decks | Original | Frederik | MIT |
 | [Closing slide](components/decks/closing-slide.html) | decks | Original | Frederik | MIT |
+| [Combo bar and line chart](components/decks/combo-bar-line.html) | decks | Original | Frederik | MIT |
 | [Comparison slide](components/decks/comparison-slide.html) | decks | Original | Frederik | MIT |
 | [Competitive landscape table](components/decks/competitive-landscape.html) | decks | Original | Frederik | MIT |
+| [Country overview](components/decks/country-overview.html) | decks | Inspired by Original | Frederik | MIT |
 | [Cover, editorial](components/decks/cover-editorial.html) | decks | Inspired by [frontend-slides style presets by Zara Zhang](https://github.com/zarazhangrui/frontend-slides) | Frederik | MIT |
 | [Cover, split](components/decks/cover-split.html) | decks | Inspired by [frontend-slides style presets by Zara Zhang](https://github.com/zarazhangrui/frontend-slides) | Frederik | MIT |
 | [Cover, Swiss grid](components/decks/cover-swiss.html) | decks | Inspired by [frontend-slides style presets by Zara Zhang](https://github.com/zarazhangrui/frontend-slides) | Frederik | MIT |
 | [Deck shell](components/decks/deck-shell.html) | decks | Original | Frederik | MIT |
+| [Disclaimer](components/decks/disclaimer.html) | decks | Inspired by Original | Frederik | MIT |
 | [Discussion prompt](components/decks/discussion-prompt.html) | decks | Original | Frederik | MIT |
 | [Executive summary (SCR)](components/decks/exec-summary-scr.html) | decks | Inspired by [Barbara Minto, The Pyramid Principle (SCR)](https://www.barbaraminto.com) | Frederik | MIT |
 | [Exercise timer](components/decks/exercise-timer.html) | decks | Original | Frederik | MIT |
@@ -86,9 +90,26 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Full deck: strategy review](components/decks/full-strategy-review.html) | decks | Original | Frederik | MIT |
 | [Full deck: workshop](components/decks/full-workshop.html) | decks | Original | Frederik | MIT |
 | [Funnel slide](components/decks/funnel-slide.html) | decks | Original | Frederik | MIT |
+| [Ansoff growth matrix](components/decks/fw-ansoff-matrix.html) | decks | Inspired by [Ansoff matrix by Igor Ansoff](https://en.wikipedia.org/wiki/Ansoff_matrix) | Frederik | MIT |
+| [Balanced scorecard](components/decks/fw-balanced-scorecard.html) | decks | Inspired by [The balanced scorecard by Robert Kaplan and David Norton](https://hbr.org/1992/01/the-balanced-scorecard-measures-that-drive-performance-2) | Frederik | MIT |
+| [Business model canvas](components/decks/fw-business-model-canvas.html) | decks | Adapted from [Business Model Canvas by Strategyzer](https://www.strategyzer.com/library/the-business-model-canvas) | Frederik | CC-BY-SA-3.0 |
+| [Five forces](components/decks/fw-five-forces.html) | decks | Inspired by [Competitive forces framework by Michael Porter](https://hbr.org/1979/03/how-competitive-forces-shape-strategy) | Frederik | MIT |
+| [Growth-share matrix](components/decks/fw-growth-share-matrix.html) | decks | Inspired by [BCG growth-share matrix](https://en.wikipedia.org/wiki/Growth-share_matrix) | Frederik | MIT |
+| [Nine-box portfolio matrix](components/decks/fw-nine-box.html) | decks | Inspired by [GE-McKinsey nine-box matrix](https://en.wikipedia.org/wiki/GE_multifactorial_analysis) | Frederik | MIT |
+| [PESTLE scan](components/decks/fw-pestle.html) | decks | Original | Frederik | MIT |
+| [Product life cycle](components/decks/fw-product-life-cycle.html) | decks | Inspired by [Product life cycle (Theodore Levitt, HBR)](https://hbr.org/1965/11/exploit-the-product-life-cycle) | Frederik | MIT |
+| [Profitability tree](components/decks/fw-profitability-tree.html) | decks | Original | Frederik | MIT |
+| [McKinsey 7S](components/decks/fw-seven-s.html) | decks | Inspired by [McKinsey 7S framework](https://en.wikipedia.org/wiki/McKinsey_7S_Framework) | Frederik | MIT |
+| [Strategy house](components/decks/fw-strategy-house.html) | decks | Original | Frederik | MIT |
+| [SWOT analysis](components/decks/fw-swot.html) | decks | Original | Frederik | MIT |
+| [Three horizons](components/decks/fw-three-horizons.html) | decks | Inspired by [Three horizons of growth](https://en.wikipedia.org/wiki/Three_Horizons) | Frederik | MIT |
 | [Gantt roadmap](components/decks/gantt-roadmap.html) | decks | Original | Frederik | MIT |
 | [Governing question](components/decks/governing-question.html) | decks | Original | Frederik | MIT |
 | [Harvey ball scorecard](components/decks/harvey-ball-scorecard.html) | decks | Inspired by [StrategyU slide layouts](https://strategyu.co/slide-layouts) | Frederik | MIT |
+| [Hub and spoke concept](components/decks/hub-spoke-concept.html) | decks | Inspired by Original | Frederik | MIT |
+| [Implementation plan](components/decks/implementation-plan.html) | decks | Original | Frederik | MIT |
+| [Initiative deep dive](components/decks/initiative-deep-dive.html) | decks | Inspired by Original | Frederik | MIT |
+| [Initiative divider](components/decks/initiative-divider.html) | decks | Inspired by Original | Frederik | MIT |
 | [Issue tree](components/decks/issue-tree.html) | decks | Inspired by [Deckary consulting slide templates](https://deckary.com/blog/consulting-slide-templates) | Frederik | MIT |
 | [Key takeaways](components/decks/key-takeaways.html) | decks | Original | Frederik | MIT |
 | [Keynote availability](components/decks/keynote-availability.html) | decks | Inspired by [Apple keynote presentation style](https://www.apple.com/apple-events/) | Frederik | MIT |
@@ -105,12 +126,15 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Keynote steps](components/decks/keynote-steps.html) | decks | Original | Frederik | MIT |
 | [Keynote what's new](components/decks/keynote-whats-new.html) | decks | Original | Frederik | MIT |
 | [KPI dashboard slide](components/decks/kpi-dashboard.html) | decks | Original | Frederik | MIT |
+| [Launch sequence heat grid](components/decks/launch-sequence.html) | decks | Original | Frederik | MIT |
 | [Market map (Marimekko)](components/decks/market-map.html) | decks | Original | Frederik | MIT |
 | [Next steps table](components/decks/next-steps-table.html) | decks | Original | Frederik | MIT |
+| [Numbered divider](components/decks/numbered-divider.html) | decks | Inspired by Original | Frederik | MIT |
 | [Objectives](components/decks/objectives.html) | decks | Original | Frederik | MIT |
 | [Options evaluation](components/decks/options-evaluation.html) | decks | Original | Frederik | MIT |
 | [Org chart](components/decks/org-chart.html) | decks | Original | Frederik | MIT |
 | [Parking lot](components/decks/parking-lot.html) | decks | Original | Frederik | MIT |
+| [Persona cards](components/decks/persona-cards.html) | decks | Inspired by Original | Frederik | MIT |
 | [Pitch ask](components/decks/pitch-ask.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
 | [Pitch business model](components/decks/pitch-business-model.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
 | [Pitch competition](components/decks/pitch-competition.html) | decks | Inspired by [Y Combinator seed deck guidance](https://www.ycombinator.com/library/2u-how-to-build-your-seed-round-pitch-deck) | Frederik | MIT |
@@ -128,13 +152,20 @@ Code adapted from other projects keeps its license. The full texts are in [LICEN
 | [Quote with evidence](components/decks/quote-evidence.html) | decks | Original | Frederik | MIT |
 | [Quote slide](components/decks/quote-slide.html) | decks | Original | Frederik | MIT |
 | [RACI matrix](components/decks/raci-matrix.html) | decks | Original | Frederik | MIT |
+| [Radar perception chart](components/decks/radar-perception.html) | decks | Original | Frederik | MIT |
 | [Recommendations](components/decks/recommendations.html) | decks | Original | Frederik | MIT |
 | [Risk matrix](components/decks/risk-matrix.html) | decks | Original | Frederik | MIT |
 | [Section slide](components/decks/section-slide.html) | decks | Original | Frederik | MIT |
+| [Small multiples](components/decks/small-multiples.html) | decks | Original | Frederik | MIT |
 | [Stacked share chart](components/decks/stacked-share.html) | decks | Original | Frederik | MIT |
+| [Stage gates with headcount ramp](components/decks/stage-gate-ramp.html) | decks | Original | Frederik | MIT |
+| [Stat bubbles](components/decks/stat-bubbles.html) | decks | Original | Frederik | MIT |
+| [Statement over image](components/decks/statement-image.html) | decks | Inspired by Original | Frederik | MIT |
 | [Storyboard sheet](components/decks/storyboard-sheet.html) | decks | Original | Frederik | MIT |
+| [Strategy on a page](components/decks/strategy-on-a-page.html) | decks | Inspired by Original | Frederik | MIT |
 | [Table of contents](components/decks/table-of-contents.html) | decks | Original | Frederik | MIT |
 | [TAM, SAM and SOM](components/decks/tam-sam-som.html) | decks | Inspired by [Deckary consulting slide templates](https://deckary.com/blog/consulting-slide-templates) | Frederik | MIT |
+| [Targets and RAG status table](components/decks/targets-status.html) | decks | Original | Frederik | MIT |
 | [Three pillars](components/decks/three-pillars.html) | decks | Original | Frederik | MIT |
 | [Title slide](components/decks/title-slide.html) | decks | Original | Frederik | MIT |
 | [Tracker and appendix slide](components/decks/tracker-and-appendix.html) | decks | Original | Frederik | MIT |

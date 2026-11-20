@@ -1,0 +1,97 @@
+<!--
+@title Statement over image
+@group Openers and structure
+@description One bold statement set over a full-bleed image, with a dark scrim for legibility. The image here is an inline SVG placeholder: swap it for a photo.
+@tags slide, statement, image, full-bleed, quote, impact, photo
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Original
+-->
+<style>
+  .c-statement-image {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-statement-image .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-statement-image .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-statement-image h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-statement-image .body { min-height: 0; padding: 2.2cqi 0 1.8cqi; }
+  .c-statement-image .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-statement-image .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-statement-image { background: var(--ds-ink); color: var(--ds-bg); }
+  .c-statement-image .art { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .c-statement-image .scrim { position: absolute; inset: 0; background: linear-gradient(95deg, color-mix(in srgb, var(--ds-ink) 92%, transparent) 0%, color-mix(in srgb, var(--ds-ink) 78%, transparent) 42%, color-mix(in srgb, var(--ds-ink) 10%, transparent) 78%, transparent 100%); }
+  .c-statement-image .inner { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; padding: 6cqi 7cqi 4cqi; }
+  .c-statement-image .top { display: flex; align-items: center; gap: 1.4cqi; font-size: 1.4cqi; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ds-bg); }
+  .c-statement-image .top::before { content: ""; width: 5cqi; height: 0.5cqi; border-radius: 99px; background: var(--ds-highlight-line); }
+  .c-statement-image h1 { align-self: center; margin: 0; max-width: 50cqi; font-family: var(--ds-font-display); font-size: 6.2cqi; font-weight: var(--ds-weight-display); letter-spacing: var(--ds-tracking-display); line-height: 1.04; color: var(--ds-bg); text-wrap: balance; }
+  .c-statement-image .by { margin: 0; font-size: 1.5cqi; line-height: 1.4; color: color-mix(in srgb, var(--ds-bg) 82%, transparent); }
+  .c-statement-image .cap { position: absolute; right: 2cqi; bottom: 1.6cqi; font-size: 0.95cqi; color: color-mix(in srgb, var(--ds-bg) 70%, transparent); }
+</style>
+
+
+<section class="c-statement-image" aria-label="Statement: Every parcel is a promise">
+  <svg class="art" viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder image: a sunrise over a harbor with containers">
+    <defs>
+      <linearGradient id="c-statement-image-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--ds-info-line)" />
+        <stop offset="0.62" stop-color="var(--ds-highlight-line)" />
+        <stop offset="1" stop-color="var(--ds-highlight-fill)" />
+      </linearGradient>
+    </defs>
+    <rect width="160" height="90" fill="url(#c-statement-image-sky)" />
+    <circle cx="118" cy="54" r="11" fill="var(--ds-highlight-fill)" />
+    <rect y="58" width="160" height="32" fill="var(--ds-info-line)" />
+    <path d="M0 60 H160" stroke="var(--ds-surface)" stroke-width="0.4" opacity="0.5" />
+    <g fill="var(--ds-neutral-line)">
+      <rect x="92" y="46" width="10" height="9" /><rect x="102" y="46" width="10" height="9" opacity="0.8" />
+      <rect x="97" y="37" width="10" height="9" opacity="0.9" /><rect x="116" y="49" width="12" height="6" />
+      <rect x="130" y="43" width="10" height="12" opacity="0.85" /><rect x="140" y="47" width="10" height="8" />
+      <path d="M70 55 V28 H73 V55 Z M73 30 H98 V32 H73 Z" />
+    </g>
+    <g stroke="var(--ds-surface)" stroke-width="0.35" opacity="0.4">
+      <path d="M90 66 H150" /><path d="M100 72 H140" /><path d="M108 78 H134" />
+    </g>
+  </svg>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="inner">
+    <div class="top">Our promise</div>
+    <h1>Every parcel is a promise we keep</h1>
+    <p class="by">Harbor Freight Group, annual meeting 2027</p>
+  </div>
+  <span class="cap">Placeholder image</span>
+</section>

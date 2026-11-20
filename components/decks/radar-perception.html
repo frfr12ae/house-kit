@@ -1,0 +1,99 @@
+<!--
+@title Radar perception chart
+@group Exhibits
+@description A six-axis radar comparing our scores with a competitor on customer-rated attributes, beside a table that ranks the gap on each attribute.
+@tags slide, radar, spider, perception, competitor, survey, attributes, benchmark, exhibit
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-radar-perception {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-radar-perception .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-radar-perception .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-radar-perception h1 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-radar-perception .exhibit { position: relative; min-height: 0; }
+  .c-radar-perception .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-radar-perception .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-radar-perception svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .c-radar-perception svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-radar-perception .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-radar-perception .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-radar-perception .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-radar-perception .xs { font-size: 11px; }
+  .c-radar-perception .sm { font-size: 12px; }
+  .c-radar-perception .md { font-size: 13px; }
+  .c-radar-perception .lg { font-size: 14px; }
+  .c-radar-perception .b { font-weight: 700; }
+  .c-radar-perception .sb { font-weight: 600; }
+  .c-radar-perception .ink { fill: var(--ds-ink); }
+  .c-radar-perception .mu { fill: var(--ds-muted); }
+  .c-radar-perception .mid { text-anchor: middle; }
+  .c-radar-perception .end { text-anchor: end; }
+  .c-radar-perception .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+
+  .c-radar-perception .exhibit { display: grid; grid-template-columns: minmax(0, 46fr) minmax(0, 50fr); gap: 3cqi; align-items: center; }
+  .c-radar-perception .panel { display: grid; align-content: center; gap: 0.5cqi; }
+  .c-radar-perception .row { display: grid; grid-template-columns: minmax(0, 1fr) 6cqi 6cqi 7cqi; align-items: center; column-gap: 1cqi; padding: 0.55cqi 1cqi; border-radius: calc(0.5cqi * var(--ds-radius-scale, 1)); background: var(--ds-panel); font-size: 1.3cqi; }
+  .c-radar-perception .row.hd { background: none; padding-top: 0; padding-bottom: 0.2cqi; font-size: 1.05cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-radar-perception .at { font-weight: 700; color: var(--ds-ink); }
+  .c-radar-perception .n { text-align: right; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-radar-perception .n.mu { color: var(--ds-muted); font-weight: 600; }
+  .c-radar-perception .row.hd .n { font-weight: 600; color: var(--ds-muted); }
+  .c-radar-perception .gap { justify-self: end; min-width: 4.6cqi; padding: 0.3cqi 0.8cqi; border-radius: var(--ds-radius-pill); text-align: center; font-size: 1.15cqi; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-radar-perception .gap.good { background: var(--ds-note-fill); box-shadow: inset 0 0 0 1px var(--ds-note-line); }
+  .c-radar-perception .gap.bad { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 1px var(--ds-danger-line); }
+  .c-radar-perception .cap { margin: 0.4cqi 0 0; font-size: 1.05cqi; line-height: 1.4; color: var(--ds-muted); }
+</style>
+
+<section class="c-radar-perception" aria-label="Slide 12: customer ratings of Norlight and Corvane on six attributes">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Market position · Customer perception survey</p>
+      <h1>We lead on service and reliability, but trail Corvane by 1.9 points on price value and 1.3 on innovation</h1>
+    </div>
+    <div class="exhibit">
+<svg viewBox="0 0 460 330" role="img" aria-label="Radar chart on six attributes. Norlight scores service 8.4, reliability 8.0, availability 7.5, brand trust 7.2, innovation 6.1 and price value 5.9. Corvane scores 6.9, 7.1, 7.3, 7.6, 7.4 and 7.8."><polygon class="grid" style="fill:none" points="230.0,150.4 250.4,162.2 250.4,185.8 230.0,197.6 209.6,185.8 209.6,162.2"/><polygon class="grid" style="fill:none" points="230.0,126.8 270.9,150.4 270.9,197.6 230.0,221.2 189.1,197.6 189.1,150.4"/><polygon class="grid" style="fill:none" points="230.0,103.2 291.3,138.6 291.3,209.4 230.0,244.8 168.7,209.4 168.7,138.6"/><polygon class="grid" style="fill:none" points="230.0,79.6 311.8,126.8 311.8,221.2 230.0,268.4 148.2,221.2 148.2,126.8"/><polygon class="axis" style="fill:none" points="230.0,56.0 332.2,115.0 332.2,233.0 230.0,292.0 127.8,233.0 127.8,115.0"/><line class="grid" x1="230" y1="174" x2="230.0" y2="56.0"/><line class="grid" x1="230" y1="174" x2="332.2" y2="115.0"/><line class="grid" x1="230" y1="174" x2="332.2" y2="233.0"/><line class="grid" x1="230" y1="174" x2="230.0" y2="292.0"/><line class="grid" x1="230" y1="174" x2="127.8" y2="233.0"/><line class="grid" x1="230" y1="174" x2="127.8" y2="115.0"/><text class="xs mu halo" x="234" y="161.4">2</text><text class="xs mu halo" x="234" y="137.8">4</text><text class="xs mu halo" x="234" y="114.2">6</text><text class="xs mu halo" x="234" y="90.6">8</text><text class="xs mu halo" x="234" y="67.0">10</text><polygon points="230.0,92.6 302.6,132.1 304.6,217.1 230.0,263.7 154.4,217.7 150.3,128.0" style="fill:color-mix(in srgb, var(--ds-neutral-line) 14%, transparent);stroke:var(--ds-neutral-line);stroke-width:2.2;stroke-dasharray:6 4;stroke-linejoin:round"/><polygon points="230.0,74.9 311.8,126.8 306.6,218.3 230.0,259.0 167.7,210.0 169.7,139.2" style="fill:color-mix(in srgb, var(--ds-info-line) 28%, transparent);stroke:var(--ds-info-line);stroke-width:2.8;stroke-linejoin:round"/><circle cx="230.0" cy="92.6" r="3.5" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:2"/><circle cx="230.0" cy="74.9" r="4.5" style="fill:var(--ds-info-line);stroke:var(--ds-surface);stroke-width:2"/><circle cx="302.6" cy="132.1" r="3.5" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:2"/><circle cx="311.8" cy="126.8" r="4.5" style="fill:var(--ds-info-line);stroke:var(--ds-surface);stroke-width:2"/><circle cx="304.6" cy="217.1" r="3.5" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:2"/><circle cx="306.6" cy="218.3" r="4.5" style="fill:var(--ds-info-line);stroke:var(--ds-surface);stroke-width:2"/><circle cx="230.0" cy="263.7" r="3.5" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:2"/><circle cx="230.0" cy="259.0" r="4.5" style="fill:var(--ds-info-line);stroke:var(--ds-surface);stroke-width:2"/><circle cx="154.4" cy="217.7" r="3.5" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:2"/><circle cx="167.7" cy="210.0" r="4.5" style="fill:var(--ds-info-line);stroke:var(--ds-surface);stroke-width:2"/><circle cx="150.3" cy="128.0" r="3.5" style="fill:var(--ds-surface);stroke:var(--ds-neutral-line);stroke-width:2"/><circle cx="169.7" cy="139.2" r="4.5" style="fill:var(--ds-info-line);stroke:var(--ds-surface);stroke-width:2"/><text class="md b ink mid" x="230.0" y="43.4">Service</text><text class="md b ink " x="345.4" y="113.7">Reliability</text><text class="md b ink " x="345.4" y="242.3">Availability</text><text class="md b ink mid" x="230.0" y="314.6">Brand trust</text><text class="md b ink end" x="114.6" y="242.3">Innovation</text><text class="md b ink end" x="114.6" y="113.7">Price value</text><rect x="0" y="2" width="14" height="10" rx="2" style="fill:color-mix(in srgb, var(--ds-info-line) 28%, transparent);stroke:var(--ds-info-line);stroke-width:2"/><text class="md b ink" x="21" y="12">Norlight</text><line x1="0" x2="14" y1="29" y2="29" style="stroke:var(--ds-neutral-line);stroke-width:2.2;stroke-dasharray:4 3"/><text class="md b ink" x="21" y="33">Corvane</text></svg>
+      <div class="panel"><div class="row hd"><span>Attribute, ranked by gap</span><span class="n">Norlight</span><span class="n">Corvane</span><span class="n">Gap</span></div><div class="row"><span class="at">Service</span><span class="n">8.4</span><span class="n mu">6.9</span><span class="gap good">+1.5</span></div><div class="row"><span class="at">Reliability</span><span class="n">8.0</span><span class="n mu">7.1</span><span class="gap good">+0.9</span></div><div class="row"><span class="at">Availability</span><span class="n">7.5</span><span class="n mu">7.3</span><span class="gap good">+0.2</span></div><div class="row"><span class="at">Brand trust</span><span class="n">7.2</span><span class="n mu">7.6</span><span class="gap bad">-0.4</span></div><div class="row"><span class="at">Innovation</span><span class="n">6.1</span><span class="n mu">7.4</span><span class="gap bad">-1.3</span></div><div class="row"><span class="at">Price value</span><span class="n">5.9</span><span class="n mu">7.8</span><span class="gap bad">-1.9</span></div><p class="cap">Ahead on 3 of 6 attributes; our largest gap is on price value.</p></div>
+    </div>
+    <div class="foot">
+      <span>Source: customer perception survey, n = 412 business buyers, September 2026; mean score on a 1 to 10 scale. Illustrative figures.</span>
+      <span class="page">12</span>
+    </div>
+  </div>
+</section>

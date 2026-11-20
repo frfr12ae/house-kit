@@ -1,0 +1,104 @@
+<!--
+@title SWOT analysis
+@group Frameworks
+@description A SWOT grid with internal and external factors on one axis and helpful and harmful on the other, three evidence points per quadrant.
+@tags slide, swot, strengths, weaknesses, opportunities, threats, framework, strategy, situation analysis
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-fw-swot {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-swot .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-swot .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-swot h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-swot .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-swot .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-swot .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-swot .swot { height: 100%; display: grid; grid-template-columns: 4.6cqi minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr); gap: 1.1cqi; }
+  .c-fw-swot .colh { align-self: end; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); padding-left: 0.4cqi; }
+  .c-fw-swot .rowh { display: grid; place-items: center; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-swot .rowh span { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+  .c-fw-swot .cell { padding: 1.3cqi 1.8cqi; border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); min-height: 0; }
+  .c-fw-swot .cell.s, .c-fw-swot .cell.o { background: var(--ds-note-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-note-line); }
+  .c-fw-swot .cell.w, .c-fw-swot .cell.t { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-danger-line); }
+  .c-fw-swot .ch { display: flex; align-items: center; gap: 1.1cqi; margin-bottom: 0.9cqi; }
+  .c-fw-swot .let { display: grid; place-items: center; width: 3cqi; height: 3cqi; border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); background: var(--ds-surface); font-size: 1.8cqi; font-weight: 800; color: var(--ds-ink); }
+  .c-fw-swot .cell.s .let, .c-fw-swot .cell.o .let { box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-note-line); }
+  .c-fw-swot .cell.w .let, .c-fw-swot .cell.t .let { box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-danger-line); }
+  .c-fw-swot h2 { margin: 0; font-size: 1.8cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-fw-swot ul { margin: 0; padding: 0; list-style: none; }
+  .c-fw-swot li { position: relative; padding-left: 1.5cqi; margin-bottom: 0.55cqi; font-size: 1.35cqi; line-height: 1.35; color: var(--ds-ink); }
+  .c-fw-swot li::before { content: ''; position: absolute; left: 0.1cqi; top: 0.55cqi; width: 0.5cqi; height: 0.5cqi; border-radius: 50%; background: var(--ds-ink); }
+</style>
+
+<section class="c-fw-swot" aria-label="SWOT analysis of Halden Cycles in four quadrants">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Situation analysis · Halden Cycles</p>
+      <h1>Halden has a strong brand and in-house engineering, but slow delivery leaves it open to cheaper imports</h1>
+    </div>
+    <div class="body">
+      <div class="swot">
+        <div></div>
+        <div class="colh">Helpful to the goal</div>
+        <div class="colh">Harmful to the goal</div>
+        <div class="rowh"><span>Internal</span></div>
+        <div class="cell s">
+        <div class="ch"><span class="let">S</span><h2>Strengths</h2></div>
+        <ul><li>Premium commuter brand, NPS 58</li><li>Battery and motor designed in-house</li><li>112 dealers across the Nordics</li></ul>
+      </div>
+        <div class="cell w">
+        <div class="ch"><span class="let">W</span><h2>Weaknesses</h2></div>
+        <ul><li>70% of sales from two markets</li><li>Nine-week lead time, rivals take four</li><li>Online sales only 8% of revenue</li></ul>
+      </div>
+        <div class="rowh"><span>External</span></div>
+        <div class="cell o">
+        <div class="ch"><span class="let">O</span><h2>Opportunities</h2></div>
+        <ul><li>Employer bike leasing grows 25% a year</li><li>Cargo bikes for city logistics</li><li>Subscription and service revenue</li></ul>
+      </div>
+        <div class="cell t">
+        <div class="ch"><span class="let">T</span><h2>Threats</h2></div>
+        <ul><li>Asian imports up 30% in two years</li><li>Battery cell prices swing by 20%</li><li>Weak consumer demand in Germany</li></ul>
+      </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: management workshop, October 2026; dealer survey; customs data. Illustrative figures.</span><span class="page">4</span></div>
+  </div>
+</section>

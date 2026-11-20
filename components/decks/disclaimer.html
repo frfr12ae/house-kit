@@ -1,0 +1,85 @@
+<!--
+@title Disclaimer
+@group Openers and structure
+@description A plain-English confidentiality and disclaimer slide with six short clauses and a contact line, for the back of a cover or the end of a deck.
+@tags slide, disclaimer, confidentiality, legal, notice, terms
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Original
+-->
+<style>
+  .c-disclaimer {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-disclaimer .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-disclaimer .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-disclaimer h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-disclaimer .body { min-height: 0; padding: 2.2cqi 0 1.8cqi; }
+  .c-disclaimer .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-disclaimer .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-disclaimer .body { display: grid; align-content: start; gap: 2cqi; padding-top: 2.6cqi; }
+  .c-disclaimer ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2cqi 5cqi; counter-reset: c; }
+  .c-disclaimer li { position: relative; padding: 0 0 0 4cqi; counter-increment: c; }
+  .c-disclaimer li::before { content: counter(c, decimal-leading-zero); position: absolute; left: 0; top: 0.15cqi; font-size: 1.2cqi; font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-disclaimer h2 { margin: 0 0 0.4cqi; font-size: 1.6cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-disclaimer li p { margin: 0; font-size: 1.3cqi; line-height: 1.5; }
+  .c-disclaimer .contact { display: flex; align-items: center; gap: 2cqi; padding: 1.2cqi 1.8cqi; background: var(--ds-neutral-fill); border: var(--ds-hairline) solid var(--ds-neutral-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); font-size: 1.3cqi; color: var(--ds-ink); }
+  .c-disclaimer .contact b { flex: none; font-size: 1.05cqi; letter-spacing: 0.1em; text-transform: uppercase; }
+</style>
+
+
+<section class="c-disclaimer" aria-label="Confidentiality and disclaimer">
+  <div class="inner">
+    <div class="top">
+      <p class="kicker">Important notice</p>
+      <h1>Please read this before you use the document</h1>
+    </div>
+    <div class="body">
+      <ol>
+        <li><h2>Confidential</h2><p>This document is for the people it was sent to. Please do not copy it, forward it or share it outside your organisation without our written permission.</p></li>
+        <li><h2>Not advice</h2><p>We prepared it to support a discussion. It is not legal, tax, accounting or investment advice, and you should not rely on it as such.</p></li>
+        <li><h2>Forecasts</h2><p>Figures that look ahead are our best estimates today. Real results will differ, and some will differ a lot.</p></li>
+        <li><h2>Sources</h2><p>We used public information and data shared with us. We have not checked all of it independently and cannot promise it is complete.</p></li>
+        <li><h2>Ownership</h2><p>The ideas, methods and designs in this document remain ours. Sharing them does not give you a licence to reuse them.</p></li>
+        <li><h2>Questions</h2><p>If anything here is unclear, or you think you received it by mistake, tell the contact below and delete your copy.</p></li>
+      </ol>
+      <div class="contact"><b>Contact</b><span>Anna Berg, Head of Legal, legal@harborfreight.example, +45 5550 0142</span></div>
+    </div>
+    <div class="foot"><span>Harbor Freight Group. Confidential. Version 1.0, November 2026.</span><span class="page">2</span></div>
+  </div>
+</section>

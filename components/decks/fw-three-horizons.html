@@ -1,0 +1,102 @@
+<!--
+@title Three horizons
+@group Frameworks
+@description The three horizons of growth as overlapping curves over time, with a card for each horizon giving its focus, period, share of investment and the measure that matters.
+@tags slide, three horizons, growth, innovation, portfolio, time, curves, framework, strategy
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Three horizons of growth | https://en.wikipedia.org/wiki/Three_Horizons | inspired-by
+-->
+<style>
+  .c-fw-three-horizons {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-three-horizons .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-three-horizons .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-three-horizons h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-three-horizons .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-three-horizons .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-three-horizons .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-three-horizons .th { height: 100%; display: grid; grid-template-rows: minmax(0, 1fr) auto; row-gap: 1.2cqi; }
+  .c-fw-three-horizons .ch { min-height: 0; position: relative; }
+  .c-fw-three-horizons .ch svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+  .c-fw-three-horizons .ch text { font-family: var(--ds-font-sans); fill: var(--ds-ink); font-size: 12px; font-weight: 700; }
+  .c-fw-three-horizons .ch .mu { fill: var(--ds-muted); font-weight: 600; font-size: 11px; }
+  .c-fw-three-horizons .ch .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-fw-three-horizons .ch .ax { stroke: var(--ds-muted); stroke-width: 1.2; fill: none; }
+  .c-fw-three-horizons .ch .cv { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+  .c-fw-three-horizons .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4cqi; }
+  .c-fw-three-horizons .hc { padding: 1.1cqi 1.5cqi 1.2cqi; border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); background: var(--ds-panel); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-line); border-top: 0.35cqi solid var(--hc); }
+  .c-fw-three-horizons .hc .hh { display: flex; justify-content: space-between; align-items: baseline; gap: 1cqi; font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-three-horizons .hc h2 { margin: 0.4cqi 0 0; font-size: 1.55cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-fw-three-horizons .hc p { margin: 0.3cqi 0 0; font-size: 1.2cqi; line-height: 1.3; color: var(--ds-text); }
+  .c-fw-three-horizons .hc .mm { display: flex; justify-content: space-between; margin-top: 0.8cqi; padding-top: 0.6cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.1cqi; color: var(--ds-text); }
+  .c-fw-three-horizons .hc .mm b { color: var(--ds-ink); }
+</style>
+
+<section class="c-fw-three-horizons" aria-label="Three horizons of growth: core business declining, emerging businesses rising, new options starting">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Growth portfolio · Halden Cycles</p>
+      <h1>Defend e-bikes today while cargo bikes and battery swapping take over the growth</h1>
+    </div>
+    <div class="body">
+      <div class="th">
+        <div class="ch">
+          <svg viewBox="0 0 880 210" role="img" aria-label="Three curves over time. Horizon 1 starts high and declines. Horizon 2 rises in the middle and then fades. Horizon 3 starts late and rises steeply.">
+            <path class="ax" d="M40 8V192H872M868 188L874 192L868 196"/>
+            <text class="mu" x="32" y="14" text-anchor="end">Value</text>
+            <text class="mu" x="860" y="208" text-anchor="end">Time</text>
+            <path d="M40 65.5 L50.3 65.9 L60.5 66.3 L70.8 66.7 L81 67.2 L91.3 67.7 L101.5 68.2 L111.8 68.8 L122 69.5 L132.3 70.2 L142.5 70.9 L152.8 71.7 L163 72.5 L173.3 73.5 L183.5 74.4 L193.8 75.5 L204 76.6 L214.3 77.8 L224.5 79 L234.8 80.4 L245 81.8 L255.3 83.3 L265.5 84.9 L275.8 86.5 L286 88.3 L296.3 90.1 L306.5 92.1 L316.8 94.1 L327 96.2 L337.3 98.4 L347.5 100.7 L357.8 103 L368 105.4 L378.3 107.9 L388.5 110.4 L398.8 113 L409 115.7 L419.3 118.3 L429.5 121 L439.8 123.8 L450 126.5 L460.2 129.2 L470.5 131.9 L480.8 134.6 L491 137.3 L501.3 139.9 L511.5 142.5 L521.8 145.1 L532 147.5 L542.3 150 L552.5 152.3 L562.8 154.6 L573 156.8 L583.3 158.9 L593.5 160.9 L603.8 162.8 L614 164.7 L624.3 166.4 L634.5 168.1 L644.8 169.7 L655 171.2 L665.3 172.6 L675.5 173.9 L685.8 175.2 L696 176.4 L706.3 177.5 L716.5 178.5 L726.8 179.5 L737 180.4 L747.3 181.3 L757.5 182.1 L767.8 182.8 L778 183.5 L788.3 184.1 L798.5 184.7 L808.8 185.3 L819 185.8 L829.3 186.3 L839.5 186.7 L849.8 187.1 L860 187.5 L860 192 L40 192 Z" style="fill:color-mix(in srgb, var(--ds-series-1) 18%, transparent);stroke:none"/><path class="cv" d="M40 65.5 L50.3 65.9 L60.5 66.3 L70.8 66.7 L81 67.2 L91.3 67.7 L101.5 68.2 L111.8 68.8 L122 69.5 L132.3 70.2 L142.5 70.9 L152.8 71.7 L163 72.5 L173.3 73.5 L183.5 74.4 L193.8 75.5 L204 76.6 L214.3 77.8 L224.5 79 L234.8 80.4 L245 81.8 L255.3 83.3 L265.5 84.9 L275.8 86.5 L286 88.3 L296.3 90.1 L306.5 92.1 L316.8 94.1 L327 96.2 L337.3 98.4 L347.5 100.7 L357.8 103 L368 105.4 L378.3 107.9 L388.5 110.4 L398.8 113 L409 115.7 L419.3 118.3 L429.5 121 L439.8 123.8 L450 126.5 L460.2 129.2 L470.5 131.9 L480.8 134.6 L491 137.3 L501.3 139.9 L511.5 142.5 L521.8 145.1 L532 147.5 L542.3 150 L552.5 152.3 L562.8 154.6 L573 156.8 L583.3 158.9 L593.5 160.9 L603.8 162.8 L614 164.7 L624.3 166.4 L634.5 168.1 L644.8 169.7 L655 171.2 L665.3 172.6 L675.5 173.9 L685.8 175.2 L696 176.4 L706.3 177.5 L716.5 178.5 L726.8 179.5 L737 180.4 L747.3 181.3 L757.5 182.1 L767.8 182.8 L778 183.5 L788.3 184.1 L798.5 184.7 L808.8 185.3 L819 185.8 L829.3 186.3 L839.5 186.7 L849.8 187.1 L860 187.5" style="stroke:var(--ds-series-1)"/>
+            <path d="M40 188.8 L50.3 188.3 L60.5 187.7 L70.8 187 L81 186.2 L91.3 185.3 L101.5 184.2 L111.8 183 L122 181.6 L132.3 179.9 L142.5 178.1 L152.8 176 L163 173.7 L173.3 171.1 L183.5 168.2 L193.8 164.9 L204 161.4 L214.3 157.5 L224.5 153.3 L234.8 148.8 L245 144.1 L255.3 139.1 L265.5 134 L275.8 128.8 L286 123.5 L296.3 118.2 L306.5 112.9 L316.8 107.9 L327 103 L337.3 98.4 L347.5 94.1 L357.8 90.1 L368 86.5 L378.3 83.2 L388.5 80.3 L398.8 77.7 L409 75.5 L419.3 73.7 L429.5 72.2 L439.8 71 L450 70.1 L460.2 69.5 L470.5 69.3 L480.8 69.3 L491 69.5 L501.3 70.1 L511.5 70.9 L521.8 72.1 L532 73.4 L542.3 75.1 L552.5 77.1 L562.8 79.4 L573 81.9 L583.3 84.8 L593.5 87.9 L603.8 91.3 L614 95 L624.3 99 L634.5 103.1 L644.8 107.5 L655 112 L665.3 116.7 L675.5 121.4 L685.8 126.1 L696 130.9 L706.3 135.5 L716.5 140.1 L726.8 144.5 L737 148.7 L747.3 152.7 L757.5 156.5 L767.8 160 L778 163.3 L788.3 166.3 L798.5 169.1 L808.8 171.6 L819 173.9 L829.3 176 L839.5 177.8 L849.8 179.5 L860 181 L860 192 L40 192 Z" style="fill:color-mix(in srgb, var(--ds-series-2) 18%, transparent);stroke:none"/><path class="cv" d="M40 188.8 L50.3 188.3 L60.5 187.7 L70.8 187 L81 186.2 L91.3 185.3 L101.5 184.2 L111.8 183 L122 181.6 L132.3 179.9 L142.5 178.1 L152.8 176 L163 173.7 L173.3 171.1 L183.5 168.2 L193.8 164.9 L204 161.4 L214.3 157.5 L224.5 153.3 L234.8 148.8 L245 144.1 L255.3 139.1 L265.5 134 L275.8 128.8 L286 123.5 L296.3 118.2 L306.5 112.9 L316.8 107.9 L327 103 L337.3 98.4 L347.5 94.1 L357.8 90.1 L368 86.5 L378.3 83.2 L388.5 80.3 L398.8 77.7 L409 75.5 L419.3 73.7 L429.5 72.2 L439.8 71 L450 70.1 L460.2 69.5 L470.5 69.3 L480.8 69.3 L491 69.5 L501.3 70.1 L511.5 70.9 L521.8 72.1 L532 73.4 L542.3 75.1 L552.5 77.1 L562.8 79.4 L573 81.9 L583.3 84.8 L593.5 87.9 L603.8 91.3 L614 95 L624.3 99 L634.5 103.1 L644.8 107.5 L655 112 L665.3 116.7 L675.5 121.4 L685.8 126.1 L696 130.9 L706.3 135.5 L716.5 140.1 L726.8 144.5 L737 148.7 L747.3 152.7 L757.5 156.5 L767.8 160 L778 163.3 L788.3 166.3 L798.5 169.1 L808.8 171.6 L819 173.9 L829.3 176 L839.5 177.8 L849.8 179.5 L860 181" style="stroke:var(--ds-series-2)"/>
+            <path d="M40 192 L50.3 192 L60.5 192 L70.8 192 L81 192 L91.3 192 L101.5 191.9 L111.8 191.9 L122 191.9 L132.3 191.9 L142.5 191.9 L152.8 191.9 L163 191.9 L173.3 191.9 L183.5 191.8 L193.8 191.8 L204 191.8 L214.3 191.8 L224.5 191.7 L234.8 191.7 L245 191.6 L255.3 191.6 L265.5 191.5 L275.8 191.4 L286 191.4 L296.3 191.3 L306.5 191.2 L316.8 191 L327 190.9 L337.3 190.7 L347.5 190.5 L357.8 190.3 L368 190.1 L378.3 189.8 L388.5 189.5 L398.8 189.1 L409 188.7 L419.3 188.2 L429.5 187.7 L439.8 187 L450 186.3 L460.2 185.5 L470.5 184.6 L480.8 183.5 L491 182.4 L501.3 181 L511.5 179.5 L521.8 177.8 L532 175.9 L542.3 173.8 L552.5 171.4 L562.8 168.8 L573 165.8 L583.3 162.6 L593.5 159.1 L603.8 155.3 L614 151.2 L624.3 146.8 L634.5 142.1 L644.8 137.2 L655 132 L665.3 126.6 L675.5 121 L685.8 115.4 L696 109.7 L706.3 104 L716.5 98.3 L726.8 92.8 L737 87.4 L747.3 82.2 L757.5 77.2 L767.8 72.5 L778 68.1 L788.3 64 L798.5 60.2 L808.8 56.7 L819 53.5 L829.3 50.6 L839.5 48 L849.8 45.6 L860 43.5 L860 192 L40 192 Z" style="fill:color-mix(in srgb, var(--ds-series-3) 18%, transparent);stroke:none"/><path class="cv" d="M40 192 L50.3 192 L60.5 192 L70.8 192 L81 192 L91.3 192 L101.5 191.9 L111.8 191.9 L122 191.9 L132.3 191.9 L142.5 191.9 L152.8 191.9 L163 191.9 L173.3 191.9 L183.5 191.8 L193.8 191.8 L204 191.8 L214.3 191.8 L224.5 191.7 L234.8 191.7 L245 191.6 L255.3 191.6 L265.5 191.5 L275.8 191.4 L286 191.4 L296.3 191.3 L306.5 191.2 L316.8 191 L327 190.9 L337.3 190.7 L347.5 190.5 L357.8 190.3 L368 190.1 L378.3 189.8 L388.5 189.5 L398.8 189.1 L409 188.7 L419.3 188.2 L429.5 187.7 L439.8 187 L450 186.3 L460.2 185.5 L470.5 184.6 L480.8 183.5 L491 182.4 L501.3 181 L511.5 179.5 L521.8 177.8 L532 175.9 L542.3 173.8 L552.5 171.4 L562.8 168.8 L573 165.8 L583.3 162.6 L593.5 159.1 L603.8 155.3 L614 151.2 L624.3 146.8 L634.5 142.1 L644.8 137.2 L655 132 L665.3 126.6 L675.5 121 L685.8 115.4 L696 109.7 L706.3 104 L716.5 98.3 L726.8 92.8 L737 87.4 L747.3 82.2 L757.5 77.2 L767.8 72.5 L778 68.1 L788.3 64 L798.5 60.2 L808.8 56.7 L819 53.5 L829.3 50.6 L839.5 48 L849.8 45.6 L860 43.5" style="stroke:var(--ds-series-3)"/>
+            <text class="halo" x="60" y="54.09227631528799">Horizon 1</text>
+            <text class="halo" x="450" y="58.12014428241743" text-anchor="middle">Horizon 2</text>
+            <text class="halo" x="778" y="56.13536821953676" text-anchor="middle">Horizon 3</text>
+          </svg>
+        </div>
+        <div class="cards">
+          <div class="hc" style="--hc:var(--ds-series-1)"><div class="hh"><span>Horizon 1</span><span>Now to 2027</span></div><h2>Extend and defend the core</h2><p>Premium e-bikes and components</p><div class="mm"><span>Growth capital <b>70%</b></span><span>Measure <b>EBIT margin</b></span></div></div>
+          <div class="hc" style="--hc:var(--ds-series-2)"><div class="hh"><span>Horizon 2</span><span>2027 to 2029</span></div><h2>Build emerging businesses</h2><p>Cargo bikes and subscription</p><div class="mm"><span>Growth capital <b>20%</b></span><span>Measure <b>Revenue growth</b></span></div></div>
+          <div class="hc" style="--hc:var(--ds-series-3)"><div class="hh"><span>Horizon 3</span><span>2029 onward</span></div><h2>Create viable options</h2><p>Battery swapping and fleet services</p><div class="mm"><span>Growth capital <b>10%</b></span><span>Measure <b>Pilots validated</b></span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: strategy plan 2027 to 2029; investment shares are planned allocation of growth capital. Illustrative figures.</span><span class="page">13</span></div>
+  </div>
+</section>

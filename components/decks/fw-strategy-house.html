@@ -1,0 +1,93 @@
+<!--
+@title Strategy house
+@group Frameworks
+@description A strategy house with the vision as the roof, four strategic pillars each with a goal and two targets, a foundation of capabilities and a base band of values.
+@tags slide, strategy house, vision, pillars, foundation, capabilities, values, strategy on a page, framework
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-fw-strategy-house {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-strategy-house .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-strategy-house .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-strategy-house h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-strategy-house .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-strategy-house .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-strategy-house .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-strategy-house .hs { height: 100%; display: grid; grid-template-rows: 8.4cqi minmax(0, 1fr) 4.6cqi 3cqi; row-gap: 0.6cqi; }
+  .c-fw-strategy-house .roof { display: grid; place-content: end center; padding-bottom: 0.9cqi; text-align: center; clip-path: polygon(0 100%, 50% 0, 100% 100%); background: color-mix(in srgb, var(--ds-highlight-line) 42%, var(--ds-highlight-fill)); }
+  .c-fw-strategy-house .roof small { font-size: 1cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-ink); }
+  .c-fw-strategy-house .roof p { margin: 0.4cqi 0 0; max-width: 58cqi; font-size: 1.55cqi; font-weight: 700; line-height: 1.25; color: var(--ds-ink); text-wrap: balance; }
+  .c-fw-strategy-house .pi { min-height: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2cqi; }
+  .c-fw-strategy-house .pc { min-width: 0; padding: 1.3cqi 1.6cqi; border-radius: calc(0.5cqi * var(--ds-radius-scale, 1)); background: var(--ds-info-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-info-line), inset 0 0.45cqi 0 var(--ds-info-line); }
+  .c-fw-strategy-house .pc h2 { margin: 0.3cqi 0 0; font-size: 1.65cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-fw-strategy-house .pc .gl { margin: 0.5cqi 0 0.9cqi; font-size: 1.2cqi; line-height: 1.3; color: var(--ds-text); }
+  .c-fw-strategy-house .pc ul { margin: 0; padding: 0; list-style: none; border-top: var(--ds-hairline) solid var(--ds-info-line); }
+  .c-fw-strategy-house .pc li { padding: 0.55cqi 0; border-bottom: var(--ds-hairline) solid color-mix(in srgb, var(--ds-info-line) 45%, transparent); font-size: 1.2cqi; line-height: 1.3; font-weight: 600; color: var(--ds-ink); }
+  .c-fw-strategy-house .pc li:last-child { border-bottom: 0; }
+  .c-fw-strategy-house .fd { display: grid; grid-template-columns: 10cqi repeat(4, minmax(0, 1fr)); gap: 1.2cqi; align-items: stretch; padding: 0.8cqi 1.2cqi; border-radius: calc(0.5cqi * var(--ds-radius-scale, 1)); background: var(--ds-neutral-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-neutral-line); }
+  .c-fw-strategy-house .fd b { align-self: center; font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-strategy-house .fd span { display: grid; place-items: center; padding: 0 0.8cqi; border-radius: calc(0.4cqi * var(--ds-radius-scale, 1)); background: var(--ds-surface); font-size: 1.2cqi; font-weight: 600; text-align: center; color: var(--ds-ink); }
+  .c-fw-strategy-house .vl { display: flex; align-items: center; justify-content: center; gap: 2.4cqi; border-radius: calc(0.4cqi * var(--ds-radius-scale, 1)); background: var(--ds-action); color: var(--ds-on-action); font-size: 1.2cqi; font-weight: 600; }
+  .c-fw-strategy-house .vl b { font-size: 1cqi; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+</style>
+
+<section class="c-fw-strategy-house" aria-label="Strategy house: vision on the roof, four pillars, a foundation of capabilities and values at the base">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Strategy on a page · Halden Cycles</p>
+      <h1>Four pillars carry the vision, resting on engineering, software, dealers and people</h1>
+    </div>
+    <div class="body">
+      <div class="hs">
+        <div class="roof"><small>Vision 2030</small><p>The first choice for every urban trip in Northern Europe</p></div>
+        <div class="pi">
+          <div class="pc"><h2>Premium e-bikes</h2><p class="gl">Win premium commuters</p><ul><li>Share 14% by 2029, now 11%</li><li>Two new frame families</li></ul></div>
+          <div class="pc"><h2>Service</h2><p class="gl">Earn after the sale</p><ul><li>Plans on 60% of new bikes</li><li>Subscription in 3 countries</li></ul></div>
+          <div class="pc"><h2>Cargo and fleets</h2><p class="gl">A second growth engine</p><ul><li>Cargo range on sale 2027</li><li>Ten city fleet contracts</li></ul></div>
+          <div class="pc"><h2>Lean operations</h2><p class="gl">Four weeks, not nine</p><ul><li>Second motor source signed</li><li>One weekly planning run</li></ul></div>
+        </div>
+        <div class="fd"><b>Capabilities</b><span>Battery and motor design</span><span>Software and data</span><span>Dealer partnerships</span><span>Skilled, stable teams</span></div>
+        <div class="vl"><b>Values</b><span>Craft</span><span>Honest advice</span><span>Reliable service</span><span>Speed</span></div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: strategy plan 2027 to 2029, approved by the board in October 2026. Illustrative targets.</span><span class="page">16</span></div>
+  </div>
+</section>

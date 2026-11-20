@@ -1,0 +1,117 @@
+<!--
+@title PESTLE scan
+@group Frameworks
+@description A PESTLE scan of the six external factors, each with an impact rating and three findings marked as an opportunity or a threat.
+@tags slide, pestle, pest, external analysis, macro environment, political, economic, social, technological, legal, environmental, framework
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-fw-pestle {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-pestle .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-pestle .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-pestle h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-pestle .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-pestle .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-pestle .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-pestle .ps { height: 100%; display: grid; grid-template-rows: minmax(0, 1fr) auto; row-gap: 1.2cqi; }
+  .c-fw-pestle .grid { min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 1.2cqi; }
+  .c-fw-pestle .pc { min-height: 0; padding: 1.2cqi 1.6cqi; border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); background: var(--ds-panel); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-line); }
+  .c-fw-pestle .ph { display: flex; align-items: center; gap: 1cqi; margin-bottom: 0.9cqi; }
+  .c-fw-pestle .let { display: grid; place-items: center; width: 2.8cqi; height: 2.8cqi; border-radius: calc(0.5cqi * var(--ds-radius-scale, 1)); background: var(--ds-surface); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-line); font-size: 1.6cqi; font-weight: 800; color: var(--ds-ink); }
+  .c-fw-pestle h2 { margin: 0; flex: 1; font-size: 1.6cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-fw-pestle .im { display: inline-flex; align-items: flex-end; gap: 0.25cqi; }
+  .c-fw-pestle .im i { display: block; width: 0.55cqi; border-radius: 0.1cqi; background: var(--ds-surface); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-muted); }
+  .c-fw-pestle .im i:nth-child(1) { height: 0.8cqi; }
+  .c-fw-pestle .im i:nth-child(2) { height: 1.3cqi; }
+  .c-fw-pestle .im i:nth-child(3) { height: 1.8cqi; }
+  .c-fw-pestle .im i.on { background: var(--ds-ink); box-shadow: none; }
+  .c-fw-pestle ul { margin: 0; padding: 0; list-style: none; }
+  .c-fw-pestle li { position: relative; padding-left: 1.9cqi; margin-bottom: 0.9cqi; font-size: 1.35cqi; line-height: 1.3; color: var(--ds-ink); }
+  .c-fw-pestle li::before { content: ''; position: absolute; left: 0.1cqi; top: 0.25cqi; width: 0.85cqi; height: 0.85cqi; border-radius: 50%; }
+  .c-fw-pestle li.o::before { background: var(--ds-note-fill); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-note-line); }
+  .c-fw-pestle li.t::before { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-danger-line); }
+  .c-fw-pestle .lg { display: flex; align-items: center; gap: 2.2cqi; font-size: 1.05cqi; color: var(--ds-muted); }
+  .c-fw-pestle .lg span { display: inline-flex; align-items: center; gap: 0.6cqi; }
+  .c-fw-pestle .lg .k { display: inline-block; width: 0.85cqi; height: 0.85cqi; border-radius: 50%; }
+  .c-fw-pestle .lg .k.o { background: var(--ds-note-fill); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-note-line); }
+  .c-fw-pestle .lg .k.t { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-danger-line); }
+</style>
+
+<section class="c-fw-pestle" aria-label="PESTLE scan with six external factors, impact ratings and opportunities and threats">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">External analysis · Halden Cycles</p>
+      <h1>Policy and social trends favour e-bikes, but new battery rules add cost from 2027</h1>
+    </div>
+    <div class="body">
+      <div class="ps">
+        <div class="grid">
+          <div class="pc">
+        <div class="ph"><span class="let">P</span><h2>Political</h2><span class="im" role="img" aria-label="Impact high"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+        <ul><li class="o">Cycle-to-work tax relief to 2030</li><li class="o">EU duties on Asian e-bike imports</li><li class="t">Trade tension lifts component costs</li></ul>
+      </div>
+          <div class="pc">
+        <div class="ph"><span class="let">E</span><h2>Economic</h2><span class="im" role="img" aria-label="Impact medium"><i class="on"></i><i class="on"></i><i class=""></i></span></div>
+        <ul><li class="t">Soft consumer demand in Germany</li><li class="o">Lower rates ease dealer financing</li><li class="o">Falling freight rates cut landed cost</li></ul>
+      </div>
+          <div class="pc">
+        <div class="ph"><span class="let">S</span><h2>Social</h2><span class="im" role="img" aria-label="Impact high"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+        <ul><li class="o">Bike commuting up 12% in cities</li><li class="o">Older riders choose assisted bikes</li><li class="t">Remote work cuts commuting days</li></ul>
+      </div>
+          <div class="pc">
+        <div class="ph"><span class="let">T</span><h2>Technological</h2><span class="im" role="img" aria-label="Impact medium"><i class="on"></i><i class="on"></i><i class=""></i></span></div>
+        <ul><li class="o">Cell energy density up 7% a year</li><li class="t">Connected apps now expected</li><li class="t">Asian mid-drive motors close the gap</li></ul>
+      </div>
+          <div class="pc">
+        <div class="ph"><span class="let">L</span><h2>Legal</h2><span class="im" role="img" aria-label="Impact high"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+        <ul><li class="t">EU battery passport from 2027</li><li class="o">Right-to-repair favours service</li><li class="t">Speed rules for fast pedelecs</li></ul>
+      </div>
+          <div class="pc">
+        <div class="ph"><span class="let">E</span><h2>Environmental</h2><span class="im" role="img" aria-label="Impact low"><i class="on"></i><i class=""></i><i class=""></i></span></div>
+        <ul><li class="o">Fleet decarbonisation targets</li><li class="t">Battery recycling duty adds cost</li><li class="o">Carbon labels reward local assembly</li></ul>
+      </div>
+        </div>
+        <div class="lg"><span><i class="k o"></i>Opportunity</span><span><i class="k t"></i>Threat</span><span><span class="im"><i class="on"></i><i class="on"></i><i></i></span>Impact on Halden: low, medium or high</span></div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: policy trackers, market reports and management interviews, October 2026. Illustrative findings.</span><span class="page">12</span></div>
+  </div>
+</section>

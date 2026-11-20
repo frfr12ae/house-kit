@@ -1,0 +1,108 @@
+<!--
+@title Profitability tree
+@group Frameworks
+@description A driver tree that breaks profit into revenue and costs, then into volume, price and cost lines, with the change on last year for every node and the driver that moved most highlighted.
+@tags slide, profitability tree, driver tree, profit, revenue, cost, volume, price, issue tree, framework, strategy
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-fw-profitability-tree {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-profitability-tree .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-profitability-tree .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-profitability-tree h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-profitability-tree .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-profitability-tree .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-profitability-tree .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-profitability-tree .tw { height: 100%; display: grid; place-items: center; }
+  .c-fw-profitability-tree .fr { position: relative; width: 100%; aspect-ratio: 880 / 320; }
+  .c-fw-profitability-tree .fr svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .c-fw-profitability-tree .fr path { fill: none; stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-fw-profitability-tree .nn { position: absolute; display: flex; flex-direction: column; justify-content: center; padding: 0 1cqi; border-radius: calc(0.45cqi * var(--ds-radius-scale, 1)); background: var(--ds-surface); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-line); }
+  .c-fw-profitability-tree .nn.mid { background: var(--ds-panel); }
+  .c-fw-profitability-tree .nn.root { background: var(--ds-info-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-info-line); }
+  .c-fw-profitability-tree .nn.hot { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-highlight-line); }
+  .c-fw-profitability-tree .nl { font-size: 0.95cqi; line-height: 1.2; color: var(--ds-muted); white-space: nowrap; }
+  .c-fw-profitability-tree .nv { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6cqi; font-variant-numeric: tabular-nums; }
+  .c-fw-profitability-tree .nv b { font-size: 1.3cqi; line-height: 1.2; font-weight: 700; color: var(--ds-ink); }
+  .c-fw-profitability-tree .nv em { font-style: normal; font-size: 1cqi; font-weight: 600; color: var(--ds-text); }
+  .c-fw-profitability-tree .op { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; width: 2cqi; height: 2cqi; border-radius: 50%; background: var(--ds-surface); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-muted); font-size: 1.2cqi; font-weight: 700; line-height: 1; color: var(--ds-ink); }
+</style>
+
+<section class="c-fw-profitability-tree" aria-label="Profitability tree from EBIT down to ten drivers, with change versus last year">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Profit diagnosis · Halden Cycles, FY2026</p>
+      <h1>Profit fell 9% because component costs grew three times faster than revenue</h1>
+    </div>
+    <div class="body">
+      <div class="tw">
+        <div class="fr" role="img" aria-label="Tree: EBIT 24.0 equals revenue 312 minus costs 288. Revenue is bikes sold 124 thousand times average price 2,516. Costs are variable 214 plus fixed 74. Components, up 6%, is the largest mover.">
+          <svg viewBox="0 0 880 320" aria-hidden="true"><path d="M160 144H190V64H240M160 144H190V224H240M400 64H430V32H480M400 64H430V96H480M640 32H670V16H720M640 32H670V48H720M640 96H670V80H720M640 96H670V112H720M400 224H430V176H480M400 224H430V272H480M640 176H670V144H720M640 176H670V176H720M640 176H670V208H720M640 272H670V240H720M640 272H670V272H720M640 272H670V304H720"/></svg>
+          <div class="nn root" style="left:0%;top:40.6%;width:18.2%;height:8.8%"><span class="nl">EBIT</span><span class="nv"><b>24.0</b><em>-9%</em></span></div>
+                <div class="nn mid" style="left:27.3%;top:15.6%;width:18.2%;height:8.8%"><span class="nl">Revenue</span><span class="nv"><b>312</b><em>+2%</em></span></div>
+                <div class="nn mid" style="left:54.5%;top:5.6%;width:18.2%;height:8.8%"><span class="nl">Bikes sold, thousand</span><span class="nv"><b>124</b><em>+1%</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:0.6%;width:18.2%;height:8.8%"><span class="nl">Market size, million</span><span class="nv"><b>2.1</b><em>+3%</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:10.6%;width:18.2%;height:8.8%"><span class="nl">Market share</span><span class="nv"><b>5.9%</b><em>-0.1 pt</em></span></div>
+                <div class="nn mid" style="left:54.5%;top:25.6%;width:18.2%;height:8.8%"><span class="nl">Average price, EUR</span><span class="nv"><b>2,516</b><em>+1%</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:20.6%;width:18.2%;height:8.8%"><span class="nl">List price, EUR</span><span class="nv"><b>2,790</b><em>+2%</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:30.6%;width:18.2%;height:8.8%"><span class="nl">Average discount</span><span class="nv"><b>9.8%</b><em>+0.6 pt</em></span></div>
+                <div class="nn mid" style="left:27.3%;top:65.6%;width:18.2%;height:8.8%"><span class="nl">Costs</span><span class="nv"><b>288</b><em>+3%</em></span></div>
+                <div class="nn mid" style="left:54.5%;top:50.6%;width:18.2%;height:8.8%"><span class="nl">Variable costs</span><span class="nv"><b>214</b><em>+4%</em></span></div>
+                <div class="nn hot" style="left:81.8%;top:40.6%;width:18.2%;height:8.8%"><span class="nl">Components</span><span class="nv"><b>142</b><em>+6%</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:50.6%;width:18.2%;height:8.8%"><span class="nl">Assembly labour</span><span class="nv"><b>38</b><em>+2%</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:60.6%;width:18.2%;height:8.8%"><span class="nl">Freight and warranty</span><span class="nv"><b>34</b><em>+1%</em></span></div>
+                <div class="nn mid" style="left:54.5%;top:80.6%;width:18.2%;height:8.8%"><span class="nl">Fixed costs</span><span class="nv"><b>74</b><em>+1%</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:70.6%;width:18.2%;height:8.8%"><span class="nl">Staff and overhead</span><span class="nv"><b>46</b><em>+2%</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:80.6%;width:18.2%;height:8.8%"><span class="nl">Marketing</span><span class="nv"><b>16</b><em>flat</em></span></div>
+                <div class="nn leaf" style="left:81.8%;top:90.6%;width:18.2%;height:8.8%"><span class="nl">Depreciation</span><span class="nv"><b>12</b><em>flat</em></span></div>
+          <span class="op" style="left:21.6%;top:45%">-</span>
+          <span class="op" style="left:48.9%;top:20%">&times;</span>
+          <span class="op" style="left:76.1%;top:10%">&times;</span>
+          <span class="op" style="left:76.1%;top:30%">-</span>
+          <span class="op" style="left:48.9%;top:70%">+</span>
+          <span class="op" style="left:76.1%;top:55%">+</span>
+          <span class="op" style="left:76.1%;top:85%">+</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: finance, FY2026 against FY2025. EUR m unless stated; small figure is the change on last year. Illustrative figures.</span><span class="page">15</span></div>
+  </div>
+</section>

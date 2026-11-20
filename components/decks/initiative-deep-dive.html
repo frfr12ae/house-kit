@@ -1,0 +1,114 @@
+<!--
+@title Initiative deep dive
+@group Storyline
+@description One initiative on one slide: why it matters, the actions with timing, the KPIs, the main risks, and who owns it.
+@tags slide, initiative, deep dive, actions, kpi, risks, owner, timing
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Original
+-->
+<style>
+  .c-initiative-deep-dive {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-initiative-deep-dive .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-initiative-deep-dive .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-initiative-deep-dive h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-initiative-deep-dive .body { min-height: 0; padding: 2.2cqi 0 1.8cqi; }
+  .c-initiative-deep-dive .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-initiative-deep-dive .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-initiative-deep-dive .body { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 1.2cqi 2.6cqi; }
+  .c-initiative-deep-dive .col { min-height: 0; display: flex; flex-direction: column; gap: 1.1cqi; }
+  .c-initiative-deep-dive h2 { margin: 0 0 0.7cqi; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-text); }
+  .c-initiative-deep-dive .why { margin: 0; padding: 1.3cqi 1.6cqi; background: var(--ds-highlight-fill); box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); font-size: 1.4cqi; line-height: 1.4; color: var(--ds-ink); }
+  .c-initiative-deep-dive .actions { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.5cqi; }
+  .c-initiative-deep-dive .actions li { display: grid; grid-template-columns: 2.2cqi minmax(0, 1fr) auto; align-items: center; gap: 1.2cqi; padding: 0.55cqi 1.2cqi; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); font-size: 1.3cqi; line-height: 1.3; color: var(--ds-ink); }
+  .c-initiative-deep-dive .actions .n { display: grid; place-items: center; width: 2.2cqi; height: 2.2cqi; border-radius: 50%; background: var(--ds-neutral-fill); border: var(--ds-hairline) solid var(--ds-neutral-line); font-size: 1.1cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-initiative-deep-dive .actions .when { font-size: 1.1cqi; font-weight: 600; color: var(--ds-muted); white-space: nowrap; }
+  .c-initiative-deep-dive .kpi { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: baseline; gap: 1.2cqi; padding: 0.6cqi 0; border-bottom: var(--ds-hairline) solid var(--ds-line); font-size: 1.3cqi; color: var(--ds-ink); }
+  .c-initiative-deep-dive .kpi .from { color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-initiative-deep-dive .kpi .arr { color: var(--ds-muted); }
+  .c-initiative-deep-dive .kpi .to { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .c-initiative-deep-dive .risks { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.7cqi; }
+  .c-initiative-deep-dive .risks li { display: flex; align-items: baseline; gap: 1cqi; padding: 0.8cqi 1.2cqi; background: var(--ds-danger-fill); border: var(--ds-hairline) solid var(--ds-danger-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); font-size: 1.25cqi; line-height: 1.3; color: var(--ds-ink); }
+  .c-initiative-deep-dive .risks b { flex: none; font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .c-initiative-deep-dive .meta { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2cqi; padding: 0.9cqi 1.6cqi; background: var(--ds-panel); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-initiative-deep-dive .meta span { display: block; font-size: 1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-initiative-deep-dive .meta b { display: block; margin-top: 0.2cqi; font-size: 1.35cqi; font-weight: 700; color: var(--ds-ink); }
+</style>
+
+
+<section class="c-initiative-deep-dive" aria-label="Initiative deep dive">
+  <div class="inner">
+    <div class="top">
+      <p class="kicker">Initiative 2 of 4: Automate the warehouses</p>
+      <h1>Warehouse robots cut cost per order by a fifth in two years</h1>
+    </div>
+    <div class="body">
+      <div class="col">
+        <div><h2>Why now</h2><p class="why">Order volume grows 18% a year, but labour hours per order have not moved. Temporary staff now do a third of peak-week picks.</p></div>
+        <div><h2>Actions</h2>
+          <ol class="actions">
+            <li><span class="n">1</span><span>Pilot robots at the Aarhus site</span><span class="when">Q1 2027</span></li>
+            <li><span class="n">2</span><span>Connect robots to the warehouse system</span><span class="when">Q2 2027</span></li>
+            <li><span class="n">3</span><span>Roll out to four more sites</span><span class="when">Q3 2027 to Q2 2028</span></li>
+            <li><span class="n">4</span><span>Retrain pickers as robot supervisors</span><span class="when">Ongoing</span></li>
+          </ol></div>
+      </div>
+      <div class="col">
+        <div><h2>KPIs</h2>
+          <div class="kpi"><span>Cost per order</span><span class="from">EUR 2.40</span><span class="arr">to</span><span class="to">EUR 1.90</span></div>
+          <div class="kpi"><span>Orders picked per hour</span><span class="from">68</span><span class="arr">to</span><span class="to">140</span></div>
+          <div class="kpi"><span>Pick accuracy</span><span class="from">99.1%</span><span class="arr">to</span><span class="to">99.8%</span></div>
+        </div>
+        <div><h2>Risks</h2>
+          <ul class="risks">
+            <li><b>High</b><span>Robot supplier delivers late: two sources qualified.</span></li>
+            <li><b>Medium</b><span>Staff resistance: supervisors involved from the pilot.</span></li>
+          </ul></div>
+      </div>
+      <div class="meta">
+        <div><span>Owner</span><b>Maria Lindqvist, COO</b></div>
+        <div><span>Timing</span><b>Jan 2027 to Jun 2028</b></div>
+        <div><span>Budget</span><b>EUR 14m</b></div>
+        <div><span>Payback</span><b>26 months</b></div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Operations business case v3, October 2026. Illustrative figures.</span><span class="page">9</span></div>
+  </div>
+</section>

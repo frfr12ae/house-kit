@@ -1,0 +1,86 @@
+<!--
+@title Numbered divider
+@group Openers and structure
+@description A chapter divider with a very large section number on the left, the section title and promise on the right, and a short list of what the section covers.
+@tags slide, divider, chapter, section, number, structure
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Original
+-->
+<style>
+  .c-numbered-divider {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-numbered-divider .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-numbered-divider .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-numbered-divider h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-numbered-divider .body { min-height: 0; padding: 2.2cqi 0 1.8cqi; }
+  .c-numbered-divider .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-numbered-divider .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-numbered-divider { background: var(--ds-bg); }
+  .c-numbered-divider .inner { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 0 5cqi; padding: 6cqi 7cqi 3.2cqi; }
+  .c-numbered-divider .numcol { position: relative; display: flex; padding-right: 3cqi; align-items: center; border-right: var(--ds-hairline) solid var(--ds-line); }
+  .c-numbered-divider .num { font-family: var(--ds-font-display); font-size: 27cqi; font-weight: var(--ds-weight-display); letter-spacing: -0.06em; line-height: 0.9; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-numbered-divider .txt::before { content: ""; width: 8cqi; height: 0.7cqi; border-radius: 99px; background: var(--ds-highlight-line); }
+  .c-numbered-divider .txt { align-self: center; display: grid; gap: 1.8cqi; }
+  .c-numbered-divider .kicker { font-size: 1.4cqi; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+  .c-numbered-divider h1 { margin: 0; max-width: 40cqi; font-size: 5cqi; line-height: 1.05; letter-spacing: var(--ds-tracking-display); font-weight: var(--ds-weight-display); }
+  .c-numbered-divider .lead { margin: 0; max-width: 38cqi; font-size: 1.8cqi; line-height: 1.45; }
+  .c-numbered-divider ul { margin: 0.8cqi 0 0; padding: 0; list-style: none; display: grid; gap: 0.8cqi; max-width: 38cqi; }
+  .c-numbered-divider li { display: flex; gap: 1.2cqi; padding-top: 0.8cqi; border-top: var(--ds-hairline) solid var(--ds-line); font-size: 1.4cqi; line-height: 1.3; color: var(--ds-ink); }
+  .c-numbered-divider li b { flex: none; width: 3cqi; font-size: 1.2cqi; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-numbered-divider .foot { grid-column: 1 / -1; margin-top: 2cqi; }
+</style>
+
+
+<section class="c-numbered-divider" aria-label="Section 2: Where we compete">
+  <div class="inner">
+    <div class="numcol" aria-hidden="true"><div class="num">02</div></div>
+    <div class="txt">
+      <p class="kicker">Section 2 of 5</p>
+      <h1>Where we compete</h1>
+      <p class="lead">The markets, customers and products that carry the plan, and why we expect to win in each.</p>
+      <ul>
+        <li><b>2.1</b><span>Market outlook</span></li>
+        <li><b>2.2</b><span>Customer segments</span></li>
+        <li><b>2.3</b><span>Our right to win</span></li>
+      </ul>
+    </div>
+    <div class="foot"><span>Harbor Freight Group, strategy review 2027</span><span class="page">8</span></div>
+  </div>
+</section>

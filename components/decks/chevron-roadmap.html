@@ -1,0 +1,95 @@
+<!--
+@title Chevron roadmap
+@group Exhibits
+@description A five-phase roadmap drawn as chevron arrows coloured by status, with three deliverables under each phase and a decision strip for the next gate.
+@tags slide, chevron, roadmap, phases, process arrows, deliverables, plan, exhibit
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-chevron-roadmap {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-chevron-roadmap .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-chevron-roadmap .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-chevron-roadmap h1 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-chevron-roadmap .exhibit { position: relative; min-height: 0; }
+  .c-chevron-roadmap .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-chevron-roadmap .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-chevron-roadmap .exhibit { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; row-gap: 1.6cqi; }
+  .c-chevron-roadmap .chevs, .c-chevron-roadmap .cols { display: flex; }
+  .c-chevron-roadmap .chev { position: relative; flex: 1 1 0; min-width: 0; height: 8.6cqi; padding: 0 3.2cqi 0 3.4cqi; display: flex; flex-direction: column; justify-content: center; gap: 0.2cqi; color: var(--ds-ink); clip-path: polygon(0 0, calc(100% - 2.6cqi) 0, 100% 50%, calc(100% - 2.6cqi) 100%, 0 100%, 2.6cqi 50%); }
+  .c-chevron-roadmap .chev + .chev { margin-left: -1.4cqi; }
+  .c-chevron-roadmap .chev:first-child { padding-left: 2cqi; clip-path: polygon(0 0, calc(100% - 2.6cqi) 0, 100% 50%, calc(100% - 2.6cqi) 100%, 0 100%); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)) 0 0 calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-chevron-roadmap .chev small { font-size: 1cqi; font-weight: 600; opacity: 0.75; }
+  .c-chevron-roadmap .chev b { font-size: 1.9cqi; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; }
+  .c-chevron-roadmap .chev span { font-size: 1.1cqi; font-weight: 600; }
+  .c-chevron-roadmap .chev.done { background: color-mix(in srgb, var(--ds-note-line) 42%, var(--ds-surface)); }
+  .c-chevron-roadmap .chev.now { background: color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface)); }
+  .c-chevron-roadmap .chev.next { background: var(--ds-panel); box-shadow: inset 0 0 0 1px var(--ds-line); }
+  .c-chevron-roadmap .col { flex: 1 1 0; min-width: 0; }
+  .c-chevron-roadmap .col + .col { margin-left: -1.4cqi; }
+  .c-chevron-roadmap .col ul { margin: 0; padding: 0 1.4cqi 0 3.4cqi; list-style: none; display: grid; gap: 0.9cqi; }
+  .c-chevron-roadmap .col:first-child ul { padding-left: 2cqi; }
+  .c-chevron-roadmap .col li { position: relative; padding-left: 1.3cqi; font-size: 1.3cqi; line-height: 1.35; color: var(--ds-text); }
+  .c-chevron-roadmap .col li::before { content: ''; position: absolute; left: 0; top: 0.45em; width: 0.55cqi; height: 0.55cqi; border-radius: 50%; background: var(--ds-ink); }
+  .c-chevron-roadmap .legend { display: flex; gap: 2cqi; font-size: 1cqi; color: var(--ds-muted); }
+  .c-chevron-roadmap .legend span { display: inline-flex; align-items: center; gap: 0.6cqi; }
+  .c-chevron-roadmap .legend i { width: 1.8cqi; height: 1cqi; border-radius: 0.2cqi; }
+  .c-chevron-roadmap .legend .done { background: color-mix(in srgb, var(--ds-note-line) 42%, var(--ds-surface)); }
+  .c-chevron-roadmap .legend .now { background: color-mix(in srgb, var(--ds-highlight-line) 55%, var(--ds-surface)); }
+  .c-chevron-roadmap .legend .next { background: var(--ds-panel); box-shadow: inset 0 0 0 1px var(--ds-line); }
+  .c-chevron-roadmap .decision { display: flex; align-items: baseline; gap: 1.4cqi; padding: 1.1cqi 1.6cqi; background: var(--ds-highlight-fill); border-left: 0.35cqi solid var(--ds-highlight-line); border-radius: 0 calc(0.6cqi * var(--ds-radius-scale, 1)) calc(0.6cqi * var(--ds-radius-scale, 1)) 0; font-size: 1.25cqi; line-height: 1.35; color: var(--ds-ink); }
+  .c-chevron-roadmap .decision b { flex: none; font-weight: 800; }
+</style>
+
+<section class="c-chevron-roadmap" aria-label="Slide 8: five-phase transformation roadmap with deliverables per phase">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Transformation roadmap · 2027 to 2028</p>
+      <h1>The programme runs in five phases: two are complete, the pilot is under way and scaling starts in September</h1>
+    </div>
+    <div class="exhibit">
+<div class="legend"><span><i class="done"></i>Complete</span><span><i class="now"></i>In progress</span><span><i class="next"></i>Planned</span></div><div class="chevs"><div class="chev done"><small>Phase 1</small><b>Diagnose</b><span>Jan to Feb 2027</span></div><div class="chev done"><small>Phase 2</small><b>Design</b><span>Mar to Apr 2027</span></div><div class="chev now"><small>Phase 3</small><b>Pilot</b><span>May to Aug 2027</span></div><div class="chev next"><small>Phase 4</small><b>Scale</b><span>Sep to Dec 2027</span></div><div class="chev next"><small>Phase 5</small><b>Embed</b><span>H1 2028</span></div></div><div class="cols"><div class="col"><ul><li>Baseline of 14 processes</li><li>Cost-to-serve model</li><li>32 leadership interviews</li></ul></div><div class="col"><ul><li>Target operating model</li><li>Business case, three options</li><li>Tooling shortlist</li></ul></div><div class="col"><ul><li>Two pilot sites live</li><li>Weekly KPI pack to steering</li><li>Exit criteria agreed</li></ul></div><div class="col"><ul><li>Waves 1 to 3, nine sites</li><li>Training for 420 staff</li><li>Central support desk</li></ul></div><div class="col"><ul><li>Handover to line teams</li><li>Benefits in the finance close</li><li>Post-implementation review</li></ul></div></div><div class="decision"><b>Next decision, 15 September:</b><span>steering committee approves the pilot exit criteria and releases the €2.4m Phase 4 budget.</span></div>
+    </div>
+    <div class="foot">
+      <span>Source: transformation office roadmap, status at mid-May 2027. Illustrative plan.</span>
+      <span class="page">8</span>
+    </div>
+  </div>
+</section>

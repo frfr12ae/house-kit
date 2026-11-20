@@ -1,0 +1,119 @@
+<!--
+@title Growth-share matrix
+@group Frameworks
+@description A BCG-style portfolio matrix with business units as bubbles sized by revenue, market growth on one axis, relative share on the other and an action for each quadrant.
+@tags slide, bcg, growth share, portfolio, stars, cash cows, question marks, dogs, framework, strategy
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source BCG growth-share matrix | https://en.wikipedia.org/wiki/Growth-share_matrix | inspired-by
+-->
+<style>
+  .c-fw-growth-share-matrix {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-growth-share-matrix .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-growth-share-matrix .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-growth-share-matrix h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-growth-share-matrix .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-growth-share-matrix .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-growth-share-matrix .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-growth-share-matrix .wrap { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 29cqi; gap: 3cqi; }
+  .c-fw-growth-share-matrix .mx { min-height: 0; display: grid; grid-template-columns: 3.6cqi minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 2.6cqi; }
+  .c-fw-growth-share-matrix .yl { display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding-bottom: 0.2cqi; font-size: 1.1cqi; color: var(--ds-muted); }
+  .c-fw-growth-share-matrix .yl span { font-size: 0.95cqi; }
+  .c-fw-growth-share-matrix .yl b { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 700; color: var(--ds-ink); }
+  .c-fw-growth-share-matrix .xl { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 0.3cqi; font-size: 0.95cqi; color: var(--ds-muted); }
+  .c-fw-growth-share-matrix .xl b { font-size: 1.1cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-fw-growth-share-matrix .plot { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: var(--ds-hairline); background: var(--ds-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); overflow: hidden; }
+  .c-fw-growth-share-matrix .q { padding: 0.8cqi 1cqi; font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); background: var(--ds-neutral-fill); }
+  .c-fw-growth-share-matrix .q.star { background: var(--ds-highlight-fill); }
+  .c-fw-growth-share-matrix .q.dog, .c-fw-growth-share-matrix .q.qm { background: var(--ds-panel); }
+  .c-fw-growth-share-matrix .q.dog { text-align: right; }
+  .c-fw-growth-share-matrix .q.qm { text-align: right; }
+  .c-fw-growth-share-matrix .bb { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--ds-info-line) 38%, transparent); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-info-line); font-size: 1.15cqi; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-fw-growth-share-matrix .bb.hl { background: color-mix(in srgb, var(--ds-highlight-line) 55%, transparent); box-shadow: inset 0 0 0 calc(var(--ds-stroke) * 1.5) var(--ds-highlight-line); }
+  .c-fw-growth-share-matrix .bn { position: absolute; transform: translateY(-50%); font-size: 1.15cqi; font-weight: 600; color: var(--ds-ink); white-space: nowrap; }
+  .c-fw-growth-share-matrix .side { display: flex; flex-direction: column; justify-content: space-between; gap: 1.2cqi; padding-left: 2.6cqi; border-left: var(--ds-hairline) solid var(--ds-line); }
+  .c-fw-growth-share-matrix .side h3 { margin: 0 0 0.9cqi; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-growth-share-matrix .key { display: flex; align-items: flex-end; gap: 1.6cqi; font-size: 0.95cqi; color: var(--ds-muted); }
+  .c-fw-growth-share-matrix .key span { display: grid; justify-items: center; gap: 0.3cqi; }
+  .c-fw-growth-share-matrix .key i { display: block; border-radius: 50%; box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-muted); }
+  .c-fw-growth-share-matrix .act { margin: 0 0 0.9cqi; font-size: 1.15cqi; line-height: 1.35; color: var(--ds-ink); }
+  .c-fw-growth-share-matrix .act b { display: block; font-size: 1cqi; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ds-muted); }
+</style>
+
+<section class="c-fw-growth-share-matrix" aria-label="Growth-share matrix of six Halden business units, bubble area is revenue">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Portfolio review · Halden Group</p>
+      <h1>E-bikes are the star to fund, components and service pay for it, and cargo bikes need a decision</h1>
+    </div>
+    <div class="body">
+      <div class="wrap">
+        <div class="mx">
+          <div class="yl"><span>High</span><b>Market growth</b><span>Low</span></div>
+          <div class="plot" role="img" aria-label="Bubble chart: E-bikes revenue EUR 130m, growth 14%, relative share 1.6x; Components revenue EUR 62m, growth 3%, relative share 2.2x; Service revenue EUR 40m, growth 6%, relative share 1.2x; Cargo bikes revenue EUR 28m, growth 16%, relative share 0.5x; Rental revenue EUR 14m, growth 11%, relative share 0.4x; Accessories revenue EUR 38m, growth 3%, relative share 0.8x">
+            <div class="q star">Stars</div><div class="q qm">Question marks</div>
+            <div class="q cow">Cash cows</div><div class="q dog">Dogs</div>
+            <span class="bb hl" style="left:29.8%;top:30%;width:10.8cqi;height:10.8cqi">130</span><span class="bn" style="top:30%;left:calc(29.8% + 6cqi);">E-bikes</span>
+            <span class="bb " style="left:16.1%;top:85%;width:7.5cqi;height:7.5cqi">62</span><span class="bn" style="top:85%;left:calc(16.1% + 4.4cqi);">Components</span>
+            <span class="bb " style="left:42.2%;top:70%;width:6cqi;height:6cqi">40</span><span class="bn" style="top:70%;left:calc(42.2% + 3.6cqi);">Service</span>
+            <span class="bb " style="left:79.8%;top:20%;width:5cqi;height:5cqi">28</span><span class="bn" style="top:20%;right:calc(20.2% + 3.1cqi);text-align:right;">Cargo bikes</span>
+            <span class="bb " style="left:89.4%;top:45%;width:3.6cqi;height:3.6cqi">14</span><span class="bn" style="top:45%;right:calc(10.6% + 2.4cqi);text-align:right;">Rental</span>
+            <span class="bb " style="left:59.6%;top:85%;width:5.9cqi;height:5.9cqi">38</span><span class="bn" style="top:85%;left:calc(59.6% + 3.6cqi);">Accessories</span>
+          </div>
+          <div></div>
+          <div class="xl"><span>High</span><b>Relative market share</b><span>Low</span></div>
+        </div>
+        <div class="side">
+          <div>
+            <h3>Bubble area is revenue, EUR m</h3>
+            <div class="key"><span><i style="width:3.7cqi;height:3.7cqi"></i>15</span><span><i style="width:7.4cqi;height:7.4cqi"></i>60</span></div>
+          </div>
+          <div>
+            <p class="act"><b>Fund</b>E-bikes: hold share in a market growing 14% a year.</p>
+            <p class="act"><b>Harvest</b>Components and service: EUR 102m of revenue to reinvest.</p>
+            <p class="act"><b>Decide</b>Back cargo bikes, give rental twelve months to prove itself.</p>
+            <p class="act"><b>Partner</b>Accessories: sell through dealers, no new spend.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: finance, FY2026 revenue; Nordic market study 2026. Relative share is share divided by the largest rival. Illustrative figures.</span><span class="page">6</span></div>
+  </div>
+</section>

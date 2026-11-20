@@ -1,0 +1,92 @@
+<!--
+@title Initiative divider
+@group Openers and structure
+@description A divider that introduces one strategic initiative with its goal, owner, timing and budget before the detail slides.
+@tags slide, divider, initiative, owner, goal, strategy, programme
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Original
+-->
+<style>
+  .c-initiative-divider {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-initiative-divider .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-initiative-divider .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-initiative-divider h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-initiative-divider .body { min-height: 0; padding: 2.2cqi 0 1.8cqi; }
+  .c-initiative-divider .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-initiative-divider .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-initiative-divider .inner { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 0 5cqi; padding: 6cqi 7cqi 3.2cqi; }
+  .c-initiative-divider .main { align-self: center; display: grid; gap: 2.2cqi; }
+  .c-initiative-divider .tag { justify-self: start; padding: 0.5cqi 1.4cqi; background: var(--ds-highlight-fill); border: var(--ds-hairline) solid var(--ds-highlight-line); border-radius: var(--ds-radius-pill); font-size: 1.2cqi; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-ink); }
+  .c-initiative-divider h1 { margin: 0; max-width: 46cqi; font-size: 5cqi; line-height: 1.06; letter-spacing: var(--ds-tracking-display); font-weight: var(--ds-weight-display); }
+  .c-initiative-divider .lead { margin: 0; max-width: 42cqi; font-size: 1.8cqi; line-height: 1.45; }
+  .c-initiative-divider .side { align-self: center; display: grid; gap: 1.6cqi; padding: 2.4cqi; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: calc(1cqi * var(--ds-radius-scale, 1)); }
+  .c-initiative-divider .side h2 { margin: 0 0 0.8cqi; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-text); }
+  .c-initiative-divider .goal { margin: 0; font-size: 1.75cqi; font-weight: 600; line-height: 1.35; color: var(--ds-ink); }
+  .c-initiative-divider .owner { display: flex; align-items: center; gap: 1.4cqi; padding-top: 1.6cqi; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-initiative-divider .av { flex: none; display: grid; place-items: center; width: 5cqi; height: 5cqi; border-radius: 50%; background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); font-size: 1.6cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-initiative-divider .owner div b { display: block; font-size: 1.6cqi; color: var(--ds-ink); }
+  .c-initiative-divider .owner div span { display: block; font-size: 1.2cqi; color: var(--ds-muted); }
+  .c-initiative-divider .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4cqi; margin: 0; }
+  .c-initiative-divider .facts div { padding: 1cqi 1.3cqi; background: var(--ds-panel); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-initiative-divider .facts dt { font-size: 1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-initiative-divider .facts dd { margin: 0.2cqi 0 0; font-size: 1.5cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-initiative-divider .foot { grid-column: 1 / -1; margin-top: 2cqi; }
+</style>
+
+
+<section class="c-initiative-divider" aria-label="Initiative 2: Automate the warehouses">
+  <div class="inner">
+    <div class="main">
+      <span class="tag">Initiative 2 of 4</span>
+      <h1>Automate the warehouses</h1>
+      <p class="lead">Move routine picking to robots in our five largest sites, so people can focus on the work that needs judgement.</p>
+    </div>
+    <div class="side">
+      <div><h2>Goal</h2><p class="goal">Cut cost per order by 20% by mid 2028, without losing accuracy.</p></div>
+      <div class="owner"><span class="av">ML</span><div><b>Maria Lindqvist</b><span>Chief Operating Officer, initiative owner</span></div></div>
+      <dl class="facts">
+        <div><dt>Timing</dt><dd>2027 to 2028</dd></div>
+        <div><dt>Budget</dt><dd>EUR 14m</dd></div>
+      </dl>
+    </div>
+    <div class="foot"><span>Harbor Freight Group, strategy review 2027</span><span class="page">8</span></div>
+  </div>
+</section>

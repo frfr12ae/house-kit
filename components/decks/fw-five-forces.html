@@ -1,0 +1,104 @@
+<!--
+@title Five forces
+@group Frameworks
+@description Porter's five forces around a central rivalry box, each force rated high, medium or low, with a side panel for what it means.
+@tags slide, porter, five forces, industry analysis, competition, strategy, framework
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Competitive forces framework by Michael Porter | https://hbr.org/1979/03/how-competitive-forces-shape-strategy | inspired-by
+-->
+<style>
+  .c-fw-five-forces {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-five-forces .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-five-forces .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-five-forces h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-five-forces .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-five-forces .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-five-forces .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-five-forces .wrap { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 29cqi; gap: 3cqi; }
+  .c-fw-five-forces .map { min-height: 0; display: grid; grid-template-columns: 1fr 2.6cqi 1.2fr 2.6cqi 1fr; grid-template-rows: 1fr 2.4cqi 1fr 2.4cqi 1fr; }
+  .c-fw-five-forces .f { min-width: 0; min-height: 0; padding: 0.9cqi 1.2cqi; border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); background: var(--ds-panel); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-line); display: flex; flex-direction: column; justify-content: center; }
+  .c-fw-five-forces .f.mid { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-fw-five-forces .f h2 { margin: 0; font-size: 1.3cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-fw-five-forces .f p { margin: 0.5cqi 0 0; font-size: 1.05cqi; line-height: 1.35; color: var(--ds-text); }
+  .c-fw-five-forces .lv { align-self: flex-start; margin-top: 0.5cqi; padding: 0.15cqi 0.7cqi; border-radius: var(--ds-radius-pill); font-size: 0.95cqi; font-weight: 700; line-height: 1.3; color: var(--ds-ink); }
+  .c-fw-five-forces .lv.high { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-danger-line); }
+  .c-fw-five-forces .lv.medium { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-fw-five-forces .lv.low { background: var(--ds-note-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-note-line); }
+  .c-fw-five-forces .ar { display: grid; place-items: center; min-height: 0; min-width: 0; }
+  .c-fw-five-forces .ar svg { display: block; fill: none; stroke: var(--ds-muted); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .c-fw-five-forces .ar.v svg { height: 100%; width: auto; }
+  .c-fw-five-forces .ar.h svg { width: 100%; height: auto; }
+  .c-fw-five-forces .side { display: flex; flex-direction: column; justify-content: center; gap: 1.6cqi; padding-left: 2.6cqi; border-left: var(--ds-hairline) solid var(--ds-line); }
+  .c-fw-five-forces .side h3 { margin: 0; font-size: 1.1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-five-forces .side .it { margin: 0; font-size: 1.35cqi; line-height: 1.4; color: var(--ds-ink); }
+  .c-fw-five-forces .side .it b { display: block; margin-bottom: 0.2cqi; font-size: 1.45cqi; }
+</style>
+
+<section class="c-fw-five-forces" aria-label="Porter's five forces for premium e-bikes with a rating for each force">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Industry analysis · Premium e-bikes, Northern Europe</p>
+      <h1>Supplier power and rivalry squeeze margins, while substitutes are not a threat</h1>
+    </div>
+    <div class="body">
+      <div class="wrap">
+        <div class="map" role="group" aria-label="Five forces map">
+          <div class="f " style="grid-area:1 / 3 / 2 / 4"><h2>Threat of new entrants</h2><span class="lv medium">Medium pressure</span><p>Direct-to-consumer start-ups launch for about EUR 5m.</p></div>
+          <div class="ar v" style="grid-area:2 / 3 / 3 / 4"><svg viewBox="0 0 10 20" aria-hidden="true"><path d="M5 0V16M1.5 12.5L5 17L8.5 12.5"/></svg></div>
+          <div class="f " style="grid-area:3 / 1 / 4 / 2"><h2>Supplier power</h2><span class="lv high">High pressure</span><p>Two firms make 80% of drive motors.</p></div>
+          <div class="ar h" style="grid-area:3 / 2 / 4 / 3"><svg viewBox="0 0 20 10" aria-hidden="true"><path d="M0 5H16M12.5 1.5L17 5L12.5 8.5"/></svg></div>
+          <div class="f mid" style="grid-area:3 / 3 / 4 / 4"><h2>Industry rivalry</h2><span class="lv high">High pressure</span><p>Rivals cut list prices by 6% last year.</p></div>
+          <div class="ar h" style="grid-area:3 / 4 / 4 / 5"><svg viewBox="0 0 20 10" aria-hidden="true" style="transform:rotate(180deg)"><path d="M0 5H16M12.5 1.5L17 5L12.5 8.5"/></svg></div>
+          <div class="f " style="grid-area:3 / 5 / 4 / 6"><h2>Buyer power</h2><span class="lv medium">Medium pressure</span><p>Leasing platforms buy 30% of volume.</p></div>
+          <div class="ar v" style="grid-area:4 / 3 / 5 / 4"><svg viewBox="0 0 10 20" aria-hidden="true" style="transform:rotate(180deg)"><path d="M5 0V16M1.5 12.5L5 17L8.5 12.5"/></svg></div>
+          <div class="f " style="grid-area:5 / 3 / 6 / 4"><h2>Threat of substitutes</h2><span class="lv low">Low pressure</span><p>Cars and transit cost more per trip.</p></div>
+        </div>
+        <div class="side">
+          <h3>What it means for Halden</h3>
+          <p class="it"><b>Secure a second motor source</b>before the 2027 contracts renew.</p>
+          <p class="it"><b>Compete on service, not price</b>so list-price cuts do not set the margin.</p>
+          <p class="it"><b>Leave substitutes alone</b>because no action is needed there.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: industry interviews, supplier contracts, retail price tracking, Q3 2026. Illustrative figures.</span><span class="page">5</span></div>
+  </div>
+</section>

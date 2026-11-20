@@ -1,0 +1,95 @@
+<!--
+@title Targets and RAG status table
+@group Exhibits
+@description A KPI table with owner, target, actual, gap, a progress bar against target and a red, amber or green status pill with its label spelled out.
+@tags slide, kpi, targets, rag, status, scorecard, table, performance review, exhibit
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-targets-status {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-targets-status .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-targets-status .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-targets-status h1 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-targets-status .exhibit { position: relative; min-height: 0; }
+  .c-targets-status .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-targets-status .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-targets-status .exhibit { display: grid; grid-template-rows: auto repeat(7, minmax(0, 1fr)); }
+  .c-targets-status .row { display: grid; grid-template-columns: minmax(0, 24fr) minmax(0, 12fr) minmax(0, 8fr) minmax(0, 8fr) minmax(0, 10fr) minmax(0, 20fr) minmax(0, 6fr) minmax(0, 13fr); column-gap: 1.2cqi; align-items: center; min-height: 0; border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-targets-status .row.hd { padding-bottom: 0.5cqi; border-bottom: var(--ds-stroke) solid var(--ds-muted); font-size: 1.05cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-targets-status .row.hd span:nth-child(3), .c-targets-status .row.hd span:nth-child(4), .c-targets-status .row.hd span:nth-child(5), .c-targets-status .row.hd span:nth-child(7) { text-align: right; }
+  .c-targets-status p { margin: 0; }
+  .c-targets-status .kpi { display: flex; flex-direction: column; gap: 0.1cqi; }
+  .c-targets-status .kpi b { font-size: 1.35cqi; color: var(--ds-ink); }
+  .c-targets-status .kpi span { font-size: 0.95cqi; color: var(--ds-muted); }
+  .c-targets-status .own { font-size: 1.15cqi; color: var(--ds-text); }
+  .c-targets-status .num { text-align: right; font-size: 1.35cqi; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-targets-status .num.act { font-weight: 800; color: var(--ds-ink); }
+  .c-targets-status .num.gp { font-size: 1.15cqi; color: var(--ds-muted); }
+  .c-targets-status .bar { position: relative; height: 0.9cqi; border-radius: var(--ds-radius-pill); background: var(--ds-panel); }
+  .c-targets-status .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: var(--ds-radius-pill); }
+  .c-targets-status .bar em { position: absolute; left: 80%; top: -0.35cqi; bottom: -0.35cqi; width: 0; border-left: 0.16cqi solid var(--ds-ink); }
+  .c-targets-status .pct { text-align: right; font-size: 1.15cqi; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-targets-status .st { justify-self: start; }
+  .c-targets-status .pill { display: inline-flex; align-items: center; gap: 0.6cqi; padding: 0.35cqi 1cqi; border-radius: var(--ds-radius-pill); font-size: 1.1cqi; font-weight: 700; color: var(--ds-ink); white-space: nowrap; }
+  .c-targets-status .pill::before { content: ''; width: 0.8cqi; height: 0.8cqi; border-radius: 50%; }
+  .c-targets-status .pill.on { background: var(--ds-note-fill); box-shadow: inset 0 0 0 1px var(--ds-note-line); }
+  .c-targets-status .pill.on::before { background: var(--ds-note-line); }
+  .c-targets-status .pill.risk { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); }
+  .c-targets-status .pill.risk::before { background: var(--ds-highlight-line); }
+  .c-targets-status .pill.off { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 1px var(--ds-danger-line); }
+  .c-targets-status .pill.off::before { background: var(--ds-danger-line); }
+</style>
+
+<section class="c-targets-status" aria-label="Slide 6: seven company targets with actuals and red amber green status">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Performance review · Year-to-date against target</p>
+      <h1>Three of seven targets are on track and two are at risk; NPS and customer churn are off track and need an owner decision</h1>
+    </div>
+    <div class="exhibit">
+<div class="row hd"><span>KPI</span><span>Owner</span><span>Target</span><span>Actual</span><span>Gap</span><span>Progress to target</span><span>Attain.</span><span>Status</span></div><div class="row"><p class="kpi"><b>Revenue</b><span>€m</span></p><p class="own">CFO</p><p class="num">188</p><p class="num act">196</p><p class="num gp">+8</p><div class="bar" role="img" aria-label="104 percent of target"><i style="width:83.4%;background:var(--ds-note-line)"></i><em></em></div><p class="pct">104%</p><p class="st"><span class="pill on">On track</span></p></div><div class="row"><p class="kpi"><b>Gross margin</b><span>%</span></p><p class="own">CFO</p><p class="num">41.0</p><p class="num act">41.8</p><p class="num gp">+0.8 pts</p><div class="bar" role="img" aria-label="102 percent of target"><i style="width:81.6%;background:var(--ds-note-line)"></i><em></em></div><p class="pct">102%</p><p class="st"><span class="pill on">On track</span></p></div><div class="row"><p class="kpi"><b>Pipeline coverage</b><span>x quota</span></p><p class="own">Head of Sales</p><p class="num">3.0</p><p class="num act">3.4</p><p class="num gp">+0.4x</p><div class="bar" role="img" aria-label="113 percent of target"><i style="width:90.7%;background:var(--ds-note-line)"></i><em></em></div><p class="pct">113%</p><p class="st"><span class="pill on">On track</span></p></div><div class="row"><p class="kpi"><b>On-time delivery</b><span>%</span></p><p class="own">COO</p><p class="num">95.0</p><p class="num act">94.2</p><p class="num gp">-0.8 pts</p><div class="bar" role="img" aria-label="99 percent of target"><i style="width:79.3%;background:var(--ds-highlight-line)"></i><em></em></div><p class="pct">99%</p><p class="st"><span class="pill risk">At risk</span></p></div><div class="row"><p class="kpi"><b>Cost per order</b><span>€, lower is better</span></p><p class="own">COO</p><p class="num">8.40</p><p class="num act">8.55</p><p class="num gp">+0.15</p><div class="bar" role="img" aria-label="98 percent of target"><i style="width:78.6%;background:var(--ds-highlight-line)"></i><em></em></div><p class="pct">98%</p><p class="st"><span class="pill risk">At risk</span></p></div><div class="row"><p class="kpi"><b>Net promoter score</b><span>points</span></p><p class="own">CCO</p><p class="num">50</p><p class="num act">46</p><p class="num gp">-4</p><div class="bar" role="img" aria-label="92 percent of target"><i style="width:73.6%;background:var(--ds-danger-line)"></i><em></em></div><p class="pct">92%</p><p class="st"><span class="pill off">Off track</span></p></div><div class="row"><p class="kpi"><b>Customer churn</b><span>%, lower is better</span></p><p class="own">CCO</p><p class="num">6.0</p><p class="num act">7.1</p><p class="num gp">+1.1 pts</p><div class="bar" role="img" aria-label="85 percent of target"><i style="width:67.6%;background:var(--ds-danger-line)"></i><em></em></div><p class="pct">85%</p><p class="st"><span class="pill off">Off track</span></p></div>
+    </div>
+    <div class="foot">
+      <span>Source: finance and operations scorecards, year to date October 2026. Attainment is actual over target (target over actual where lower is better); the bar marker is 100%. At risk is within 5% of target. Illustrative figures.</span>
+      <span class="page">6</span>
+    </div>
+  </div>
+</section>

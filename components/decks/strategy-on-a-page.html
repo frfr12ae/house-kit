@@ -1,0 +1,98 @@
+<!--
+@title Strategy on a page
+@group Storyline
+@description The whole strategy on one slide: a vision statement, four priorities, the enablers that make them possible and the KPIs that show progress.
+@tags slide, strategy, vision, priorities, enablers, kpi, one-pager
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Original
+-->
+<style>
+  .c-strategy-on-a-page {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-strategy-on-a-page .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-strategy-on-a-page .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-strategy-on-a-page h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-strategy-on-a-page .body { min-height: 0; padding: 2.2cqi 0 1.8cqi; }
+  .c-strategy-on-a-page .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-strategy-on-a-page .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-strategy-on-a-page .body { display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 1.3cqi; }
+  .c-strategy-on-a-page .vision { display: flex; align-items: center; gap: 2cqi; padding: 1.4cqi 2cqi; background: var(--ds-highlight-fill); box-shadow: inset 0.35cqi 0 0 var(--ds-highlight-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-strategy-on-a-page .label { flex: none; font-size: 1.05cqi; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-text); }
+  .c-strategy-on-a-page .vision p { margin: 0; font-size: 1.7cqi; font-weight: 600; line-height: 1.3; color: var(--ds-ink); }
+  .c-strategy-on-a-page .prios { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.4cqi; margin: 0; padding: 0; list-style: none; }
+  .c-strategy-on-a-page .prio { display: flex; flex-direction: column; gap: 0.6cqi; padding: 1.2cqi 1.4cqi; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-strategy-on-a-page .prio .n { font-size: 1.1cqi; font-weight: 700; color: var(--ds-muted); font-variant-numeric: tabular-nums; }
+  .c-strategy-on-a-page .prio h2 { margin: 0; font-size: 1.75cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-strategy-on-a-page .prio ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.6cqi; }
+  .c-strategy-on-a-page .prio li { position: relative; padding-left: 1.2cqi; font-size: 1.2cqi; line-height: 1.35; }
+  .c-strategy-on-a-page .prio li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 0.5cqi; height: 0.5cqi; border-radius: 50%; background: var(--ds-neutral-line); }
+  .c-strategy-on-a-page .row { display: flex; align-items: center; gap: 1.4cqi; }
+  .c-strategy-on-a-page .row .label { width: 7.5cqi; }
+  .c-strategy-on-a-page .chips { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.4cqi; margin: 0; padding: 0; list-style: none; }
+  .c-strategy-on-a-page .chips li { padding: 0.9cqi 1.2cqi; background: var(--ds-neutral-fill); border: var(--ds-hairline) solid var(--ds-neutral-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); font-size: 1.2cqi; font-weight: 600; line-height: 1.25; color: var(--ds-ink); text-align: center; }
+  .c-strategy-on-a-page .kpis { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.4cqi; margin: 0; padding: 0; list-style: none; }
+  .c-strategy-on-a-page .kpis li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.8cqi; padding: 0.9cqi 1.2cqi; background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-strategy-on-a-page .kpis b { white-space: nowrap; font-size: 1.7cqi; font-weight: 700; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-strategy-on-a-page .kpis span { font-size: 1.1cqi; line-height: 1.25; color: var(--ds-ink); }
+</style>
+
+
+<section class="c-strategy-on-a-page" aria-label="Strategy on a page">
+  <div class="inner">
+    <div class="top">
+      <p class="kicker">Strategy 2027 to 2030</p>
+      <h1>Harbor Freight will double its contract logistics business by 2030</h1>
+    </div>
+    <div class="body">
+      <div class="vision"><span class="label">Vision</span><p>The most reliable partner for Nordic retailers, from the factory gate to the front door.</p></div>
+      <ol class="prios">
+        <li class="prio"><span class="n">Priority 1</span><h2>Win retail contracts</h2><ul><li>Three anchor clients per region</li><li>Peak capacity on demand</li></ul></li>
+        <li class="prio"><span class="n">Priority 2</span><h2>Automate warehouses</h2><ul><li>Robots in the five largest sites</li><li>One shared stock system</li></ul></li>
+        <li class="prio"><span class="n">Priority 3</span><h2>Green the fleet</h2><ul><li>60% electric city vans</li><li>CO2 report for every client</li></ul></li>
+        <li class="prio"><span class="n">Priority 4</span><h2>Grow in Poland</h2><ul><li>Hub near Gdansk</li><li>Local carrier partner</li></ul></li>
+      </ol>
+      <div class="row"><span class="label">Enablers</span>
+        <ul class="chips"><li>Warehouse system upgrade</li><li>Drivers academy</li><li>Data platform</li><li>Partner network</li></ul></div>
+      <div class="row"><span class="label">KPIs</span>
+        <ul class="kpis"><li><b>EUR 1.2bn</b><span>revenue by 2030</span></li><li><b>98.5%</b><span>on-time delivery</span></li><li><b>-35%</b><span>CO2 per parcel</span></li><li><b>9%</b><span>EBIT margin</span></li></ul></div>
+    </div>
+    <div class="foot"><span>Source: Group strategy workshop, November 2026. Illustrative figures.</span><span class="page">4</span></div>
+  </div>
+</section>

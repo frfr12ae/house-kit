@@ -1,0 +1,104 @@
+<!--
+@title McKinsey 7S
+@group Frameworks
+@description The McKinsey 7S model as a connected ring of three hard and three soft elements around shared values, with a table of where each stands today, the next move and the size of the gap.
+@tags slide, mckinsey, 7s, organisation, alignment, strategy, structure, systems, skills, style, staff, framework
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source McKinsey 7S framework | https://en.wikipedia.org/wiki/McKinsey_7S_Framework | inspired-by
+-->
+<style>
+  .c-fw-seven-s {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-seven-s .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-seven-s .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-seven-s h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-seven-s .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-seven-s .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-seven-s .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-seven-s .wrap { height: 100%; display: grid; grid-template-columns: 31cqi minmax(0, 1fr); gap: 3.2cqi; align-items: center; }
+  .c-fw-seven-s .dg { width: 100%; height: auto; max-height: 100%; display: block; }
+  .c-fw-seven-s .dg .rg { stroke: var(--ds-line); stroke-width: 1.5; }
+  .c-fw-seven-s .dg .nd.hard { fill: var(--ds-info-fill); stroke: var(--ds-info-line); stroke-width: 1.2; }
+  .c-fw-seven-s .dg .nd.soft { fill: var(--ds-neutral-fill); stroke: var(--ds-neutral-line); stroke-width: 1.2; }
+  .c-fw-seven-s .dg .core { fill: var(--ds-highlight-fill); stroke: var(--ds-highlight-line); stroke-width: 1.5; }
+  .c-fw-seven-s .dg text { font-family: var(--ds-font-sans); fill: var(--ds-ink); text-anchor: middle; font-weight: 700; }
+  .c-fw-seven-s .dg .nt { font-size: 15px; }
+  .c-fw-seven-s .dg .ct { font-size: 14px; }
+  .c-fw-seven-s .dg .lg { font-size: 11px; font-weight: 600; fill: var(--ds-muted); text-anchor: start; }
+  .c-fw-seven-s .tb { width: 100%; border-collapse: collapse; font-size: 1.15cqi; color: var(--ds-ink); }
+  .c-fw-seven-s .tb th { padding: 0 1cqi 0.6cqi 0; text-align: left; font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-seven-s .tb td { padding: 0.62cqi 1cqi 0.62cqi 0; vertical-align: middle; line-height: 1.3; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-fw-seven-s .tb td:first-child { width: 12.5cqi; font-weight: 700; white-space: nowrap; }
+  .c-fw-seven-s .tb td:last-child, .c-fw-seven-s .tb th:last-child { width: 7cqi; padding-right: 0; }
+  .c-fw-seven-s .tb i { display: inline-block; width: 1cqi; height: 1cqi; margin-right: 0.8cqi; border-radius: 50%; vertical-align: -0.05cqi; }
+  .c-fw-seven-s .tb i.hard { background: var(--ds-info-fill); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-info-line); }
+  .c-fw-seven-s .tb i.soft { background: var(--ds-neutral-fill); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-neutral-line); }
+  .c-fw-seven-s .tb i.ctr { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-highlight-line); }
+  .c-fw-seven-s .gp { display: inline-block; padding: 0.15cqi 0.8cqi; border-radius: var(--ds-radius-pill); font-size: 1cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-fw-seven-s .gp.high { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-danger-line); }
+  .c-fw-seven-s .gp.medium { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-fw-seven-s .gp.low { background: var(--ds-note-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-note-line); }
+</style>
+
+<section class="c-fw-seven-s" aria-label="McKinsey 7S assessment of Halden Cycles with gap ratings">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Organisation review · Halden Cycles</p>
+      <h1>Systems and structure are the biggest gaps between today's organisation and the new strategy</h1>
+    </div>
+    <div class="body">
+      <div class="wrap">
+        <svg class="dg" viewBox="0 0 360 330" role="img" aria-label="Seven S ring: shared values at the centre, strategy, structure and systems as hard elements, skills, style and staff as soft elements">
+          <line class="rg" x1="180" y1="47" x2="290.9" y2="106"/><line class="rg" x1="290.9" y1="106" x2="290.9" y2="224"/><line class="rg" x1="290.9" y1="224" x2="180" y2="283"/><line class="rg" x1="180" y1="283" x2="69.1" y2="224"/><line class="rg" x1="69.1" y1="224" x2="69.1" y2="106"/><line class="rg" x1="69.1" y1="106" x2="180" y2="47"/><line class="rg" x1="180" y1="165" x2="180" y2="47"/><line class="rg" x1="180" y1="165" x2="290.9" y2="106"/><line class="rg" x1="180" y1="165" x2="290.9" y2="224"/><line class="rg" x1="180" y1="165" x2="180" y2="283"/><line class="rg" x1="180" y1="165" x2="69.1" y2="224"/><line class="rg" x1="180" y1="165" x2="69.1" y2="106"/>
+          <circle class="core" cx="180" cy="165" r="44"/>
+          <text class="ct" x="180" y="163">Shared</text><text class="ct" x="180" y="180">values</text>
+          <rect class="nd hard" x="134" y="30" width="92" height="34" rx="8"/><text class="nt" x="180" y="52">Strategy</text><rect class="nd hard" x="244.9" y="89" width="92" height="34" rx="8"/><text class="nt" x="290.9" y="111">Structure</text><rect class="nd hard" x="244.9" y="207" width="92" height="34" rx="8"/><text class="nt" x="290.9" y="229">Systems</text><rect class="nd soft" x="134" y="266" width="92" height="34" rx="8"/><text class="nt" x="180" y="288">Skills</text><rect class="nd soft" x="23.1" y="207" width="92" height="34" rx="8"/><text class="nt" x="69.1" y="229">Style</text><rect class="nd soft" x="23.1" y="89" width="92" height="34" rx="8"/><text class="nt" x="69.1" y="111">Staff</text>
+          <rect class="nd hard" x="4" y="304" width="12" height="12" rx="3"/><text class="lg" x="22" y="314">Hard</text>
+          <rect class="nd soft" x="64" y="304" width="12" height="12" rx="3"/><text class="lg" x="82" y="314">Soft</text>
+        </svg>
+        <table class="tb">
+          <thead><tr><th>Element</th><th>Today</th><th>Next move</th><th>Gap</th></tr></thead>
+          <tbody><tr><td><i class="ctr"></i>Shared values</td><td>Craft, quality and Nordic design</td><td>Add customer service as a stated value</td><td><span class="gp low">Low</span></td></tr><tr><td><i class="hard"></i>Strategy</td><td>Premium e-bikes sold through dealers</td><td>Add cargo bikes and subscription</td><td><span class="gp low">Low</span></td></tr><tr><td><i class="hard"></i>Structure</td><td>Functional silos: design, build, sell</td><td>Three product teams with own P&amp;L</td><td><span class="gp high">High</span></td></tr><tr><td><i class="hard"></i>Systems</td><td>Order planning by hand in spreadsheets</td><td>One weekly planning run in the ERP</td><td><span class="gp high">High</span></td></tr><tr><td><i class="soft"></i>Skills</td><td>Strong mechanical and battery engineering</td><td>Build software and service skills</td><td><span class="gp medium">Medium</span></td></tr><tr><td><i class="soft"></i>Style</td><td>Founder-led, decisions escalate to the CEO</td><td>Decisions pushed to team leads</td><td><span class="gp medium">Medium</span></td></tr><tr><td><i class="soft"></i>Staff</td><td>420 people, 60 of them in R&amp;D</td><td>Hire 25 in software and service</td><td><span class="gp low">Low</span></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="foot"><span>Source: 24 management interviews and an employee pulse survey, September 2026. Illustrative findings.</span><span class="page">9</span></div>
+  </div>
+</section>

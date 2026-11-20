@@ -1,0 +1,86 @@
+<!--
+@title Stat bubbles
+@group Exhibits
+@description Five key figures drawn as circles whose area is proportional to the value, with the largest highlighted and each labelled with its share of the total.
+@tags slide, bubbles, circles, key figures, proportional, contribution, big numbers, exhibit
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-stat-bubbles {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-stat-bubbles .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-stat-bubbles .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-stat-bubbles h1 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-stat-bubbles .exhibit { position: relative; min-height: 0; }
+  .c-stat-bubbles .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-stat-bubbles .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-stat-bubbles svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .c-stat-bubbles svg text { font-family: var(--ds-font-sans); fill: var(--ds-text); font-variant-numeric: tabular-nums; }
+  .c-stat-bubbles .grid { stroke: var(--ds-line); stroke-width: 1; }
+  .c-stat-bubbles .axis { stroke: var(--ds-muted); stroke-width: 1.2; }
+  .c-stat-bubbles .tick { fill: var(--ds-muted); font-size: 12px; }
+  .c-stat-bubbles .xs { font-size: 11px; }
+  .c-stat-bubbles .sm { font-size: 12px; }
+  .c-stat-bubbles .md { font-size: 13px; }
+  .c-stat-bubbles .lg { font-size: 14px; }
+  .c-stat-bubbles .b { font-weight: 700; }
+  .c-stat-bubbles .sb { font-weight: 600; }
+  .c-stat-bubbles .ink { fill: var(--ds-ink); }
+  .c-stat-bubbles .mu { fill: var(--ds-muted); }
+  .c-stat-bubbles .mid { text-anchor: middle; }
+  .c-stat-bubbles .end { text-anchor: end; }
+  .c-stat-bubbles .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+
+</style>
+
+<section class="c-stat-bubbles" aria-label="Slide 5: sources of 2026 revenue growth drawn as sized circles">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Growth review · Sources of 2026 revenue growth</p>
+      <h1>New customers delivered 46% of the €40.4m revenue growth in 2026, and upsell added another 28%</h1>
+    </div>
+    <div class="exhibit">
+<svg viewBox="0 0 880 316" role="img" aria-label="Five circles sized by revenue added in 2026: new customers 18.4 million euro, upsell 11.2, price increases 6.1, cross-sell 3.4 and reactivation 1.3."><line class="grid" x1="0" x2="880" y1="228" y2="228"/><circle cx="135.9" cy="116" r="100.0" style="fill:color-mix(in srgb, var(--ds-highlight-line) 40%, var(--ds-surface));stroke:var(--ds-highlight-line);stroke-width:2"/><text class="ink b mid" x="135.9" y="127.9" style="font-size:34.0px">€18.4m</text><text class="md b ink mid" x="135.9" y="256">New customers</text><text class="sm mu mid" x="135.9" y="274">46% of growth</text><circle cx="347.9" cy="116" r="78.0" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, var(--ds-surface));stroke:var(--ds-info-line);stroke-width:2"/><text class="ink b mid" x="347.9" y="126.9" style="font-size:31.2px">€11.2m</text><text class="md b ink mid" x="347.9" y="256">Upsell</text><text class="sm mu mid" x="347.9" y="274">28% of growth</text><circle cx="517.5" cy="116" r="57.6" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, var(--ds-surface));stroke:var(--ds-info-line);stroke-width:2"/><text class="ink b mid" x="517.5" y="124.1" style="font-size:23.0px">€6.1m</text><text class="md b ink mid" x="517.5" y="256">Price increases</text><text class="sm mu mid" x="517.5" y="274">15% of growth</text><circle cx="667.5" cy="116" r="43.0" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, var(--ds-surface));stroke:var(--ds-info-line);stroke-width:2"/><text class="ink b mid" x="667.5" y="122.0" style="font-size:17.2px">€3.4m</text><text class="md b ink mid" x="667.5" y="256">Cross-sell</text><text class="sm mu mid" x="667.5" y="274">8% of growth</text><circle cx="817.5" cy="116" r="26.6" style="fill:color-mix(in srgb, var(--ds-info-line) 38%, var(--ds-surface));stroke:var(--ds-info-line);stroke-width:2"/><text class="ink b mid" x="817.5" y="121.3" style="font-size:15.0px">€1.3m</text><text class="md b ink mid" x="817.5" y="256">Reactivation</text><text class="sm mu mid" x="817.5" y="274">3% of growth</text><text class="xs mu end" x="880" y="308">Circle area is proportional to revenue added</text></svg>
+    </div>
+    <div class="foot">
+      <span>Source: finance revenue bridge, full year 2026 against 2025, in € million. Illustrative figures.</span>
+      <span class="page">5</span>
+    </div>
+  </div>
+</section>

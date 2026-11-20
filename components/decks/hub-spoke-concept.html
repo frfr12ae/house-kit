@@ -1,0 +1,92 @@
+<!--
+@title Hub and spoke concept
+@group Storyline
+@description A central idea in a hub with six surrounding elements connected to it, for showing how a concept or platform ties its parts together.
+@tags slide, hub and spoke, concept, platform, ecosystem, central idea, diagram
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Original
+-->
+<style>
+  .c-hub-spoke-concept {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-hub-spoke-concept .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-hub-spoke-concept .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-hub-spoke-concept h1 {
+    margin: 1cqi 0 0;
+    max-width: 78cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-hub-spoke-concept .body { min-height: 0; padding: 2.2cqi 0 1.8cqi; }
+  .c-hub-spoke-concept .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-hub-spoke-concept .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-hub-spoke-concept .body { position: relative; padding: 1.4cqi 0 1.2cqi; }
+  .c-hub-spoke-concept .stage { position: relative; width: 100%; height: 100%; }
+  .c-hub-spoke-concept .lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .c-hub-spoke-concept .lines line { stroke: var(--ds-neutral-line); stroke-width: 2; stroke-dasharray: 5 5; vector-effect: non-scaling-stroke; }
+  .c-hub-spoke-concept .hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 17cqi; height: 17cqi; display: grid; place-content: center; gap: 0.4cqi; padding: 1.4cqi; border-radius: 50%; background: var(--ds-action); color: var(--ds-on-action); text-align: center; box-shadow: 0 0 0 1cqi color-mix(in srgb, var(--ds-action) 14%, transparent); }
+  .c-hub-spoke-concept .hub b { font-family: var(--ds-font-display); font-size: 2cqi; font-weight: 700; line-height: 1.1; }
+  .c-hub-spoke-concept .hub span { font-size: 1.2cqi; line-height: 1.3; opacity: 0.85; }
+  .c-hub-spoke-concept .nodes { margin: 0; padding: 0; list-style: none; }
+  .c-hub-spoke-concept .node { position: absolute; transform: translate(-50%, -50%); width: 25cqi; padding: 1.2cqi 1.5cqi 1.2cqi 4.4cqi; background: var(--ds-raised); border: var(--ds-hairline) solid var(--ds-line); border-radius: calc(0.6cqi * var(--ds-radius-scale, 1)); }
+  .c-hub-spoke-concept .node .n { position: absolute; left: 1.4cqi; top: 1.3cqi; display: grid; place-items: center; width: 2.2cqi; height: 2.2cqi; border-radius: 50%; background: var(--ds-info-fill); border: var(--ds-hairline) solid var(--ds-info-line); font-size: 1.1cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-hub-spoke-concept .node h2 { margin: 0 0 0.3cqi; font-size: 1.55cqi; font-weight: 700; line-height: 1.2; color: var(--ds-ink); }
+  .c-hub-spoke-concept .node p { margin: 0; font-size: 1.2cqi; line-height: 1.35; }
+</style>
+
+
+<section class="c-hub-spoke-concept" aria-label="Hub and spoke concept: the pet care platform">
+  <div class="inner">
+    <div class="top">
+      <p class="kicker">Concept</p>
+      <h1>One pet care platform ties six services to a single owner relationship</h1>
+    </div>
+    <div class="body">
+      <div class="stage">
+        <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="50" x2="17" y2="17" /><line x1="50" y1="50" x2="17" y2="50" /><line x1="50" y1="50" x2="17" y2="83" /><line x1="50" y1="50" x2="83" y2="17" /><line x1="50" y1="50" x2="83" y2="50" /><line x1="50" y1="50" x2="83" y2="83" /></svg>
+        <div class="hub"><b>Pawly</b><span>One account, one pet record</span></div>
+        <ul class="nodes">
+          <li class="node" style="left: 17%; top: 17%"><span class="n">1</span><h2>Partner vets</h2><p>Local clinics sign up in under a day.</p></li>
+          <li class="node" style="left: 17%; top: 50%"><span class="n">2</span><h2>Online booking</h2><p>Owners book from the app at any hour.</p></li>
+          <li class="node" style="left: 17%; top: 83%"><span class="n">3</span><h2>Home visits</h2><p>A vet comes to the door for routine care.</p></li>
+          <li class="node" style="left: 83%; top: 17%"><span class="n">4</span><h2>Pharmacy</h2><p>Medicine ships to the owner overnight.</p></li>
+          <li class="node" style="left: 83%; top: 50%"><span class="n">5</span><h2>Pet insurance</h2><p>Claims are paid directly to the clinic.</p></li>
+          <li class="node" style="left: 83%; top: 83%"><span class="n">6</span><h2>Community</h2><p>Advice and events keep owners engaged.</p></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Pawly concept workshop, November 2026. Illustrative concept.</span><span class="page">7</span></div>
+  </div>
+</section>

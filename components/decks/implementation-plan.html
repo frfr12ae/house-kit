@@ -1,0 +1,98 @@
+<!--
+@title Implementation plan
+@group Exhibits
+@description A 12 month Gantt-style plan with six workstreams and their leads, bars shaded to show progress, a today line, numbered milestone diamonds and a milestone list beneath.
+@tags slide, implementation plan, gantt, workstreams, milestones, programme, schedule, exhibit
+@preview slide
+@added 2026-11-20
+@author Frederik
+-->
+<style>
+  .c-implementation-plan {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-implementation-plan .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: 1.4cqi;
+    padding: 5cqi 6cqi;
+  }
+  .c-implementation-plan .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-implementation-plan h1 {
+    margin: 0.9cqi 0 0;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-implementation-plan .exhibit { position: relative; min-height: 0; }
+  .c-implementation-plan .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-implementation-plan .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-implementation-plan .exhibit { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+  .c-implementation-plan .plan { position: relative; display: grid; grid-template-rows: auto repeat(7, minmax(0, 1fr)); min-height: 0; }
+  .c-implementation-plan .row { display: grid; grid-template-columns: 17cqi minmax(0, 1fr); min-height: 0; border-bottom: var(--ds-hairline) solid var(--ds-line); }
+  .c-implementation-plan .row.hd { border-bottom: var(--ds-stroke) solid var(--ds-muted); padding-bottom: 0.4cqi; }
+  .c-implementation-plan .months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .c-implementation-plan .months span { text-align: center; font-size: 1.05cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-implementation-plan .row.hd > span { align-self: end; font-size: 1.05cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-implementation-plan .ws { margin: 0; align-self: center; display: flex; flex-direction: column; gap: 0.1cqi; }
+  .c-implementation-plan .ws b { font-size: 1.3cqi; color: var(--ds-ink); }
+  .c-implementation-plan .ws span { font-size: 0.95cqi; color: var(--ds-muted); }
+  .c-implementation-plan .lane { position: relative; background-image: linear-gradient(to right, var(--ds-line) 1px, transparent 1px); background-size: calc(100% / 12) 100%; }
+  .c-implementation-plan .bar { position: absolute; top: 18%; bottom: 18%; display: flex; align-items: center; overflow: hidden; border-radius: calc(0.4cqi * var(--ds-radius-scale, 1)); background: var(--ds-surface); box-shadow: inset 0 0 0 1px var(--ds-neutral-line); }
+  .c-implementation-plan .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: color-mix(in srgb, var(--ds-neutral-line) 40%, var(--ds-surface)); }
+  .c-implementation-plan .bar span { position: relative; padding: 0 0.7cqi; font-size: 1cqi; font-weight: 600; color: var(--ds-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-implementation-plan .bar.prep { box-shadow: inset 0 0 0 1px var(--ds-neutral-line); }
+  .c-implementation-plan .bar.build { box-shadow: inset 0 0 0 1px var(--ds-info-line); }
+  .c-implementation-plan .bar.build i { background: color-mix(in srgb, var(--ds-info-line) 45%, var(--ds-surface)); }
+  .c-implementation-plan .bar.roll { box-shadow: inset 0 0 0 1px var(--ds-note-line); }
+  .c-implementation-plan .bar.roll i { background: color-mix(in srgb, var(--ds-note-line) 45%, var(--ds-surface)); }
+  .c-implementation-plan .ms { position: absolute; top: 50%; width: 2cqi; height: 2cqi; margin: -1cqi 0 0 -1cqi; display: grid; place-items: center; z-index: 2; }
+  .c-implementation-plan .ms::before { content: ''; position: absolute; inset: 0.15cqi; transform: rotate(45deg); background: var(--ds-highlight-fill); box-shadow: 0 0 0 0.18cqi var(--ds-highlight-line), 0 0 0 0.4cqi var(--ds-surface); }
+  .c-implementation-plan .ms span { position: relative; font-size: 0.9cqi; font-weight: 800; color: var(--ds-ink); }
+  .c-implementation-plan .today { position: absolute; left: calc(17cqi + (100% - 17cqi) * 0.3750); top: 2.2cqi; bottom: 0; width: 0; border-left: 0.16cqi dashed var(--ds-danger-line); z-index: 1; pointer-events: none; }
+  .c-implementation-plan .today span { position: absolute; bottom: 0.5cqi; left: 0.6cqi; padding: 0.1cqi 0.6cqi; border-radius: var(--ds-radius-pill); background: var(--ds-danger-fill); box-shadow: inset 0 0 0 1px var(--ds-danger-line); font-size: 0.9cqi; font-weight: 700; color: var(--ds-ink); white-space: nowrap; }
+  .c-implementation-plan .key { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.4cqi; margin: 0; padding: 0.8cqi 0 0; list-style: none; }
+  .c-implementation-plan .key li { display: grid; grid-template-columns: 1.8cqi minmax(0, 1fr); gap: 0.7cqi; align-items: center; font-size: 1.05cqi; line-height: 1.3; color: var(--ds-text); }
+  .c-implementation-plan .key b { display: grid; place-items: center; width: 1.8cqi; height: 1.8cqi; border-radius: 50%; background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 1px var(--ds-highlight-line); font-size: 0.95cqi; color: var(--ds-ink); }
+  .c-implementation-plan .key em { display: block; font-style: normal; color: var(--ds-muted); }
+</style>
+
+<section class="c-implementation-plan" aria-label="Slide 10: implementation plan for 2027 with six workstreams and five milestones">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Programme plan · Implementation 2027</p>
+      <h1>On plan at mid-May: design is signed off, data and integrations are in build, and the last site goes live in December</h1>
+    </div>
+    <div class="exhibit">
+<div class="plan"><div class="row hd"><span>Workstream and lead</span><div class="months"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div></div><div class="row"><p class="ws"><b>Governance and PMO</b><span>Programme director</span></p><div class="lane"><div class="bar prep" style="left:0.00%;width:12.50%"><i style="width:100%"></i><span>Mobilise</span></div><div class="bar prep" style="left:12.50%;width:87.50%"><i style="width:29%"></i><span>Steering and reporting</span></div></div></div><div class="row"><p class="ws"><b>Data migration</b><span>Head of data</span></p><div class="lane"><div class="bar prep" style="left:8.33%;width:25.00%"><i style="width:100%"></i><span>Map and clean</span></div><div class="bar build" style="left:33.33%;width:41.67%"><i style="width:10%"></i><span>Migrate in waves</span></div></div></div><div class="row"><p class="ws"><b>Platform build</b><span>CTO</span></p><div class="lane"><div class="bar prep" style="left:4.17%;width:20.83%"><i style="width:100%"></i><span>Design</span></div><div class="bar build" style="left:25.00%;width:41.67%"><i style="width:30%"></i><span>Build and test</span></div></div></div><div class="row"><p class="ws"><b>Integrations</b><span>Lead architect</span></p><div class="lane"><div class="bar build" style="left:25.00%;width:33.33%"><i style="width:38%"></i><span>ERP and CRM links</span></div><div class="bar build" style="left:58.33%;width:25.00%"><i style="width:0%"></i><span>Partner APIs</span></div></div></div><div class="row"><p class="ws"><b>Training and change</b><span>HR lead</span></p><div class="lane"><div class="bar prep" style="left:16.67%;width:16.67%"><i style="width:100%"></i><span>Change plan</span></div><div class="bar roll" style="left:50.00%;width:16.67%"><i style="width:0%"></i><span>Super-users</span></div><div class="bar roll" style="left:66.67%;width:25.00%"><i style="width:0%"></i><span>All sites</span></div></div></div><div class="row"><p class="ws"><b>Rollout</b><span>COO</span></p><div class="lane"><div class="bar roll" style="left:58.33%;width:16.67%"><i style="width:0%"></i><span>Pilot site</span></div><div class="bar roll" style="left:75.00%;width:25.00%"><i style="width:0%"></i><span>Waves 1 to 3</span></div></div></div><div class="row"><p class="ws"><b>Milestones</b><span>Numbered, listed below</span></p><div class="lane"><div class="ms" style="left:8.33%"><span>1</span></div><div class="ms" style="left:25.00%"><span>2</span></div><div class="ms" style="left:66.67%"><span>3</span></div><div class="ms" style="left:75.00%"><span>4</span></div><div class="ms" style="left:98.33%"><span>5</span></div></div></div><div class="today"><span>Today</span></div></div><ol class="key"><li><b>1</b><span>Contract signed<em>Feb</em></span></li><li><b>2</b><span>Design sign-off<em>Apr</em></span></li><li><b>3</b><span>Data rehearsal passed<em>Sep</em></span></li><li><b>4</b><span>Pilot signed off<em>Oct</em></span></li><li><b>5</b><span>Last site live<em>Dec</em></span></li></ol>
+    </div>
+    <div class="foot">
+      <span>Source: programme plan, status at mid-May 2027. Shaded part of a bar is work completed; the dashed line is today. Illustrative plan.</span>
+      <span class="page">10</span>
+    </div>
+  </div>
+</section>

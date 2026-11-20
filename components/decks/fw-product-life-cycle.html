@@ -1,0 +1,109 @@
+<!--
+@title Product life cycle
+@group Frameworks
+@description A product life cycle curve with sales and profit across introduction, growth, maturity and decline, a marker for where the product is today and what customers, competition and priorities look like at each stage.
+@tags slide, product life cycle, plc, introduction, growth, maturity, decline, levitt, sales, profit, framework, strategy
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source Product life cycle (Theodore Levitt, HBR) | https://hbr.org/1965/11/exploit-the-product-life-cycle | inspired-by
+-->
+<style>
+  .c-fw-product-life-cycle {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-product-life-cycle .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-product-life-cycle .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-product-life-cycle h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-product-life-cycle .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-product-life-cycle .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-product-life-cycle .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-product-life-cycle .pl { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+  .c-fw-product-life-cycle .st { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .c-fw-product-life-cycle .sh { display: flex; align-items: center; gap: 0.8cqi; padding: 0.7cqi 1.3cqi; background: var(--ds-panel); border-left: var(--ds-hairline) solid var(--ds-surface); font-size: 1.35cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-fw-product-life-cycle .sh:first-child { border-radius: calc(0.5cqi * var(--ds-radius-scale, 1)) 0 0 calc(0.5cqi * var(--ds-radius-scale, 1)); border-left: 0; }
+  .c-fw-product-life-cycle .sh:last-child { border-radius: 0 calc(0.5cqi * var(--ds-radius-scale, 1)) calc(0.5cqi * var(--ds-radius-scale, 1)) 0; }
+  .c-fw-product-life-cycle .sh.now { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-fw-product-life-cycle .sh span { color: var(--ds-muted); font-size: 1.1cqi; font-variant-numeric: tabular-nums; }
+  .c-fw-product-life-cycle .cv { position: relative; width: 100%; align-self: center; aspect-ratio: 880 / 160; }
+  .c-fw-product-life-cycle .cv svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+  .c-fw-product-life-cycle .cv text { font-family: var(--ds-font-sans); fill: var(--ds-ink); font-size: 12px; font-weight: 700; }
+  .c-fw-product-life-cycle .cv .halo { paint-order: stroke; stroke: var(--ds-surface); stroke-width: 4px; stroke-linejoin: round; }
+  .c-fw-product-life-cycle .dv { stroke: var(--ds-line); stroke-width: 1; }
+  .c-fw-product-life-cycle .zr { stroke: var(--ds-muted); stroke-width: 1; stroke-dasharray: 4 4; }
+  .c-fw-product-life-cycle .sc { fill: none; stroke: var(--ds-series-1); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+  .c-fw-product-life-cycle .pf { fill: none; stroke: var(--ds-series-2); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+  .c-fw-product-life-cycle .mk { stroke: var(--ds-highlight-line); stroke-width: 2; stroke-dasharray: 5 4; }
+  .c-fw-product-life-cycle .rows { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 0.4cqi; }
+  .c-fw-product-life-cycle .rc { padding: 0.6cqi 1.3cqi 0.5cqi; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-fw-product-life-cycle .rc small { display: block; font-size: 0.95cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-product-life-cycle .rc span { display: block; margin-top: 0.2cqi; font-size: 1.2cqi; line-height: 1.25; color: var(--ds-ink); }
+</style>
+
+<section class="c-fw-product-life-cycle" aria-label="Product life cycle curve with the Urban e-bike range at the start of maturity">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Product portfolio · Urban e-bike range</p>
+      <h1>The Urban range has reached maturity, so defend its share and fund the next product</h1>
+    </div>
+    <div class="body">
+      <div class="pl">
+        <div class="st"><div class="sh"><span>1</span>Introduction</div><div class="sh"><span>2</span>Growth</div><div class="sh now"><span>3</span>Maturity</div><div class="sh"><span>4</span>Decline</div></div>
+        <div class="cv">
+          <svg viewBox="0 0 880 160" role="img" aria-label="Sales rise slowly in introduction, steeply in growth, level off in maturity and fall in decline. Profit turns positive in growth, peaks at the start of maturity and fades. The Urban range sits at the start of maturity.">
+            <line class="dv" x1="220" x2="220" y1="0" y2="160"/><line class="dv" x1="440" x2="440" y1="0" y2="160"/><line class="dv" x1="660" x2="660" y1="0" y2="160"/>
+            <line class="zr" x1="0" x2="880" y1="112" y2="112"/>
+            <path class="sc" d="M0 110 L7.3 109.8 L14.7 109.5 L22 109.2 L29.3 108.8 L36.7 108.5 L44 108 L51.3 107.5 L58.7 107 L66 106.4 L73.3 105.8 L80.7 105 L88 104.2 L95.3 103.3 L102.7 102.3 L110 101.3 L117.3 100.1 L124.7 98.8 L132 97.4 L139.3 95.8 L146.7 94.1 L154 92.3 L161.3 90.4 L168.7 88.4 L176 86.2 L183.3 83.9 L190.7 81.5 L198 78.9 L205.3 76.3 L212.7 73.6 L220 70.8 L227.3 68 L234.7 65.2 L242 62.3 L249.3 59.5 L256.7 56.7 L264 53.9 L271.3 51.2 L278.7 48.6 L286 46.1 L293.3 43.7 L300.7 41.4 L308 39.3 L315.3 37.3 L322.7 35.4 L330 33.6 L337.3 32 L344.7 30.5 L352 29.1 L359.3 27.9 L366.7 26.7 L374 25.7 L381.3 24.7 L388.7 23.9 L396 23.1 L403.3 22.5 L410.7 21.9 L418 21.3 L425.3 20.9 L432.7 20.5 L440 20.1 L447.3 19.9 L454.7 19.6 L462 19.4 L469.3 19.3 L476.7 19.2 L484 19.1 L491.3 19.1 L498.7 19.1 L506 19.2 L513.3 19.3 L520.7 19.5 L528 19.7 L535.3 19.9 L542.7 20.2 L550 20.6 L557.3 21 L564.7 21.5 L572 22 L579.3 22.6 L586.7 23.3 L594 24 L601.3 24.8 L608.7 25.7 L616 26.7 L623.3 27.8 L630.7 29 L638 30.3 L645.3 31.6 L652.7 33.1 L660 34.7 L667.3 36.3 L674.7 38.1 L682 39.9 L689.3 41.8 L696.7 43.7 L704 45.7 L711.3 47.7 L718.7 49.8 L726 51.8 L733.3 53.9 L740.7 55.9 L748 57.9 L755.3 59.8 L762.7 61.7 L770 63.5 L777.3 65.2 L784.7 66.9 L792 68.4 L799.3 69.9 L806.7 71.2 L814 72.5 L821.3 73.7 L828.7 74.8 L836 75.8 L843.3 76.7 L850.7 77.5 L858 78.3 L865.3 79 L872.7 79.6 L880 80.2"/>
+            <path class="pf" d="M0 121.3 L7.3 122.8 L14.7 124.4 L22 126 L29.3 127.5 L36.7 128.9 L44 130 L51.3 130.8 L58.7 131.4 L66 131.5 L73.3 131.3 L80.7 130.7 L88 129.7 L95.3 128.3 L102.7 126.6 L110 124.6 L117.3 122.5 L124.7 120.1 L132 117.7 L139.3 115.3 L146.7 112.9 L154 110.4 L161.3 108.1 L168.7 105.7 L176 103.5 L183.3 101.2 L190.7 99.1 L198 96.9 L205.3 94.7 L212.7 92.5 L220 90.3 L227.3 88 L234.7 85.6 L242 83.3 L249.3 80.8 L256.7 78.3 L264 75.7 L271.3 73.1 L278.7 70.4 L286 67.7 L293.3 65.1 L300.7 62.4 L308 59.8 L315.3 57.2 L322.7 54.7 L330 52.2 L337.3 49.9 L344.7 47.8 L352 45.8 L359.3 43.9 L366.7 42.3 L374 40.8 L381.3 39.6 L388.7 38.6 L396 37.9 L403.3 37.4 L410.7 37.1 L418 37.2 L425.3 37.5 L432.7 38 L440 38.8 L447.3 39.8 L454.7 41.1 L462 42.6 L469.3 44.3 L476.7 46.1 L484 48.2 L491.3 50.4 L498.7 52.7 L506 55.2 L513.3 57.7 L520.7 60.3 L528 62.9 L535.3 65.6 L542.7 68.3 L550 70.9 L557.3 73.6 L564.7 76.2 L572 78.7 L579.3 81.1 L586.7 83.5 L594 85.8 L601.3 88 L608.7 90.1 L616 92 L623.3 93.9 L630.7 95.6 L638 97.3 L645.3 98.8 L652.7 100.2 L660 101.5 L667.3 102.6 L674.7 103.7 L682 104.7 L689.3 105.6 L696.7 106.4 L704 107.1 L711.3 107.7 L718.7 108.3 L726 108.8 L733.3 109.2 L740.7 109.6 L748 110 L755.3 110.3 L762.7 110.5 L770 110.8 L777.3 111 L784.7 111.1 L792 111.3 L799.3 111.4 L806.7 111.5 L814 111.6 L821.3 111.7 L828.7 111.7 L836 111.8 L843.3 111.8 L850.7 111.8 L858 111.9 L865.3 111.9 L872.7 111.9 L880 111.9"/>
+            <line class="mk" x1="475.2" x2="475.2" y1="19.2" y2="128"/>
+            <circle cx="475.2" cy="19.2" r="6" style="fill:var(--ds-highlight-fill);stroke:var(--ds-highlight-line);stroke-width:2.5"/>
+            <rect x="483.2" y="124" width="132" height="24" rx="6" style="fill:var(--ds-highlight-fill);stroke:var(--ds-highlight-line);stroke-width:1.2"/>
+            <text x="549.2" y="140" text-anchor="middle">Urban range today</text>
+            <text class="halo" x="22" y="99.4" style="fill:var(--ds-ink)">Sales</text>
+            <text class="halo" x="540" y="64.8">Profit</text>
+          </svg>
+        </div>
+        <div class="rows">
+          <div class="rc"><small>Customers</small><span>Early adopters</span></div><div class="rc"><small>Customers</small><span>Mainstream buyers</span></div><div class="rc"><small>Customers</small><span>Loyal and repeat buyers</span></div><div class="rc"><small>Customers</small><span>Laggards only</span></div>
+          <div class="rc"><small>Competition</small><span>Few rivals</span></div><div class="rc"><small>Competition</small><span>Rivals enter fast</span></div><div class="rc"><small>Competition</small><span>Price pressure</span></div><div class="rc"><small>Competition</small><span>Rivals exit</span></div>
+          <div class="rc"><small>Priority</small><span>Build awareness and dealer trust</span></div><div class="rc"><small>Priority</small><span>Widen distribution, add variants</span></div><div class="rc"><small>Priority</small><span>Defend share, cut cost per bike</span></div><div class="rc"><small>Priority</small><span>Harvest cash or retire the range</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: Halden sales data 2019 to 2026 and management view of stage boundaries. Curves are schematic. Illustrative.</span><span class="page">14</span></div>
+  </div>
+</section>

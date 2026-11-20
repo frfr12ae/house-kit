@@ -1,0 +1,126 @@
+<!--
+@title Nine-box portfolio matrix
+@group Frameworks
+@description A GE-McKinsey style nine-box of industry attractiveness against business strength, with zones for invest, selective and harvest and numbered units sized by revenue.
+@tags slide, ge mckinsey, nine box, 3x3, portfolio, industry attractiveness, business strength, framework, strategy
+@preview slide
+@added 2026-11-20
+@author Frederik
+@source GE-McKinsey nine-box matrix | https://en.wikipedia.org/wiki/GE_multifactorial_analysis | inspired-by
+-->
+<style>
+  .c-fw-nine-box {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ds-surface);
+    color: var(--ds-text);
+    font-family: var(--ds-font-sans);
+  }
+  .c-fw-nine-box .inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 5cqi 6cqi 3.2cqi;
+  }
+  .c-fw-nine-box .kicker { margin: 0; font-size: 1.25cqi; font-weight: 600; line-height: 1.3; color: var(--ds-muted); }
+  .c-fw-nine-box h1 {
+    margin: 1cqi 0 0;
+    max-width: 80cqi;
+    font-family: var(--ds-font-display);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ds-ink);
+    text-wrap: balance;
+  }
+  .c-fw-nine-box .body { min-height: 0; padding: 1.8cqi 0 1.4cqi; }
+  .c-fw-nine-box .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3cqi;
+    padding-top: 0.9cqi;
+    border-top: var(--ds-hairline) solid var(--ds-line);
+    font-size: 0.95cqi;
+    line-height: 1.4;
+    color: var(--ds-muted);
+  }
+  .c-fw-nine-box .page { flex: none; font-weight: 600; color: var(--ds-text); font-variant-numeric: tabular-nums; }
+
+  .c-fw-nine-box .wrap { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 31cqi; gap: 3cqi; }
+  .c-fw-nine-box .nm { min-height: 0; display: grid; grid-template-columns: 2.4cqi 5.2cqi repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)) 2cqi 2.2cqi; gap: 0.5cqi; }
+  .c-fw-nine-box .nc { display: grid; place-items: center; border-radius: calc(0.5cqi * var(--ds-radius-scale, 1)); }
+  .c-fw-nine-box .nc.inv { background: var(--ds-note-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-note-line); }
+  .c-fw-nine-box .nc.sel { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-fw-nine-box .nc.har { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-danger-line); }
+  .c-fw-nine-box .nb { display: grid; place-items: center; border-radius: 50%; background: var(--ds-surface); box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-ink); font-size: 1.3cqi; font-weight: 800; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+  .c-fw-nine-box .rl { display: flex; align-items: center; justify-content: flex-end; font-size: 1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-fw-nine-box .cl { display: flex; align-items: flex-start; justify-content: center; padding-top: 0.2cqi; font-size: 1cqi; font-weight: 600; color: var(--ds-muted); }
+  .c-fw-nine-box .ax { display: flex; align-items: center; justify-content: center; font-size: 1.1cqi; font-weight: 700; color: var(--ds-ink); }
+  .c-fw-nine-box .ax.y { grid-area: 1 / 1 / 4 / 2; }
+  .c-fw-nine-box .ax.y span { writing-mode: vertical-rl; transform: rotate(180deg); }
+  .c-fw-nine-box .ax.x { grid-area: 5 / 3 / 6 / 6; }
+  .c-fw-nine-box .side { display: flex; flex-direction: column; justify-content: space-between; gap: 1.4cqi; padding-left: 2.6cqi; border-left: var(--ds-hairline) solid var(--ds-line); }
+  .c-fw-nine-box .zs { display: grid; gap: 0.7cqi; }
+  .c-fw-nine-box .z { display: flex; align-items: center; gap: 0.9cqi; font-size: 1.15cqi; color: var(--ds-ink); }
+  .c-fw-nine-box .z i { flex: none; width: 2.2cqi; height: 1.5cqi; border-radius: calc(0.3cqi * var(--ds-radius-scale, 1)); }
+  .c-fw-nine-box .z.inv i { background: var(--ds-note-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-note-line); }
+  .c-fw-nine-box .z.sel i { background: var(--ds-highlight-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-highlight-line); }
+  .c-fw-nine-box .z.har i { background: var(--ds-danger-fill); box-shadow: inset 0 0 0 var(--ds-hairline) var(--ds-danger-line); }
+  .c-fw-nine-box .tbl { width: 100%; border-collapse: collapse; font-size: 1.2cqi; color: var(--ds-ink); }
+  .c-fw-nine-box .tbl th { padding: 0 0 0.6cqi; text-align: left; font-size: 1cqi; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-muted); }
+  .c-fw-nine-box .tbl td { padding: 0.55cqi 0; border-top: var(--ds-hairline) solid var(--ds-line); }
+  .c-fw-nine-box .tbl td:first-child { width: 3.4cqi; }
+  .c-fw-nine-box .tbl .n { display: inline-grid; place-items: center; width: 2.2cqi; height: 2.2cqi; border-radius: 50%; box-shadow: inset 0 0 0 var(--ds-stroke) var(--ds-ink); font-size: 1.05cqi; font-weight: 800; }
+  .c-fw-nine-box .tbl td:last-child, .c-fw-nine-box .tbl th:last-child { text-align: right; }
+  .c-fw-nine-box .tbl td:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums; color: var(--ds-muted); padding-right: 1.4cqi; }
+</style>
+
+<section class="c-fw-nine-box" aria-label="Nine-box matrix placing six Halden business units by industry attractiveness and business strength">
+  <div class="inner">
+    <div class="head">
+      <p class="kicker">Portfolio review · Halden Group</p>
+      <h1>Invest in e-bikes, cargo and service, fix or exit rental, and harvest accessories</h1>
+    </div>
+    <div class="body">
+      <div class="wrap">
+        <div class="nm" role="img" aria-label="Nine-box: E-bikes sits at strength high, attractiveness high; Cargo bikes sits at strength medium, attractiveness high; Service sits at strength high, attractiveness medium; Components sits at strength medium, attractiveness medium; Rental sits at strength low, attractiveness high; Accessories sits at strength medium, attractiveness low">
+          <div class="ax y"><span>Industry attractiveness</span></div>
+          <div class="rl" style="grid-area:1 / 2">High</div>
+          <div class="rl" style="grid-area:2 / 2">Medium</div>
+          <div class="rl" style="grid-area:3 / 2">Low</div>
+          <div style="grid-area:1 / 3" class="nc inv"><span class="nb" style="width:5.9cqi;height:5.9cqi">1</span></div>
+          <div style="grid-area:1 / 4" class="nc inv"><span class="nb" style="width:2.8cqi;height:2.8cqi">2</span></div>
+          <div style="grid-area:1 / 5" class="nc sel"><span class="nb" style="width:2.8cqi;height:2.8cqi">5</span></div>
+          <div style="grid-area:2 / 3" class="nc inv"><span class="nb" style="width:3.3cqi;height:3.3cqi">3</span></div>
+          <div style="grid-area:2 / 4" class="nc sel"><span class="nb" style="width:4.1cqi;height:4.1cqi">4</span></div>
+          <div style="grid-area:2 / 5" class="nc har"></div>
+          <div style="grid-area:3 / 3" class="nc sel"></div>
+          <div style="grid-area:3 / 4" class="nc har"><span class="nb" style="width:3.2cqi;height:3.2cqi">6</span></div>
+          <div style="grid-area:3 / 5" class="nc har"></div>
+          <div class="cl" style="grid-area:4 / 3">High</div>
+          <div class="cl" style="grid-area:4 / 4">Medium</div>
+          <div class="cl" style="grid-area:4 / 5">Low</div>
+          <div class="ax x">Business unit strength</div>
+        </div>
+        <div class="side">
+          <div class="zs">
+            <div class="z inv"><i></i>Invest to grow</div>
+            <div class="z sel"><i></i>Selective: fix or hold</div>
+            <div class="z har"><i></i>Harvest or divest</div>
+          </div>
+          <table class="tbl">
+            <thead><tr><th></th><th>Unit</th><th>EUR m</th><th>Call</th></tr></thead>
+            <tbody><tr><td><span class="n">1</span></td><td>E-bikes</td><td>130</td><td>Invest</td></tr><tr><td><span class="n">2</span></td><td>Cargo bikes</td><td>28</td><td>Invest</td></tr><tr><td><span class="n">3</span></td><td>Service</td><td>40</td><td>Invest</td></tr><tr><td><span class="n">4</span></td><td>Components</td><td>62</td><td>Selective</td></tr><tr><td><span class="n">5</span></td><td>Rental</td><td>14</td><td>Selective</td></tr><tr><td><span class="n">6</span></td><td>Accessories</td><td>38</td><td>Harvest</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Source: management scoring of 12 attractiveness and 10 strength criteria, October 2026. Bubble area is revenue. Illustrative figures.</span><span class="page">7</span></div>
+  </div>
+</section>
